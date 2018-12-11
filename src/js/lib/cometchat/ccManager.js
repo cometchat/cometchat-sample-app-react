@@ -1,16 +1,25 @@
+/**
+ * CCManager class : To manage cometchat SDK
+ */
+
 import {CometChat,UsersRequestBuilder,GroupsRequestBuilder,UserMessagesRequestBuilder,MESSAGE_REQUEST,MESSAGE_TYPE,RECEIVER_TYPE,TextMessage,MediaMessage,MessageEventListener} from '@cometchat-pulse/cometchat-pulse.js';
 
 import * as actionCreator from './../../store/actions/cc_action';
-import { resolve } from 'url';
-import { rejects } from 'assert';
 
 export default class CCManager {
 
     static cometchat = null;
     
-    static appId        =   '6e13b23d7a3';
-    static apiKey       =   'admin';
+    
+    static appId        =   '219cb4a5aed5';
+    static apiKey       =   '5b0c573f6e87a45beccea8bb3109f478f479aea0';
     static listnerKey   =   "listener1";
+
+    // static appId        =   '{APP_ID}';     //Enter your App ID 
+    // static apiKey       =   '{API_KEY}';    //Enter your API KEY
+
+
+    // static LISTENER_KEY   =   'Listener_Key';
 
 
     static usersRequestBuilder  = null;
@@ -43,33 +52,34 @@ export default class CCManager {
     }
 
     static addMessageListener(dispatch){
-        
-        console.log("rached inside addmesslistner ccmangr  : "   + this.listnerKey);
 
         CometChat.addMessageEventListner(
-            this.listnerKey,
-            (msg) => {},
+            this.LISTENER_KEY,
             new MessageEventListener({
-            onActionRecived:(action)=>{
+                onActionRecived: action => {
+
                     // handle actions
-                this.handleActionMessage(action,dispatch);     
-            },
-            onMessageReceived:(message) => {
-                //console.log("ccmangr msg: " + JSON.stringify(message));
+                    console.log("ccmangr msg: " + JSON.stringify(action));
+                    console.log("ccmessanger : " + {action});
+                    
+                    this.handleActionMessage(action,dispatch);     
+                },
+                onMessageReceived: message => {
 
-                console.log("ccmessanger : " + {message});
+                    console.log("ccmangr msg: " + JSON.stringify(message));
 
-                if( message instanceof TextMessage){
-                    // handle text messages	              
-                    //this.handleTextMessage(message,dispatch);
-                    dispatch(actionCreator.handleTextMessage(message));
-                }else if(message instanceof MediaMessage) {
-                    // handle media messages
-                    this.handleMediaMessage(message,dispatch);
-                }
-            }
-        }));
-        
+                    console.log("ccmessanger : " + {message});
+    
+                    if( message instanceof TextMessage){
+                        // handle text messages	              
+                        this.handleTextMessage(message,dispatch);
+                        
+                    }else if(message instanceof MediaMessage) {
+                        // handle media messages
+                        this.handleMediaMessage(message,dispatch);
+                    }                }
+            })
+        );
 
     }
 
@@ -83,7 +93,8 @@ export default class CCManager {
     }
 
     static handleActionMessage(action,dispatch){
-       dispatch(actionCreator.handleTextMessage(action));
+        console.log("ccmangr msg: " + JSON.stringify(message));
+        dispatch(actionCreator.handleTextMessage(action));
     }
 
     static messageRequestBuilder(uid,limit){

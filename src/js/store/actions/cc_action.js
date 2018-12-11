@@ -118,10 +118,10 @@ export const handleActionMessage=(actionMsg)=>{
 //handle Text Message 
 
 export const handleTextMessage=(msg)=>{
-    console.log("Text Message recieved : "+ JSON.stringify(msg));
-    return {
-        type:'NoAction',
-    }
+    console.log("Text Message recieved : "+ msg.getReceiver());
+
+    return updateMessage(msg.getReceiver(),msg,"");
+
 }
 
 //handle Media Message 

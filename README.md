@@ -65,6 +65,7 @@ If you want to put some changes into the sample app, you should build it using `
   
 Please change  `appId` and `apiKey` in *src/js/lib/cometchat/ccmanager.js* to the provided credentials.
 
+ ![Studio Guide](https://github.com/CometChat-Pulse/CometChat-Pulse/javascript-reactjs-chat-app/blob/master/screenshots/code.png)   
 
 
 ## Run the Sample

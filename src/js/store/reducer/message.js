@@ -28,7 +28,7 @@ const reducers = (state = intialState, action)=> {
 
         case 'updateMessage':
           
-            console.log("User id received  : " + JSON.stringify(action.uid));
+            console.log("User id received meesage.js  : " + JSON.stringify(action.uid));
 
             //find if any object is available for uid 
            
