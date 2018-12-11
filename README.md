@@ -100,8 +100,7 @@ npm run build
 ```
 # Screenshots
 
- ![Studio Guide](https://github.com/CometChat-Pulse/javascript-reactjs-chat-app/blob/master/screenshots/blank.png)   
-  ![Studio Guide](https://github.com/CometChat-Pulse/javascript-reactjs-chat-app/blob/master/screenshots/chat.png)   
+![Studio Guide](https://github.com/CometChat-Pulse/javascript-reactjs-chat-app/blob/master/screenshots/chat.png)   
 
 
 
