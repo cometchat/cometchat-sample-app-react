@@ -3,7 +3,7 @@
  */
 
 import {CometChat,UsersRequestBuilder,GroupsRequestBuilder,UserMessagesRequestBuilder,MESSAGE_REQUEST,MESSAGE_TYPE,RECEIVER_TYPE,TextMessage,MediaMessage,MessageEventListener} from '@cometchat-pulse/cometchat-pulse.js';
-//import {CometChat,UsersRequestBuilder,GroupsRequestBuilder,UserMessagesRequestBuilder,MESSAGE_REQUEST,MESSAGE_TYPE,RECEIVER_TYPE,TextMessage,MediaMessage,MessageEventListener} from './CometChat';
+
 import * as actionCreator from './../../store/actions/cc_action';
 
 export default class CCManager {
