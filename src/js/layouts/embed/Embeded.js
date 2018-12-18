@@ -26,7 +26,7 @@ class Embeded extends Component{
         try{
             await this.props.fetchUser(50);
             await this.props.fetchGroup(50);
-            this.props.registerListener();
+            //this.props.registerListener();
             await this.stopLoader();
          }catch(error){
             console.log(error);
@@ -68,7 +68,7 @@ class Embeded extends Component{
                         <Col xs={12} lg={3} style = {{borderRight : "1px solid #ccc", height: "100%"}}>
                            <CCLeftSidebar></CCLeftSidebar>
                         </Col>
-                        <Col xsHidden lg={9} style={{height:"100vh"}}>
+                        <Col xsHidden lg={9} style={{height:"100%"}}>
                           <ActiveUserMessageContainer dataContent={this.props.activeUsers}/>
                         </Col>
                     </Row>
@@ -127,7 +127,7 @@ const mapDispachToProps = dispatch => {
     return {
         fetchUser        :  (limit) =>  dispatch(actionCreator.getUsers(limit)),
         fetchGroup       :  (limit) =>  dispatch(actionCreator.getGroups(limit)),
-        registerListener :  ()      =>  actionCreator.addMessageListener(dispatch)
+        //registerListener :  ()      =>  actionCreator.addMessageListener(dispatch)
 
     };
 };

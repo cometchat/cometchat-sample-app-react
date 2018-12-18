@@ -14,25 +14,18 @@
     }
   }
 
-#cometchat{
-    margin: 0px !important;
-    padding: 0px !important;
-    width: 100% !important;
-    height: 100vh!important;
-    overflow: auto;
-}
-body::-webkit-scrollbar {
+/* body::-webkit-scrollbar {
     width: 1em;
 }
  
 body::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-}
+} */
  
-body::-webkit-scrollbar-thumb {
+/* body::-webkit-scrollbar-thumb {
   background-color: darkgrey;
   outline: 1px solid slategrey;
-}
+} */
 
 .ccShowGrid{
     height:100%;
@@ -273,6 +266,7 @@ body::-webkit-scrollbar-thumb {
     max-width: 100%;
     width:fit-content;
     overflow-wrap: break-word;
+    display:table;
   }
   .time_date {
     color:inherit;
@@ -318,12 +312,13 @@ body::-webkit-scrollbar-thumb {
 /* blank container  */
 
   .outer {
-    display: table;
-    position: absolute;
-    top: 0;
-    left: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0px;
+    background-color: #ffffff00;
     height: 100%;
-    width: 100%;
   }
 
   .middle {

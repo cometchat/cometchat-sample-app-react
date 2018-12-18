@@ -1,0 +1,103 @@
+/* Style for CC-UI */
+
+@font-face {
+    font-family: "products_bold";
+    src: url("./../fonts/Product_Sans_Bold.ttf");
+}
+
+
+@font-face {
+    font-family: "products_regular";
+    src: url("./../fonts/Product_Sans_Regular.ttf");
+}
+
+body{
+    font-family: 'products_regular', Arial, sans-serif;
+}
+
+.logincontainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0px;
+    background-color: #ffffff00;
+    height: 100%;
+}
+
+.cc-form-input{
+    border-radius: 20px;
+    border-color: #FFFFFF;
+    box-shadow: 0 13px 25px #0000000c !important;
+    color: black;
+    height: 64px;
+}
+
+.cc-submit-btn{
+    background-color: #2636be !important;
+    border-color: #2636be !important;
+    border-radius: 20px;
+    align-content: center;
+    width: 60%;
+    margin-left: 20%;
+    box-shadow: #0000000c 0 13px 20px;
+    align-self: center;
+    margin-top: 32px;
+}
+
+.box-shadow{
+    box-shadow: 0 13px 25px 0 #0000000c;
+}
+
+.bg-white{
+    background: white !important;
+}
+
+.padding-48{
+    padding: 48px !important;;
+}
+
+.border-1sw{
+    border: 1px solid #fff !important;
+}
+
+.border-radius-full{
+    border-radius: 20px !important;
+}
+
+.border-radius-top{
+    border-radius:20px 20px 0 0 !important;
+}
+
+
+.font-size-20{
+    font-size: 20px !important;
+}
+
+.H-64{
+    height: 64px !important;
+}
+
+.login-form-container{
+    box-shadow: 0 13px 25px 0 #0000000c;
+    padding: 48px;
+    background: white;
+    border-radius: 20px;
+
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none !important;
+    box-shadow: 0 13px 25px #0000000c !important;
+}
+
+
+
+    
+ 
+
+
+
