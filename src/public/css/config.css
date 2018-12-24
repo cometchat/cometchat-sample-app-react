@@ -1,19 +1,14 @@
-/* Style for CC-UI */
-
-@font-face {
-    font-family: "products_bold";
-    src: url("./../fonts/Product_Sans_Bold.ttf");
-}
-
-
-@font-face {
-    font-family: "products_regular";
-    src: url("./../fonts/Product_Sans_Regular.ttf");
-}
+@import url("./cc-style.css");
 
 body{
-    font-family: 'products_regular', Arial, sans-serif;
+    text-rendering: optimizeLegibility;
 }
+.padding-48{
+    padding: 48px !important;;
+}
+
+
+/* login form */
 
 .logincontainer{
     display: flex;
@@ -45,39 +40,6 @@ body{
     margin-top: 32px;
 }
 
-.box-shadow{
-    box-shadow: 0 13px 25px 0 #0000000c;
-}
-
-.bg-white{
-    background: white !important;
-}
-
-.padding-48{
-    padding: 48px !important;;
-}
-
-.border-1sw{
-    border: 1px solid #fff !important;
-}
-
-.border-radius-full{
-    border-radius: 20px !important;
-}
-
-.border-radius-top{
-    border-radius:20px 20px 0 0 !important;
-}
-
-
-.font-size-20{
-    font-size: 20px !important;
-}
-
-.H-64{
-    height: 64px !important;
-}
-
 .login-form-container{
     box-shadow: 0 13px 25px 0 #0000000c;
     padding: 48px;
@@ -94,10 +56,66 @@ button:focus {
     box-shadow: 0 13px 25px #0000000c !important;
 }
 
+/*scrollbar*/
+
+*::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
+
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+*::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.08);
+
+}
 
 
-    
- 
+/* header_icon  */
 
+.header-icon{
+    height: 100%;
+    font-size: 18px;
+    float: right;
+    display: inline;
+    align-self: center;
+    line-height: 34px;
+}
+
+.margin-right-10{
+    margin-right: 10px !important;
+}
+
+
+.sidebarHeader{
+    box-sizing: border-box !important;
+    justify-content: space-between !important;
+    padding: 20px 20px 20px 20px !important;
+}
+
+.tab_icon{
+    height: 28px;
+    width: auto;
+}
+
+
+.tab_title{
+    font-size: 12px;
+    color: #011000;
+}
+
+
+nav nav-pills>li>a{
+    color:#d9dbdd;
+}
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus, .nav-pills>li.active>a
+{
+    background-color: white !important;
+       
+
+}
 
 

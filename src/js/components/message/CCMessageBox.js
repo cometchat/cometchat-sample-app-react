@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {calculateAvailableHeight, CheckEmpty} from './../../lib/uiComponentLib';
 
 
-var heightCCMessageBox = calculateAvailableHeight(50,50,"ccMessage");
+var heightCCMessageBox = calculateAvailableHeight(74,65,"ccMessage");
 
 var ccMessageBoxStyle = {
     

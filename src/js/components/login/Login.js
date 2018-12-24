@@ -40,7 +40,7 @@ import * as actionCreator from './../../store/actions/cc_action';
               <ControlLabel>Username</ControlLabel>
               <FormControl
                 autoFocus
-                className = "border-radius-full box-shadow border-1sw font-size-20 H-64"
+                className = "border-radius-full box-shadow border color-border font-size-20 H-64"
                 type="Text"
                 value={this.state.email}
                 onChange={this.handleChange}
@@ -49,7 +49,7 @@ import * as actionCreator from './../../store/actions/cc_action';
             <FormGroup controlId="password">
               <ControlLabel>Password</ControlLabel>
               <FormControl 
-                className = "border-radius-full box-shadow border-1sw font-size-20 H-64"
+                className = "border-radius-full box-shadow border color-border font-size-20 H-64"
                 value={this.state.password}
                 onChange={this.handleChange}
                 type="password"

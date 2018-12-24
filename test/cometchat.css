@@ -27,6 +27,7 @@ body::-webkit-scrollbar-track {
   outline: 1px solid slategrey;
 } */
 
+
 .ccShowGrid{
     height:100%;
 
@@ -72,17 +73,15 @@ body::-webkit-scrollbar-track {
     margin: 0px;
     padding:4px;
     border-bottom: 1px solid rgba(0, 0, 0, .10) !important;
-    background:#fff;
+    
 
 }
+
 
 .userItem.active {
     background:#f2f2f2;
 }
 
-#sidebarTabContainer{
-    height:100%;
-}
 
 .sidebarUserListItemAvatar{
     float : left !important;
@@ -148,15 +147,6 @@ body::-webkit-scrollbar-track {
     text-align: center;
 }
 
-.sidebarHeader{
-        height: 50px !important ;
-        border-bottom: 1px solid rgba(0, 0, 0, .10) !important;
-        box-sizing: border-box !important;
-
-        justify-content: space-between !important;
-        padding: 8px !important;
-    
-}
 
 /* Message CSS */
 

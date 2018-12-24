@@ -1,4 +1,4 @@
-import {faEdit, faCog, faVideo,faPhone,faInfoCircle,faFileUpload,faSmile,faCamera,faThumbsUp,faStickyNote,faMicrophone,faPaperPlane} from '@fortawesome/free-solid-svg-icons'
+import {faEdit, faCog, faVideo,faPhone,faInfoCircle,faFileUpload,faSmile,faCamera,faThumbsUp,faStickyNote,faMicrophone,faPaperPlane,faEllipsisV} from '@fortawesome/free-solid-svg-icons'
 
 
 export var icons = [
@@ -15,5 +15,6 @@ export var icons = [
     faStickyNote,
     faMicrophone,
     faPaperPlane,
+    faEllipsisV,
 ];
 

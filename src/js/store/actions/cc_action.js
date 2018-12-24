@@ -55,6 +55,8 @@ export const getUsers=(limit=1000)=>{
   
     return dispatch => {
         usersRequest.fetchNext().then(users => {
+            
+            dispatch(updateHandler());
             return dispatch(updateUserList(users));
         },error=>{
             console.log("Print Error : "+ JSON.stringify(error));
@@ -62,7 +64,11 @@ export const getUsers=(limit=1000)=>{
     }
 }
 
-
+export const updateHandler = ()=>{
+    return {
+        type:'UPDATED_STAGE', 
+    }
+}
 //Set UpdateUserList
 
 export const updateUserList = (val) =>{
@@ -72,7 +78,6 @@ export const updateUserList = (val) =>{
     }
 }
 
- 
 //getGroups
 export const getGroups=(limit=1000)=>{
    
@@ -80,7 +85,8 @@ export const getGroups=(limit=1000)=>{
 
     return dispatch => {
         groupRequest.fetchNext().then(groups => { 
-            console.log("Group Request output : "+ JSON.stringify(groups));      
+            console.log("Group Request output : "+ JSON.stringify(groups));   
+            dispatch(updateHandler());   
             return dispatch(updateGroupList(groups));
         },error=>{
             console.log("Print Error : "+ JSON.stringify(error));
@@ -101,6 +107,7 @@ export const updateGroupList=(val)=>{
 
 export const addMessageListener=(dispatch)=>{
     console.log("inside addMessageListener ccAction",{dispatch});
+    dispatch(updateHandler());
     CCManager.addMessageListener(dispatch);    
 }
 
@@ -193,4 +200,17 @@ export const getUserMessageHistory=(uid,limit=50)=>{
     }   
   
 }
+
+
+
+//set startFetching 
+
+export const startFetching = () =>{
+    return{
+        type:"SYNC_STARTED",
+        status:1        
+    }
+}
+
+
 

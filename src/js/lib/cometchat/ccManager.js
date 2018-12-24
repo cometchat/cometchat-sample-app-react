@@ -11,8 +11,8 @@ export default class CCManager {
     static cometchat = null;
     
     
-    static appId        =   '219cb4a5aed5';
-    static apiKey       =   '5b0c573f6e87a45beccea8bb3109f478f479aea0';
+    static appId        =   '6e13b23d7a3';
+    static apiKey       =   '824649fc1cdf02059975c40174d0af23695aea65';
     static LISTENER_KEY   =   "listener1";
 
     // static appId        =   '{APP_ID}';     //Enter your App ID 
@@ -27,6 +27,8 @@ export default class CCManager {
   
     
     static init(dispatcher){
+
+        console.log("Appid : " + this.appId);
             
         //initialize cometchat manager
         CometChat.init(this.appId);
@@ -55,19 +57,19 @@ export default class CCManager {
         console.log("ccmangr addMessageListener: ");
         try{
             CometChat.addMessageEventListner(
-                this.LISTENER_KEY, null, 
+                this.LISTENER_KEY, null,
                 new MessageEventListener({
                     onActionRecived: (message) => {
     
                         // handle actions
-                        // console.log("ccmangr action: " + JSON.stringify(message));
+                         console.log("ccmangr action: " + JSON.stringify(message));
                         // console.log("ccmessanger : " + {message});
                         
                         this.handleActionMessage(message,dispatch);     
                     },
                     onMessageReceived: (message) => {
     
-                        // console.log("ccmangr recieved msg: " + JSON.stringify(message));
+                         console.log("ccmangr recieved msg: " + JSON.stringify(message));
     
                         // console.log("ccmessanger  recieved : " + {message});
         

@@ -1,3 +1,4 @@
+
 .h-100vh{
     height:100vh !important;
 }
@@ -14,6 +15,9 @@
     padding:0px !important;
 }
 
+.bg-white{
+    background: white !important;
+}
 
 #bglayout{
     width:100%;
@@ -40,7 +44,6 @@
     background-color: #e1eaf3;
 }
 
-
 .cometchatContainer{
     margin: 0px !important;
     padding: 0px !important;
@@ -50,3 +53,7 @@
     position: absolute;
     bottom:0px;
 }
+
+
+
+

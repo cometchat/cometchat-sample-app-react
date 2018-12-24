@@ -34,11 +34,14 @@ class ccMessageFooter extends Component{
     }
 
     handleMessage(e){
+
+        
         this.sendTextMessage();        
     }
 
     async sendTextMessage(){
          var content = this.ccMessageEditorBox.innerHTML;
+         console.log("inside message handler : " + content );
          if(content.length > 0 ){
             try{
 
@@ -66,35 +69,25 @@ class ccMessageFooter extends Component{
         return(
             
             <Row style={ccMessageFooterStyle}>
+                 <Col lg={2} className="cc-no-padding h-100" style = {{ textAlign: 'right'}}>
+                    <div className = "ccMessageFooterMenu">
+                        <span  className = "cc-icon " onClick={this.handleMessage.bind(this)} >
+                            <FontAwesomeIcon icon="paper-plane" />
+                        </span>                       
+                    </div>
+                </Col>
                 <Col lg={8} className="h-100 cc-no-padding">
                     <div className="ccMessageEditorBox" contentEditable="true"  data-placeholder="Type a message..." 
                        ref={(div)=>{this.ccMessageEditorBox = div}} onKeyUp = {this.handleEnterPressed.bind(this)}>
                     </div>
                 </Col>
-                <Col lg={4} className="cc-no-padding h-100" style = {{ textAlign: 'right'}}>
+                <Col lg={2} className="cc-no-padding h-100" style = {{ textAlign: 'right'}}>
                     <div className = "ccMessageFooterMenu">
                         
-                        <span  className = "cc-icon " >
-                            <FontAwesomeIcon  icon="file-upload"/> 
+                        <span  className = "cc-icon " onClick={this.handleMessage.bind(this)} >
+                            <FontAwesomeIcon icon="paper-plane" />
                         </span>
-                        <span  className = "cc-icon " >
-                            <FontAwesomeIcon  icon="smile" />
-                        </span>
-                        <span  className = "cc-icon " >
-                            <FontAwesomeIcon  icon="sticky-note"  />
-                        </span>
-                        <span  className = "cc-icon " >
-                            <FontAwesomeIcon  icon="video" />
-                        </span>
-                        <span  className = "cc-icon " >
-                            <FontAwesomeIcon  icon="microphone" />
-                        </span>
-                        <span  className = "cc-icon " >
-                            <FontAwesomeIcon  icon="camera" />
-                        </span>
-                        <span  className = "cc-icon "  onClick={this.handleMessage.bind(this)} >
-                            <MessageSendButton buttonType = {this.state.showButton}/>
-                        </span>
+                       
                     </div>
                 </Col>
             </Row>
@@ -113,28 +106,6 @@ var ccMessageFooterStyle = {
     width: "100%",
     
 };
-
-function MessageSendButton(props){
-
-    const buttonType = props.buttonType;
-    if(buttonType == "true"){
-        return <LikeButton />;
-    }else{
-        return <TextSendButton/>;
-    }
-}
-
-
-function LikeButton(props) {
-   return <FontAwesomeIcon  icon="thumbs-up"  />;
-}
-  
-
-function TextSendButton(props) {
-   return <FontAwesomeIcon  icon="paper-plane"/>;
-}
-
-
   
 
 const mapStateToProps = (store) =>{

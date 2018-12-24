@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import ReactDOM from 'react-dom';
 import { connect } from "react-redux";
-import CCUser from "./CCUser";
+import CCGroup from "./CCGroup";
 import * as utils from './../../lib/uiComponentLib';
+import * as actionCreator from '../../store/actions/cc_action';
 
-import * as actionCreator from './../../store/actions/cc_action';
-
-class CCUserList extends Component {
+class CCGroupList extends Component {
 
     constructor(props) {
         super(props);
@@ -14,7 +13,6 @@ class CCUserList extends Component {
         this.state = {
             _activeUserUID: this.props.activeUsers,
         }
-
     }
 
     handleClickUser = (uid, uType) => {
@@ -22,16 +20,12 @@ class CCUserList extends Component {
         this.setState({ _activeUserUID: uid });
     }
 
-    render() {
+   render() {
         return (
-            this.props.usersList.map((el, index) => (
-                <CCUser activeClass={this.state._activeUserUID == el.uid ? "active" : ""}
-                    key={el.uid}
-                    status={el.status}
-                    avt={utils.CheckEmpty(el.avatar) ? el.avatar : false}
-                    showMessageEvent={this.handleClickUser.bind(this, el.uid, "user")}>
+            this.props.groupList.map((el, index) => (
+                <CCGroup activeClass={this.state._activeUserUID == el.guid ? "active" : ""} key={el.guid} status={el.type} avt={utils.CheckEmpty(el.icon) ? el.avatar : false} showMessageEvent={this.handleClickUser.bind(this, el.guid, "group")}>
                     {el.name}
-                </CCUser>
+                </CCGroup>
             ))
         );
     }
@@ -39,7 +33,7 @@ class CCUserList extends Component {
 
 const mapStateToProps = (store) => {
     return {
-        usersList: store.users.usersList,
+        groupList: store.groups.groupsList,
         activeUsers: store.users.activeUsers.uid,
     };
 };
@@ -47,8 +41,9 @@ const mapStateToProps = (store) => {
 const mapDispachToProps = dispatch => {
     return {
         updateActiveUser: (key) => dispatch(actionCreator.setActiveUser(key)),
-        fetchUser: (limit) => dispatch(actionCreator.getUsers(limit)),
+        fetchGroup: (limit) => dispatch(actionCreator.getGroups(limit)),
+
     };
 };
 
-export default connect(mapStateToProps, mapDispachToProps)(CCUserList);
+export default connect(mapStateToProps, mapDispachToProps)(CCGroupList);
