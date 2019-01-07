@@ -6,15 +6,15 @@ module.exports = {
   devtool: debug ? "inline-sourcemap" : false,
   entry: "./index.js",
   output: {
-    	path: path.join(__dirname, "test"), 
-    	filename: "cc-ui.min.js"
+    path: path.join(__dirname, "test"),
+    filename: "cc-ui.min.js"
   },
   module: {
     rules: [
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
-        
+
         use: {
           loader: "babel-loader"
         }
@@ -24,15 +24,18 @@ module.exports = {
         use: ["style-loader", "css-loader"]
       },
       {
-        test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg)(\?[a-z0-9=.]+)?$/,
-        use:[ 
+        test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf)(\?[a-z0-9=.]+)?$/,
+        use: [
           {
-    		loader: 'url-loader?limit=100000' 	
-    	  } 
-        ]        
+            loader: 'url-loader?limit=100000'
+          }
+        ]
+      },
+      {
+        test: /\.svg$/,
+        use: 'raw-loader'
+
       }
-
-
     ]
   }
 };

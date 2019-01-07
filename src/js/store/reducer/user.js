@@ -16,11 +16,16 @@ const reducers = (state = intialState, action) => {
     //ToDo : dummy actions for
     switch (action.type) {
         case 'createUser':
-            newState.age += action.value;
+            
             break;
 
         case 'getNewUserList':
-            newState.age -= action.value;
+                
+                console.log("inside user.js : " + JSON.stringify(action.users));
+                 action.users.map((new_user) => {
+                    newState.usersList.push(new_user);       
+                 });
+                
             break;
 
         case 'updateUserList':
@@ -40,14 +45,9 @@ const reducers = (state = intialState, action) => {
             break;
 
         case 'deleteUser':
-            newState.age -= action.value;
+            
             break;
 
-        case 'updateActiveUser':
-
-            newState.activeUsers = state.usersList.find(user => user.uid === action.uid);
-
-            break;
         case 'setUserSession':
 
             console.log("inside user reducers : " + JSON.stringify(action.user));

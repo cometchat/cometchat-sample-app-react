@@ -4,7 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux'
 import * as actionCreator from './../../store/actions/cc_action';
 
-
+import SVGInline  from "react-svg-inline";
+import icon_attach from './../../../public/img/icon_attach.svg'
 
 class ccMessageFooter extends Component{
 
@@ -45,7 +46,7 @@ class ccMessageFooter extends Component{
          if(content.length > 0 ){
             try{
 
-                await this.props.sendMessage(content,this.props.activeUser);      
+                await this.props.sendMessage(content,this.props.activeUser,this.props.activeMessageType);      
                 this.ccMessageEditorBox.innerHTML = "";
                 this.setState({
                     showButton : "true"
@@ -69,19 +70,18 @@ class ccMessageFooter extends Component{
         return(
             
             <Row style={ccMessageFooterStyle}>
-                 <Col lg={2} className="cc-no-padding h-100" style = {{ textAlign: 'right'}}>
+                 <Col lg={2} className="cc-no-padding h-100" >
                     <div className = "ccMessageFooterMenu">
-                        <span  className = "cc-icon " onClick={this.handleMessage.bind(this)} >
-                            <FontAwesomeIcon icon="paper-plane" />
-                        </span>                       
+                        <span  className = "cc-icon color-font-theme " onClick={this.handleMessage.bind(this)} dangerouslySetInnerHTML={{__html: icon_attach}}/>
+                                             
                     </div>
                 </Col>
                 <Col lg={8} className="h-100 cc-no-padding">
-                    <div className="ccMessageEditorBox" contentEditable="true"  data-placeholder="Type a message..." 
+                    <div className="ccMessageEditorBox border border-radius-full color-border-grey" contentEditable="true"  data-placeholder="Type a message..." 
                        ref={(div)=>{this.ccMessageEditorBox = div}} onKeyUp = {this.handleEnterPressed.bind(this)}>
                     </div>
                 </Col>
-                <Col lg={2} className="cc-no-padding h-100" style = {{ textAlign: 'right'}}>
+                <Col lg={2} className="cc-no-padding h-100" >
                     <div className = "ccMessageFooterMenu">
                         
                         <span  className = "cc-icon " onClick={this.handleMessage.bind(this)} >
@@ -97,11 +97,10 @@ class ccMessageFooter extends Component{
 };
 
 var ccMessageFooterStyle = {
-    minHeight: "50px",
+    position: "absolute",
+    minHeight: "65px",
     maxHeight:"200px",
     backgroundColor: "#FFFFFF",
-    position:"absolute",
-    borderTop:"1px solid #ccc",
     bottom:"0px",
     width: "100%",
     
@@ -110,13 +109,15 @@ var ccMessageFooterStyle = {
 
 const mapStateToProps = (store) =>{
     return {
-        activeUser: store.users.activeUsers.uid,
+        activeUser: store.message.activeMessage.id,
+        activeMessageType : store.message.activeMessage.type,
+
     };
 };
   
 const mapDispachToProps = dispatch => {
     return {
-         sendMessage : (content,uid)=>dispatch(actionCreator.sendTextMessage(uid, content))
+         sendMessage : (content,uid,msgType)=>dispatch(actionCreator.sendTextMessage(uid, content,msgType))
     };
 };
 

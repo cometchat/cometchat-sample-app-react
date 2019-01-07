@@ -1,7 +1,15 @@
 import React, { Component } from "react";
+
+import SVGInline  from "react-svg-inline";
+
 import { Row, Col, OverlayTrigger, Button, Popover } from 'react-bootstrap';
-import Glyphicon from 'react-bootstrap/lib/Glyphicon';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+import iconNewMessage from './../../../public/img/icon_new_message.svg';
+import iconMore from './../../../public/img/icon_more.svg';
+
+
 
 export default class CCLeftSidebarHeader extends Component {
 
@@ -12,28 +20,28 @@ export default class CCLeftSidebarHeader extends Component {
 
     render() {
         let title = this.props.tabTitle;
-        let tabName =   title.charAt(0).toUpperCase() + title.slice(1);
+        let tabName = title.charAt(0).toUpperCase() + title.slice(1);
         return (<Row className="sidebarHeader">
-        <div>
-            <span class="font-title color-font-title size-title">{tabName}</span>
+            <div>
+                <span class="font-title color-font-title size-title">{tabName}</span>
+                
+                <div className="header-icon">
+                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popoverClickRootClose}>
+                        <SVGInline svg={ iconMore } className="header-icon" height="18px" width="18px"/> 
+                    </OverlayTrigger>
 
-            <div className="header-icon">
-                <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popoverClickRootClose}>
-                    <FontAwesomeIcon  icon="ellipsis-v" />
-                </OverlayTrigger>
+                </div>
+
+                <div className="header-icon margin-right-10">
+                    <SVGInline svg={ iconNewMessage } className="header-icon" height="18px" width="18px"  /> 
+                </div>
+
+
+
 
             </div>
 
-            <div className="header-icon margin-right-10">
-                <FontAwesomeIcon  icon="edit" />
-            </div>
-
-
-
-
-        </div>
-
-    </Row>);
+        </Row>);
     }
 }
 

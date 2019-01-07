@@ -1,44 +1,35 @@
 /* Style for CC-UI */
 
 @font-face {
-    font-family: "product_bold";
-    src: url("./../fonts/product_bold.ttf");
+    font-family: "avenir_demibold";
+    src: url("./../fonts/AvenirNext-DemiBold.ttf");
 }
 
 
 @font-face {
-    font-family: "product_regular";
-    src: url("./../fonts/product_regular.ttf");
-}
-
-@font-face {
-    font-family: "product_italic";
-    src: url("./../fonts/product_italic.ttf");
+    font-family: "avenir_medium";
+    src: url("./../fonts/AvenirNext-Medium.ttf");
 }
 
 
 body{
-    font-family: 'product_regular', Arial, sans-serif !important ;
+    font-family: 'avenir_medium', Arial, sans-serif !important ;
 }
 
 .font-title{
-    font-family: 'product_bold', Arial, sans-serif !important;
+    font-family: 'avenir_demibold', Arial, sans-serif !important;
 }
 
 .font-header{
-    font-family: 'products_regular', Arial, sans-serif !important;
+    font-family: 'avenir_medium', Arial, sans-serif !important;
 }
 
 .font-sub-header{
-    font-family: 'products_regular', Arial, sans-serif !important;
+    font-family: 'avenir_medium', Arial, sans-serif !important;
 }
 
 .color-background{
     background:#2636be !important;
-}
-
-.color-font-theme{
-    color:#2636be !important;
 }
 
 .color-font-white{
@@ -56,16 +47,8 @@ body{
     background:#3e3e3e !important;
 }
 
-.color-dark-tint-font{
-    color:#3e3e3e !important;
-}
-
 .color-light-tint{
     background:#d9dbdd !important;
-}
-
-.color-light-tint-font{
-    color:#d9dbdd !important;
 }
 
 .color-font-header,.color-font-title{
@@ -130,18 +113,10 @@ body{
 .border-radius-no-bottom-right{
     border-radius:20px 20px 0 20px !important;
 }
-
-.border-radius-no-bottom-left{
-    border-radius:20px 20px 20px 0 !important;
-}
-
 .border{
     border: 1px solid !important;
 }
 
-.color-border-grey{
-    border-color:#ccc !important;
-}
 .color-border{
     border-color: #ffffff !important;
 }

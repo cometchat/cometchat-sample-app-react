@@ -21,8 +21,8 @@ class CCMessageContainer extends Component {
 
   async fetchMessage(){
     try{
-      console.log("inside fetch Message" + this.props.user);
-      await this.props.getMessage(this.props.user,50);
+      console.log("inside fetch Message" + this.props.user.id);
+      await this.props.getMessage(this.props.user.id,50);
       
     }catch(error){
       console.log(error);
@@ -33,7 +33,6 @@ class CCMessageContainer extends Component {
   render() {
 
     this.fetchMessage();
-
     return (
         <div className="ccMessageContainer h-100" >
             
@@ -51,7 +50,7 @@ class CCMessageContainer extends Component {
 
 const mapStateToProps = (store) =>{
   return {
-    user : store.users.activeUsers.uid
+      user :  store.message.activeMessage
   };
 };
 

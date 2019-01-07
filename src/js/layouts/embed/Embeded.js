@@ -38,6 +38,8 @@ class Embeded extends Component {
             );
 
         } else {
+
+            console.log("inside embedded : ", this.props.activeMessage );
             return (
 
                 <Grid fluid={true} className="border-radius-top bg-white h-100pr">
@@ -46,7 +48,7 @@ class Embeded extends Component {
                             <CCLeftSidebar></CCLeftSidebar>
                         </Col>
                         <Col xsHidden lg={8} style={{ height: "100%" }}>
-                            <ActiveUserMessageContainer dataContent={this.props.activeUsers} />
+                            <ActiveUserMessageContainer dataContent={this.props.activeMessage} />
                         </Col>
                     </Row>
                 </Grid>
@@ -96,7 +98,7 @@ function ShowActiveMessage(props) {
 
 const mapStateToProps = (store) => {
     return {
-        activeUsers: store.users.activeUsers,
+        activeMessage: store.message.activeMessage,
         showLoader: store.app.splashHandler.showLoader
     };
 };

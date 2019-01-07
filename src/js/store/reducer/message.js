@@ -2,7 +2,8 @@ import { updateMessageList } from "../actions/cc_action";
 import {CheckEmpty} from "./../../lib/uiComponentLib"
 
 const intialState = {
-    messages : [ ]
+    messages:[],
+    activeMessage : {}
 }
 
 //only CRD messages action 
@@ -86,6 +87,16 @@ const reducers = (state = intialState, action)=> {
                 newState.messages.push(tempobject);    
             }            
         
+        break;
+        case 'updateActiveMessage' :
+
+            console.log("updateActiveMessage : " + action.uid);
+
+            newState.activeMessage = {
+                type: action.utype,
+                id:  action.uid
+            };
+            
         break;
     }
     return newState;

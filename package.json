@@ -26,7 +26,8 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "css-loader": "^1.0.1",
-    "file-loader": "^2.0.0",
+    "file-loader": "^3.0.1",
+    "raw-loader": "^1.0.0",
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",
     "webpack": "^4.27.0",
@@ -34,7 +35,7 @@
     "webpack-dev-server": "^3.1.10"
   },
   "dependencies": {
-    "@cometchat-pulse/cometchat-pulse.js": "0.0.5",
+    "@cometchat-pulse/cometchat-pulse.js": "0.0.7",
     "@fortawesome/fontawesome-svg-core": "^1.2.8",
     "@fortawesome/free-brands-svg-icons": "^5.5.0",
     "@fortawesome/free-solid-svg-icons": "^5.5.0",
@@ -43,6 +44,7 @@
     "react-bootstrap": "^0.32.4",
     "react-dom": "^16.6.3",
     "react-redux": "^5.1.1",
+    "react-svg-inline": "^2.1.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0"
   }

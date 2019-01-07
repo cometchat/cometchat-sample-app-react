@@ -11,19 +11,34 @@ class CCGroupList extends Component {
         super(props);
 
         this.state = {
-            _activeUserUID: this.props.activeUsers,
+            _activeGroupUID: this.props.activeGroups.id
+        }       
+    }
+
+
+    handleClickUser = (uid) => {
+        this.props.updateActiveMessage(uid);
+        this.setState({ _activeGroupUID: uid });
+    }
+
+    render() {
+
+        let activeUserId = "";
+
+        if(!(utils.isEmpty(this.props.activeGroups))){
+            activeUserId = this.props.activeGroups.id;
         }
-    }
-
-    handleClickUser = (uid, uType) => {
-        this.props.updateActiveUser(uid);
-        this.setState({ _activeUserUID: uid });
-    }
-
-   render() {
+       
+        
         return (
             this.props.groupList.map((el, index) => (
-                <CCGroup activeClass={this.state._activeUserUID == el.guid ? "active" : ""} key={el.guid} status={el.type} avt={utils.CheckEmpty(el.icon) ? el.avatar : false} showMessageEvent={this.handleClickUser.bind(this, el.guid, "group")}>
+                <CCGroup 
+                activeClass={activeUserId == el.guid ? "active" : ""} 
+                key={el.guid} 
+                status={el.type} 
+                guid = {el.guid}
+                avt={utils.CheckEmpty(el.icon) ? el.icon : false} 
+                showMessageEvent={this.handleClickUser.bind(this, el.guid)}>
                     {el.name}
                 </CCGroup>
             ))
@@ -34,13 +49,13 @@ class CCGroupList extends Component {
 const mapStateToProps = (store) => {
     return {
         groupList: store.groups.groupsList,
-        activeUsers: store.users.activeUsers.uid,
+        activeGroups: store.message.activeMessage
     };
 };
 
 const mapDispachToProps = dispatch => {
     return {
-        updateActiveUser: (key) => dispatch(actionCreator.setActiveUser(key)),
+        updateActiveMessage: (key, type = "group") => dispatch(actionCreator.setActiveMessages(key, type)),
         fetchGroup: (limit) => dispatch(actionCreator.getGroups(limit)),
 
     };
