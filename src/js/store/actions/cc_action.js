@@ -1,7 +1,7 @@
 //cometchat login
 
 import CCManager from "./../../lib/cometchat/ccManager";
-import { CometChat, sendMessage } from "@cometchat-pulse/cometchat-pulse.js";
+import { CometChat, sendMessage,Group } from "@cometchat-pulse/cometchat-pulse.js";
 
 //set User Session
 export const loginInCC = (dispatch, UID) => {
@@ -155,8 +155,17 @@ export const handleActionMessage = actionMsg => {
 //handle Text Message
 
 export const handleTextMessage = (msg, dispatch) => {
-  console.log("Text Message recieved from : " + msg.sender);
-  dispatch(updateMessage(msg.sender, msg, "text Recieved : "));
+  if(msg.receiverType=="user"){
+
+    console.log("Text Message recieved from : " + msg.sender);
+    dispatch(updateMessage(msg.sender, msg, "text Recieved : "));
+  }else{
+
+    dispatch(updateMessage(msg.receiver,msg,"text recieved for group"));
+
+  }
+  
+  
 };
 
 //handle Media Message
@@ -174,21 +183,33 @@ export const sendTextMessage = (uid, text, msgType) => {
   console.log("messazgetype " + msgType);
 
   let textMessage = CCManager.getTextMessage(uid, text, msgType);
-
-  return dispatch => {
-    CometChat.sendMessage(textMessage).then(
-      message => {
-        // if(message instanceof TextMessage){
-        //console.log("mesage callback : " + JSON.stringify(message));
-        return dispatch(updateMessage(uid, message, "sendText"));
-        //}
-      },
-      error => {
-        console.log("mesage callback error : " + JSON.stringify(error));
-        //Handle any error
-      }
-    );
-  };
+  if(msgType == "user"){
+    return dispatch => {
+      CometChat.sendMessage(textMessage).then(
+        message => {
+          // if(message instanceof TextMessage){
+          //console.log("mesage callback : " + JSON.stringify(message));
+          return dispatch(updateMessage(uid, message, "sendText"));
+          //}
+        },
+        error => {
+          console.log("mesage callback error : " + JSON.stringify(error));
+          //Handle any error
+        }
+      );
+    };
+  }else{
+    return dispatch => {
+      CometChat.sendMessage(textMessage).then(
+        message => {
+        },
+        error => {
+          console.log("mesage callback error : " + JSON.stringify(error));
+        }
+      );
+    };
+  }
+  
 };
 
 //sendMediaMessage
@@ -252,8 +273,6 @@ export const getUserMessageHistory = (uid, limit = 50) => {
   };
 };
 
-//export const getGroupMessageHistory=()
-
 //set startFetching
 
 export const startFetching = () => {
@@ -262,3 +281,13 @@ export const startFetching = () => {
     status: 1
   };
 };
+
+
+export const joinGroup =(group)=>{
+
+  CometChat.joinGroup(group.guid,group.name,Group.Type.Public,'').then(
+    groupData =>{
+      console.log("Joined Group", groupData);
+    }
+  )
+}

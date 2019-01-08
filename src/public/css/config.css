@@ -248,6 +248,8 @@ button:focus {
     display: inline-block;
     width: 5%;
     text-align: center;
+    line-height: 46px;
+    vertical-align: text-top;
   }
   .received_msg {
     display: inline-block;

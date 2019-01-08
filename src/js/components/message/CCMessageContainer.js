@@ -18,7 +18,6 @@ class CCMessageContainer extends Component {
   } 
 
  
-
   async fetchMessage(){
     try{
       console.log("inside fetch Message" + this.props.user.id);
@@ -31,7 +30,6 @@ class CCMessageContainer extends Component {
 
   
   render() {
-
     this.fetchMessage();
     return (
         <div className="ccMessageContainer h-100" >

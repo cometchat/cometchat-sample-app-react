@@ -16,10 +16,40 @@ class CCGroupList extends Component {
     }
 
 
-    handleClickUser = (uid) => {
-        this.props.updateActiveMessage(uid);
-        this.setState({ _activeGroupUID: uid });
+    handleClickUser = (group) => {
+
+        switch(group.type){
+        case "public":
+            console.log("group type: ", (group.type));
+            if(group.hasJoined == undefined){
+               actionCreator.joinGroup(group);
+            }
+
+        break;
+
+        case "password":
+        console.log("group type: ", (group.type));
+        break;
+        
+        case "private":
+        console.log("group type: ", (group.type));
+        break;
+        
+
+        }
+
+        this.props.updateActiveMessage(group.guid);
+        this.setState({ _activeGroupUID: group.guid });
     }
+
+    shouldComponentUpdate = (nextProps, nextState) => {
+        if (this.props != undefined && this.props.length != 0) {
+          if (this.props.groupList.length == nextProps.groupList.length) {
+            return false;
+          }
+        }
+        return true;
+    };
 
     render() {
 
@@ -37,8 +67,9 @@ class CCGroupList extends Component {
                 key={el.guid} 
                 status={el.type} 
                 guid = {el.guid}
+                
                 avt={utils.CheckEmpty(el.icon) ? el.icon : false} 
-                showMessageEvent={this.handleClickUser.bind(this, el.guid)}>
+                showMessageEvent={this.handleClickUser.bind(this, el)}>
                     {el.name}
                 </CCGroup>
             ))

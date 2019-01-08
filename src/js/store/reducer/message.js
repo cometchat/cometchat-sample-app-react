@@ -70,6 +70,8 @@ const reducers = (state = intialState, action)=> {
             
             if(CheckEmpty(userMessageList)){
                 //uid is present    
+
+
                 newState.messages.map( userMessage => {
 
                     if(userMessage.muid === action.uid){
@@ -80,11 +82,17 @@ const reducers = (state = intialState, action)=> {
 
             }else{
                 //uid is not present
-                let tempobject = { 
+                
+                var tempArray = [...state.messages];
+
+                var tempobject1 = { 
                     muid : action.uid,
                     message : action.messages
                 };
-                newState.messages.push(tempobject);    
+
+                tempArray.push(tempobject1);    
+                newState.messages  = tempArray;
+                
             }            
         
         break;

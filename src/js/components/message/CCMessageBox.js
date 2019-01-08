@@ -16,40 +16,28 @@ var ccMessageBoxStyle = {
 };
 
 class CCMessageBox extends Component {
-
-    constructor(props) {
+    constructor(props){
         super(props);
+
 
     }
 
-    // componentWillMount(){
-    //     window.addEventListener('resize', this.scrollDownMessageBox);
-    // }
-
-    // componentWillUnmount(){
-    //     window.removeEventListener('resize', this.scrollDownMessageBox);
-    // }
-
-    // scrollDownMessageBox(e) {
-    //     console.log("inside scroll down message event");
-    //     //Later, you can stop observing
-    //     var objDiv = document.getElementById("ccMessageBox");
-    //     objDiv.scrollTop = objDiv.scrollHeight;
-    // onChange={this.scrollDownMessageBox.bind(this)}
-
-    // }
-
+    shouldComponentUpdate(nextProps,nextState){
+        console.log("next props : " + JSON.stringify(nextProps) );
+        return true;
+    }
 
     render() {
 
-        let messageUser = this.props.messageList.find(e => {
+        console.log("inside messagebox : " + JSON.stringify(this.props.messageList));
+        var messageUser = this.props.messageList.find(e => {
 
             if (e.muid == this.props.activeUser.id) {
                 return e;
             }
         });
 
-        console.log("inside messagebox : " + JSON.stringify(messageUser));
+      
 
         if (!CheckEmpty(messageUser)) {
             return (
@@ -78,10 +66,9 @@ class CCMessageBox extends Component {
 
 
 
-const mapStateToProps = (store) => {
+const mapStateToProps = store => {
     return {
         messageList: store.message.messages,
-        user: store.users,
         loggedUid: store.users.loggedInUser.uid,
         activeUser: store.message.activeMessage,
     };
@@ -89,17 +76,8 @@ const mapStateToProps = (store) => {
 
 const mapDispachToProps = dispatch => {
     return {
-
     };
 };
 
 export default connect(mapStateToProps, mapDispachToProps)(CCMessageBox);
 
-
-window.onload = function () {
-    var objDiv = document.getElementById("ccMessageBox");
-    if (objDiv != null) {
-        objDiv.scrollTop = objDiv.scrollHeight;
-    }
-
-}
