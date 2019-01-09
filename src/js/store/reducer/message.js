@@ -1,5 +1,5 @@
-import { updateMessageList } from "../actions/cc_action";
-import {CheckEmpty} from "./../../lib/uiComponentLib"
+import {CheckEmpty} from "./../../lib/uiComponentLib";
+import update from 'immutability-helper';
 
 const intialState = {
     messages:[],
@@ -32,30 +32,39 @@ const reducers = (state = intialState, action)=> {
             console.log(action.tags + " : " + JSON.stringify(action.uid));
 
             //find if any object is available for uid 
-           
-            let _userMessageList = newState.messages.find( userMessage => userMessage.muid === action.uid);
             
-            if(CheckEmpty(_userMessageList)){
+            let index = newState.messages.findIndex(userMessage =>userMessage.muid === action.uid);
+
+           
+            
+            if(index != -1 ){
                 //uid is present    
-                newState.messages.map( userMessage => {
+                const copyMessageState = Object.assign({},state.messages[index]);
 
-                    if(userMessage.muid === action.uid){
-                        userMessage.message.push(action.message);
-                    }
-                    return userMessage;
-                });
+                copyMessageState.message.push(action.message);
+                
+                const PSMessageState = update(state,{messages:{index:{$set:[copyMessageState]}}});
+                
+                console.log("message single : ", JSON.stringify(PSMessageState));
 
+                return PSMessageState;
+
+                
             }else{
                 //uid is not present
-                let tempobject = { 
-                    muid : action.uid,
-                    message : action.message
-                };
-                newState.messages.push(tempobject);    
+                
+                return Object.assign({}, state, {
+                    messages: [
+                       ...state.messages,
+                       {
+                        'muid' : action.uid,
+                        'message' : action.message
+                       }
+                    ]
+                  });
             }
 
         
-            console.log("message : ", JSON.stringify(newState));
         
         break;
 
@@ -65,35 +74,40 @@ const reducers = (state = intialState, action)=> {
             console.log("User id received  : " + JSON.stringify(action.uid));
 
             //find if any object is available for uid 
-            
-            let userMessageList = newState.messages.find( userMessage => userMessage.muid === action.uid);
-            
-            if(CheckEmpty(userMessageList)){
+
+            let index1 = newState.messages.findIndex(userMessage =>userMessage.muid === action.uid);
+                        
+            if(index1 != -1){
+
                 //uid is present    
+                const copyMessageState = Object.assign({},state.messages[index1]);
 
+                copyMessageState.message.push(action.messages);
+                
+                const copyMessagesState =  Object.assign({}, state.messages);
 
-                newState.messages.map( userMessage => {
+                copyMessagesState[index1] = copyMessageState; 
 
-                    if(userMessage.muid === action.uid){
-                        userMessage.message = action.messages;
-                    }
-                    return userMessage;
-                });
+                newState.messages = copyMessagesState; 
+
 
             }else{
                 //uid is not present
+                var tempObj = {
+                    'muid' : action.uid,
+                    'message' : action.messages
+                }
+                const NPMessageState = update(state,{messages:{$push:[tempObj]}});
                 
-                var tempArray = [...state.messages];
+                console.log("message : ", JSON.stringify(NPMessageState));
 
-                var tempobject1 = { 
-                    muid : action.uid,
-                    message : action.messages
-                };
-
-                tempArray.push(tempobject1);    
-                newState.messages  = tempArray;
+                return NPMessageState;
                 
-            }            
+                 
+
+                
+                
+            }           
         
         break;
         case 'updateActiveMessage' :

@@ -266,10 +266,10 @@ export const getUserMessageHistory = (uid, limit = 50) => {
         // handle list of messages received
         return dispatch(updateMessageList(messages, uid));
       })
-      .catch(error => {
-        //         // handle exception
-        console.log("mesage callback error : " + JSON.stringify(error));
-      });
+      // .catch(error => {
+      //   //         // handle exception
+      //   console.log("mesage callback error : " + JSON.stringify(error));
+      // });
   };
 };
 

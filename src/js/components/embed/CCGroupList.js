@@ -42,11 +42,12 @@ class CCGroupList extends Component {
         this.setState({ _activeGroupUID: group.guid });
     }
 
-    shouldComponentUpdate = (nextProps, nextState) => {
-        if (this.props != undefined && this.props.length != 0) {
-          if (this.props.groupList.length == nextProps.groupList.length) {
+     shouldComponentUpdate = (nextProps, nextState) => {
+        console.log("inside grouplist : ", {nextProps});
+        if (this.props == nextProps) {
+          //if (this.props.groupList.length == nextProps.groupList.length) {
             return false;
-          }
+          //}
         }
         return true;
     };
@@ -58,6 +59,8 @@ class CCGroupList extends Component {
         if(!(utils.isEmpty(this.props.activeGroups))){
             activeUserId = this.props.activeGroups.id;
         }
+
+        console.log("inside ccgrplist render");
        
         
         return (

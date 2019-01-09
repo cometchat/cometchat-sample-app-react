@@ -4,7 +4,7 @@ import CCMessageHeader from './CCMessageHeader'
 import CCMessageFooter from './CCMessageFooter'
 import CCMessageBox from './CCMessageBox';
 import { connect } from 'react-redux';
-import * as actionCreator from './../../store/actions/cc_action';
+
 
  
 
@@ -17,20 +17,15 @@ class CCMessageContainer extends Component {
     }
   } 
 
+
+
  
-  async fetchMessage(){
-    try{
-      console.log("inside fetch Message" + this.props.user.id);
-      await this.props.getMessage(this.props.user.id,50);
-      
-    }catch(error){
-      console.log(error);
-    };
-  }
+
 
   
   render() {
-    this.fetchMessage();
+  
+    
     return (
         <div className="ccMessageContainer h-100" >
             
@@ -54,7 +49,7 @@ const mapStateToProps = (store) =>{
 
 const mapDispachToProps = dispatch => {
   return {
-      getMessage: (uid,limit) => dispatch(actionCreator.getUserMessageHistory(uid,limit)),
+      
   };
 };
 

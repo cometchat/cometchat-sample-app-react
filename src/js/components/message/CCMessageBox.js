@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import CCMessage from './CCMessage';
 import { connect } from 'react-redux';
 import { calculateAvailableHeight, CheckEmpty } from './../../lib/uiComponentLib';
-
+import * as actionCreator from './../../store/actions/cc_action';
 
 var heightCCMessageBox = calculateAvailableHeight(74, 65, "ccMessage");
 
@@ -15,27 +15,60 @@ var ccMessageBoxStyle = {
 
 };
 
+
+
 class CCMessageBox extends Component {
     constructor(props){
         super(props);
-
-
     }
 
-    shouldComponentUpdate(nextProps,nextState){
-        console.log("next props : " + JSON.stringify(nextProps) );
+    componentWillMount(){
+        this.fetchfirstTimeMessage(this.props.activeUser.id);
+    }
+
+
+    fetchfirstTimeMessage(userid){
+        
+        var messageUser = this.props.messageList.findIndex((e) => e.muid == userid);
+    
+        console.log("component did mount in messagebox : " , {messageUser})
+    
+        if (messageUser == -1) {
+          try{
+            console.log("inside fetch Message : " + userid);
+            this.props.getMessage(userid,50);
+            
+          }catch(error){
+            console.log(error);
+          };   
+        }
+        
+      }
+
+      shouldComponentUpdate(nextProps,nextState){
+
+        console.log("next props messagebox : " + JSON.stringify(nextProps) );
+
+        if(nextProps.activeUser != this.props.activeUser){
+            this.fetchfirstTimeMessage(nextProps.activeUser.id);
+        }
+
         return true;
     }
 
     render() {
+        
+        
+        console.log("inside messagebox : ",JSON.stringify(this.props.messageList));
 
-        console.log("inside messagebox : " + JSON.stringify(this.props.messageList));
-        var messageUser = this.props.messageList.find(e => {
+        var messageUser = this.props.messageList.find((e) => {
 
             if (e.muid == this.props.activeUser.id) {
                 return e;
             }
         });
+        
+        console.log("inside messagebox messageUser: ",{messageUser} );
 
       
 
@@ -76,6 +109,7 @@ const mapStateToProps = store => {
 
 const mapDispachToProps = dispatch => {
     return {
+        getMessage: (uid,limit) => dispatch(actionCreator.getUserMessageHistory(uid,limit))
     };
 };
 

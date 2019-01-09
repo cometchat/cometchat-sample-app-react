@@ -21,10 +21,9 @@ class CCUserList extends Component {
   };
 
   shouldComponentUpdate = (nextProps, nextState) => {
-    if (this.props != undefined && this.props.length != 0) {
-      if (this.props.usersList.length == nextProps.usersList.length) {
+    if (this.props == nextProps) {
         return false;
-      }
+      
     }
     return true;
   };
