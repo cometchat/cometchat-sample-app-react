@@ -107,8 +107,7 @@ const mapDispachToProps = dispatch => {
     return {
         fetchUser: (limit) => dispatch(actionCreator.getUsers(limit)),
         fetchGroup: (limit) => dispatch(actionCreator.getGroups(limit)),
-        registerListener: () => actionCreator.addMessageListener(dispatch)
-
+        
     };
 };
 

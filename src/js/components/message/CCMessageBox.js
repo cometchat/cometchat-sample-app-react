@@ -20,6 +20,8 @@ var ccMessageBoxStyle = {
 class CCMessageBox extends Component {
     constructor(props){
         super(props);
+
+        this.refsMessageBox = React.createRef();
     }
 
     componentWillMount(){
@@ -31,7 +33,7 @@ class CCMessageBox extends Component {
         
         var messageUser = this.props.messageList.findIndex((e) => e.muid == userid);
     
-        console.log("component did mount in messagebox : " , {messageUser})
+        console.log("component did mount in messagebox : " , {messageUser});
     
         if (messageUser == -1) {
           try{
@@ -45,7 +47,7 @@ class CCMessageBox extends Component {
         
       }
 
-      shouldComponentUpdate(nextProps,nextState){
+    shouldComponentUpdate(nextProps,nextState){
 
         console.log("next props messagebox : " + JSON.stringify(nextProps) );
 
@@ -55,6 +57,26 @@ class CCMessageBox extends Component {
 
         return true;
     }
+
+    componentDidMount(){
+        this.addEventMessageBox();
+    }
+
+    addEventMessageBox = (node) =>{
+        console.log("event : " + this.refsMessageBox);
+
+        node.addEventListener("scroll", this.handleScroll.bind(this));      
+
+    }
+
+    handleScroll = (event) => {    
+        var node = event.target;
+        const bottom = node.scrollHeight - node.scrollTop === node.clientHeight;
+        if (bottom) {      
+          console.log("reached bottom");
+        }    
+    }
+
 
     render() {
         
@@ -70,17 +92,15 @@ class CCMessageBox extends Component {
         
         console.log("inside messagebox messageUser: ",{messageUser} );
 
-      
-
         if (!CheckEmpty(messageUser)) {
             return (
-                <Row ref={(div) => { this.MessageBox = div }} id="ccMessageBox" className="ccMessageBox" style={ccMessageBoxStyle}>
+                <Row ref={this.refsMessageBox} id="ccMessageBox" className="ccMessageBox" style={ccMessageBoxStyle}>
                 </Row>
             );
         } else {
 
             return (
-                <Row ref={(div) => { this.MessageBox = div }} className="ccMessageBox" style={ccMessageBoxStyle} >
+                <Row ref={this.refsMessageBox} className="ccMessageBox" style={ccMessageBoxStyle} >
                     {
                         messageUser.message.map((msg, index) => (
                             <CCMessage key={index} msgData={msg} />

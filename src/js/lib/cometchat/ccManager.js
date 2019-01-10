@@ -80,12 +80,12 @@ export default class CCManager {
     CometChat.addMessageEventListener(
       this.LISTENER_KEY_MESSAGE,
       new MessageEventListener({
-        onTextMessage: message => {
+        onTextMessageReceived: message => {
           console.log("Incoming Message Log", { message });
           // Handle text message
           this.handleTextMessage(message, dispatch);
         },
-        onMediaMessage: message => {
+        onMediaMessageReceived: message => {
           console.log("Incoming Message Log", { message });
           // handle media message
           this.handleMediaMessage(message, dispatch);

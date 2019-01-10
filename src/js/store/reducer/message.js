@@ -32,18 +32,18 @@ const reducers = (state = intialState, action)=> {
             console.log(action.tags + " : " + JSON.stringify(action.uid));
 
             //find if any object is available for uid 
-            
             let index = newState.messages.findIndex(userMessage =>userMessage.muid === action.uid);
 
-           
+           console.log("single message received index : " + index );
             
             if(index != -1 ){
-                //uid is present    
-                const copyMessageState = Object.assign({},state.messages[index]);
 
-                copyMessageState.message.push(action.message);
+                //uid is present    
+                const copyPSMessageState = Object.assign({},state.messages[index]);
+
+                copyPSMessageState.message.push(action.message);
                 
-                const PSMessageState = update(state,{messages:{index:{$set:[copyMessageState]}}});
+                const PSMessageState = update(state,{messages:{index:{$set:[copyPSMessageState]}}});
                 
                 console.log("message single : ", JSON.stringify(PSMessageState));
 
@@ -53,18 +53,17 @@ const reducers = (state = intialState, action)=> {
             }else{
                 //uid is not present
                 
-                return Object.assign({}, state, {
-                    messages: [
-                       ...state.messages,
-                       {
-                        'muid' : action.uid,
-                        'message' : action.message
-                       }
-                    ]
-                  });
-            }
+                var tempObj = {
+                    'muid' : action.uid,
+                    'message' : action.message
+                }
 
-        
+                const PSSMessageState = update(state,{messages:{$push:[tempObj]}});
+               
+                console.log("message : ", JSON.stringify(PSSMessageState));
+
+                return PSSMessageState;
+            }
         
         break;
 
@@ -74,7 +73,6 @@ const reducers = (state = intialState, action)=> {
             console.log("User id received  : " + JSON.stringify(action.uid));
 
             //find if any object is available for uid 
-
             let index1 = newState.messages.findIndex(userMessage =>userMessage.muid === action.uid);
                         
             if(index1 != -1){
@@ -86,17 +84,22 @@ const reducers = (state = intialState, action)=> {
                 
                 const copyMessagesState =  Object.assign({}, state.messages);
 
-                copyMessagesState[index1] = copyMessageState; 
+                const NPLMessageState = update(state,{messages:{index:{$set:[copyMessageState]}}});
+                
+                console.log("message single : ", JSON.stringify(NPLMessageState));
 
-                newState.messages = copyMessagesState; 
+                return NPLMessageState;
 
 
             }else{
+                
                 //uid is not present
+
                 var tempObj = {
                     'muid' : action.uid,
                     'message' : action.messages
                 }
+
                 const NPMessageState = update(state,{messages:{$push:[tempObj]}});
                 
                 console.log("message : ", JSON.stringify(NPMessageState));

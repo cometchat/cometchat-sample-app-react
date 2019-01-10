@@ -9,7 +9,6 @@ export const loginInCC = (dispatch, UID) => {
     CometChat.login(UID, CCManager.apiKey)
       .then(user => {
         console.log("AppUser Information :", { user });
-        addMessageListener(dispatch);
         return dispatch(setUserSession(user));
       })
       .catch(error => {
@@ -156,9 +155,8 @@ export const handleActionMessage = actionMsg => {
 
 export const handleTextMessage = (msg, dispatch) => {
   if(msg.receiverType=="user"){
-
     console.log("Text Message recieved from : " + msg.sender);
-    dispatch(updateMessage(msg.sender, msg, "text Recieved : "));
+    dispatch(updateMessage(msg.sender.uid, msg, "text Recieved : "));
   }else{
 
     dispatch(updateMessage(msg.receiver,msg,"text recieved for group"));
