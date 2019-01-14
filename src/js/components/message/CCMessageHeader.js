@@ -3,8 +3,15 @@ import { Row, Col, OverlayTrigger, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux';
 import * as utils from './../../lib/uiComponentLib';
+
+import icon_audio from "./../../../public/img/icon_audio_call.svg";
+import icon_more from "./../../../public/img/icon_more_header.svg";
+import icon_video from "./../../../public/img/icon_video_call.svg";
+
+
 var Userthumbnail = require('./../../../public/img/user.png');
 var Groupthumbnail = require('./../../../public/img/group.jpg');
+
 
 class CCMessageHeader extends Component {
 
@@ -41,9 +48,9 @@ class CCMessageHeader extends Component {
 
                 <Col lg={4} className="cc-no-padding h-100">
                     <div className="ccMessageHeaderMenu">
-                        <FontAwesomeIcon className="cc-icon " icon="phone" flip="horizontal" />
-                        <FontAwesomeIcon className="cc-icon " icon="video" />
-                        <FontAwesomeIcon className="cc-icon " icon="ellipsis-v" />
+                        <span className="ccmessageHeaderIcon " dangerouslySetInnerHTML={{__html:icon_audio}}/>
+                        <span className="ccmessageHeaderIcon " dangerouslySetInnerHTML={{__html:icon_video}}/>
+                        <span className="ccmessageHeaderIcon " dangerouslySetInnerHTML={{__html:icon_more}}/>
                     </div>
                 </Col>
 

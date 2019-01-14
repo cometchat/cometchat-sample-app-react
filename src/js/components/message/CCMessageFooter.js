@@ -6,6 +6,7 @@ import * as actionCreator from "./../../store/actions/cc_action";
 
 import SVGInline from "react-svg-inline";
 import icon_attach from "./../../../public/img/icon_attach.svg";
+import icon_send from "./../../../public/img/icon_send.svg"
 
 class ccMessageFooter extends Component {
   constructor(props) {
@@ -92,7 +93,7 @@ class ccMessageFooter extends Component {
   render() {
     return (
       <Row style={ccMessageFooterStyle}>
-        <Col lg={2} className="cc-no-padding h-100">
+        <Col lg={2} className="cc-no-padding h-100 align-center">
           <div className="ccMessageFooterMenu">
             <input
               id="ccMessageInputFile"
@@ -111,7 +112,7 @@ class ccMessageFooter extends Component {
             />
           </div>
         </Col>
-        <Col lg={8} className="h-100 cc-no-padding">
+        <Col lg={8} className="h-100 cc-no-padding ">
           <div
             className="ccMessageEditorBox border border-radius-full color-border-grey"
             contentEditable="true"
@@ -122,11 +123,9 @@ class ccMessageFooter extends Component {
             onKeyUp={this.handleEnterPressed.bind(this)}
           />
         </Col>
-        <Col lg={2} className="cc-no-padding h-100">
+        <Col lg={2} className="cc-no-padding h-100 align-center" >
           <div className="ccMessageFooterMenu">
-            <span className="cc-icon " onClick={this.handleMessage.bind(this)}>
-              <FontAwesomeIcon icon="paper-plane" />
-            </span>
+            <span className="cc-icon sendButton " onClick={this.handleMessage.bind(this)} dangerouslySetInnerHTML={{__html:icon_send}}/>
           </div>
         </Col>
       </Row>

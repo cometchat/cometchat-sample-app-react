@@ -7,6 +7,9 @@ body{
     padding: 48px !important;;
 }
 
+.align-center{
+    text-align: center !important;
+}
 
 /* login form */
 
@@ -192,10 +195,8 @@ button:focus {
 }
 
 .ccMessageFooterMenu{
-    position: absolute;
     padding: 9px 8px;
-    height: 100%;
-    right: 0;
+    height: 100%;   
     font-size: 24px;
 }
 
@@ -332,11 +333,18 @@ button:focus {
 
 .header-icon{
     height: 100%;
-    font-size: 18px;
+    font-size: 28px;
     float: right;
     display: inline;
     align-self: center;
-    line-height: 34px;
+    line-height: 32px;
+    cursor: pointer;
+}
+
+.ccmessageHeaderIcon{
+    height:36px;
+    width:36px;
+
 }
 
 .margin-right-10{
@@ -408,3 +416,40 @@ nav nav-pills>li>a{
     padding-bottom: 0px !important;
 }
 
+.messageBoxNewMessageNotification{
+    position: absolute;
+    align-self: center;
+    text-align: center;
+    width: 100%;
+}
+
+.messageBoxNewMessageNotification>span{
+    border: 1px solid #4CAF50;
+    border-radius: 20px;
+    padding: 10px;
+    width: 320px;
+    font-size: 14px;
+    color: white;
+    height: 16px;
+    cursor:pointer;
+    background: #4CAF50;
+}
+
+.hideBlock{
+    display:none !important;
+}
+
+.displayBlock{
+    display:none !important;
+}
+
+.sendButton{
+    border: 1px solid;
+    border-radius: 32px;
+    padding-left: 4px !important;
+    height: 42px !important;
+    width: 42px;
+    color: white;
+    background: #2636be;
+    font-size: 28px;
+}

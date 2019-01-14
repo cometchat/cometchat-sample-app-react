@@ -27,13 +27,13 @@ export default class CCLeftSidebarHeader extends Component {
                 
                 <div className="header-icon">
                     <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popoverClickRootClose}>
-                        <SVGInline svg={ iconMore } className="header-icon" height="18px" width="18px"/> 
+                        <SVGInline svg={ iconMore } className="header-icon" height="32px" width="20px"/> 
                     </OverlayTrigger>
 
                 </div>
 
                 <div className="header-icon margin-right-10">
-                    <SVGInline svg={ iconNewMessage } className="header-icon" height="18px" width="18px"  /> 
+                    <SVGInline svg={ iconNewMessage } className="header-icon" height="32px" width="20px"  /> 
                 </div>
 
 

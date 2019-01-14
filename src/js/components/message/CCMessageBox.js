@@ -15,11 +15,19 @@ var ccMessageBoxStyle = {
 
 };
 
+var ccNewMessageNotifierStyle =  {
+    top: (heightCCMessageBox-10),
+}
+
 
 
 class CCMessageBox extends Component {
     constructor(props){
         super(props);
+
+        this.state = {
+            displayStatusNewMessage : false,
+        }
 
         this.refsMessageBox = React.createRef();
     }
@@ -54,31 +62,41 @@ class CCMessageBox extends Component {
         if(nextProps.activeUser != this.props.activeUser){
             this.fetchfirstTimeMessage(nextProps.activeUser.id);
         }
-
+    
         return true;
     }
 
     componentDidMount(){
-        this.addEventMessageBox();
+        var node = document.getElementById("ccMessageBox");
+        this.addEventMessageBox(node);
     }
 
     addEventMessageBox = (node) =>{
-        console.log("event : " + this.refsMessageBox);
-
-        node.addEventListener("scroll", this.handleScroll.bind(this));      
-
+        node.addEventListener("DOMSubtreeModified", this.handleScroll.bind(this));     
     }
 
     handleScroll = (event) => {    
         var node = event.target;
         const bottom = node.scrollHeight - node.scrollTop === node.clientHeight;
-        if (bottom) {      
-          console.log("reached bottom");
+        if (!bottom) {      
+            console.log("reached not bottom");
+        }else{
+            console.log("reached bottom");  
         }    
     }
 
 
     render() {
+
+        var displayStatus = this.state.displayStatusNewMessage;
+
+        let classVar = ['messageBoxNewMessageNotification'];
+
+        if (this.state.displayStatusNewMessage) {
+            classVar.push('displayBlock');
+        }else{
+            classVar.push('hideBlock');
+        }
         
         
         console.log("inside messagebox : ",JSON.stringify(this.props.messageList));
@@ -100,15 +118,23 @@ class CCMessageBox extends Component {
         } else {
 
             return (
-                <Row ref={this.refsMessageBox} className="ccMessageBox" style={ccMessageBoxStyle} >
-                    {
-                        messageUser.message.map((msg, index) => (
-                            <CCMessage key={index} msgData={msg} />
-                        ))
+                <div>
+                    <Row ref={this.refsMessageBox} id="ccMessageBox" className="ccMessageBox" style={ccMessageBoxStyle} >
+                        {
+                            messageUser.message.map((msg, index) => (
+                                <CCMessage key={index} msgData={msg} />
+                            ))
+                        }
+                    </Row>
+                  
+                    <Row class={classVar.join(' ')} style={ccNewMessageNotifierStyle}>
+                            <span>Unread message ▼</span>
+                    </Row>
 
+                </div>
+                
+                
 
-                    }
-                </Row>
 
             );
         }
