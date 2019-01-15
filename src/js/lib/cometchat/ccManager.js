@@ -2,20 +2,22 @@
  * CCManager class : To manage cometchat SDK
  */
 
-import {
-  CometChat,
-  UsersRequestBuilder,
-  GroupsRequestBuilder,
-  UserMessagesRequestBuilder,
-  MESSAGE_REQUEST,
-  MESSAGE_TYPE,
-  RECEIVER_TYPE,
-  TextMessage,
-  MediaMessage,
-  MessageEventListener,
-  UserEventListener,
-  GroupEventListener
-} from "@cometchat-pulse/cometchat-pulse.js";
+// import {
+//   CometChat,
+//   UsersRequestBuilder,
+//   GroupsRequestBuilder,
+//   UserMessagesRequestBuilder,
+//   MESSAGE_REQUEST,
+//   MESSAGE_TYPE,
+//   RECEIVER_TYPE,
+//   TextMessage,
+//   MediaMessage,
+//   MessageEventListener,
+//   UserEventListener,
+//   GroupEventListener
+// } from "@cometchat-pulse/cometchat-pulse.js";
+
+import {CometChat} from "@cometchat-pro/chat";
 
 import * as actionCreator from "./../../store/actions/cc_action";
 
@@ -31,8 +33,7 @@ export default class CCManager {
   // static appId        =   '{APP_ID}';     //Enter your App ID
   // static apiKey       =   '{API_KEY}';    //Enter your API KEY
 
-  // static LISTENER_KEY   =   'Listener_Key';
-
+  
   static usersRequestBuilder = null;
   static groupsRequestBuilder = null;
 
@@ -60,17 +61,17 @@ export default class CCManager {
 
   static getTextMessage(uid, text, msgType) {
     if (msgType == "user") {
-      return new TextMessage(uid, text, MESSAGE_TYPE.TEXT, RECEIVER_TYPE.USER);
+      return new TextMessage(uid, text, CometChat.MESSAGE_TYPE.TEXT, CometChat.RECEIVER_TYPE.USER);
     } else {
-      return new TextMessage(uid, text, MESSAGE_TYPE.TEXT, RECEIVER_TYPE.GROUP);
+      return new TextMessage(uid, text, CometChat.MESSAGE_TYPE.TEXT, CometChat.RECEIVER_TYPE.GROUP);
     }
   }
 
   static getMediaMessage(uid, file, msgType) {
     if (msgType == "user") {
-      return new MediaMessage(uid, file, MESSAGE_TYPE.IMAGE, RECEIVER_TYPE.USER);
+      return new MediaMessage(uid, file, CometChat.MESSAGE_TYPE.IMAGE, CometChat.RECEIVER_TYPE.USER);
     } else {
-      return new MediaMessage(uid, file, MESSAGE_TYPE.IMAGE, RECEIVER_TYPE.GROUP);
+      return new MediaMessage(uid, file, CometChat.MESSAGE_TYPE.IMAGE, CometChat.RECEIVER_TYPE.GROUP);
     }
   }
 
@@ -92,9 +93,7 @@ export default class CCManager {
         }
       })
     );
-    // }catch(err){
-    //     console.log("Message event error ",{err});
-    // }
+    
   }
 
   static addUserEventListener(dispatch) {

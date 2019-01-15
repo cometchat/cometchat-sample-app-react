@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as util from './../../lib/uiComponentLib';
 import * as utils from './../../lib/uiComponentLib';
+
 var Userthumbnail = require('./../../../public/img/user.png');
 var Groupthumbnail = require('./../../../public/img/group.jpg');
 
@@ -14,15 +15,12 @@ class CCMessage extends Component {
             sid : this.props.msgData.sender.uid,
             loggedInUser: this.props.loggedUid,
             sendAt: this.props.msgData.sentAt,
+            msgType : this.props.msgData.type,
         }
         console.log("message sender id : " + JSON.stringify(msg.sid.uid));
 
         msg.username = this.props.msgData.sender.name;
         msg.avatar = utils.CheckEmpty(this.props.msgData.sender.avatar) ? this.props.msgData.sender.avatar : Userthumbnail;
-
-
-
-       
 
         return (<MessageType msg={msg} />);
     }
@@ -40,6 +38,11 @@ function MessageType(props) {
 
 
 function IncomingMessage(props) {
+
+    switch(props.msg.msgType){
+        case cometchat.
+    }
+
 
     return (
         <div className="incoming_msg">
