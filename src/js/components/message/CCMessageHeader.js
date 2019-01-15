@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Row, Col, OverlayTrigger, Button } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { connect } from 'react-redux';
 import * as utils from './../../lib/uiComponentLib';
 
@@ -53,10 +53,6 @@ class CCMessageHeader extends Component {
                         <span className="ccmessageHeaderIcon " dangerouslySetInnerHTML={{__html:icon_more}}/>
                     </div>
                 </Col>
-
-
-
-
             </Row>
         );
     }
@@ -72,7 +68,7 @@ const mapStateToProps = (store) => {
 
 const mapDispachToProps = dispatch => {
     return {
-        //UpdateActiveUser: (key) => dispatch({ type: "updateActiveUser", uid:key }),
+
     };
 };
 
