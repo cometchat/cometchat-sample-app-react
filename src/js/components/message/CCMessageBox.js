@@ -46,7 +46,7 @@ class CCMessageBox extends Component {
         if (messageUser == -1) {
           try{
             console.log("inside fetch Message : " + userid);
-            this.props.getMessage(userid,50);
+            this.props.getMessage(this.props.activeUser.type,userid,50);
             
           }catch(error){
             console.log(error);
@@ -155,7 +155,7 @@ const mapStateToProps = store => {
 
 const mapDispachToProps = dispatch => {
     return {
-        getMessage: (uid,limit) => dispatch(actionCreator.getUserMessageHistory(uid,limit))
+        getMessage: (uid,limit) => dispatch(actionCreator.getUserMessageHistory(uType,uid,limit))
     };
 };
 

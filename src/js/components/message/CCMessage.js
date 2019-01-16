@@ -6,6 +6,7 @@ import * as utils from './../../lib/uiComponentLib';
 var Userthumbnail = require('./../../../public/img/user.png');
 var Groupthumbnail = require('./../../../public/img/group.jpg');
 
+import { CometChat} from "@cometchat-pro/chat";
 class CCMessage extends Component {
 
     render() {
@@ -40,39 +41,90 @@ function MessageType(props) {
 function IncomingMessage(props) {
 
     switch(props.msg.msgType){
-        case cometchat.
+        case CometChat.MESSAGE_TYPE.IMAGE : {
+
+        } break;
+
+        case CometChat.MESSAGE_TYPE.VIDEO : {
+
+        }
+        break;
+
+        case CometChat.MESSAGE_TYPE.AUDIO: {
+
+        }
+        break;
+
+        case CometChat.MESSAGE_TYPE.FILE : {
+
+        }
+        break;
+
+        case CometChat.MESSAGE_TYPE.TEXT : {
+            return (
+                <div className="incoming_msg">
+                    <div className="incoming_msg_img">
+                        <img className="img-circle" src={props.msg.avatar} alt="" style={{ width: "32px", height: "32px" }} />
+                    </div>
+        
+                    <div className="received_msg">
+                        <div className="received_withd_msg">
+                            <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">{props.msg.data}
+                            </p>
+                            <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
+                        </div>
+                    </div>
+                </div>
+            );
+            
+        }
+        break;
     }
 
 
-    return (
-        <div className="incoming_msg">
-            <div className="incoming_msg_img">
-                <img className="img-circle" src={props.msg.avatar} alt="" style={{ width: "32px", height: "32px" }} />
-            </div>
-
-            <div className="received_msg">
-                <div className="received_withd_msg">
-                    <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">{props.msg.data}
-                    </p>
-                    <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
-                </div>
-            </div>
-        </div>
-    );
+   
 }
 
 function OutgoingMessage(props) {
-    return (
-        <div class="outgoing_msg">
-            <div class="sent_msg ">
-                <p class="color-background border-radius-no-bottom-right color-font-white">
-                    {props.msg.data}
-                </p>
-                <span class="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
 
-            </div>
-        </div>
-    );
+    switch(props.msg.msgType){
+        case CometChat.MESSAGE_TYPE.IMAGE : {
+
+        } break;
+
+        case CometChat.MESSAGE_TYPE.VIDEO : {
+
+        }
+        break;
+
+        case CometChat.MESSAGE_TYPE.AUDIO: {
+
+        }
+        break;
+
+        case CometChat.MESSAGE_TYPE.FILE : {
+
+        }
+        break;
+
+        case CometChat.MESSAGE_TYPE.TEXT : {
+            return (
+                <div class="outgoing_msg">
+                    <div class="sent_msg ">
+                        <p class="color-background border-radius-no-bottom-right color-font-white">
+                            {props.msg.data}
+                        </p>
+                        <span class="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
+        
+                    </div>
+                </div>
+            );
+        }
+        break;
+    }
+
+
+ 
 }
 
 const mapStateToProps = (store) => {

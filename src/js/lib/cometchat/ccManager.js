@@ -2,21 +2,6 @@
  * CCManager class : To manage cometchat SDK
  */
 
-// import {
-//   CometChat,
-//   UsersRequestBuilder,
-//   GroupsRequestBuilder,
-//   UserMessagesRequestBuilder,
-//   MESSAGE_REQUEST,
-//   MESSAGE_TYPE,
-//   RECEIVER_TYPE,
-//   TextMessage,
-//   MediaMessage,
-//   MessageEventListener,
-//   UserEventListener,
-//   GroupEventListener
-// } from "@cometchat-pulse/cometchat-pulse.js";
-
 import {CometChat} from "@cometchat-pro/chat";
 
 import * as actionCreator from "./../../store/actions/cc_action";
@@ -33,9 +18,6 @@ export default class CCManager {
   // static appId        =   '{APP_ID}';     //Enter your App ID
   // static apiKey       =   '{API_KEY}';    //Enter your API KEY
 
-  
-  static usersRequestBuilder = null;
-  static groupsRequestBuilder = null;
 
   static userRequest = null;
   static groupRequest = null;
@@ -45,10 +27,6 @@ export default class CCManager {
 
     //initialize cometchat manager
     CometChat.init(this.appId);
-
-    //initiate Chat API POJO objects
-    CCManager.usersRequestBuilder = new UsersRequestBuilder();
-    CCManager.groupsRequestBuilder = new GroupsRequestBuilder();
   }
 
   static getInstance() {
@@ -57,6 +35,14 @@ export default class CCManager {
     }
 
     return CCManager.cometchat;
+  }
+  
+  static setUserRequestBuilder(limit){
+    CCManager.userRequest = new CometChat.UsersRequestBuilder().setLimit(limit).build();
+  }
+
+  static setGroupRequestBuilder(limit){
+    CCManager.groupRequest = new CometChat.GroupsRequestBuilder().setLimit(limit).build();
   }
 
   static getTextMessage(uid, text, msgType) {
@@ -78,9 +64,9 @@ export default class CCManager {
   static addMessageListener(dispatch) {
     console.log("ccmangr addMessageListener: ");
     //   try{
-    CometChat.addMessageEventListener(
+    CometChat.addMessageListener(
       this.LISTENER_KEY_MESSAGE,
-      new MessageEventListener({
+      new CometChat.MessageListener({
         onTextMessageReceived: message => {
           console.log("Incoming Message Log", { message });
           // Handle text message
@@ -98,9 +84,9 @@ export default class CCManager {
 
   static addUserEventListener(dispatch) {
     try {
-      CometChat.addUserEventListener(
+      CometChat.addUserListener(
         this.LISTENER_KEY_USER,
-        new UserEventListener({
+        new CometChat.UserListener({
           onUserOnline: onlineUser => {
             console.log("On User Online :=>", { onlineUser });
             //User came online
@@ -118,9 +104,9 @@ export default class CCManager {
 
   static addGroupEventListener(dispatch) {
     try {
-      CometChat.addGroupEventListener(
+      CometChat.addGroupListener(
         this.LISTENER_KEY_GROUP,
-        new GroupEventListener({
+        new CometChat.GroupListener({
           onUserJoined: (joinedUser, joinedGroup) => {
             console.log("user joined", { joinedUser, joinedGroup });
             // Handle Event : user joined group
@@ -170,12 +156,12 @@ export default class CCManager {
 
     console.log("Current time : " + currentTime);
 
-    let messageRequestBuilder = new UserMessagesRequestBuilder(
+    let messageRequestBuilder = new CometChat.UserMessagesRequestBuilder(
       uid,
       currentTime,
-      MESSAGE_REQUEST.SENT_AT
+      CometChat.MESSAGE_REQUEST.SENT_AT
     );
-
+      
     let messageRequest = messageRequestBuilder.setLimit(limit).build();
 
     return messageRequest;

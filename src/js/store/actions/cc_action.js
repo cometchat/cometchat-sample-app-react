@@ -1,7 +1,7 @@
 //cometchat login
 
 import CCManager from "./../../lib/cometchat/ccManager";
-import { CometChat, sendMessage,Group } from "@cometchat-pulse/cometchat-pulse.js";
+import { CometChat, sendMessage,Group } from "@cometchat-pro/chat";
 
 //set User Session
 export const loginInCC = (dispatch, UID) => {
@@ -45,12 +45,10 @@ export const setActiveMessage = (key, val) => {
 
 //get the user
 export const getUsers = (limit = 50) => {
-  CCManager.usersRequest = CCManager.usersRequestBuilder
-    .setLimit(limit)
-    .build();
 
+  CCManager.setUserRequestBuilder(limit);
   return dispatch => {
-    CCManager.usersRequest.fetchNext().then(
+    CCManager.userRequest.fetchNext().then(
       users => {
         dispatch(updateHandler());
         return dispatch(updateUserList(users));
@@ -64,7 +62,7 @@ export const getUsers = (limit = 50) => {
 
 export const getNextUserList = () => {
   return dispatch => {
-    CCManager.usersRequest.fetchNext().then(
+    CCManager.userRequest.fetchNext().then(
       users => {
         console.log("new users", JSON.stringify(users));
         return dispatch(updateUserList(users));
@@ -92,9 +90,8 @@ export const updateUserList = val => {
 
 //getGroups
 export const getGroups = (limit = 50) => {
-  CCManager.groupRequest = CCManager.groupsRequestBuilder
-    .setLimit(limit)
-    .build();
+  
+  CCManager.setGroupRequestBuilder(limit);
 
   return dispatch => {
     CCManager.groupRequest.fetchNext().then(
