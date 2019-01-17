@@ -1,5 +1,5 @@
 {
-  "name": "cometchat-pulse-reactjs-sample-app",
+  "name": "cometchat-pro-reactjs-sample-app",
   "version": "1.0.0",
   "description": "",
   "main": "webpack.config.js",
@@ -35,7 +35,6 @@
     "webpack-dev-server": "^3.1.14"
   },
   "dependencies": {
-
     "@cometchat-pro/chat": "^1.0.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.8",
     "@fortawesome/free-brands-svg-icons": "^5.5.0",
