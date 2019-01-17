@@ -1,62 +1,61 @@
 const intialState = {
-    usersList:[
+    usersList: [
     ],
-    activeUsers:{
-       
+    activeUsers: {
+        
     },
-    loggedInUser:{
-    
+    loggedInUser: {
+        
+    },
 
-    },
-   
 }
 
-const reducers = (state = intialState, action)=> {
-    const newState = {...state};
+const reducers = (state = intialState, action) => {
+    const newState = { ...state };
 
     //ToDo : dummy actions for
-    switch(action.type){
-        case 'createUser': 
-            newState.age += action.value;
-        break;
-        
-        case 'getNewUserList': 
-            newState.age -= action.value;
-        break;
-
-        case 'updateUserList': 
-        
-            const tempArray = [...state.usersList];
+    switch (action.type) {
+        case 'createUser':
             
-             action.users.map( (user) =>{
-                if(state.loggedInUser.uid !== user.uid ){
+            break;
+
+        case 'getNewUserList':
+                
+                console.log("inside user.js : " + JSON.stringify(action.users));
+                 action.users.map((new_user) => {
+                    newState.usersList.push(new_user);       
+                 });
+                
+            break;
+
+        case 'updateUserList':
+
+            const tempArray = [...state.usersList];
+
+            action.users.map((user) => {
+                if (state.loggedInUser.uid !== user.uid) {
                     tempArray.push(user);
                 }
-                
-             });
-         
-            newState.usersList = tempArray;            
+
+            });
+
+            newState.usersList = tempArray;
+
+
+            break;
+
+        case 'deleteUser':
             
+            break;
 
-        break;
-
-        case 'deleteUser': 
-            newState.age -= action.value;
-        break;
-
-        case 'updateActiveUser':
-            
-            newState.activeUsers = state.usersList.find( user => user.uid === action.uid);
-           
-        break;
-        case  'setUserSession':
+        case 'setUserSession':
 
             console.log("inside user reducers : " + JSON.stringify(action.user));
             newState.loggedInUser = action.user;
-        break;
+            break;
         case 'unsetUserSession':
 
-        break;
+            break;
     }
     return newState;
 }

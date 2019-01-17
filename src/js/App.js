@@ -8,8 +8,7 @@ import Login from "./components/login/Login";
 class App extends Component {  
    
 
-    render() {
-      
+    render() {    
         return (
             <CheckLoginUser loggedStatus = {this.props.loggedInUser} cc_layout = {this.props.cc_layout}/> 
         );
@@ -37,7 +36,7 @@ function ShowMessenger(props) {
  
 
 function ShowLoginPage(props) {
-    return <Login/>;
+    return <Login/>; 
 }
 
 

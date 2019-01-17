@@ -1,0 +1,454 @@
+@import url("./cc-style.css");
+
+body{
+    text-rendering: optimizeLegibility;
+}
+.padding-48{
+    padding: 48px !important;;
+}
+
+.align-center{
+    text-align: center !important;
+}
+
+/* login form */
+
+.logincontainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0px;
+    background-color: #ffffff00;
+    height: 100%;
+}
+
+.cc-form-input{
+    border-radius: 20px;
+    border-color: #FFFFFF;
+    box-shadow: 0 13px 25px #0000000c !important;
+    color: black;
+    height: 64px;
+}
+
+.cc-submit-btn{
+    background-color: #2636be !important;
+    border-color: #2636be !important;
+    border-radius: 20px;
+    align-content: center;
+    width: 60%;
+    margin-left: 20%;
+    box-shadow: #0000000c 0 13px 20px;
+    align-self: center;
+    margin-top: 32px;
+}
+
+.login-form-container{
+    box-shadow: 0 13px 25px 0 #0000000c;
+    padding: 48px;
+    background: white;
+    border-radius: 20px;
+
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none !important;
+    box-shadow: 0 13px 25px #0000000c !important;
+}
+
+/*scrollbar*/
+
+*::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
+    display: none !important;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+*::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.08) !important;
+
+}
+
+
+.ccMainContainer{
+    height:100%
+}
+.ccleftSidebar{
+    height:100% !important;
+}
+
+.ccUserList{
+    height: 92%;
+    overflow: auto;
+}
+
+
+
+.cc-icon{
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    text-align: center;
+    font-size: 24px;
+    cursor: pointer;
+    transition: opacity .2s;
+    width: 32px;
+}
+
+
+.sidebarUserListItemAvatar{
+    float : left !important;
+    margin: 8px;
+}
+
+
+.sidebarUserListItemTitle{
+    flex: 1 1 0%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: rgba(0, 0, 0, 1);
+    font-size: 15px !important;
+    font-weight: 400;
+    line-height: 1.4;
+    margin: 4px;
+    margin-bottom:0px !important;
+    padding: 4px;
+    padding-bottom: 0px !important;
+    
+}
+
+
+
+.userItem{
+    cursor: pointer !important;
+    text-decoration: none;
+    height: 64px;
+    position: relative;
+    margin: 0px;
+    padding:4px;
+    border-bottom: 1px solid rgba(0, 0, 0, .10) !important;
+}
+
+
+.userItem.active {
+    background:#f2f2f2;
+}
+
+
+.pull-left{
+    float : left !important;
+}
+
+.sidebarUserListItemStatus{
+    color: rgba(153, 153, 153, 1);
+    font-size: 13px !important;
+    font-weight: 400;
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 4px;
+    margin-top:0px !important;
+    padding: 4px;
+    padding-top: 0px !important;
+}
+
+
+
+/* Message CSS */
+
+.ccMessageBox{
+    padding: 0 16px;
+}
+
+
+.ccMessagetitle{
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    white-space: nowrap;
+    color: rgba(0, 0, 0, 1);
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 50px;
+    height: 100%;   
+}
+
+.ccMessageHeaderMenu{
+    height: 100%;
+    float: right;
+}
+
+.ccMessageFooterMenu{
+    padding: 9px 8px;
+    height: 100%;   
+    font-size: 24px;
+}
+
+.ccMessageFooterMenu span{
+    display: inline-block;
+    margin-right: 15px;
+    padding: 0;
+}
+
+.ccMessageHeaderMenu span:last-child, .ccMessageFooterMenu span:last-child {
+    margin-right: 0px;
+}
+
+
+
+.ccMessageFooter{
+    position: absolute !important;
+    bottom:0px !important;
+    
+}
+
+
+
+.ccMessageEditorBox{
+    overflow: auto;
+    font-size: 16px;
+    flex-wrap: wrap;
+    width: 100%;
+    max-height: 180px;
+    min-height: 42px;
+    align-self: center;
+    align-content: center;
+    margin: 3px 0 3px 4px;
+    line-height: 32px;
+    padding: 8px;
+    outline: none !important;
+}
+
+.ccMessageEditorBox[data-placeholder]:not([data-placeholder=""]):empty::before {
+    content: attr(data-placeholder);
+  }
+
+/* message-bubble */
+
+.incoming_msg{
+    margin:14px 8px;
+}
+
+.incoming_msg_img {
+    display: inline-block;
+    width: 5%;
+    text-align: center;
+    line-height: 46px;
+    vertical-align: text-top;
+  }
+  .received_msg {
+    display: inline-block;
+    padding: 0 0 0 10px;
+    vertical-align: top;
+    width: 92%;
+   }
+  
+   .received_withd_msg p {
+    display: inline-block;
+    max-width: 100%;
+    width: fit-content;
+    min-width: 100px;
+    font-size: 14px;
+    overflow-wrap: break-word;
+    padding: 11px 16px;
+    text-align: left;
+  }
+
+  .time_date {
+    display: inline-block;
+    font-size: 12px;
+    line-height: 70px;
+    margin-right: 12px;
+    margin-left:  12px;
+    vertical-align: top;
+  }
+
+  .received_withd_msg { width: 57%;}
+
+ 
+.outgoing_msg{ 
+   overflow:hidden; margin:14px 8px;
+}
+.outgoing_msg .sent_msg {
+    float: right;
+    width: 46%;
+    text-align:right;
+ }
+
+.outgoing_msg .sent_msg p{
+    max-width: 100%;
+    width: fit-content;
+    min-width: 100px;
+    font-size: 14px;
+    overflow-wrap: break-word;
+    padding: 11px 16px;
+    text-align: left;
+    float: right;
+  }
+
+
+
+
+/* blank container  */
+
+  .outer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0px;
+    background-color: #ffffff00;
+    height: 100%;
+  }
+
+  .middle {
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  .inner {
+    margin-left: auto;
+    margin-right: auto;
+    text-align:center;
+    /*whatever width you want*/
+  }
+
+/* header_icon  */
+
+.header-icon{
+    height: 100%;
+    font-size: 28px;
+    float: right;
+    display: inline;
+    align-self: center;
+    line-height: 32px;
+    cursor: pointer;
+}
+
+.ccmessageHeaderIcon{
+    height: 38px;
+    width: 38px;
+    cursor: pointer;
+    margin-right: 24px;
+    padding: 0px;
+
+}
+
+.margin-right-10{
+    margin-right: 10px !important;
+}
+
+
+.sidebarHeader{
+    box-sizing: border-box !important;
+    justify-content: space-between !important;
+    padding: 20px 20px 20px 20px !important;
+}
+
+.tab_icon{
+    height: 28px;
+    width: auto;
+}
+
+
+.tab_title{
+    font-size: 12px;
+    color: #011000;
+}
+
+
+nav nav-pills>li>a{
+    color:#d9dbdd;
+}
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus, .nav-pills>li.active>a
+{
+    background-color: white !important;
+}
+
+.ccMessageHeader{
+    box-sizing: border-box;
+    height: 74px;
+    position: relative;
+    padding: 20px 20px 0 20px !important;
+
+}
+
+.messageHeaderAvatar{
+    display: inline-block;
+    float: left !important;
+}
+
+.messageHeaderStatus{
+    font-weight: 400;
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 0 0 8px;
+    padding-top: 0px !important;
+    font-size: 14px;
+}
+
+.messageHeaderTitle{
+    font-size: 18px;
+    flex: 1 1 0%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: rgba(0, 0, 0, 1);
+    font-weight: 400;
+    padding: 0 0 0 8px;
+    padding-bottom: 0px !important;
+}
+
+.messageBoxNewMessageNotification{
+    position: absolute;
+    align-self: center;
+    text-align: center;
+    width: 100%;
+}
+
+.messageBoxNewMessageNotification>span{
+    border: 1px solid #4CAF50;
+    border-radius: 20px;
+    padding: 10px;
+    width: 320px;
+    font-size: 14px;
+    color: white;
+    height: 16px;
+    cursor:pointer;
+    background: #4CAF50;
+}
+
+.hideBlock{
+    display:none !important;
+}
+
+.displayBlock{
+    display:none !important;
+}
+
+.sendButton{
+    border: 1px solid;
+    border-radius: 32px;
+    padding-left: 4px !important;
+    height: 42px !important;
+    width: 42px;
+    color: white;
+    background: #2636be;
+    font-size: 28px;
+}

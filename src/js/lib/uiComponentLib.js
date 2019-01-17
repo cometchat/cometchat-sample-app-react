@@ -63,7 +63,7 @@ export function convertStringToDate(strTime){
     var timestamp = Number(strTime)*1000;
     var date = new Date(timestamp);
     let timestr = formatAMPM(date);
-    return (date.getDate() + " " + monthNames[date.getMonth()] + ", " + timestr.toString());
+    return (timestr.toString());
     
   
 }

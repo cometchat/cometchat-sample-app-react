@@ -1,0 +1,122 @@
+/* Style for CC-UI */
+
+@font-face {
+    font-family: "avenir_demibold";
+    src: url("./../fonts/AvenirNext-DemiBold.ttf");
+}
+
+
+@font-face {
+    font-family: "avenir_medium";
+    src: url("./../fonts/AvenirNext-Medium.ttf");
+}
+
+
+body{
+    font-family: 'avenir_medium', Arial, sans-serif !important ;
+}
+
+.font-title{
+    font-family: 'avenir_demibold', Arial, sans-serif !important;
+}
+
+.font-header{
+    font-family: 'avenir_medium', Arial, sans-serif !important;
+}
+
+.font-sub-header{
+    font-family: 'avenir_medium', Arial, sans-serif !important;
+}
+
+.color-background{
+    background:#2636be !important;
+}
+
+.color-font-white{
+    color:#ffffff !important;
+}
+.color-view{
+    background:#ffffff !important;
+}
+
+.color-left-panel{
+    background:#97979760 !important;
+}
+
+.color-dark-tint{
+    background:#3e3e3e !important;
+}
+
+.color-light-tint{
+    background:#d9dbdd !important;
+}
+
+.color-font-header,.color-font-title{
+    color: #3e3e3e !important;
+}
+
+.color-font-sub-header{
+    color: #8e8e92 !important;
+}
+
+.view-separator{
+    height:1px !important;
+    width: 100% !important;
+    background:#e5e5e6 !important;
+}
+
+.color-font-success{
+    color:#7ed321 !important;
+}
+
+.color-bg-success{
+    color:#7ed321 !important;
+}
+
+.color-font-error{
+    color:#d0021b !important;
+}
+
+.color-bg-error{
+    color:#d0021b !important;
+}
+
+.size-title{
+    font-size:24px !important;
+}
+
+.size-header{
+    font-size: 22px !important;
+}
+
+.size-sub-header{
+    font-size: 22px !important;
+}
+
+.box-shadow{
+    box-shadow: 0 13px 25px 0 #0000000c !important;
+}
+
+.border-radius-full{
+    border-radius: 20px !important;
+}
+
+.border-radius-top{
+    border-radius:20px 20px 0 0 !important;
+}
+
+.border-radius-top-no-right{
+    border-radius:20px 20px 0 0 !important;
+    border-top-right-radius: 0 !important;
+}
+
+.border-radius-no-bottom-right{
+    border-radius:20px 20px 0 20px !important;
+}
+.border{
+    border: 1px solid !important;
+}
+
+.color-border{
+    border-color: #ffffff !important;
+}

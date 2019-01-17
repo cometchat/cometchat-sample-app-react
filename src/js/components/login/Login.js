@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { Row, Col, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import { connect } from 'react-redux';
 import * as actionCreator from './../../store/actions/cc_action';
 
@@ -32,35 +32,41 @@ import * as actionCreator from './../../store/actions/cc_action';
 
   render() {
     return (
-      <div className="Login">
-        <form onSubmit={this.handleSubmit}>
-          <FormGroup controlId="email" bsSize="large">
-            <ControlLabel>Email</ControlLabel>
-            <FormControl
-              autoFocus
-              type="Text"
-              value={this.state.email}
-              onChange={this.handleChange}
-            />
-          </FormGroup>
-          <FormGroup controlId="password" bsSize="large">
-            <ControlLabel>Password</ControlLabel>
-            <FormControl
-              value={this.state.password}
-              onChange={this.handleChange}
-              type="password"
-            />
-          </FormGroup>
-          <Button
-            block
-            bsSize="large"
-            disabled={!this.validateForm()}
-            type="submit"
-          >
-            Login
-          </Button>
-        </form>
-      </div>
+      <Row className="logincontainer border-radius-top">
+
+        <Col md={4} class="login-form-container">
+          <form onSubmit={this.handleSubmit}>
+            <FormGroup controlId="email" >
+              <ControlLabel>Username</ControlLabel>
+              <FormControl
+                autoFocus
+                className = "border-radius-full box-shadow border color-border font-size-20 H-64"
+                type="Text"
+                value={this.state.email}
+                onChange={this.handleChange}
+              />
+            </FormGroup>
+            <FormGroup controlId="password">
+              <ControlLabel>Password</ControlLabel>
+              <FormControl 
+                className = "border-radius-full box-shadow border color-border font-size-20 H-64"
+                value={this.state.password}
+                onChange={this.handleChange}
+                type="password"
+              />
+            </FormGroup>
+            <Button
+              className="cc-submit-btn"
+              block
+              bsSize="large"
+              disabled={!this.validateForm()}
+              type="submit"
+            >
+              Login
+            </Button>
+          </form>
+        </Col>
+      </Row>
     );
   }
 }

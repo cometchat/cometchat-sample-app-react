@@ -8,8 +8,11 @@ import {reducers} from './js/store/reducer'
 
 import App from './js/App'
 
+import './public/css/config.css';
+
 import { icons } from './js/lib/icons';
 import { library, dom } from '@fortawesome/fontawesome-svg-core';
+
 
 library.add(icons);
 dom.watch();
