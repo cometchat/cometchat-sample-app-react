@@ -1,21 +1,42 @@
 
+
+
+
+  <div style="width:100%">
+	<div style="width:50%; display:inline-block">
+		<p align="center">
+		<img align="center" width="180" height="180" alt="" src="https://github.com/cometchat-pro/ios-swift-chat-app/blob/master/Screenshots/CometChat%20Logo.png">	
+		</p>	
+	</div>	
+</div>
+</br>
+</br>
+</div>
+
+ Javascript Reactjs Demo app (built using **CometChat Pro**) is a fully functional messaging app capable of **one-on-one** (private) and **group** messaging. The app enables users to send **text** and **multimedia messages like audio, video, images, documents.**
+
+
   
 
-# Javascript Reactjs Sample using CometChat Pulse 
+## Table of Content
 
-This is full screen chat sample like Facebook Messenger using the [CometChat Pulse SDK](https://cometchat.com) for desktop browsers.
-
-
-  
+1. [Screenshots](#Screenshots)
 
 1. [Config Development Environment](#Config-your-Development-Environment)
 
-2.  [Config Chat App](#Config-Chat-App)
+2. [Config Chat App](#Config-Chat-App)
 
 3. [Run the Sample](#Run-the-Sample)
 
+4. [Contributing](#Contributing)
+
 
   
+## Screenshots
+
+<img align="left" src="https://github.com/cometchat-pro/ios-swift-chat-app/blob/master/Screenshots/chat.png">
+   
+<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
   
   
 
@@ -98,16 +119,9 @@ Please check `webpack.config.js` for settings.
 npm run build
 
 ```
-# Screenshots
-
-![Studio Guide](https://github.com/CometChat-Pulse/javascript-reactjs-chat-app/blob/master/screenshots/chat.png)   
 
 
 
+# Contribute 
 
-#  NOTE : 
-Develop you Real time Chat Application using Cometchat pulse. 
-
-
-Download CometChat Pulse from npm library : 
-[https://www.npmjs.com/package/@cometchat-pulse/cometchat-pulse.js](https://www.npmjs.com/package/@cometchat-pulse/cometchat-pulse.js)
+    Feel free to make a suggestion by creating a pull request.
