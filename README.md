@@ -26,7 +26,7 @@
 
 2. [Config Chat App](#Config-Chat-App)
 
-3. [Run the Sample](#Run-the-Sample)
+3. [Run the Sample](#Run-the-Demo-App)
 
 4. [Contributing](#Contributing)
 
@@ -34,9 +34,13 @@
   
 ## Screenshots
 
-<img align="left" src="https://github.com/cometchat-pro/ios-swift-chat-app/blob/master/Screenshots/chat.png">
-   
-<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+<img align="center" src="https://github.com/cometchat-pro/javascript-reactjs-chat-app/blob/master/screenshots/login.png" style="width:75%;"/>
+<p align ="center"> Fig : Login page embedded in Website </p>
+<br></br>
+<img align="center" src="https://github.com/cometchat-pro/javascript-reactjs-chat-app/blob/master/screenshots/chat.png" style="width:75%;"/>
+	<p align ="center"> Fig : Chat Application embedded in Website </p>
+<br></br>
+<br></br>
   
   
 
@@ -80,21 +84,22 @@ Please Check **package.json** file for the dependency list.
 
 ## Config Chat App
 
-If you want to put some changes into the sample app, you should build it using `webpack`. Sample uses Webpack version : 4+
+If you want to put some changes into the demo app, you should build it using `webpack`. 
+demo app uses Webpack version : 4+
 
->To know more about Webpack, visit Webpack official documentation : [HERE](https://webpack.js.org/concepts/)
+> To know more about Webpack, visit Webpack official documentation : [HERE](https://webpack.js.org/concepts/)
   
 Please change  `appId` and `apiKey` in *src/js/lib/cometchat/ccmanager.js* to the provided credentials.
 
  ![Studio Guide](https://github.com/CometChat-Pulse/javascript-reactjs-chat-app/blob/master/screenshots/code.png)   
 
 
-## Run the Sample
+## Run the Demo App
 
 
-1. Test the sample 
+1. Test the demo app 
 
-You can test the sample with local server by running the following command.
+You can test the demo app with local server by running the following command.
 
 ```bash
 
@@ -124,4 +129,4 @@ npm run build
 
 # Contribute 
 
-    Feel free to make a suggestion by creating a pull request.
+Feel free to make a suggestion by creating a pull request.
