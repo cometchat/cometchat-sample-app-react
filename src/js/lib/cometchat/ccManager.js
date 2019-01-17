@@ -9,14 +9,15 @@ import * as actionCreator from "./../../store/actions/cc_action";
 export default class CCManager {
   static cometchat = null;
 
-  static appId = "6e13b23d7a3";
-  static apiKey = "824649fc1cdf02059975c40174d0af23695aea65";
+
+  static appId        =   '{APP_ID}';     //Enter your App ID
+  static apiKey       =   '{API_KEY}';    //Enter your API KEY
+
+
   static LISTENER_KEY_MESSAGE = "msglistener";
   static LISTENER_KEY_USER = "userlistener";
   static LISTENER_KEY_GROUP = "grouplistener";
 
-  // static appId        =   '{APP_ID}';     //Enter your App ID
-  // static apiKey       =   '{API_KEY}';    //Enter your API KEY
 
 
   static userRequest = null;
@@ -47,17 +48,17 @@ export default class CCManager {
 
   static getTextMessage(uid, text, msgType) {
     if (msgType == "user") {
-      return new TextMessage(uid, text, CometChat.MESSAGE_TYPE.TEXT, CometChat.RECEIVER_TYPE.USER);
+      return new CometChat.TextMessage(uid, text, CometChat.MESSAGE_TYPE.TEXT, CometChat.RECEIVER_TYPE.USER);
     } else {
-      return new TextMessage(uid, text, CometChat.MESSAGE_TYPE.TEXT, CometChat.RECEIVER_TYPE.GROUP);
+      return new CometChat.TextMessage(uid, text, CometChat.MESSAGE_TYPE.TEXT, CometChat.RECEIVER_TYPE.GROUP);
     }
   }
 
   static getMediaMessage(uid, file, msgType) {
     if (msgType == "user") {
-      return new MediaMessage(uid, file, CometChat.MESSAGE_TYPE.IMAGE, CometChat.RECEIVER_TYPE.USER);
+      return new CometChat.MediaMessage(uid, file, CometChat.MESSAGE_TYPE.IMAGE, CometChat.RECEIVER_TYPE.USER);
     } else {
-      return new MediaMessage(uid, file, CometChat.MESSAGE_TYPE.IMAGE, CometChat.RECEIVER_TYPE.GROUP);
+      return new CometChat.MediaMessage(uid, file, CometChat.MESSAGE_TYPE.IMAGE, CometChat.RECEIVER_TYPE.GROUP);
     }
   }
 
@@ -151,20 +152,22 @@ export default class CCManager {
 
   static handleActionMessage(action, dispatch) {}
 
-  static messageRequestBuilder(uid, limit) {
-    let currentTime = parseInt((new Date().getTime() / 1000).toString());
+  static messageRequestBuilder(uType,uid, limit) {
 
-    console.log("Current time : " + currentTime);
+    // let currentTime = parseInt((new Date().getTime() / 1000).toString());
 
-    let messageRequestBuilder = new CometChat.UserMessagesRequestBuilder(
-      uid,
-      currentTime,
-      CometChat.MESSAGE_REQUEST.SENT_AT
-    );
-      
-    let messageRequest = messageRequestBuilder.setLimit(limit).build();
+    // console.log("Current time : " + currentTime);
+    
+    var messagesRequest  = "";  
 
-    return messageRequest;
+    if(uType == "user"){
+      messagesRequest = new CometChat.MessagesRequestBuilder().setUID(uid).setLimit(limit).build();
+    }else{
+      messagesRequest = new CometChat.MessagesRequestBuilder().setGUID(uid).setLimit(limit).build();
+    }
+    
+
+    return messagesRequest;
   }
 
   static removeListener() {

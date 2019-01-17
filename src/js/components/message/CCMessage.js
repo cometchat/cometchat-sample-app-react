@@ -29,6 +29,8 @@ class CCMessage extends Component {
 
 function MessageType(props) {
     if (props.msg.loggedInUser == props.msg.sid) {
+
+        console.log("Mesage : type : " + props.msg.msgType);
         //outgoing message
         return <OutgoingMessage msg={props.msg} />;
     } else {
@@ -42,21 +44,77 @@ function IncomingMessage(props) {
 
     switch(props.msg.msgType){
         case CometChat.MESSAGE_TYPE.IMAGE : {
-
+            return (
+                <div className="incoming_msg">
+                    <div className="incoming_msg_img">
+                        <img className="img-circle" src={props.msg.avatar} alt="" style={{ width: "32px", height: "32px" }} />
+                    </div>
+        
+                    <div className="received_msg">
+                        <div className="received_withd_msg">
+                            <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">{props.msg.data}
+                            </p>
+                            <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
+                        </div>
+                    </div>
+                </div>
+            );
         } break;
 
         case CometChat.MESSAGE_TYPE.VIDEO : {
-
+            return (
+                <div className="incoming_msg">
+                    <div className="incoming_msg_img">
+                        <img className="img-circle" src={props.msg.avatar} alt="" style={{ width: "32px", height: "32px" }} />
+                    </div>
+        
+                    <div className="received_msg">
+                        <div className="received_withd_msg">
+                            <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">{props.msg.data}
+                            </p>
+                            <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
+                        </div>
+                    </div>
+                </div>
+            );
         }
         break;
 
         case CometChat.MESSAGE_TYPE.AUDIO: {
-
+            return (
+                <div className="incoming_msg">
+                    <div className="incoming_msg_img">
+                        <img className="img-circle" src={props.msg.avatar} alt="" style={{ width: "32px", height: "32px" }} />
+                    </div>
+        
+                    <div className="received_msg">
+                        <div className="received_withd_msg">
+                            <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">{props.msg.data}
+                            </p>
+                            <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
+                        </div>
+                    </div>
+                </div>
+            );
         }
         break;
 
         case CometChat.MESSAGE_TYPE.FILE : {
-
+            return (
+                <div className="incoming_msg">
+                    <div className="incoming_msg_img">
+                        <img className="img-circle" src={props.msg.avatar} alt="" style={{ width: "32px", height: "32px" }} />
+                    </div>
+        
+                    <div className="received_msg">
+                        <div className="received_withd_msg">
+                            <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">{props.msg.data}
+                            </p>
+                            <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
+                        </div>
+                    </div>
+                </div>
+            );
         }
         break;
 
@@ -89,21 +147,61 @@ function OutgoingMessage(props) {
 
     switch(props.msg.msgType){
         case CometChat.MESSAGE_TYPE.IMAGE : {
-
+            return (
+                <div class="outgoing_msg">
+                    <div class="sent_msg ">
+                        <p class="color-background border-radius-no-bottom-right color-font-white">
+                            {props.msg.data}
+                        </p>
+                        <span class="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
+        
+                    </div>
+                </div>
+            );
         } break;
 
         case CometChat.MESSAGE_TYPE.VIDEO : {
-
+            return (
+                <div class="outgoing_msg">
+                    <div class="sent_msg ">
+                        <p class="color-background border-radius-no-bottom-right color-font-white">
+                            {props.msg.data}
+                        </p>
+                        <span class="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
+        
+                    </div>
+                </div>
+            );
         }
         break;
 
         case CometChat.MESSAGE_TYPE.AUDIO: {
-
+            return (
+                <div class="outgoing_msg">
+                    <div class="sent_msg ">
+                        <p class="color-background border-radius-no-bottom-right color-font-white">
+                            {props.msg.data}
+                        </p>
+                        <span class="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
+        
+                    </div>
+                </div>
+            );
         }
         break;
 
         case CometChat.MESSAGE_TYPE.FILE : {
-
+            return (
+                <div class="outgoing_msg">
+                    <div class="sent_msg ">
+                        <p class="color-background border-radius-no-bottom-right color-font-white">
+                            {props.msg.data}
+                        </p>
+                        <span class="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
+        
+                    </div>
+                </div>
+            );
         }
         break;
 

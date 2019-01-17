@@ -155,7 +155,7 @@ const mapStateToProps = store => {
 
 const mapDispachToProps = dispatch => {
     return {
-        getMessage: (uid,limit) => dispatch(actionCreator.getUserMessageHistory(uType,uid,limit))
+        getMessage: (uType,uid,limit) => dispatch(actionCreator.getUserMessageHistory(uType,uid,limit))
     };
 };
 

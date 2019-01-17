@@ -29,7 +29,6 @@ export const setUserSession = val => {
 export const setActiveMessages = (uid, type) => {
   console.log("inside setActiveMessages " + uid + " type : " + type);
   return dispatch => {
-    //dispatch(getUserMessageHistory(uid,50));
     return dispatch(setActiveMessage(uid, type));
   };
 };
@@ -246,12 +245,11 @@ export const updateMessageList = (message, val) => {
 };
 
 //getUserMessageHistory
-export const getUserMessageHistory = (uid, limit = 50) => {
+export const getUserMessageHistory = ( utype, uid, limit = 50) => {
   console.log("user id for other party : " + uid);
-
-  // let uid="SUPERHERO2" //Uid of the user with the communication is happening.;
-
-  let messageRequest = CCManager.messageRequestBuilder(uid, limit);
+  
+  let messageRequest = CCManager.messageRequestBuilder(utype, uid, limit);
+  
 
   return dispatch => {
     messageRequest
