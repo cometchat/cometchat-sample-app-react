@@ -1,21 +1,48 @@
 
+
+
+
+
+
+  <div style="width:100%">
+	<div style="width:50%; display:inline-block">
+		<p align="center">
+		<img align="center" width="180" height="180" alt="" src="https://github.com/cometchat-pro/ios-swift-chat-app/blob/master/Screenshots/CometChat%20Logo.png">	
+		</p>	
+	</div>	
+</div>
+</br>
+</br>
+</div>
+
+ Javascript Reactjs Demo app (built using **CometChat Pro**) is a fully functional messaging app capable of **one-on-one** (private) and **group** messaging. The app enables users to send **text** and **multimedia messages like audio, video, images, documents.**
+
+
   
 
-# Javascript Reactjs Sample using CometChat Pulse 
+## Table of Content
 
-This is full screen chat sample like Facebook Messenger using the [CometChat Pulse SDK](https://cometchat.com) for desktop browsers.
-
-
-  
+1. [Screenshots](#Screenshots)
 
 1. [Config Development Environment](#Config-your-Development-Environment)
 
-2.  [Config Chat App](#Config-Chat-App)
+2. [Config Chat App](#Config-Chat-App)
 
-3. [Run the Sample](#Run-the-Sample)
+3. [Run the Sample](#Run-the-Demo-App)
+
+4. [Contributing](#Contributing)
 
 
   
+## Screenshots
+
+<img align="center" src="https://github.com/cometchat-pro/javascript-reactjs-chat-app/blob/master/screenshots/login.png" style="width:75%;"/>
+<p align ="center"> Fig : Login page embedded in Website </p>
+<br></br>
+<img align="center" src="https://github.com/cometchat-pro/javascript-reactjs-chat-app/blob/master/screenshots/chat.png" style="width:75%;"/>
+	<p align ="center"> Fig : Chat Application embedded in Website </p>
+<br></br>
+<br></br>
   
   
 
@@ -59,21 +86,22 @@ Please Check **package.json** file for the dependency list.
 
 ## Config Chat App
 
-If you want to put some changes into the sample app, you should build it using `webpack`. Sample uses Webpack version : 4+
+If you want to put some changes into the demo app, you should build it using `webpack`. 
+demo app uses Webpack version : 4+
 
->To know more about Webpack, visit Webpack official documentation : [HERE](https://webpack.js.org/concepts/)
+> To know more about Webpack, visit Webpack official documentation : [HERE](https://webpack.js.org/concepts/)
   
 Please change  `appId` and `apiKey` in *src/js/lib/cometchat/ccmanager.js* to the provided credentials.
 
  ![Studio Guide](https://github.com/CometChat-Pulse/javascript-reactjs-chat-app/blob/master/screenshots/code.png)   
 
 
-## Run the Sample
+## Run the Demo App
 
 
-1. Test the sample 
+1. Test the demo app 
 
-You can test the sample with local server by running the following command.
+You can test the demo app with local server by running the following command.
 
 ```bash
 
@@ -98,14 +126,9 @@ Please check `webpack.config.js` for settings.
 npm run build
 
 ```
-# Screenshots
-
-![Studio Guide](https://github.com/CometChat-Pulse/javascript-reactjs-chat-app/blob/master/screenshots/chat.png)   
 
 
 
+# Contribute 
 
-#  NOTE : 
-Develop you Real time Chat Application using Cometchat pulse. 
-**Using Cometchat Pulse version : 0.0.2**
-Download CometChat Pulse from npm library : [https://www.npmjs.com/package/@cometchat-pulse/cometchat-pulse.js](https://www.npmjs.com/package/@cometchat-pulse/cometchat-pulse.js)
+Feel free to make a suggestion by creating a pull request.
