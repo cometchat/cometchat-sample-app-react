@@ -10,8 +10,12 @@ export default class CCManager {
   static cometchat = null;
 
 
-  static appId        =   '{APP_ID}';     //Enter your App ID
-  static apiKey       =   '{API_KEY}';    //Enter your API KEY
+  // static appId        =   '{APP_ID}';     //Enter your App ID
+  // static apiKey       =   '{API_KEY}';    //Enter your API KEY
+
+  static appId = "6e13b23d7a3";
+  static apiKey = "824649fc1cdf02059975c40174d0af23695aea65";
+
 
 
   static LISTENER_KEY_MESSAGE = "msglistener";
