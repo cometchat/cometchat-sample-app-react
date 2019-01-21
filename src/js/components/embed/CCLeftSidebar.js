@@ -18,7 +18,7 @@ import tab_icon_contact from './../../../public/img/icon_tab_contact.svg';
 import tab_icon_group from './../../../public/img/icon_tab_group.svg';
 
 
-var heightCCUserList = utils.calculateAvailableHeight(74, 65, "ccleftsidebar");
+var heightCCUserList = utils.calculateAvailableHeight(78, 65, "ccleftsidebar");
 
 
 

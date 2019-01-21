@@ -68,23 +68,21 @@ export default class CCManager {
 
   static addMessageListener(dispatch) {
     console.log("ccmangr addMessageListener: ");
-    //   try{
     CometChat.addMessageListener(
       this.LISTENER_KEY_MESSAGE,
       new CometChat.MessageListener({
         onTextMessageReceived: message => {
           console.log("Incoming Message Log", { message });
           // Handle text message
-          this.handleTextMessage(message, dispatch);
+          this.handleMessage(message, dispatch);
         },
         onMediaMessageReceived: message => {
           console.log("Incoming Message Log", { message });
           // handle media message
-          this.handleMediaMessage(message, dispatch);
+          this.handleMessage(message, dispatch);
         }
       })
     );
-    
   }
 
   static addUserEventListener(dispatch) {
@@ -144,23 +142,15 @@ export default class CCManager {
     }
   }
 
-  static handleMediaMessage(message, dispatch) {
+  static handleMessage(message, dispatch) {
     //console.log("ccmangr msg: " + JSON.stringify(message));
-    actionCreator.handleMediaMessage(message);
-  }
-
-  static handleTextMessage(message, dispatch) {
-    //console.log("ccmangr msg: " + JSON.stringify(message));
-    actionCreator.handleTextMessage(message, dispatch);
+    actionCreator.handleMessage(message, dispatch);
   }
 
   static handleActionMessage(action, dispatch) {}
 
   static messageRequestBuilder(uType,uid, limit) {
 
-    // let currentTime = parseInt((new Date().getTime() / 1000).toString());
-
-    // console.log("Current time : " + currentTime);
     
     var messagesRequest  = "";  
 

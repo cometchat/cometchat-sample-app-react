@@ -264,6 +264,7 @@ button:focus {
     overflow-wrap: break-word;
     padding: 11px 16px;
     text-align: left;
+    margin:0px;
   }
 
   .time_date {
@@ -283,8 +284,9 @@ button:focus {
 }
 .outgoing_msg .sent_msg {
     float: right;
-    width: 46%;
+    width: 70%;
     text-align:right;
+    position: relative;
  }
 
 .outgoing_msg .sent_msg p{
@@ -298,7 +300,21 @@ button:focus {
     float: right;
   }
 
+.outgoing_msg .sent_msg img{
+    max-height: 320px;
+    float: right;
+    max-width: 320px;
+    border-radius: 8px;
+}
 
+.outgoing_msg .sent_msg .time_date_media{
+    line-height: unset;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    left: 16%;
+    font-size: 12px;
+}
 
 
 /* blank container  */

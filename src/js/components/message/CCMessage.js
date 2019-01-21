@@ -12,7 +12,7 @@ class CCMessage extends Component {
     render() {
         console.log("message : " + JSON.stringify(this.props.msgData));
         var msg = {
-            data: this.props.msgData.data.text,
+            data: this.props.msgData.data,
             sid : this.props.msgData.sender.uid,
             loggedInUser: this.props.loggedUid,
             sendAt: this.props.msgData.sentAt,
@@ -52,7 +52,7 @@ function IncomingMessage(props) {
         
                     <div className="received_msg">
                         <div className="received_withd_msg">
-                            <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">{props.msg.data}
+                            <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">{props.msg.data.url}
                             </p>
                             <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
                         </div>
@@ -89,7 +89,7 @@ function IncomingMessage(props) {
         
                     <div className="received_msg">
                         <div className="received_withd_msg">
-                            <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">{props.msg.data}
+                            <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">{props.msg.data.text}
                             </p>
                             <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
                         </div>
@@ -108,7 +108,7 @@ function IncomingMessage(props) {
         
                     <div className="received_msg">
                         <div className="received_withd_msg">
-                            <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">{props.msg.data}
+                            <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">{props.msg.data.text}
                             </p>
                             <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
                         </div>
@@ -127,7 +127,7 @@ function IncomingMessage(props) {
         
                     <div className="received_msg">
                         <div className="received_withd_msg">
-                            <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">{props.msg.data}
+                            <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">{props.msg.data.text}
                             </p>
                             <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
                         </div>
@@ -150,10 +150,11 @@ function OutgoingMessage(props) {
             return (
                 <div class="outgoing_msg">
                     <div class="sent_msg ">
-                        <p class="color-background border-radius-no-bottom-right color-font-white">
-                            {props.msg.data}
-                        </p>
-                        <span class="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
+                        {/* <p class="color-background border-radius-no-bottom-right color-font-white">
+                        {props.msg.data.url}
+                        </p> */}
+                        <img src={props.msg.data.url}/>
+                        <span class="time_date_media color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
         
                     </div>
                 </div>
@@ -165,7 +166,7 @@ function OutgoingMessage(props) {
                 <div class="outgoing_msg">
                     <div class="sent_msg ">
                         <p class="color-background border-radius-no-bottom-right color-font-white">
-                            {props.msg.data}
+                            {props.msg.data.text}
                         </p>
                         <span class="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
         
@@ -180,7 +181,7 @@ function OutgoingMessage(props) {
                 <div class="outgoing_msg">
                     <div class="sent_msg ">
                         <p class="color-background border-radius-no-bottom-right color-font-white">
-                            {props.msg.data}
+                            {props.msg.data.text}
                         </p>
                         <span class="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
         
@@ -195,7 +196,7 @@ function OutgoingMessage(props) {
                 <div class="outgoing_msg">
                     <div class="sent_msg ">
                         <p class="color-background border-radius-no-bottom-right color-font-white">
-                            {props.msg.data}
+                            {props.msg.data.text}
                         </p>
                         <span class="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
         
@@ -210,7 +211,7 @@ function OutgoingMessage(props) {
                 <div class="outgoing_msg">
                     <div class="sent_msg ">
                         <p class="color-background border-radius-no-bottom-right color-font-white">
-                            {props.msg.data}
+                            {props.msg.data.text}
                         </p>
                         <span class="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
         

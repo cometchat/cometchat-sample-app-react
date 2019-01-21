@@ -149,7 +149,7 @@ export const handleActionMessage = actionMsg => {
 
 //handle Text Message
 
-export const handleTextMessage = (msg, dispatch) => {
+export const handleMessage = (msg, dispatch) => {
   if(msg.receiverType=="user"){
     console.log("Text Message recieved from : " + msg.sender);
     dispatch(updateMessage(msg.sender.uid, msg, "text Recieved : "));
