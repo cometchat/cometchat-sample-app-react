@@ -118,11 +118,11 @@ class CCMessageBox extends Component {
         } else {
 
             return (
-                <div>
+                <div id="ccMessageBoxContainer">
                     <Row ref={this.refsMessageBox} id="ccMessageBox" className="ccMessageBox" style={ccMessageBoxStyle} >
                         {
                             messageUser.message.map((msg, index) => (
-                                <CCMessage key={index} msgData={msg} />
+                                <CCMessage key={msg.id} msgData={msg} />
                             ))
                         }
                     </Row>

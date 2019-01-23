@@ -238,7 +238,7 @@ button:focus {
 /* message-bubble */
 
 .incoming_msg{
-    margin:14px 8px;
+    margin:20px 8px;
 }
 
 .incoming_msg_img {
@@ -246,18 +246,23 @@ button:focus {
     width: 5%;
     text-align: center;
     line-height: 46px;
-    vertical-align: text-top;
+    vertical-align: bottom;
   }
   .received_msg {
     display: inline-block;
     padding: 0 0 0 10px;
     vertical-align: top;
-    width: 92%;
+    width: 75%;
+    
    }
+    .received_withd_msg { 
+        width: 100%;
+        position: relative;
+    }
   
-   .received_withd_msg p {
+   .received_withd_msg p, .received_withd_msg img {
     display: inline-block;
-    max-width: 100%;
+    max-width: 70%;
     width: fit-content;
     min-width: 100px;
     font-size: 14px;
@@ -267,45 +272,70 @@ button:focus {
     margin:0px;
   }
 
+  .received_withd_msg img {
+
+    max-width: 70%;
+    border-radius: 8px !important;
+    padding: 0px; 
+}
+
   .time_date {
     display: inline-block;
     font-size: 12px;
-    line-height: 70px;
     margin-right: 12px;
-    margin-left:  12px;
-    vertical-align: top;
+    margin-left: 12px;
+    position: absolute;
+    bottom: 0;
   }
 
-  .received_withd_msg { width: 57%;}
+ 
 
  
 .outgoing_msg{ 
-   overflow:hidden; margin:14px 8px;
+   margin:20px 8px;
 }
-.outgoing_msg .sent_msg {
-    float: right;
-    width: 70%;
-    text-align:right;
-    position: relative;
- }
 
-.outgoing_msg .sent_msg p{
-    max-width: 100%;
+.outgoing_msg .sent_msg{
+    display: inline-block;
+    text-align: right;
+    width: 100%;
+    padding: 0px;
+}
+
+.sent_withd_msg {
+    width: 100%;
+    position: relative;
+}
+
+.sent_withd_msg p , .sent_withd_msg img{
+    display: inline-block;
+    max-width: 70%;
     width: fit-content;
     min-width: 100px;
     font-size: 14px;
     overflow-wrap: break-word;
     padding: 11px 16px;
     text-align: left;
-    float: right;
+    margin: 0px;
+    color: #FFF;
   }
 
-.outgoing_msg .sent_msg img{
-    max-height: 320px;
-    float: right;
-    max-width: 320px;
-    border-radius: 8px;
+.sent_withd_msg .time_date{
+    display: inline-block;
+    font-size: 12px;
+    margin-right: 12px;
+    margin-left: 12px;
+    position: relative;
+    vertical-align: bottom;
 }
+
+.outgoing_msg .sent_msg img {
+    max-width: 50%;
+    border-radius: 8px !important;
+    padding: 0px;
+}
+
+
 
 .outgoing_msg .sent_msg .time_date_media{
     line-height: unset;

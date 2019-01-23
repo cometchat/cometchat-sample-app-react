@@ -12,6 +12,7 @@ class CCMessage extends Component {
     render() {
         console.log("message : " + JSON.stringify(this.props.msgData));
         var msg = {
+            msgId : this.props.msgData.id,
             data: this.props.msgData.data,
             sid : this.props.msgData.sender.uid,
             loggedInUser: this.props.loggedUid,
@@ -52,8 +53,7 @@ function IncomingMessage(props) {
         
                     <div className="received_msg">
                         <div className="received_withd_msg">
-                            <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">{props.msg.data.url}
-                            </p>
+                            <img class="color-dark-tint-font border-radius-no-bottom-left" src={props.msg.data.url} />                            
                             <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
                         </div>
                     </div>
@@ -148,16 +148,14 @@ function OutgoingMessage(props) {
     switch(props.msg.msgType){
         case CometChat.MESSAGE_TYPE.IMAGE : {
             return (
-                <div class="outgoing_msg">
-                    <div class="sent_msg ">
-                        {/* <p class="color-background border-radius-no-bottom-right color-font-white">
-                        {props.msg.data.url}
-                        </p> */}
-                        <img src={props.msg.data.url}/>
-                        <span class="time_date_media color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
-        
+                <div className="outgoing_msg">
+                    <div className="sent_msg">
+                        <div className="sent_withd_msg">
+                            <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
+                            <img class="" src={props.msg.data.url}/>
+                        </div>
                     </div>
-                </div>
+                </div>       
             );
         } break;
 
@@ -172,6 +170,8 @@ function OutgoingMessage(props) {
         
                     </div>
                 </div>
+
+               
             );
         }
         break;
@@ -187,6 +187,7 @@ function OutgoingMessage(props) {
         
                     </div>
                 </div>
+                
             );
         }
         break;
@@ -208,13 +209,13 @@ function OutgoingMessage(props) {
 
         case CometChat.MESSAGE_TYPE.TEXT : {
             return (
-                <div class="outgoing_msg">
-                    <div class="sent_msg ">
-                        <p class="color-background border-radius-no-bottom-right color-font-white">
-                            {props.msg.data.text}
-                        </p>
-                        <span class="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
-        
+                <div className="outgoing_msg">
+                    <div className="sent_msg">
+                        <div className="sent_withd_msg">
+                            <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
+                            <p class="color-background border-radius-no-bottom-right color-font-white">{props.msg.data.text}
+                            </p>
+                        </div>
                     </div>
                 </div>
             );
