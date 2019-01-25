@@ -6,7 +6,8 @@ import * as actionCreator from "./../../store/actions/cc_action";
 
 import SVGInline from "react-svg-inline";
 import icon_attach from "./../../../public/img/icon_attach.svg";
-import icon_send from "./../../../public/img/icon_send.svg"
+import icon_send from "./../../../public/img/icon_send.svg";
+import icon_attach_gallery from "./../../../public/img/icon_attach_gallery.svg";
 
 class ccMessageFooter extends Component {
   constructor(props) {
@@ -92,43 +93,56 @@ class ccMessageFooter extends Component {
 
   render() {
     return (
-      <Row style={ccMessageFooterStyle}>
-        <Col lg={2} className="cc-no-padding h-100 align-center">
-          <div className="ccMessageFooterMenu">
-            <input
-              id="ccMessageInputFile"
-              multiple={true}
-              name="ccMessageInputFile"
-              type="file"
-              accept="image/*"
-              ref={this.inputRef}
-              style={ccMessageInputFile}
-              onChange={this.getFileData.bind(this)}
+      <div>
+        <Row style={ccMessageFooterStyle}>
+          <Col lg={12}>
+              <div class="attachMenu">
+                  <span className = "cc-icon color-font-theme" 
+                  dangerouslySetInnerHTML={{ __html: icon_attach_gallery }}
+                  ></span>
+                  <span> Gallery</span>
+              </div>
+          </Col>
+        </Row>
+
+        <Row style={ccMessageFooterStyle}>
+          <Col lg={2} className="cc-no-padding h-100 align-center">
+            <div className="ccMessageFooterMenu">
+              <input
+                id="ccMessageInputFile"
+                multiple={true}
+                name="ccMessageInputFile"
+                type="file"
+                accept="image/*"
+                ref={this.inputRef}
+                style={ccMessageInputFile}
+                onChange={this.getFileData.bind(this)}
+              />
+              <span
+                className="cc-icon color-font-theme"
+                onClick={this.handleMediaMessage.bind(this)}
+                dangerouslySetInnerHTML={{ __html: icon_attach }}
+              />
+            </div>
+          </Col>
+          <Col lg={8} className="h-100 cc-no-padding ">
+            <div
+              className="ccMessageEditorBox border border-radius-full color-border-grey"
+              contentEditable="true"
+              data-placeholder="Type a message..."
+              ref={div => {
+                this.ccMessageEditorBox = div;
+              }}
+              onKeyUp={this.handleEnterPressed.bind(this)}
             />
-            <span
-              className="cc-icon color-font-theme"
-              onClick={this.handleMediaMessage.bind(this)}
-              dangerouslySetInnerHTML={{ __html: icon_attach }}
-            />
-          </div>
-        </Col>
-        <Col lg={8} className="h-100 cc-no-padding ">
-          <div
-            className="ccMessageEditorBox border border-radius-full color-border-grey"
-            contentEditable="true"
-            data-placeholder="Type a message..."
-            ref={div => {
-              this.ccMessageEditorBox = div;
-            }}
-            onKeyUp={this.handleEnterPressed.bind(this)}
-          />
-        </Col>
-        <Col lg={2} className="cc-no-padding h-100 align-center" >
-          <div className="ccMessageFooterMenu">
-            <span className="cc-icon sendButton " onClick={this.handleMessage.bind(this)} dangerouslySetInnerHTML={{__html:icon_send}}/>
-          </div>
-        </Col>
-      </Row>
+          </Col>
+          <Col lg={2} className="cc-no-padding h-100 align-center" >
+            <div className="ccMessageFooterMenu">
+              <span className="cc-icon sendButton " onClick={this.handleMessage.bind(this)} dangerouslySetInnerHTML={{__html:icon_send}}/>
+            </div>
+          </Col>
+        </Row>
+      </div>
     );
   }
 }
