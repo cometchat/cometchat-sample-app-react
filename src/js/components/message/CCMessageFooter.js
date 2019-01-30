@@ -1,13 +1,19 @@
 import React, { Component } from "react";
 import { Row, Col, Button, Tooltip } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { connect } from "react-redux";
+
+import cameraModel from "CameraModal";
+
 import * as actionCreator from "./../../store/actions/cc_action";
 
-import SVGInline from "react-svg-inline";
 import icon_attach from "./../../../public/img/icon_attach.svg";
 import icon_send from "./../../../public/img/icon_send.svg";
 import icon_attach_gallery from "./../../../public/img/icon_attach_gallery.svg";
+import icon_attach_location from "./../../../public/img/icon_attach_location.svg";
+import icon_attach_mic from "./../../../public/img/icon_attach_mic.svg";
+import icon_attach_cam from "./../../../public/img/icon_attach_cam.svg";
+import icon_attach_video from "./../../../public/img/icon_attach_video.svg";
+import icon_attach_file from "./../../../public/img/icon_attach_file.svg";
 
 class ccMessageFooter extends Component {
   constructor(props) {
@@ -15,7 +21,7 @@ class ccMessageFooter extends Component {
 
     this.inputRef = React.createRef();
 
-    this.state = { showButton: "true" };
+    this.state = { showAttach: false };
   }
 
   handleEnterPressed(e) {
@@ -23,16 +29,6 @@ class ccMessageFooter extends Component {
       console.log("enter pressed here! ");
     } else {
       var content = this.ccMessageEditorBox.innerHTML;
-
-      if (content.length > 0) {
-        this.setState({
-          showButton: "false"
-        });
-      } else {
-        this.setState({
-          showButton: "true"
-        });
-      }
     }
   }
 
@@ -51,33 +47,69 @@ class ccMessageFooter extends Component {
           this.props.activeMessageType
         );
         this.ccMessageEditorBox.innerHTML = "";
-        this.setState({
-          showButton: "true"
-        });
+        // this.setState({
+        //   showButton: "true"
+        // });
       } catch (error) {
         console.log(error);
       }
     }
   }
 
-  getFileData = e => {
-    var ele = document.getElementById("ccMessageInputFile");
+  getFileGallery = e => {
+    
+    var ele = document.getElementById("ccMessageInputGallery");
 
     var files = ele.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
 
       this.sendMediaMessage(file);
+
+      this.toggleAttachMenu();
       //   console.log(
       //     "filename : " + file.name + " : " + file.type + " : " + file.size
       //   );
     }
+
   };
 
-  handleMediaMessage = e => {
-    console.log("inside handle message Media");
-    document.getElementById("ccMessageInputFile").click();
+  handleMediaMessageGallery = e => {
+    document.getElementById("ccMessageInputGallery").click();
   };
+
+  handleMediaMessageCamera = e => {
+    //showCamera();
+  };
+
+  handleAttachMenu = (e) =>{
+
+    this.toggleAttachMenu();
+  }
+
+  toggleAttachMenu(){
+    if(this.state.showAttach){
+
+      console.log("hide attachmenu");
+      document.getElementById("attachMenuContainer").style.opacity = "0";
+      document.getElementsByClassName("attachIcon")[0].setAttribute("active", "false");
+
+        this.setState({
+          showAttach: false
+        });
+    }else{
+      console.log("show attachmenu");
+      document.getElementById("attachMenuContainer").style.opacity = "1";
+      document.getElementsByClassName("attachIcon")[0].setAttribute("active", "true");
+      this.setState({
+        showAttach: true
+      });
+    }
+  }
+
+
+
+
 
   async sendMediaMessage(content) {
     try {
@@ -94,33 +126,113 @@ class ccMessageFooter extends Component {
   render() {
     return (
       <div>
-        <Row style={ccMessageFooterStyle}>
-          <Col lg={12}>
-              <div class="attachMenu">
-                  <span className = "cc-icon color-font-theme" 
-                  dangerouslySetInnerHTML={{ __html: icon_attach_gallery }}
-                  ></span>
-                  <span> Gallery</span>
-              </div>
-          </Col>
-        </Row>
-
-        <Row style={ccMessageFooterStyle}>
-          <Col lg={2} className="cc-no-padding h-100 align-center">
-            <div className="ccMessageFooterMenu">
+         <Row id="attachMenuContainer" class="attachMenuContainer">
+          <div class="attachMenuWrapper">
+            <Col lg={2} class="attachMenu" onClick={this.handleMediaMessageGallery.bind(this)}>
+              <center>
               <input
-                id="ccMessageInputFile"
+                id="ccMessageInputGallery"
                 multiple={true}
                 name="ccMessageInputFile"
                 type="file"
-                accept="image/*"
+                accept="audio/*,video/*,image/*"
                 ref={this.inputRef}
                 style={ccMessageInputFile}
-                onChange={this.getFileData.bind(this)}
+                onChange={this.getFileGallery.bind(this)}
               />
+                <div class="attachMenuIcon color-font-theme" dangerouslySetInnerHTML={{ __html: icon_attach_gallery }}></div>
+              </center>
+              <div class=" attachMenuText color-font"> 
+                  Gallery
+              </div> 
+            </Col>
+
+            <Col lg={2} class="attachMenu">
+              <center>
+              <input
+                id="ccMessageInputCamera"
+                multiple={true}
+                name="ccMessageInputFile"
+                type="file"
+                accept="audio/*,video/*,image/*"
+                ref={this.inputRef}
+                style={ccMessageInputFile}
+                />
+                <div class="attachMenuIcon color-font-theme" dangerouslySetInnerHTML={{ __html: icon_attach_cam }}></div>
+              </center>
+
+              <div class=" attachMenuText color-font"> 
+                  Camera
+              </div> 
+            </Col>
+
+            <Col lg={2} class="attachMenu">
+              <center>
+              <input
+                id="ccMessageInputFileVideo"
+                multiple={true}
+                name="ccMessageInputFile"
+                type="file"
+                accept="video/*"
+                ref={this.inputRef}
+                style={ccMessageInputFile}
+                />
+                <div class="attachMenuIcon color-font-theme" dangerouslySetInnerHTML={{ __html: icon_attach_video }}></div>
+              </center>
+
+              <div class=" attachMenuText color-font"> 
+                  Video
+              </div> 
+            </Col>
+
+            <Col lg={2} class="attachMenu">
+              <center>
+              <input
+                id="ccMessageInputAudio"
+                multiple={true}
+                name="ccMessageInputFile"
+                type="file"
+                accept="audio/*"
+                ref={this.inputRef}
+                style={ccMessageInputFile}
+                />
+                <div class="attachMenuIcon color-font-theme" dangerouslySetInnerHTML={{ __html: icon_attach_mic }}></div>
+              </center>
+
+              <div class=" attachMenuText color-font"> 
+                  Audio
+              </div> 
+            </Col>
+
+            <Col lg={2} class="attachMenu">
+              <center>
+                <div class="attachMenuIcon color-font-theme" dangerouslySetInnerHTML={{ __html: icon_attach_file }}></div>
+              </center>
+
+              <div class=" attachMenuText color-font"> 
+                  Files
+              </div> 
+            </Col>
+
+            <Col lg={2} class="attachMenu">
+              <center>
+                <div class="attachMenuIcon color-font-theme" dangerouslySetInnerHTML={{ __html: icon_attach_location }}></div>
+              </center>
+
+              <div class=" attachMenuText color-font"> 
+                  Location
+              </div> 
+            </Col>
+          </div>     
+          
+        </Row>
+        <Row style={ccMessageFooterStyle}>
+          <Col lg={2} className="cc-no-padding h-100 align-center">
+            <div className="ccMessageFooterMenu" onClick={this.handleAttachMenu.bind(this)} >
+             
               <span
-                className="cc-icon color-font-theme"
-                onClick={this.handleMediaMessage.bind(this)}
+                className="attachIcon color-font-theme"
+                active="false"                
                 dangerouslySetInnerHTML={{ __html: icon_attach }}
               />
             </div>
@@ -158,8 +270,8 @@ var ccMessageFooterStyle = {
 
 var ccMessageInputFile = {
   fontsize: "1px",
-  width: "1px",
-  height: "1px",
+  width: "0px",
+  height: "0px",
   opacity: "0",
   filter: "alpha(opacity=0)",
   position: "relative",

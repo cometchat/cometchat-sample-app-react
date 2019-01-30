@@ -1,6 +1,35 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="" viewBox="1 0 23 23">
-    
-    
-    
-    
-<path d="M16.5,6 L16.5,17.5 C16.5,19.71 14.71,21.5 12.5,21.5 C10.29,21.5 8.5,19.71 8.5,17.5 L8.5,5 C8.5,3.62 9.62,2.5 11,2.5 C12.38,2.5 13.5,3.62 13.5,5 L13.5,15.5 C13.5,16.05 13.05,16.5 12.5,16.5 C11.95,16.5 11.5,16.05 11.5,15.5 L11.5,6 L10,6 L10,15.5 C10,16.88 11.12,18 12.5,18 C13.88,18 15,16.88 15,15.5 L15,5 C15,2.79 13.21,1 11,1 C8.79,1 7,2.79 7,5 L7,17.5 C7,20.54 9.46,23 12.5,23 C15.54,23 18,20.54 18,17.5 L18,6 L16.5,6 Z" id="Path" transform="translate(12.500000, 12.000000) rotate(43.000000) translate(-12.500000, -12.000000) " fill="currentcolor"></path></svg>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   
+   width="42"
+   height="42"
+   viewBox="0 0 42 42"
+   > 
+  
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       transform="translate(5.0004603,-1015.3007)"
+       id="layer1-3"
+        fill="currentcolor" 
+       inkscape:label="Layer 1">
+      <g
+         style="fill-rule:evenodd;stroke:none;stroke-width:1"
+         transform="matrix(1.2100201,0,0,1.2100201,5.2937309,1023.354)"
+         id="Page-1">
+        <g
+           fill="currentcolor"
+           id="baseline-attach_file-24px"
+           transform="translate(-3,-1)">
+          <path
+             inkscape:connector-curvature="0"
+             d="m 16.5,6 0,11.5 c 0,2.21 -1.79,4 -4,4 -2.21,0 -4,-1.79 -4,-4 L 8.5,5 c 0,-1.38 1.12,-2.5 2.5,-2.5 1.38,0 2.5,1.12 2.5,2.5 l 0,10.5 c 0,0.55 -0.45,1 -1,1 -0.55,0 -1,-0.45 -1,-1 l 0,-9.5 -1.5,0 0,9.5 c 0,1.38 1.12,2.5 2.5,2.5 1.38,0 2.5,-1.12 2.5,-2.5 L 15,5 C 15,2.79 13.21,1 11,1 8.79,1 7,2.79 7,5 L 7,17.5 C 7,20.54 9.46,23 12.5,23 15.54,23 18,20.54 18,17.5 L 18,6 16.5,6 Z"
+             id="Path"
+             transform="matrix(0.7313537,0.68199836,-0.68199836,0.7313537,11.542059,-5.3012239)" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
