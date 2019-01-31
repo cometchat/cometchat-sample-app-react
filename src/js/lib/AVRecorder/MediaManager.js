@@ -1,13 +1,13 @@
 
 export class MediaManager{
 
-    static videoPlayer = NULL;
-    static streamVideo = NULL;
-    static recorder = NULL;
+    static videoPlayer = null;
+    static streamVideo = null;
+    static recorder = null;
 
 
 
-    initCamera(domObject){
+    static initCamera(domObject){
 
         this.videoPlayer = domObject;
 

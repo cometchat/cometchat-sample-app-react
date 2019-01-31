@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Row, Col, Button, Tooltip } from "react-bootstrap";
 import { connect } from "react-redux";
 
-import cameraModel from "CameraModal";
+import CameraModal from './../modal/CameraModal';
 
 import * as actionCreator from "./../../store/actions/cc_action";
 
@@ -21,7 +21,10 @@ class ccMessageFooter extends Component {
 
     this.inputRef = React.createRef();
 
-    this.state = { showAttach: false };
+    this.state = { 
+      showAttach: false, 
+      isShowingModal:false 
+    };
   }
 
   handleEnterPressed(e) {
@@ -47,9 +50,6 @@ class ccMessageFooter extends Component {
           this.props.activeMessageType
         );
         this.ccMessageEditorBox.innerHTML = "";
-        // this.setState({
-        //   showButton: "true"
-        // });
       } catch (error) {
         console.log(error);
       }
@@ -78,10 +78,6 @@ class ccMessageFooter extends Component {
     document.getElementById("ccMessageInputGallery").click();
   };
 
-  handleMediaMessageCamera = e => {
-    //showCamera();
-  };
-
   handleAttachMenu = (e) =>{
 
     this.toggleAttachMenu();
@@ -89,16 +85,12 @@ class ccMessageFooter extends Component {
 
   toggleAttachMenu(){
     if(this.state.showAttach){
-
-      console.log("hide attachmenu");
       document.getElementById("attachMenuContainer").style.opacity = "0";
       document.getElementsByClassName("attachIcon")[0].setAttribute("active", "false");
-
-        this.setState({
+      this.setState({
           showAttach: false
-        });
+      });
     }else{
-      console.log("show attachmenu");
       document.getElementById("attachMenuContainer").style.opacity = "1";
       document.getElementsByClassName("attachIcon")[0].setAttribute("active", "true");
       this.setState({
@@ -107,9 +99,22 @@ class ccMessageFooter extends Component {
     }
   }
 
+  openModalHandler = () => {
+    this.setState({
+        isShowingModal: true
+    });
+  }
 
+  closeModalHandler = () => {
+      this.setState({
+          isShowingModal: false
+      });
+  }
 
-
+  recieveCaptureImage = (data) =>{
+    console.log("received data : " + data);
+    //onrecieve data 
+  }
 
   async sendMediaMessage(content) {
     try {
@@ -124,6 +129,10 @@ class ccMessageFooter extends Component {
   }
 
   render() {
+
+    const cameraModal  = this.state.isShowingModal ? (<CameraModal sendMessage = {this.recieveCaptureImage.bind(this)} handleClose={this.closeModalHandler.bind(this)}/>) : null;
+
+
     return (
       <div>
          <Row id="attachMenuContainer" class="attachMenuContainer">
@@ -147,17 +156,8 @@ class ccMessageFooter extends Component {
               </div> 
             </Col>
 
-            <Col lg={2} class="attachMenu">
+            <Col lg={2} class="attachMenu" onClick={this.openModalHandler.bind(this)}>
               <center>
-              <input
-                id="ccMessageInputCamera"
-                multiple={true}
-                name="ccMessageInputFile"
-                type="file"
-                accept="audio/*,video/*,image/*"
-                ref={this.inputRef}
-                style={ccMessageInputFile}
-                />
                 <div class="attachMenuIcon color-font-theme" dangerouslySetInnerHTML={{ __html: icon_attach_cam }}></div>
               </center>
 
@@ -254,6 +254,9 @@ class ccMessageFooter extends Component {
             </div>
           </Col>
         </Row>
+
+        {cameraModal}
+
       </div>
     );
   }

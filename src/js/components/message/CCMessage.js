@@ -137,6 +137,10 @@ function IncomingMessage(props) {
             
         }
         break;
+
+        default :
+        return (<h2>deafult message</h2>);
+        break;
     }
 
 
@@ -220,6 +224,10 @@ function OutgoingMessage(props) {
                 </div>
             );
         }
+        break;
+
+        default:
+        return (<h2>deafult message</h2>);
         break;
     }
 

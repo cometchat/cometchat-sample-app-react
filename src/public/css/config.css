@@ -581,32 +581,26 @@ nav nav-pills>li>a{
 
 /* //testing */
 
-
-.wrapper {
+.modal {
+    background-color: rgba(0,0,0,1);
     position: fixed;
-    left: 0;
-    top: 0;
-    background-color: rgba(0, 0, 0, 0.95);
-    height: 100vh;
-    width: 100vw;
-    z-index: 999;
-  }
-  
-  .inner {
-    position: relative;
-    width: 100%;
     height: 100%;
-    text-align: center;
+    width: 100%;
+    top: 0;
+    left: 0;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
+    overflow: hidden;
+    color:#fff;
+
   }
   
   .close {
     position: absolute;
     top: 20px;
     right: 20px;
-    color: white;
-    background: none;
+    background: white;
+    color: #000;
     border: 0;
   }

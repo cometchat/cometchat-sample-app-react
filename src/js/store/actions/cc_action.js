@@ -1,7 +1,7 @@
 //cometchat login
 
 import CCManager from "./../../lib/cometchat/ccManager";
-import { CometChat, sendMessage,Group } from "@cometchat-pro/chat";
+import { CometChat, sendMessage } from "@cometchat-pro/chat";
 
 //set User Session
 export const loginInCC = (dispatch, UID) => {
@@ -278,7 +278,9 @@ export const startFetching = () => {
 
 export const joinGroup =(group)=>{
 
-  CometChat.joinGroup(group.guid,group.name,Group.Type.Public,'').then(
+  console.log("inside group");
+
+  CometChat.joinGroup(group.guid,group.name,CometChat.Group.Type.Public,'').then(
     groupData =>{
       console.log("Joined Group", groupData);
     }
