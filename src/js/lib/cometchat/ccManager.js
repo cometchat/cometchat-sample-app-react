@@ -58,11 +58,11 @@ export default class CCManager {
     }
   }
 
-  static getMediaMessage(uid, file, msgType) {
+  static getMediaMessage(uid, file, msgType,mediaType) {
     if (msgType == "user") {
-      return new CometChat.MediaMessage(uid, file, CometChat.MESSAGE_TYPE.IMAGE, CometChat.RECEIVER_TYPE.USER);
+      return new CometChat.MediaMessage(uid, file, mediaType, CometChat.RECEIVER_TYPE.USER);
     } else {
-      return new CometChat.MediaMessage(uid, file, CometChat.MESSAGE_TYPE.IMAGE, CometChat.RECEIVER_TYPE.GROUP);
+      return new CometChat.MediaMessage(uid, file, mediaType, CometChat.RECEIVER_TYPE.GROUP);
     }
   }
 

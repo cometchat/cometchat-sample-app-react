@@ -208,10 +208,10 @@ export const sendTextMessage = (uid, text, msgType) => {
 
 //sendMediaMessage
 
-export const sendMediaMessage = (uid, text, msgType) => {
+export const sendMediaMessage = (uid, text, msgType,mediaType) => {
   console.log("media messazgetype " + msgType);
 
-  let mediaMessage = CCManager.getMediaMessage(uid, text, msgType);
+  let mediaMessage = CCManager.getMediaMessage(uid, text, msgType,mediaType);
 
   return dispatch => {
     CometChat.sendMessage(mediaMessage).then(

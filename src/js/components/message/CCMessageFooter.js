@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Row, Col, Button, Tooltip } from "react-bootstrap";
 import { connect } from "react-redux";
+import {CometChat} from "@cometchat-pro/chat";
 
 import CameraModal from './../modal/CameraModal';
 import * as utils from './../../lib/uiComponentLib';
@@ -24,7 +25,7 @@ class ccMessageFooter extends Component {
 
     this.state = { 
       showAttach: false, 
-      isShowingModal:false 
+      isShowingCameraModal:false
     };
   }
 
@@ -64,19 +65,40 @@ class ccMessageFooter extends Component {
     var files = ele.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-
-      this.sendMediaMessage(file);
-
-      this.toggleAttachMenu();
+      this.sendMediaMessage(file,CometChat.MESSAGE_TYPE.IMAGE);
+     
       //   console.log(
       //     "filename : " + file.name + " : " + file.type + " : " + file.size
       //   );
     }
 
+    this.toggleAttachMenu();
+
   };
+
+
+  getFileVideo=e=>{
+    var ele = document.getElementById("ccMessageInputFileVideo");
+
+    var files = ele.files;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      this.sendMediaMessage(file,CometChat.MESSAGE_TYPE.VIDEO);
+      
+      console.log( "filename : " + JSON.stringify(file) + "\n" +file.name + " : " + file.type + " : " + file.size  );
+
+    }
+
+    this.toggleAttachMenu();
+
+  }
 
   handleMediaMessageGallery = e => {
     document.getElementById("ccMessageInputGallery").click();
+  };
+
+  handleMediaMessageVideo = e =>{
+    document.getElementById("ccMessageInputFileVideo").click();
   };
 
   handleAttachMenu = (e) =>{
@@ -88,27 +110,32 @@ class ccMessageFooter extends Component {
     if(this.state.showAttach){
       document.getElementById("attachMenuContainer").style.opacity = "0";
       document.getElementsByClassName("attachIcon")[0].setAttribute("active", "false");
+      document.getElementById("attachMenuContainer").setAttribute("active", "false");
+
       this.setState({
           showAttach: false
       });
     }else{
       document.getElementById("attachMenuContainer").style.opacity = "1";
       document.getElementsByClassName("attachIcon")[0].setAttribute("active", "true");
+      document.getElementById("attachMenuContainer").setAttribute("active", "true");
       this.setState({
         showAttach: true
       });
     }
   }
 
-  openModalHandler = () => {
-    this.setState({
-        isShowingModal: true
-    });
+  openModalHandler = (modalName) => {
+
+    switch(modalName){
+      case 'camera':    this.setState({isShowingCameraModal: true}); break;
+    }
+    
   }
 
   closeModalHandler = () => {
       this.setState({
-          isShowingModal: false
+          isShowingCameraModal: false
       });
   }
 
@@ -121,16 +148,17 @@ class ccMessageFooter extends Component {
     this.toggleAttachMenu();
 
 
-    this.sendMediaMessage(fileObject);
+    this.sendMediaMessage(fileObject,CometChat.MESSAGE_TYPE.IMAGE);
   }
 
   //send media message
-  async sendMediaMessage(content) {
+  async sendMediaMessage(content,mediaType) {
     try {
       await this.props.sendMediaMessage(
         content,
         this.props.activeUser,
-        this.props.activeMessageType
+        this.props.activeMessageType,
+        mediaType
       );
     } catch (error) {
       console.log(error);
@@ -139,12 +167,12 @@ class ccMessageFooter extends Component {
 
   render() {
 
-    const cameraModal  = this.state.isShowingModal ? (<CameraModal sendMessage = {this.recieveCaptureImage.bind(this)} handleClose={this.closeModalHandler.bind(this)}/>) : null;
+    const cameraModal  = this.state.isShowingCameraModal ? (<CameraModal sendMessage = {this.recieveCaptureImage.bind(this)} handleClose={this.closeModalHandler.bind(this)}/>) : null;
 
-
+    
     return (
       <div>
-         <Row id="attachMenuContainer" class="attachMenuContainer">
+         <Row id="attachMenuContainer" class="attachMenuContainer" active="false">
           <div class="attachMenuWrapper">
             <Col lg={2} class="attachMenu" onClick={this.handleMediaMessageGallery.bind(this)}>
               <center>
@@ -165,7 +193,7 @@ class ccMessageFooter extends Component {
               </div> 
             </Col>
 
-            <Col lg={2} class="attachMenu" onClick={this.openModalHandler.bind(this)}>
+            <Col lg={2} class="attachMenu" onClick={this.openModalHandler.bind(this,'camera')}>
               <center>
                 <div class="attachMenuIcon color-font-theme" dangerouslySetInnerHTML={{ __html: icon_attach_cam }}></div>
               </center>
@@ -175,15 +203,16 @@ class ccMessageFooter extends Component {
               </div> 
             </Col>
 
-            <Col lg={2} class="attachMenu">
+            <Col lg={2} class="attachMenu" onClick={this.handleMediaMessageVideo.bind(this)} >
               <center>
               <input
                 id="ccMessageInputFileVideo"
                 multiple={true}
                 name="ccMessageInputFile"
                 type="file"
-                accept="video/*"
+                accept="video/x-ms-wmv,video/x-msvideo,video/quicktime,video/MP2T,application/x-mpegURL,video/3gpp,video/mp4,video/x-m4v"
                 ref={this.inputRef}
+                onChange={this.getFileVideo.bind(this)}
                 style={ccMessageInputFile}
                 />
                 <div class="attachMenuIcon color-font-theme" dangerouslySetInnerHTML={{ __html: icon_attach_video }}></div>
@@ -300,10 +329,9 @@ const mapStateToProps = store => {
 
 const mapDispachToProps = dispatch => {
   return {
-    sendMessage: (content, uid, msgType) =>
-      dispatch(actionCreator.sendTextMessage(uid, content, msgType)),
-    sendMediaMessage: (content, uid, msgType) =>
-      dispatch(actionCreator.sendMediaMessage(uid, content, msgType))
+    sendMessage: (content, uid, msgType) =>         dispatch(actionCreator.sendTextMessage(uid, content, msgType)),
+    sendMediaMessage: (content, uid, msgType,mediaType) =>    dispatch(actionCreator.sendMediaMessage(uid, content, msgType,mediaType)),
+    
   };
 };
 
