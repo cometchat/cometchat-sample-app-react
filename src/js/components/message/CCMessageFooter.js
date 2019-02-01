@@ -3,6 +3,7 @@ import { Row, Col, Button, Tooltip } from "react-bootstrap";
 import { connect } from "react-redux";
 
 import CameraModal from './../modal/CameraModal';
+import * as utils from './../../lib/uiComponentLib';
 
 import * as actionCreator from "./../../store/actions/cc_action";
 
@@ -112,10 +113,18 @@ class ccMessageFooter extends Component {
   }
 
   recieveCaptureImage = (data) =>{
-    console.log("received data : " + data);
+    console.log("received data ccfooter: " + data);
     //onrecieve data 
+
+    let fileObject = utils.dataURLtoFile(data, 'a.png')
+    this.closeModalHandler();
+    this.toggleAttachMenu();
+
+
+    this.sendMediaMessage(fileObject);
   }
 
+  //send media message
   async sendMediaMessage(content) {
     try {
       await this.props.sendMediaMessage(
