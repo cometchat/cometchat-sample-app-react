@@ -262,7 +262,7 @@ button:focus {
   
    .received_withd_msg p, .received_withd_msg img,.received_withd_msg video {
     display: inline-block;
-    max-width: 70%;
+    max-width: 80%;
     width: fit-content;
     min-width: 100px;
     font-size: 14px;
@@ -278,6 +278,7 @@ button:focus {
     border-radius: 8px !important;
     padding: 0px; 
 }
+
 
   .time_date {
     display: inline-block;
@@ -307,7 +308,7 @@ button:focus {
     position: relative;
 }
 
-.sent_withd_msg p , .sent_withd_msg img, .sent_withd_msg video{
+.sent_withd_msg p , .sent_withd_msg img, .sent_withd_msg video,.sent_withd_msg a p{
     display: inline-block;
     max-width: 70%;
     width: fit-content;
@@ -345,6 +346,21 @@ button:focus {
     left: 16%;
     font-size: 12px;
 }
+
+.sent_withd_msg a p .file_name, .received_withd_msg a p .file_name{  
+    display: table-cell;
+    word-break: break-all;
+    position: relative;
+    vertical-align: middle;
+}
+
+.sent_withd_msg a p .file_icon,.received_withd_msg a p .file_icon{
+    height: 48px;
+    display: table-cell;
+    word-break: break-all;
+    position: relative;
+}
+
 
 
 /* blank container  */
@@ -584,8 +600,6 @@ nav nav-pills>li>a{
 
 
 
-/* //testing */
-
 .modal {
     background-color: rgba(0,0,0,1);
     position: fixed;
@@ -668,6 +682,16 @@ nav nav-pills>li>a{
         justify-content: center;
         align-content: center;
     }
+
+
+    .cameraSendButton{
+        display: block;
+        font-size: 24px;
+        width: 280px;
+        border-radius: 16px;
+        background: #2636be;
+    }
+    
 
     
   

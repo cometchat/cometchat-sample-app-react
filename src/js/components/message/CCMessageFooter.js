@@ -78,7 +78,7 @@ class ccMessageFooter extends Component {
 
 
   getFileVideo=e=>{
-    var ele = document.getElementById("ccMessageInputFileVideo");
+    var ele = document.getElementById("ccMessageInputVideo");
 
     var files = ele.files;
     for (let i = 0; i < files.length; i++) {
@@ -93,13 +93,55 @@ class ccMessageFooter extends Component {
 
   }
 
+  getFileAudio=e=>{
+    console.log("e target :", e.target);
+    var ele = document.getElementById("ccMessageInputAudio");
+
+    var files = ele.files;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      this.sendMediaMessage(file,CometChat.MESSAGE_TYPE.AUDIO);      
+      console.log( "filename : " + JSON.stringify(file) + "\n" +file.name + " : " + file.type + " : " + file.size  );
+
+    }
+
+    this.toggleAttachMenu();
+
+  }
+
+  getFile = e => {
+      console.log("e target :", e.target);
+      var ele = document.getElementById("ccMessageInputFile");
+
+      var files = ele.files;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        this.sendMediaMessage(file,CometChat.MESSAGE_TYPE.FILE);      
+        console.log( "filename : " + JSON.stringify(file) + "\n" +file.name + " : " + file.type + " : " + file.size  );
+
+      }
+
+      this.toggleAttachMenu();
+
+  }
+
   handleMediaMessageGallery = e => {
     document.getElementById("ccMessageInputGallery").click();
   };
 
   handleMediaMessageVideo = e =>{
-    document.getElementById("ccMessageInputFileVideo").click();
+    document.getElementById("ccMessageInputVideo").click();
   };
+
+  handleMediaMessageAudio = e =>{
+    document.getElementById("ccMessageInputAudio").click();
+  };
+
+  handleMediaMessageFile = e =>{
+    document.getElementById("ccMessageInputFile").click();
+  }
+
+
 
   handleAttachMenu = (e) =>{
 
@@ -206,11 +248,11 @@ class ccMessageFooter extends Component {
             <Col lg={2} class="attachMenu" onClick={this.handleMediaMessageVideo.bind(this)} >
               <center>
               <input
-                id="ccMessageInputFileVideo"
+                id="ccMessageInputVideo"
                 multiple={true}
                 name="ccMessageInputFile"
                 type="file"
-                accept="video/x-ms-wmv,video/x-msvideo,video/quicktime,video/MP2T,application/x-mpegURL,video/3gpp,video/mp4,video/x-m4v"
+                accept="video/x-ms-wmv,video/x-msvideo,video/quicktime,*.mkv,*.3gpp,video/MP2T,application/x-mpegURL,video/3gpp,video/mp4,video/x-m4v"
                 ref={this.inputRef}
                 onChange={this.getFileVideo.bind(this)}
                 style={ccMessageInputFile}
@@ -223,7 +265,7 @@ class ccMessageFooter extends Component {
               </div> 
             </Col>
 
-            <Col lg={2} class="attachMenu">
+            <Col lg={2} class="attachMenu" onClick={this.handleMediaMessageAudio.bind(this)}>
               <center>
               <input
                 id="ccMessageInputAudio"
@@ -232,6 +274,7 @@ class ccMessageFooter extends Component {
                 type="file"
                 accept="audio/*"
                 ref={this.inputRef}
+                onChange={this.getFileAudio.bind(this)}
                 style={ccMessageInputFile}
                 />
                 <div class="attachMenuIcon color-font-theme" dangerouslySetInnerHTML={{ __html: icon_attach_mic }}></div>
@@ -242,7 +285,16 @@ class ccMessageFooter extends Component {
               </div> 
             </Col>
 
-            <Col lg={2} class="attachMenu">
+            <Col lg={2} class="attachMenu" onClick={this.handleMediaMessageFile.bind(this)}>
+              <input
+                id="ccMessageInputFile"
+                multiple={true}
+                name="ccMessageInputFile"
+                type="file"
+                ref={this.inputRef}
+                onChange={this.getFile.bind(this)}
+                style={ccMessageInputFile} />
+
               <center>
                 <div class="attachMenuIcon color-font-theme" dangerouslySetInnerHTML={{ __html: icon_attach_file }}></div>
               </center>

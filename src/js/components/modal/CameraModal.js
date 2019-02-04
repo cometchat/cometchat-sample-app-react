@@ -20,7 +20,9 @@ export default class CameraModal extends React.PureComponent {
         
     }
 
-
+    componentWillUnmount(){
+        MediaManager.stopPlaying();
+    }
     componentDidMount(){
 
         CameraModal.videoDom = document.getElementById("vCameraCapture");
@@ -81,11 +83,11 @@ export default class CameraModal extends React.PureComponent {
                     </div>
 
 
-                    <div id= "btnCapturedImageSend" className="cameraCaptureButton" onClick={this.sendMessageCapturedImage.bind(this)} 
-                    style={{ display: "none" }} 
-                        dangerouslySetInnerHTML={{ __html: icon_back }}>
-                        
+                    <div id= "btnCapturedImageSend" className="btn cameraSendButton" onClick={this.sendMessageCapturedImage.bind(this)} 
+                    style={{ display: "none" }} >
+                        Share
                     </div>
+
 
                 </div>
                   

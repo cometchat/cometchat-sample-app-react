@@ -10,6 +10,8 @@ import { CometChat} from "@cometchat-pro/chat";
 
 import ImageViewerModal from './../modal/ImageViewerModal';
 
+import icon_msg_file from './../../../public/img/icon_msg_file.svg';
+
 
 //image_src
 class CCMessage extends Component {
@@ -138,8 +140,9 @@ function IncomingMessage(props) {
         
                     <div className="received_msg">
                         <div className="received_withd_msg">
-                            <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">{props.msg.data.text}
-                            </p>
+                            <audio preload="auto" controls>
+                                <source src={props.msg.data.url}/>
+                            </audio>   
                             <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
                         </div>
                     </div>
@@ -157,8 +160,16 @@ function IncomingMessage(props) {
         
                     <div className="received_msg">
                         <div className="received_withd_msg">
-                            <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">{props.msg.data.text}
-                            </p>
+                            <a href={props.msg.data.url} download={props.msg.msgId} target="_blank" >
+                                <p class="color-light-tint color-dark-tint-font border-radius-no-bottom-left">
+                            
+                                    <div class="file_icon"  dangerouslySetInnerHTML={{ __html: icon_msg_file}}></div>
+                            
+                                    <div class="file_name"> 
+                                        {props.msg.data.url}
+                                    </div> 
+                                </p>
+                            </a>
                             <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
                         </div>
                     </div>
@@ -225,14 +236,6 @@ function OutgoingMessage(props) {
                     </div>
                 </div>
             </div>   
-                // <div class="outgoing_msg">
-                //     <div class="sent_msg ">
-                //         <video src={props.msg.data.url} class="color-background border-radius-no-bottom-right color-font-white"/>
-                //         <span class="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
-        
-                //     </div>
-                // </div>
-
                
             );
         }
@@ -240,31 +243,41 @@ function OutgoingMessage(props) {
 
         case CometChat.MESSAGE_TYPE.AUDIO: {
             return (
-                <div class="outgoing_msg">
-                    <div class="sent_msg ">
-                        <p class="color-background border-radius-no-bottom-right color-font-white">
-                            {props.msg.data.text}
-                        </p>
-                        <span class="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
-        
+
+                <div className="outgoing_msg">
+                    <div className="sent_msg">
+                        <div className="sent_withd_msg">
+                            <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
+                            <audio preload="auto" controls>
+                                <source src={props.msg.data.url}/>
+                            </audio>
+                        </div>
                     </div>
-                </div>
-                
+                </div>                 
             );
         }
         break;
 
         case CometChat.MESSAGE_TYPE.FILE : {
             return (
-                <div class="outgoing_msg">
-                    <div class="sent_msg ">
-                        <p class="color-background border-radius-no-bottom-right color-font-white">
-                            {props.msg.data.text}
-                        </p>
-                        <span class="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
-        
+                <div className="outgoing_msg">
+                <div className="sent_msg">
+                    <div className="sent_withd_msg">
+                        <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
+                        <a href={props.msg.data.url} download={props.msg.msgId} target="_blank">
+                            <p class="color-background border-radius-no-bottom-right color-font-white">
+                            
+                                <div class="file_icon"  dangerouslySetInnerHTML={{ __html: icon_msg_file}}>
+                                </div>
+                                
+                                <div class="file_name"> 
+                                    {props.msg.data.url}
+                                </div> 
+                            </p>
+                        </a>
                     </div>
                 </div>
+            </div>
             );
         }
         break;
@@ -285,7 +298,7 @@ function OutgoingMessage(props) {
         break;
 
         default:
-        return (<h2>deafult message</h2>);
+        return (<h2>default message</h2>);
         break;
     }
 

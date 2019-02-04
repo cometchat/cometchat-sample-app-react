@@ -41,6 +41,18 @@ export default class MediaManager{
         this.videoPlayer.play();
     }
 
+    static stopPlaying(){
+
+        this.videoPlayer.pause();
+
+        if (this.stream) {
+            this.stream.getTracks().forEach(function(track) {
+               track.stop();
+             });
+         }
+        
+    }
+
     startRecordingVideo(){
         recorder = new MediaRecorder(this.stream);
         recorder.start();
