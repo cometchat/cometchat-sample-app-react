@@ -1,5 +1,6 @@
 
 
+
 <div style="width:100%">
 	<div style="width:50%; display:inline-block">
 		<p align="center">
@@ -11,9 +12,12 @@
 Javascript Reactjs Demo app (built using **CometChat Pro**) is a fully functional messaging app capable of **one-on-one** (private) and **group** messaging. The app enables users to send **text** and **multimedia messages like audio, video, images, documents.**
 
 
+
   
 
+
 ## Table of Contents
+
 
 1. [Screenshots](#Screenshots)
 
@@ -35,8 +39,7 @@ Javascript Reactjs Demo app (built using **CometChat Pro**) is a fully functiona
 <img align="center" src="https://github.com/cometchat-pro/javascript-reactjs-chat-app/blob/master/screenshots/chat.png" style="width:75%;"/>
 	<p align ="center"> Fig : Chat Application embedded in Website </p>
 <br></br>
- 
-  
+
 
 ## Config Development Environment
 
@@ -126,3 +129,4 @@ npm run build
 # Contribute 
 
 Feel free to make a suggestion by creating a pull request.
+

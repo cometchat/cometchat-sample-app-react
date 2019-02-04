@@ -14,7 +14,7 @@ import * as actionCreator from './../../store/actions/cc_action';
   }
 
   validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
+    return this.state.email.length > 0;
   }
 
   handleChange = event => {
@@ -44,15 +44,6 @@ import * as actionCreator from './../../store/actions/cc_action';
                 type="Text"
                 value={this.state.email}
                 onChange={this.handleChange}
-              />
-            </FormGroup>
-            <FormGroup controlId="password">
-              <ControlLabel>Password</ControlLabel>
-              <FormControl 
-                className = "border-radius-full box-shadow border color-border font-size-20 H-64"
-                value={this.state.password}
-                onChange={this.handleChange}
-                type="password"
               />
             </FormGroup>
             <Button

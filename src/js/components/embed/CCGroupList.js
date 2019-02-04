@@ -20,8 +20,8 @@ class CCGroupList extends Component {
 
         switch(group.type){
         case "public":
-            console.log("group type: ", (group.type));
-            if(group.hasJoined == undefined){
+            console.log("group type: ", (group.hasJoined));
+            if(group.hasJoined == false){
                actionCreator.joinGroup(group);
             }
 

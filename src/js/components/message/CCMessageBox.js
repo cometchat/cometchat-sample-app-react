@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { calculateAvailableHeight, CheckEmpty } from './../../lib/uiComponentLib';
 import * as actionCreator from './../../store/actions/cc_action';
 
-var heightCCMessageBox = calculateAvailableHeight(74, 65, "ccMessage");
+var heightCCMessageBox = calculateAvailableHeight(79, 65, "ccMessage");
 
 var ccMessageBoxStyle = {
 
@@ -118,11 +118,11 @@ class CCMessageBox extends Component {
         } else {
 
             return (
-                <div>
+                <div id="ccMessageBoxContainer">
                     <Row ref={this.refsMessageBox} id="ccMessageBox" className="ccMessageBox" style={ccMessageBoxStyle} >
                         {
                             messageUser.message.map((msg, index) => (
-                                <CCMessage key={index} msgData={msg} />
+                                <CCMessage key={msg.id} msgData={msg} />
                             ))
                         }
                     </Row>

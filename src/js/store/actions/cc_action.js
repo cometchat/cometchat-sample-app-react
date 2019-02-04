@@ -1,7 +1,7 @@
 //cometchat login
 
 import CCManager from "./../../lib/cometchat/ccManager";
-import { CometChat, sendMessage,Group } from "@cometchat-pro/chat";
+import { CometChat, sendMessage } from "@cometchat-pro/chat";
 
 //set User Session
 export const loginInCC = (dispatch, UID) => {
@@ -149,7 +149,7 @@ export const handleActionMessage = actionMsg => {
 
 //handle Text Message
 
-export const handleTextMessage = (msg, dispatch) => {
+export const handleMessage = (msg, dispatch) => {
   if(msg.receiverType=="user"){
     console.log("Text Message recieved from : " + msg.sender);
     dispatch(updateMessage(msg.sender.uid, msg, "text Recieved : "));
@@ -208,10 +208,10 @@ export const sendTextMessage = (uid, text, msgType) => {
 
 //sendMediaMessage
 
-export const sendMediaMessage = (uid, text, msgType) => {
+export const sendMediaMessage = (uid, text, msgType,mediaType) => {
   console.log("media messazgetype " + msgType);
 
-  let mediaMessage = CCManager.getMediaMessage(uid, text, msgType);
+  let mediaMessage = CCManager.getMediaMessage(uid, text, msgType,mediaType);
 
   return dispatch => {
     CometChat.sendMessage(mediaMessage).then(
@@ -278,7 +278,9 @@ export const startFetching = () => {
 
 export const joinGroup =(group)=>{
 
-  CometChat.joinGroup(group.guid,group.name,Group.Type.Public,'').then(
+  console.log("inside group");
+
+  CometChat.joinGroup(group.guid,group.name,CometChat.Group.Type.Public,'').then(
     groupData =>{
       console.log("Joined Group", groupData);
     }

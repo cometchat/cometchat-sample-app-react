@@ -191,7 +191,7 @@ button:focus {
 }
 
 .ccMessageFooterMenu{
-    padding: 9px 8px;
+    padding: 8px 8px;
     height: 100%;   
     font-size: 24px;
 }
@@ -238,7 +238,7 @@ button:focus {
 /* message-bubble */
 
 .incoming_msg{
-    margin:14px 8px;
+    margin:20px 8px;
 }
 
 .incoming_msg_img {
@@ -246,58 +246,120 @@ button:focus {
     width: 5%;
     text-align: center;
     line-height: 46px;
-    vertical-align: text-top;
+    vertical-align: bottom;
   }
   .received_msg {
     display: inline-block;
     padding: 0 0 0 10px;
     vertical-align: top;
-    width: 92%;
+    width: 75%;
+    
    }
+    .received_withd_msg { 
+        width: 100%;
+        position: relative;
+    }
   
-   .received_withd_msg p {
+   .received_withd_msg p, .received_withd_msg img,.received_withd_msg video {
     display: inline-block;
-    max-width: 100%;
+    max-width: 80%;
     width: fit-content;
     min-width: 100px;
     font-size: 14px;
     overflow-wrap: break-word;
     padding: 11px 16px;
     text-align: left;
+    margin:0px;
   }
+
+  .received_withd_msg img {
+
+    max-width: 70%;
+    border-radius: 8px !important;
+    padding: 0px; 
+}
+
 
   .time_date {
     display: inline-block;
     font-size: 12px;
-    line-height: 70px;
     margin-right: 12px;
-    margin-left:  12px;
-    vertical-align: top;
+    margin-left: 12px;
+    position: absolute;
+    bottom: 0;
   }
 
-  .received_withd_msg { width: 57%;}
+ 
 
  
 .outgoing_msg{ 
-   overflow:hidden; margin:14px 8px;
+   margin:20px 8px;
 }
-.outgoing_msg .sent_msg {
-    float: right;
-    width: 46%;
-    text-align:right;
- }
 
-.outgoing_msg .sent_msg p{
-    max-width: 100%;
+.outgoing_msg .sent_msg{
+    display: inline-block;
+    text-align: right;
+    width: 100%;
+    padding: 0px;
+}
+
+.sent_withd_msg {
+    width: 100%;
+    position: relative;
+}
+
+.sent_withd_msg p , .sent_withd_msg img, .sent_withd_msg video,.sent_withd_msg a p{
+    display: inline-block;
+    max-width: 70%;
     width: fit-content;
     min-width: 100px;
     font-size: 14px;
     overflow-wrap: break-word;
     padding: 11px 16px;
     text-align: left;
-    float: right;
+    margin: 0px;
+    color: #FFF;
   }
 
+.sent_withd_msg .time_date{
+    display: inline-block;
+    font-size: 12px;
+    margin-right: 12px;
+    margin-left: 12px;
+    position: relative;
+    vertical-align: bottom;
+}
+
+.outgoing_msg .sent_msg img, .outgoing_msg .sent_msg video {
+    max-width: 50%;
+    border-radius: 8px !important;
+    padding: 0px;
+}
+
+
+
+.outgoing_msg .sent_msg .time_date_media{
+    line-height: unset;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    left: 16%;
+    font-size: 12px;
+}
+
+.sent_withd_msg a p .file_name, .received_withd_msg a p .file_name{  
+    display: table-cell;
+    word-break: break-all;
+    position: relative;
+    vertical-align: middle;
+}
+
+.sent_withd_msg a p .file_icon,.received_withd_msg a p .file_icon{
+    height: 48px;
+    display: table-cell;
+    word-break: break-all;
+    position: relative;
+}
 
 
 
@@ -452,3 +514,186 @@ nav nav-pills>li>a{
     background: #2636be;
     font-size: 28px;
 }
+
+/* attachmentMenu Style */
+
+.attachIcon{
+    justify-content: center;
+    align-items: center;
+    height: 42px;
+    text-align: center;
+    font-size: 24px;
+    cursor: pointer;
+    transition: opacity .2s;
+    width: 42px;     
+    border-radius: 50%;
+}
+
+.attachIcon[active="true"]{
+    background: #ccc;
+}
+
+.attachIcon[active="false"]{
+    background: #fff;
+}
+
+
+.attachMenuContainer[active=false]{
+    display:none;
+}
+
+.attachMenuContainer[active=true]{
+    display:block;
+}
+
+
+
+.attachMenuContainer{
+    position: absolute;
+    min-height: 65px;
+    max-height: 200px;
+    background-color: rgb(255, 255, 255);
+    bottom: 65px;
+    width: 100%;
+    right: 0px;
+    left: 0px;
+    margin: 0px;
+    padding: 0 18px;
+    align-content: center;
+    opacity:0;
+    transition: opacity 0.5s linear;
+    -webkit-transition: opacity 0.5s linear;
+    -moz-transition: opacity 0.5s linear;
+}
+
+.attachMenuWrapper{
+    padding: 16px 16px !important;        
+    background: #f5f5f7;        
+    display: inline-block;        
+    width: 100%;
+    border-radius: 8px 8px 0 0;
+}
+
+.attachMenu{
+    padding: 8px;    
+    text-align: center;    
+    justify-content: center;    
+    align-content: center;
+    cursor: pointer;
+}
+
+.attachMenuIcon{
+    height: 48px;    
+    width: 48px;    
+    border-radius: 50%;   
+    border: 1px solid currentcolor;
+}
+
+.attachMenuText{
+    
+    font-size: 14px;
+    margin-top: 8px;
+    
+}
+
+
+
+
+
+.modal {
+    background-color: rgba(0,0,0,1);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color:#fff;
+
+  }
+  
+  .cameraCaptureModalHeader,.imageModalHeader{
+    width: 100%;
+    height: 58px;
+    position: fixed;
+    z-index: 9;
+    padding: 0PX;
+    padding-top: 16px;
+    top: 0;
+    padding-left: 16px;
+    border-bottom: 0px;
+  }
+
+    .cameraModalBackIcon,.imageViewerModalBackIcon{
+        height: 32px;
+        width: 32px;
+        color: #ffffff;
+    }
+
+    .cameraCaptureModalContent,.imageViewerModalContent{
+        height: 100%;
+        width: 100%;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+    }
+
+    #vCameraCapture{
+
+    }
+
+    #iCameraImage{
+        display:none;
+    }
+    
+
+    .cameraCaptureModalFooter{
+        position: absolute;
+        bottom: 0;
+        display: flex;
+        text-align: center;
+        margin-bottom:  32px;
+    }
+
+    .cameraCaptureButton{
+        border-radius: 50%;
+        background: #000;
+        height: 54px;
+        width: 54px;
+        border: 4px solid #fff;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+        display: flex;
+        cursor: pointer;
+    }
+
+    .cameraCaptureButton>div{
+        border-radius: 50%;
+        background: #fff;
+        height: 42px;
+        width: 42px;
+        border: 2px solid #000;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        align-content: center;
+    }
+
+
+    .cameraSendButton{
+        display: block;
+        font-size: 24px;
+        width: 280px;
+        border-radius: 16px;
+        background: #2636be;
+    }
+    
+
+    
+  
+
+  
