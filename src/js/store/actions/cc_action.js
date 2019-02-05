@@ -135,6 +135,7 @@ export const addMessageListener = dispatch => {
   CCManager.addMessageListener(dispatch);
   CCManager.addUserEventListener(dispatch);
   CCManager.addGroupEventListener(dispatch);
+  CCManager.addCallListener(dispatch);
   dispatch(updateHandler());
 };
 
@@ -147,7 +148,7 @@ export const handleActionMessage = actionMsg => {
   };
 };
 
-//handle Text Message
+//handle Message
 
 export const handleMessage = (msg, dispatch) => {
   if(msg.receiverType=="user"){
@@ -157,18 +158,7 @@ export const handleMessage = (msg, dispatch) => {
 
     dispatch(updateMessage(msg.receiver,msg,"text recieved for group"));
 
-  }
-  
-  
-};
-
-//handle Media Message
-
-export const handleMediaMessage = msg => {
-  console.log("Media Message recieved : " + JSON.stringify(msg));
-  return {
-    type: "NoAction"
-  };
+  }  
 };
 
 //sendTextMessage
@@ -286,3 +276,212 @@ export const joinGroup =(group)=>{
     }
   )
 }
+
+
+export const initializeCall = (uid,callType,userType) =>{
+
+  var call = CCManager.getCall(uid,callType,userType)
+
+  return dispatch => {
+
+    CometChat.initiateCall(call).then(
+      outGoingCall => {
+          console.log("Call initiated successfully:", JSON.stringify(outGoingCall));
+          // perform action on success. Like show your calling screen.
+      },
+      error => {
+          console.log("Call initialization failed with exception:", error);
+      }
+    );
+  
+  };
+  
+}
+
+
+export const handleIncomingCall = (call, dispatch) => {
+    dispatch(updateCall(call,"incoming call"));
+};
+
+export const updateCall = (call,tag) => {
+  return {
+    type: "INCOMING_CALL", 
+    data:call,
+    tags: tag
+  };
+};
+
+
+export const acceptCall=(call)=>{
+
+  console.log("accept call object", call);
+
+    var sessionID = call.sessionId;
+
+    return dispatch => {
+      
+      CometChat.acceptCall(sessionID).then(
+          call => {
+          console.log("Call accepted successfully:", call);
+          // start the call using the startCall() method
+          //set state to display call portal and hide notification
+
+            dispatch(updateCallToAccept(call,"accept call"));
+          
+          },
+          error => {
+            console.log("Call acceptance failed with error", error);
+            // handle exception
+          }
+      );
+    };
+}
+
+export const updateCallToAccept = (call,tag) => {
+  return {
+    type: "INCOMING_ACCEPT_CALL", 
+    data:call,
+    tags: tag
+  };
+};
+
+export const handleOutgoinCallAccepted=(call, dispatch) => {
+    dispatch(updateCallToOutGoingAccepted(call,"incoming call"));
+};
+
+export const updateCallToOutGoingAccepted = (call,tag) => {
+  return {
+    type: "OUTGOING_ACCEPTED_CALL", 
+    data:call,
+    tags: tag
+  };
+};
+
+
+export const handleOutgoinCallRejected=(call, dispatch) => {
+  dispatch(updateCallToOutGoingRejected(call,"incoming call"));
+};
+
+export const updateCallToOutGoingRejected = (call,tag) => {
+  return {
+    type: "OUTGOING_REJECTED_CALL", 
+    data:call,
+    tags: tag
+  };
+};
+
+
+
+export const handleIncomingCancelled=(call, dispatch) => {
+  dispatch(updateCallToIncomingCancelled(call,"incoming call"));
+};
+
+export const updateCallToIncomingCancelled = (call,tag) => {
+  return {
+    type: "INCOMING_CANCELLED_CALL", 
+    data:call,
+    tags: tag
+  };
+};
+
+
+
+
+
+
+
+
+export const rejectCall = (call)=>{
+  var sessionID = call.sessionId;
+  var status = CometChat.CALL_STATUS.REJECTED;
+
+  return dispatch => {
+    CometChat.rejectCall(sessionID, status).then(
+      call => {
+        console.log("Call rejected successfully", call);
+  
+        dispatch(updateCallToReject(call,"reject call"));
+  
+      },
+      error => {
+        console.log("Call rejection failed with error:", error);
+      }
+    );
+  }; 
+}
+
+export const updateCallToReject = (call,tag) => {
+  return {
+    type: "INCOMING_REJECT_CALL", 
+    data:call,
+    tags: tag
+  };
+};
+
+
+
+
+export const startCall=(call,callDom)=>{
+  var sessionID = call.sessionId;
+
+  return dispatch => {
+    CometChat.startCall(  sessionID,  callDom,  new CometChat.OngoingCallListener({
+        onUserJoined: user => {
+        /* Notification received here if another user joins the call. */
+        console.log("User joined call:", user);
+        /* this method can be use to display message or perform any actions if someone joining the call */
+        },
+        onUserLeft: user => {
+        /* Notification received here if another user left the call. */
+        console.log("User left call:", user);
+        /* this method can be use to display message or perform any actions if someone leaving the call */
+        },
+        onCallEnded: call => {
+        /* Notification received here if current ongoing call is ended. */
+        console.log("Call ended:", call);
+          dispatch(updateCallToEnd("end_call"));
+        /* hiding/closing the call screen can be done here. */
+        }
+      })
+    );
+  }
+
+
+}
+
+
+export const updateCallToEnd = (tag) => {
+  return {
+    type: "INCOMING_END_CALL",     
+    tags: tag
+  };
+};
+
+
+export const cancelCall = (call)=>{
+  var sessionID = call.sessionId;
+  var status = CometChat.CALL_STATUS.CANCELLED;
+
+  return dispatch => {
+    CometChat.rejectCall(sessionID, status).then(
+      call => {
+        console.log("Call Cancelled successfully", call);
+  
+        dispatch(updateCallToCancel(call,"reject call"));
+  
+      },
+      error => {
+        console.log("Call rejection failed with error:", error);
+      }
+    );
+  }; 
+}
+
+
+export const updateCallToCancel = (tag) => {
+  return {
+    type: "OUTGOING_CANCEL_CALL",     
+    tags: tag
+  };
+};
+

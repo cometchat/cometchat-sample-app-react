@@ -28,7 +28,7 @@ export default class CameraModal extends React.PureComponent {
                 </div>
 
                 <div class="imageViewerModalContent">
-                    <img id="imageViewer" className="img-responsive" height="100%" src={this.props.image_src}/>
+                    <img id="imageViewer" className="img-responsive" height="90%" src={this.props.image_src}/>
                 </div>
             
                   
