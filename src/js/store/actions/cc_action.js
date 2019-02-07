@@ -288,6 +288,7 @@ export const initializeCall = (uid,callType,userType) =>{
       outGoingCall => {
           console.log("Call initiated successfully:", JSON.stringify(outGoingCall));
           // perform action on success. Like show your calling screen.
+          return dispatch(initCall(call,"init call"));
       },
       error => {
           console.log("Call initialization failed with exception:", error);
@@ -298,6 +299,13 @@ export const initializeCall = (uid,callType,userType) =>{
   
 }
 
+export const initCall = (call,tag) => {
+  return {
+    type: "INIT_CALL", 
+    data:call,
+    tags: tag
+  };
+};
 
 export const handleIncomingCall = (call, dispatch) => {
     dispatch(updateCall(call,"incoming call"));
@@ -461,6 +469,8 @@ export const updateCallToEnd = (tag) => {
 export const cancelCall = (call)=>{
   var sessionID = call.sessionId;
   var status = CometChat.CALL_STATUS.CANCELLED;
+
+  console.log("Session idf : " + sessionID + "\n : " + call.sessionId);
 
   return dispatch => {
     CometChat.rejectCall(sessionID, status).then(

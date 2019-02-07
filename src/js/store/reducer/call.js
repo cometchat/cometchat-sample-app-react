@@ -12,8 +12,9 @@ const reducers = (state = initialState, action) => {
     //ToDo : dummy actions for
     switch (action.type) {
         case 'INIT_CALL':
-            newState.state = "call initialized";                      
-            console.log("Inside Splash handler : " );
+            newState.callData  = action.data;                
+            newState.showCallWindow = false;
+            console.log("Init call set" );
 
         break;
 

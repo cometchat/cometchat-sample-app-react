@@ -7,8 +7,8 @@ import CCMessageContainer from '../../components/message/CCMessageContainer';
 import * as actionCreator from './../../store/actions/cc_action';
 import SplashLoader from "../../components/SplashLoader";
 
-import CallIncomingNotificationModal from "./../../components/modal/CallIncomingNotificationModal";
-import CallModal from "./../../components/modal/CallModal";
+import CCCallController from "./../../components/CCCallController";
+
 
 class Embeded extends Component {
 
@@ -26,10 +26,7 @@ class Embeded extends Component {
     render() {
 
 
-        const callIncomingModal = this.props.call.showIncomingNotification? (<CallIncomingNotificationModal user_avatar={this.props.call.callData.sender.avatar} user_name={this.props.call.callData.sender.name}></CallIncomingNotificationModal>):null;
-
-        const callWindow = this.props.call.showCallWindow?(<CallModal></CallModal>):null;
-
+     
         console.log("showloader : " + this.props.showLoader);
 
         if (this.props.showLoader) {
@@ -39,8 +36,6 @@ class Embeded extends Component {
                     <Row className="ccShowGrid bg-white border-radius-top ">
                         <SplashLoader/>
                     </Row>
-                    {callIncomingModal}
-                    {callWindow}
                 </Grid>
             );
 
@@ -58,11 +53,9 @@ class Embeded extends Component {
                             <ActiveUserMessageContainer dataContent={this.props.activeMessage} />
                         </Col>
                     </Row>
-                    {callIncomingModal}
-                    {callWindow}
+
+                    <CCCallController/>
                 </Grid>
-
-
             );
         }
 
@@ -109,7 +102,7 @@ const mapStateToProps = (store) => {
     return {
         activeMessage: store.message.activeMessage,
         showLoader: store.app.splashHandler.showLoader,
-        call : store.call,
+     
         
     };
 };
