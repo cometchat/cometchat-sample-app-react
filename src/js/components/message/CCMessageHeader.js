@@ -6,6 +6,8 @@ import CallModal from './../modal/CallModal';
 import { connect } from 'react-redux';
 import * as utils from './../../lib/uiComponentLib';
 
+import * as actionCreator from "./../../store/actions/cc_action";
+
 import icon_audio from "./../../../public/img/icon_audio_call.svg";
 import icon_more from "./../../../public/img/icon_more_header.svg";
 import icon_video from "./../../../public/img/icon_video_call.svg";
@@ -26,22 +28,20 @@ class CCMessageHeader extends Component {
         }
     }
 
-    openModal(calltype){
+    initiateCall(callTypes,username,avatar){
+        
+        const initCall = {
+           
+            user_avatar:avatar,
+            user_name:username,
+            call_user_id:this.props.profile.id,
+            call_type:callTypes,
+            call_user:this.props.profile.type,
+        }
 
-        this.setState({
-            showModal: true,
-            callType : calltype
-        });
-    }
+        
 
-    closeModal(){
-        this.setState({
-            showModal:false
-        });
-    }
-
-    initiateCall(callType){
-        this.openModal(callType);
+        this.props.startCall(initCall);
     }
 
     render() {
@@ -60,10 +60,6 @@ class CCMessageHeader extends Component {
             profileData.avatar  = utils.CheckEmpty(groupData.icon) ? groupData.icon : Groupthumbnail ;
             profileData.status  = groupData.description;
         }
-        
-
-        const callModal = this.state.showModal?(<CallModal user_avatar={profileData.avatar} user_name={profileData.name} call_user_id={this.props.profile.id} call_type={this.state.callType} handleClose={this.closeModal.bind(this)} call_user={this.props.profile.type}></CallModal>):null;
-
         
 
         return (
@@ -86,18 +82,14 @@ class CCMessageHeader extends Component {
                 <Col lg={4} className="cc-no-padding h-100">
                     <div className="ccMessageHeaderMenu">
                         <span className="ccmessageHeaderIcon " dangerouslySetInnerHTML={{__html:icon_audio}} 
-                            onClick={this.initiateCall.bind(this,'audio')}/>
+                            onClick={this.initiateCall.bind(this,'audio',profileData.name,profileData.avatar)}/>
 
                         <span className="ccmessageHeaderIcon " dangerouslySetInnerHTML={{__html:icon_video}}
-                         onClick={this.initiateCall.bind(this,'video')}/>
+                         onClick={this.initiateCall.bind(this,'video',profileData.name,profileData.avatar)}/>
 
                         <span className="ccmessageHeaderIcon " dangerouslySetInnerHTML={{__html:icon_more}}/>
                     </div>
-                </Col>
-                
-
-                {callModal}
-                
+                </Col>                
             </Row>
         );
     }
@@ -113,7 +105,7 @@ const mapStateToProps = (store) => {
 
 const mapDispachToProps = dispatch => {
     return {
-
+        startCall : (call) => dispatch(actionCreator.showCallScreen(call)),
     };
 };
 

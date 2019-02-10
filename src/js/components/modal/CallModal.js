@@ -3,7 +3,7 @@ import Modal from './Modal';
 import { connect } from 'react-redux';
 
 import * as actionCreator from "./../../store/actions/cc_action";
-
+import CCCall from './../call/CCCall';
 import {CometChat} from "@cometchat-pro/chat";
 
 import icon_call_accept from "./../../../public/img/icon_call_accept.svg";
@@ -17,14 +17,12 @@ class CallModal extends React.PureComponent {
 
     componentDidMount(){ 
 
-        console.log("Inside componentDidMount : "  + this.props.call.showCallWindow );
+    console.log("Inside componentDidMount call status: "  + this.props.call.callStatus);
 
-        if(this.props.call.showCallWindow){
-            var callDom = document.getElementById('callInterface');
-            this.props.startCall(this.props.call.callData,callDom);
+        if(this.props.call.callStatus == 1){
+    
         }else{
            
-
             var callType = "";
             if(this.props.call_type =="audio")
                 callType = CometChat.CALL_TYPE.AUDIO;
@@ -32,27 +30,23 @@ class CallModal extends React.PureComponent {
                 callType = CometChat.CALL_TYPE.VIDEO;
             }
 
-            this.props.initCall(this.props.call_user_id,callType,this.props.call_user);
+            this.props.initCall(this.props.call.callInitData.call_user_id,callType,this.props.call.callInitData.call_user);
         }        
     }
 
     cancelCall(){
-        this.props.cancelCall(this.props.call.callData);
+        this.props.cancelCall(this.props.call.callData);        
     }
 
     
     render(){
         
-        if(this.props.call.showCallWindow){
+        if(this.props.call.callStatus == 1){
 
             //show dom & start call
 
             return(
-                <Modal>
-                    <div id="callInterface" class="modal">
-
-                    </div>
-                </Modal>
+              <CCCall callData = {this.props.call.callData}></CCCall> 
             );
 
 
@@ -66,11 +60,11 @@ class CallModal extends React.PureComponent {
                         <div class="CallModalContent">
                 
                             <div className="callUserImage">
-                                <img src={this.props.user_avatar} class="callUserImageObj" />
+                                <img src={this.props.call.callInitData.calluser_avatar} class="callUserImageObj" />
                             </div>     
     
                             <div className="callUserStatus">
-                                {this.props.user_name}
+                                {this.props.call.callInitData.user_name}
                             </div>
                         </div>
                         
@@ -107,7 +101,6 @@ const mapStateToProps = (store) => {
 const mapDispachToProps = dispatch => {
     return {
         initCall: (uid,callType,userType) => dispatch(actionCreator.initializeCall(uid,callType,userType)),
-        startCall: (call,callDom) => dispatch(actionCreator.startCall(call,callDom)),
         cancelCall: (call) =>dispatch(actionCreator.cancelCall(call)),
     };
 };

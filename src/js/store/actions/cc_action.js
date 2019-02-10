@@ -277,6 +277,15 @@ export const joinGroup =(group)=>{
   )
 }
 
+export const showCallScreen = (call,tag="showCallScreen") =>{
+  
+  return {
+    type: "SHOW_CALL_SCREEN", 
+    data:call,
+    tags: tag
+  };
+}
+
 
 export const initializeCall = (uid,callType,userType) =>{
 
@@ -482,6 +491,7 @@ export const cancelCall = (call)=>{
       },
       error => {
         console.log("Call rejection failed with error:", error);
+        dispatch(updateCallToCancel(call,"reject call"));
       }
     );
   }; 

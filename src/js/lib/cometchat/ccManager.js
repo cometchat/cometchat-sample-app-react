@@ -143,7 +143,7 @@ export default class CCManager {
               this.handleIncomingCall(call,dispatch);
             
             },
-           onOutgoinCallAccepted : (call) => {
+           onOutgoingCallAccepted : (call) => {
             
             console.log("Outgoing call accepted:", call);
             // Outgoing Call Accepted

@@ -21,8 +21,12 @@ class CCCallController extends Component {
     componentDidMount() {
         
     }
+
+
     
     render() {
+
+        console.log("inside cccallcontroller with new ui  : " + this.props.call.showCallWindow  + "\n callincomingmodel : " + this.props.call.showIncomingNotification);
 
         const callIncomingModal = this.props.call.showIncomingNotification? (<CallIncomingNotificationModal 
             user_avatar={utils.CheckEmpty(this.props.call.callData.sender.avatar) ? this.props.call.callData.sender.avatar : Userthumbnail} 
@@ -32,7 +36,7 @@ class CCCallController extends Component {
         
         return(
             <div>
-              {callIncomingModal}
+                {callIncomingModal}
                 {callWindow}
             </div>
         );
