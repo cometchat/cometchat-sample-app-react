@@ -1,19 +1,20 @@
 @import url("./cc-style.css");
-
-body{
+body {
     text-rendering: optimizeLegibility;
 }
-.padding-48{
-    padding: 48px !important;;
+
+.padding-48 {
+    padding: 48px !important;
+    ;
 }
 
-.align-center{
+.align-center {
     text-align: center !important;
 }
 
 /* login form */
 
-.logincontainer{
+.logincontainer {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -23,7 +24,7 @@ body{
     height: 100%;
 }
 
-.cc-form-input{
+.cc-form-input {
     border-radius: 20px;
     border-color: #FFFFFF;
     box-shadow: 0 13px 25px #0000000c !important;
@@ -31,7 +32,7 @@ body{
     height: 64px;
 }
 
-.cc-submit-btn{
+.cc-submit-btn {
     background-color: #2636be !important;
     border-color: #2636be !important;
     border-radius: 20px;
@@ -43,18 +44,14 @@ body{
     margin-top: 32px;
 }
 
-.login-form-container{
+.login-form-container {
     box-shadow: 0 13px 25px 0 #0000000c;
     padding: 48px;
     background: white;
     border-radius: 20px;
-
 }
 
-input:focus,
-select:focus,
-textarea:focus,
-button:focus {
+input:focus, select:focus, textarea:focus, button:focus {
     outline: none !important;
     box-shadow: 0 13px 25px #0000000c !important;
 }
@@ -73,25 +70,22 @@ button:focus {
 
 *::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.08) !important;
-
 }
 
-
-.ccMainContainer{
-    height:100%
-}
-.ccleftSidebar{
-    height:100% !important;
+.ccMainContainer {
+    height: 100%
 }
 
-.ccUserList{
+.ccleftSidebar {
+    height: 100% !important;
+}
+
+.ccUserList {
     height: 92%;
     overflow: auto;
 }
 
-
-
-.cc-icon{
+.cc-icon {
     justify-content: center;
     align-items: center;
     height: 32px;
@@ -102,14 +96,12 @@ button:focus {
     width: 32px;
 }
 
-
-.sidebarUserListItemAvatar{
-    float : left !important;
+.sidebarUserListItemAvatar {
+    float: left !important;
     margin: 8px;
 }
 
-
-.sidebarUserListItemTitle{
+.sidebarUserListItemTitle {
     flex: 1 1 0%;
     min-width: 0;
     overflow: hidden;
@@ -120,35 +112,30 @@ button:focus {
     font-weight: 400;
     line-height: 1.4;
     margin: 4px;
-    margin-bottom:0px !important;
+    margin-bottom: 0px !important;
     padding: 4px;
     padding-bottom: 0px !important;
-    
 }
 
-
-
-.userItem{
+.userItem {
     cursor: pointer !important;
     text-decoration: none;
     height: 64px;
     position: relative;
     margin: 0px;
-    padding:4px;
+    padding: 4px;
     border-bottom: 1px solid rgba(0, 0, 0, .10) !important;
 }
 
-
 .userItem.active {
-    background:#f2f2f2;
+    background: #f2f2f2;
 }
 
-
-.pull-left{
-    float : left !important;
+.pull-left {
+    float: left !important;
 }
 
-.sidebarUserListItemStatus{
+.sidebarUserListItemStatus {
     color: rgba(153, 153, 153, 1);
     font-size: 13px !important;
     font-weight: 400;
@@ -158,21 +145,18 @@ button:focus {
     text-overflow: ellipsis;
     white-space: nowrap;
     margin: 4px;
-    margin-top:0px !important;
+    margin-top: 0px !important;
     padding: 4px;
     padding-top: 0px !important;
 }
 
-
-
 /* Message CSS */
 
-.ccMessageBox{
+.ccMessageBox {
     padding: 0 16px;
 }
 
-
-.ccMessagetitle{
+.ccMessagetitle {
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -182,21 +166,21 @@ button:focus {
     font-size: 17px;
     font-weight: 400;
     line-height: 50px;
-    height: 100%;   
+    height: 100%;
 }
 
-.ccMessageHeaderMenu{
+.ccMessageHeaderMenu {
     height: 100%;
     float: right;
 }
 
-.ccMessageFooterMenu{
+.ccMessageFooterMenu {
     padding: 8px 8px;
-    height: 100%;   
+    height: 100%;
     font-size: 24px;
 }
 
-.ccMessageFooterMenu span{
+.ccMessageFooterMenu span {
     display: inline-block;
     margin-right: 15px;
     padding: 0;
@@ -206,17 +190,12 @@ button:focus {
     margin-right: 0px;
 }
 
-
-
-.ccMessageFooter{
+.ccMessageFooter {
     position: absolute !important;
-    bottom:0px !important;
-    
+    bottom: 0px !important;
 }
 
-
-
-.ccMessageEditorBox{
+.ccMessageEditorBox {
     overflow: auto;
     font-size: 16px;
     flex-wrap: wrap;
@@ -233,12 +212,12 @@ button:focus {
 
 .ccMessageEditorBox[data-placeholder]:not([data-placeholder=""]):empty::before {
     content: attr(data-placeholder);
-  }
+}
 
 /* message-bubble */
 
-.incoming_msg{
-    margin:20px 8px;
+.incoming_msg {
+    margin: 20px 8px;
 }
 
 .incoming_msg_img {
@@ -247,20 +226,21 @@ button:focus {
     text-align: center;
     line-height: 46px;
     vertical-align: bottom;
-  }
-  .received_msg {
+}
+
+.received_msg {
     display: inline-block;
     padding: 0 0 0 10px;
     vertical-align: top;
     width: 75%;
-    
-   }
-    .received_withd_msg { 
-        width: 100%;
-        position: relative;
-    }
-  
-   .received_withd_msg p, .received_withd_msg img,.received_withd_msg video {
+}
+
+.received_withd_msg {
+    width: 100%;
+    position: relative;
+}
+
+.received_withd_msg p, .received_withd_msg img, .received_withd_msg video {
     display: inline-block;
     max-width: 80%;
     width: fit-content;
@@ -269,34 +249,29 @@ button:focus {
     overflow-wrap: break-word;
     padding: 11px 16px;
     text-align: left;
-    margin:0px;
-  }
-
-  .received_withd_msg img {
-
-    max-width: 70%;
-    border-radius: 8px !important;
-    padding: 0px; 
+    margin: 0px;
 }
 
+.received_withd_msg img {
+    max-width: 70%;
+    border-radius: 8px !important;
+    padding: 0px;
+}
 
-  .time_date {
+.time_date {
     display: inline-block;
     font-size: 12px;
     margin-right: 12px;
     margin-left: 12px;
     position: absolute;
     bottom: 0;
-  }
-
- 
-
- 
-.outgoing_msg{ 
-   margin:20px 8px;
 }
 
-.outgoing_msg .sent_msg{
+.outgoing_msg {
+    margin: 20px 8px;
+}
+
+.outgoing_msg .sent_msg {
     display: inline-block;
     text-align: right;
     width: 100%;
@@ -308,7 +283,7 @@ button:focus {
     position: relative;
 }
 
-.sent_withd_msg p , .sent_withd_msg img, .sent_withd_msg video,.sent_withd_msg a p{
+.sent_withd_msg p, .sent_withd_msg img, .sent_withd_msg video, .sent_withd_msg a p {
     display: inline-block;
     max-width: 70%;
     width: fit-content;
@@ -319,9 +294,9 @@ button:focus {
     text-align: left;
     margin: 0px;
     color: #FFF;
-  }
+}
 
-.sent_withd_msg .time_date{
+.sent_withd_msg .time_date {
     display: inline-block;
     font-size: 12px;
     margin-right: 12px;
@@ -336,9 +311,7 @@ button:focus {
     padding: 0px;
 }
 
-
-
-.outgoing_msg .sent_msg .time_date_media{
+.outgoing_msg .sent_msg .time_date_media {
     line-height: unset;
     position: absolute;
     bottom: 0;
@@ -347,25 +320,23 @@ button:focus {
     font-size: 12px;
 }
 
-.sent_withd_msg a p .file_name, .received_withd_msg a p .file_name{  
+.sent_withd_msg a p .file_name, .received_withd_msg a p .file_name {
     display: table-cell;
     word-break: break-all;
     position: relative;
     vertical-align: middle;
 }
 
-.sent_withd_msg a p .file_icon,.received_withd_msg a p .file_icon{
+.sent_withd_msg a p .file_icon, .received_withd_msg a p .file_icon {
     height: 48px;
     display: table-cell;
     word-break: break-all;
     position: relative;
 }
 
-
-
 /* blank container  */
 
-  .outer {
+.outer {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -373,23 +344,23 @@ button:focus {
     margin: 0px;
     background-color: #ffffff00;
     height: 100%;
-  }
+}
 
-  .middle {
+.middle {
     display: table-cell;
     vertical-align: middle;
-  }
+}
 
-  .inner {
+.inner {
     margin-left: auto;
     margin-right: auto;
-    text-align:center;
+    text-align: center;
     /*whatever width you want*/
-  }
+}
 
 /* header_icon  */
 
-.header-icon{
+.header-icon {
     height: 100%;
     font-size: 28px;
     float: right;
@@ -399,60 +370,55 @@ button:focus {
     cursor: pointer;
 }
 
-.ccmessageHeaderIcon{
+.ccmessageHeaderIcon {
     height: 38px;
     width: 38px;
     cursor: pointer;
     margin-right: 24px;
     padding: 0px;
-
 }
 
-.margin-right-10{
+.margin-right-10 {
     margin-right: 10px !important;
 }
 
-
-.sidebarHeader{
+.sidebarHeader {
     box-sizing: border-box !important;
     justify-content: space-between !important;
     padding: 20px 20px 20px 20px !important;
 }
 
-.tab_icon{
+.tab_icon {
     height: 28px;
     width: auto;
 }
 
-
-.tab_title{
+.tab_title {
     font-size: 12px;
     color: #011000;
 }
 
-
-nav nav-pills>li>a{
-    color:#d9dbdd;
+nav nav-pills>li>a {
+    color: #d9dbdd;
 }
-.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus, .nav-pills>li.active>a
-{
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus, .nav-pills>li.active>a {
     background-color: white !important;
 }
 
-.ccMessageHeader{
+.ccMessageHeader {
     box-sizing: border-box;
     height: 74px;
     position: relative;
     padding: 20px 20px 0 20px !important;
-
 }
 
-.messageHeaderAvatar{
+.messageHeaderAvatar {
     display: inline-block;
     float: left !important;
 }
 
-.messageHeaderStatus{
+.messageHeaderStatus {
     font-weight: 400;
     flex: 0 1 auto;
     min-width: 0;
@@ -464,7 +430,7 @@ nav nav-pills>li>a{
     font-size: 14px;
 }
 
-.messageHeaderTitle{
+.messageHeaderTitle {
     font-size: 18px;
     flex: 1 1 0%;
     min-width: 0;
@@ -477,14 +443,14 @@ nav nav-pills>li>a{
     padding-bottom: 0px !important;
 }
 
-.messageBoxNewMessageNotification{
+.messageBoxNewMessageNotification {
     position: absolute;
     align-self: center;
     text-align: center;
     width: 100%;
 }
 
-.messageBoxNewMessageNotification>span{
+.messageBoxNewMessageNotification>span {
     border: 1px solid #4CAF50;
     border-radius: 20px;
     padding: 10px;
@@ -492,19 +458,19 @@ nav nav-pills>li>a{
     font-size: 14px;
     color: white;
     height: 16px;
-    cursor:pointer;
+    cursor: pointer;
     background: #4CAF50;
 }
 
-.hideBlock{
-    display:none !important;
+.hideBlock {
+    display: none !important;
 }
 
-.displayBlock{
-    display:none !important;
+.displayBlock {
+    display: none !important;
 }
 
-.sendButton{
+.sendButton {
     border: 1px solid;
     border-radius: 32px;
     padding-left: 4px !important;
@@ -517,7 +483,7 @@ nav nav-pills>li>a{
 
 /* attachmentMenu Style */
 
-.attachIcon{
+.attachIcon {
     justify-content: center;
     align-items: center;
     height: 42px;
@@ -525,30 +491,27 @@ nav nav-pills>li>a{
     font-size: 24px;
     cursor: pointer;
     transition: opacity .2s;
-    width: 42px;     
+    width: 42px;
     border-radius: 50%;
 }
 
-.attachIcon[active="true"]{
+.attachIcon[active="true"] {
     background: #ccc;
 }
 
-.attachIcon[active="false"]{
+.attachIcon[active="false"] {
     background: #fff;
 }
 
-
-.attachMenuContainer[active=false]{
-    display:none;
+.attachMenuContainer[active=false] {
+    display: none;
 }
 
-.attachMenuContainer[active=true]{
-    display:block;
+.attachMenuContainer[active=true] {
+    display: block;
 }
 
-
-
-.attachMenuContainer{
+.attachMenuContainer {
     position: absolute;
     min-height: 65px;
     max-height: 200px;
@@ -560,48 +523,42 @@ nav nav-pills>li>a{
     margin: 0px;
     padding: 0 18px;
     align-content: center;
-    opacity:0;
+    opacity: 0;
     transition: opacity 0.5s linear;
     -webkit-transition: opacity 0.5s linear;
     -moz-transition: opacity 0.5s linear;
 }
 
-.attachMenuWrapper{
-    padding: 16px 16px !important;        
-    background: #f5f5f7;        
-    display: inline-block;        
+.attachMenuWrapper {
+    padding: 16px 16px !important;
+    background: #f5f5f7;
+    display: inline-block;
     width: 100%;
     border-radius: 8px 8px 0 0;
 }
 
-.attachMenu{
-    padding: 8px;    
-    text-align: center;    
-    justify-content: center;    
+.attachMenu {
+    padding: 8px;
+    text-align: center;
+    justify-content: center;
     align-content: center;
     cursor: pointer;
 }
 
-.attachMenuIcon{
-    height: 48px;    
-    width: 48px;    
-    border-radius: 50%;   
+.attachMenuIcon {
+    height: 48px;
+    width: 48px;
+    border-radius: 50%;
     border: 1px solid currentcolor;
 }
 
-.attachMenuText{
-    
+.attachMenuText {
     font-size: 14px;
     margin-top: 8px;
-    
 }
 
-
-
-
-
 .modal {
-    background-color: rgba(0,0,0,1);
+    background-color: rgba(0, 0, 0, 1);
     position: fixed;
     height: 100%;
     width: 100%;
@@ -611,11 +568,10 @@ nav nav-pills>li>a{
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    color:#fff;
+    color: #fff;
+}
 
-  }
-  
-  .cameraCaptureModalHeader,.imageModalHeader{
+.cameraCaptureModalHeader, .imageModalHeader {
     width: 100%;
     height: 58px;
     position: fixed;
@@ -625,75 +581,217 @@ nav nav-pills>li>a{
     top: 0;
     padding-left: 16px;
     border-bottom: 0px;
-  }
+}
 
-    .cameraModalBackIcon,.imageViewerModalBackIcon{
-        height: 32px;
-        width: 32px;
-        color: #ffffff;
-    }
+.cameraModalBackIcon, .imageViewerModalBackIcon {
+    height: 32px;
+    width: 32px;
+    color: #ffffff;
+}
 
-    .cameraCaptureModalContent,.imageViewerModalContent{
-        height: 100%;
-        width: 100%;
-        align-items: center;
-        display: flex;
-        justify-content: center;
-    }
+.cameraCaptureModalContent, .imageViewerModalContent, .CallModalContent {
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
 
-    #vCameraCapture{
+#imageViewer{
+    height:90% !important;
+}
 
-    }
+#vCameraCapture {}
 
-    #iCameraImage{
-        display:none;
-    }
-    
+#iCameraImage {
+    display: none;
+}
 
-    .cameraCaptureModalFooter{
-        position: absolute;
-        bottom: 0;
-        display: flex;
-        text-align: center;
-        margin-bottom:  32px;
-    }
+.cameraCaptureModalFooter {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    text-align: center;
+    margin-bottom: 32px;
+}
 
-    .cameraCaptureButton{
-        border-radius: 50%;
-        background: #000;
-        height: 54px;
-        width: 54px;
-        border: 4px solid #fff;
-        align-items: center;
-        align-content: center;
-        justify-content: center;
-        display: flex;
-        cursor: pointer;
-    }
+.cameraCaptureButton {
+    border-radius: 50%;
+    background: #000;
+    height: 54px;
+    width: 54px;
+    border: 4px solid #fff;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    display: flex;
+    cursor: pointer;
+}
 
-    .cameraCaptureButton>div{
-        border-radius: 50%;
-        background: #fff;
-        height: 42px;
-        width: 42px;
-        border: 2px solid #000;
-        text-align: center;
-        align-items: center;
-        justify-content: center;
-        align-content: center;
-    }
+.cameraCaptureButton>div {
+    border-radius: 50%;
+    background: #fff;
+    height: 42px;
+    width: 42px;
+    border: 2px solid #000;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+
+.cameraSendButton {
+    display: block;
+    font-size: 24px;
+    width: 280px;
+    border-radius: 16px;
+    background: #2636be;
+}
+
+/* call modal */
+
+.callUserImage {
+    width: 240px;
+    margin-top: 100px;
+    align-self: flex-start;
+    display: flex;
+    position: fixed;
+    justify-content: center;
+}
+
+.callUserStatus {
+    display: block;
+    align-self: center;
+    position: fixed;
+}
+
+.callModalFooter {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 100px;
+    height: auto;
+    width: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.btnAcceptCall {
+    position: relative;
+    height: 64px;
+    width: 64px;
+    margin: 32px;
+    border-radius: 50%;
+    background: lime;
+}
+
+.btnRejectCall {
+    position: relative;
+    height: 64px;
+    width: 64px;
+    margin: 32px;
+    border-radius: 50%;
+    background: red;
+}
+
+.callUserImageObj{
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+}
 
 
-    .cameraSendButton{
-        display: block;
-        font-size: 24px;
-        width: 280px;
-        border-radius: 16px;
-        background: #2636be;
-    }
-    
+.callNotificationModal{
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    color: #fff;
+}
 
-    
-  
+.CallNotificationHeader{
+    border: none !important;
+    text-decoration: none;
+    position: fixed;
+    margin: 0px;
+    background: #333;
+    padding: 14px;
+    right: 0;
+    margin-top: 10px;
+    color: #fff;
+    display: inline-flex;
+    border-radius: 8px 0 0 8px;
+    animation: colorchange 1.5s infinite; 
+    -webkit-animation: colorchange 1.5s infinite; 
+}
 
-  
+@keyframes colorchange{
+  0%   {background: #333;}
+  50%  {background: orangered;}
+}
+
+@-webkit-keyframes colorchange {
+   0%   {background: #333;}
+  50%  {background: orangered;} 
+}
+
+.CallNotificationUserImageContainer{
+    float: left !important;
+    margin: 8px;
+}
+
+.CallNotificationDetailContainer{
+    margin-right: 16px;
+}
+
+.CallNotificationUserName{
+    flex: 1 1 0%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: rgb(255, 255, 255);
+    font-size: 15px !important;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 4px;
+    margin-bottom: 0px !important;
+    padding: 4px;
+    padding-bottom: 0px !important;
+}
+
+.CallNotificationUserStatus{
+    color: #c1c1c1;
+    font-size: 13px !important;
+    font-weight: 400;
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 4px;
+    margin-top: 0px !important;
+    padding: 4px;
+    padding-top: 0px !important;
+}
+
+.btnAcceptCallNotification{
+    height: 42px;
+    width: 42px;
+    margin: 8px;
+    margin-right: 16px;
+    border-radius: 50%;
+    background: lime;
+    cursor: pointer;
+}
+
+.btnRejectCallNotification{
+    height: 42px;
+    width: 42px;
+    margin: 8px;
+    border-radius: 50%;
+    background: red;
+    cursor: pointer;
+}

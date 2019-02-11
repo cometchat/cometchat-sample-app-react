@@ -7,6 +7,8 @@ import CCMessageContainer from '../../components/message/CCMessageContainer';
 import * as actionCreator from './../../store/actions/cc_action';
 import SplashLoader from "../../components/SplashLoader";
 
+import CCCallController from "./../../components/CCCallController";
+
 
 class Embeded extends Component {
 
@@ -20,11 +22,11 @@ class Embeded extends Component {
     componentDidMount() {
         
     }
-
- 
     
     render() {
 
+
+     
         console.log("showloader : " + this.props.showLoader);
 
         if (this.props.showLoader) {
@@ -51,9 +53,9 @@ class Embeded extends Component {
                             <ActiveUserMessageContainer dataContent={this.props.activeMessage} />
                         </Col>
                     </Row>
+
+                    <CCCallController/>
                 </Grid>
-
-
             );
         }
 
@@ -99,7 +101,9 @@ function ShowActiveMessage(props) {
 const mapStateToProps = (store) => {
     return {
         activeMessage: store.message.activeMessage,
-        showLoader: store.app.splashHandler.showLoader
+        showLoader: store.app.splashHandler.showLoader,
+     
+        
     };
 };
 

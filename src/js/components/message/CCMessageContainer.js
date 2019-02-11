@@ -6,6 +6,7 @@ import CCMessageBox from './CCMessageBox';
 import { connect } from 'react-redux';
 
 
+
  
 
 class CCMessageContainer extends Component {
@@ -25,7 +26,7 @@ class CCMessageContainer extends Component {
   
   render() {
   
-    
+
     return (
         <div className="ccMessageContainer h-100" >
             
@@ -33,6 +34,7 @@ class CCMessageContainer extends Component {
             <CCMessageBox/>
             {/* area for portal in details */}
             <CCMessageFooter/>
+            
         
         </div>
     );
@@ -43,7 +45,8 @@ class CCMessageContainer extends Component {
 
 const mapStateToProps = (store) =>{
   return {
-      user :  store.message.activeMessage
+      user :  store.message.activeMessage,
+      
   };
 };
 

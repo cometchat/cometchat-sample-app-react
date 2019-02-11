@@ -3,6 +3,7 @@ import message from './reducer/message';
 import groups from './reducer/group';
 import layout from './reducer/layout';
 import app from './reducer/app';
+import call from './reducer/call';
 
 
 export const reducers = {
@@ -11,6 +12,7 @@ export const reducers = {
     message,
     layout,
     groups,
+    call
 
 };
 

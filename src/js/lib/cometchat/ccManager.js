@@ -10,13 +10,13 @@ export default class CCManager {
   static cometchat = null;
 
 
-  static appId        =   '{APP_ID}';     //Enter your App ID
-  static apiKey       =   '{API_KEY}';    //Enter your API KEY
+  // static appId        =   '{APP_ID}';     //Enter your App ID
+  // static apiKey       =   '{API_KEY}';    //Enter your API KEY
 
-  
   static LISTENER_KEY_MESSAGE = "msglistener";
   static LISTENER_KEY_USER = "userlistener";
   static LISTENER_KEY_GROUP = "grouplistener";
+  static LISTENER_KEY_CALL = "calllistener";
 
 
 
@@ -62,6 +62,15 @@ export default class CCManager {
     }
   }
 
+  static getCall(uid,callType,userType){
+    if(userType == "user"){
+      return new CometChat.Call(uid, callType, CometChat.RECEIVER_TYPE.USER);
+    }else{
+      return new CometChat.Call(uid, callType, CometChat.RECEIVER_TYPE.GROUP);
+    }
+    
+  }
+
   static addMessageListener(dispatch) {
     console.log("ccmangr addMessageListener: ");
     CometChat.addMessageListener(
@@ -101,6 +110,60 @@ export default class CCManager {
     }
   }
 
+
+  static handleIncomingCall = (call,dispatch) => {
+    actionCreator.handleIncomingCall(call, dispatch);
+  }
+
+  static handleOutgoinCallAccepted(call,dispatch){
+    actionCreator.handleOutgoinCallAccepted(call, dispatch);
+  }
+
+  static handleOutgoinCallRejected(call,dispatch){
+    actionCreator.handleOutgoinCallRejected(call, dispatch);
+  }
+
+  static handleIncomingCancelled(call,dispatch){
+    actionCreator.handleIncomingCancelled(call, dispatch);
+  }
+
+
+  static addCallListener(dispatch){
+      try {
+        CometChat.addCallListener(
+          this.LISTENER_KEY_CALL,
+          new CometChat.CallListener({
+            onIncomingCallReceived: call => {
+              
+              console.log("Incoming call:", JSON.stringify(call));
+              
+              this.handleIncomingCall(call,dispatch);
+            
+            },
+           onOutgoingCallAccepted : (call) => {
+            
+            console.log("Outgoing call accepted:", call);
+            // Outgoing Call Accepted
+            this.handleOutgoinCallAccepted(call,dispatch);
+            
+           },
+           onOutgoingCallRejected : (call)=> {
+            console.log("Outgoing call rejected:", call);
+            // Outgoing Call Rejected
+            this.handleOutgoinCallRejected(call,dispatch);
+
+           },
+           onIncomingCallCancelled :(call)=> {
+            console.log("Incoming call calcelled:", call);
+            this.handleIncomingCancelled(call,dispatch);
+           }
+          })
+         );
+      } catch (error) {
+        console.log("Call listener error ", { error });
+      }
+  }
+
   static addGroupEventListener(dispatch) {
     try {
       CometChat.addGroupListener(
@@ -134,14 +197,20 @@ export default class CCManager {
         })
       );
     } catch (error) {
-      console.log("Group event error ", { err });
+      console.log("Group event error ", { error });
     }
   }
+
+
+
+
+  
 
   static handleMessage(message, dispatch) {
     //console.log("ccmangr msg: " + JSON.stringify(message));
     actionCreator.handleMessage(message, dispatch);
   }
+
 
   static handleActionMessage(action, dispatch) {}
 
@@ -161,8 +230,11 @@ export default class CCManager {
   }
 
   static removeListener() {
-    CometChat.removeMessageEventListener(this.LISTENER_KEY_MESSAGE);
-    CometChat.removeUserEventListener(this.LISTENER_KEY_USER);
-    CometChat.removeGroupEventListener(this.LISTENER_KEY_GROUP);
+    CometChat.removeMessageListener(this.LISTENER_KEY_MESSAGE);
+    CometChat.removeUserListener(this.LISTENER_KEY_USER);
+    CometChat.removeGroupListener(this.LISTENER_KEY_GROUP);
+    CometChat.removeCallListener(this.LISTENER_KEY_CALL);
+    
   }
+
 }
