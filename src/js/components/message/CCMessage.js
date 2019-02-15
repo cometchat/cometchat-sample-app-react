@@ -13,7 +13,6 @@ import ImageViewerModal from './../modal/ImageViewerModal';
 import icon_msg_file from './../../../public/img/icon_msg_file.svg';
 
 
-//image_src
 class CCMessage extends Component {
 
     constructor(props){
@@ -65,14 +64,63 @@ class CCMessage extends Component {
 
         const imageViewerModal  = this.state.showModal ? (<ImageViewerModal image_src={this.state.imageUrl} handleClose={this.closeModalHandler.bind(this)}/>) : null;
 
-        return (
-                <div>
-                    <MessageType msg={msg} openImageViewer={(image)=>this.openModalHandler.bind(this,image)}/>
-                    {imageViewerModal}
-                </div>
-            );
+        switch(this.props.msgData.category){
+            case CometChat.CATEGORY_CALL: 
+                return (
+                    //to handle all call messages
+                    
+                    <MessageCall msg={msg} openImageViewer={(image)=>this.openModalHandler.bind(this,image)}/>
+                        
+                    
+                );
+            break;
+
+            case CometChat.CATEGORY_MESSAGE:
+            
+                //to handle all messages
+                return (
+                    <div>
+                        <MessageType msg={msg} openImageViewer={(image)=>this.openModalHandler.bind(this,image)}/>
+                        {imageViewerModal}
+                    </div>
+                );        
+            break;
+            
+            case CometChat.CATEGORY_ACTION :
+
+                    //to handle group action
+                return (
+                    <div>
+                        <MessageAction msg={msg} openImageViewer={(image)=>this.openModalHandler.bind(this,image)}/>
+                        
+                    </div>
+                );      
+            break;
+
+        }
+        
     }
 }
+
+
+function MessageCall(props){
+    return null;
+    // if(props.msg.data.action  === 'initiated'){
+    //     return null;
+    // }else{
+    //     return (<h2>{props.msg.data.action}</h2>);
+    // }
+        
+    
+}
+
+function MessageAction(props){
+    // return (<h3> {props.msg.message} </h3>);
+   return null;
+}
+
+
+
 
 function MessageType(props) {
     if (props.msg.loggedInUser == props.msg.sid) {

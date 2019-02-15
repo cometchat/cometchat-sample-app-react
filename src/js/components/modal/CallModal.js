@@ -6,6 +6,7 @@ import * as actionCreator from "./../../store/actions/cc_action";
 import CCCall from './../call/CCCall';
 import {CometChat} from "@cometchat-pro/chat";
 
+
 import icon_call_accept from "./../../../public/img/icon_call_accept.svg";
 import icon_call_reject from "./../../../public/img/icon_call_reject.svg";
 
@@ -60,7 +61,7 @@ class CallModal extends React.PureComponent {
                         <div class="CallModalContent">
                 
                             <div className="callUserImage">
-                                <img src={this.props.call.callInitData.calluser_avatar} class="callUserImageObj" />
+                                <img src={this.props.call.callInitData.user_avatar} class="callUserImageObj" />
                             </div>     
     
                             <div className="callUserStatus">
