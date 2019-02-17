@@ -79,7 +79,7 @@ class CCMessage extends Component {
             
                 //to handle all messages
                 return (
-                    <div>
+                    <div key={msg.msgId}>
                         <MessageType msg={msg} openImageViewer={(image)=>this.openModalHandler.bind(this,image)}/>
                         {imageViewerModal}
                     </div>
@@ -90,7 +90,7 @@ class CCMessage extends Component {
 
                     //to handle group action
                 return (
-                    <div>
+                    <div key={msg.msgId}>
                         <MessageAction msg={msg} openImageViewer={(image)=>this.openModalHandler.bind(this,image)}/>
                         
                     </div>

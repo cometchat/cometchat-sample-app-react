@@ -411,6 +411,7 @@ nav nav-pills>li>a {
     height: 74px;
     position: relative;
     padding: 20px 20px 0 20px !important;
+    box-shadow: 0px 4px 20px 0px #cccccc38;
 }
 
 .messageHeaderAvatar {
@@ -467,7 +468,7 @@ nav nav-pills>li>a {
 }
 
 .displayBlock {
-    display: none !important;
+    display: block !important;
 }
 
 .sendButton {
