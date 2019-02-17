@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 
 import * as actionCreator from "./../../store/actions/cc_action";
 import * as utils from './../../lib/uiComponentLib';
-import {CometChat} from "@cometchat-pro/chat";
 
 import icon_call_accept from "./../../../public/img/icon_call_notification_accept.svg";
 import icon_call_reject from "./../../../public/img/icon_call_notification_reject.svg";

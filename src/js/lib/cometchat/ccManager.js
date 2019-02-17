@@ -6,12 +6,14 @@ import {CometChat} from "@cometchat-pro/chat";
 
 import * as actionCreator from "./../../store/actions/cc_action";
 
+
 export default class CCManager {
   static cometchat = null;
 
 
-  // static appId        =   '{APP_ID}';     //Enter your App ID
-  // static apiKey       =   '{API_KEY}';    //Enter your API KEY
+  static appId        =   '{APP_ID}';     //Enter your App ID
+  static apiKey       =   '{API_KEY}';    //Enter your API KEY
+
 
   static LISTENER_KEY_MESSAGE = "msglistener";
   static LISTENER_KEY_USER = "userlistener";
@@ -24,7 +26,9 @@ export default class CCManager {
   static groupRequest = null;
 
   static init(dispatcher) {
+
     console.log("Appid : " + this.appId);
+    console.log("Appid : " + CometChat);
 
     //initialize cometchat manager
     CometChat.init(this.appId);
@@ -221,10 +225,13 @@ export default class CCManager {
 
     if(uType == "user"){
       messagesRequest = new CometChat.MessagesRequestBuilder().setUID(uid).setLimit(limit).build();
+      
+      
     }else{
       messagesRequest = new CometChat.MessagesRequestBuilder().setGUID(uid).setLimit(limit).build();
     }
     
+    console.log("mesagerequestbuilder : " + {messagesRequest});
 
     return messagesRequest;
   }

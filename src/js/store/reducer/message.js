@@ -48,22 +48,23 @@ const reducers = (state = intialState, action)=> {
                 console.log("message single : ", JSON.stringify(PSMessageState));
 
                 return PSMessageState;
-
                 
-            }else{
-                //uid is not present
-                
-                var tempObj = {
-                    'muid' : action.uid,
-                    'message' : action.message
-                }
-
-                const PSSMessageState = update(state,{messages:{$push:[tempObj]}});
-               
-                console.log("message : ", JSON.stringify(PSSMessageState));
-
-                return PSSMessageState;
             }
+            
+            // else{
+            //     //uid is not present
+                
+            //     var tempObj = {
+            //         'muid' : action.uid,
+            //         'message' : [action.message]
+            //     }
+
+            //     const PSSMessageState = update(state,{messages:{$push:[tempObj]}});
+               
+            //     console.log("message : ", JSON.stringify(PSSMessageState));
+
+            //     return PSSMessageState;
+            // }
         
         break;
 
@@ -80,7 +81,9 @@ const reducers = (state = intialState, action)=> {
                 //uid is present    
                 const copyMessageState = Object.assign({},state.messages[index1]);
 
-                copyMessageState.message.push(action.messages);
+                action.messages.map((msg)=>{
+                    copyMessageState.message.push(msg);
+                });
                 
                 const copyMessagesState =  Object.assign({}, state.messages);
 

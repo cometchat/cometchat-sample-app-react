@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { calculateAvailableHeight, CheckEmpty } from './../../lib/uiComponentLib';
 import * as actionCreator from './../../store/actions/cc_action';
 
+
 var heightCCMessageBox = calculateAvailableHeight(79, 65, "ccMessage");
 
 var ccMessageBoxStyle = {
@@ -22,6 +23,7 @@ var ccNewMessageNotifierStyle =  {
 
 
 class CCMessageBox extends Component {
+    
     constructor(props){
         super(props);
 
@@ -42,8 +44,7 @@ class CCMessageBox extends Component {
         var messageUser = this.props.messageList.findIndex((e) => e.muid == userid);
     
         console.log("component did mount in messagebox : " , {messageUser});
-    
-        if (messageUser == -1) {
+      if (messageUser == -1) {
           try{
             console.log("inside fetch Message : " + userid);
             this.props.getMessage(this.props.activeUser.type,userid,50);
@@ -61,29 +62,45 @@ class CCMessageBox extends Component {
 
         if(nextProps.activeUser != this.props.activeUser){
             this.fetchfirstTimeMessage(nextProps.activeUser.id);
+
+            this.showUnReadButton();
+            
         }
-    
         return true;
     }
 
-    componentDidMount(){
+    componentDidUpdate(){
+        console.log("inside component did update");
+        this.scrollToBottom();
+
+    }
+
+
+    showUnReadButton =() => {
+        this.setState({displayStatusNewMessage:true});
+        
+    }
+
+    hideUnReadButton = () =>{
+        this.setState({displayStatusNewMessage:false});
+    }
+
+    scrollToBottom() {
         var node = document.getElementById("ccMessageBox");
-        this.addEventMessageBox(node);
-    }
-
-    addEventMessageBox = (node) =>{
-        node.addEventListener("DOMSubtreeModified", this.handleScroll.bind(this));     
-    }
-
-    handleScroll = (event) => {    
-        var node = event.target;
+        //node.scrollTop = node.scrollHeight;
         const bottom = node.scrollHeight - node.scrollTop === node.clientHeight;
-        if (!bottom) {      
+        if (bottom) {      
+          
+            console.log("reached bottom");
+
+          }else{
             console.log("reached not bottom");
-        }else{
-            console.log("reached bottom");  
-        }    
-    }
+            node.scrollTop  = node.scrollHeight ;
+            this.hideUnReadButton();
+          } 
+      }
+
+
 
 
     render() {
@@ -99,7 +116,7 @@ class CCMessageBox extends Component {
         }
         
         
-        console.log("inside messagebox : ",JSON.stringify(this.props.messageList));
+        //console.log("inside messagebox : ",JSON.stringify(this.props.messageList));
 
         var messageUser = this.props.messageList.find((e) => {
 
@@ -108,27 +125,50 @@ class CCMessageBox extends Component {
             }
         });
         
-        console.log("inside messagebox messageUser: ",{messageUser} );
+        //console.log("inside messagebox messageUser: ",{messageUser} );
 
         if (!CheckEmpty(messageUser)) {
             return (
-                <Row ref={this.refsMessageBox} id="ccMessageBox" className="ccMessageBox" style={ccMessageBoxStyle}>
-                </Row>
+                <div id="ccMessageBoxContainer" key="15646896846sadasd" >
+                
+                    <Row ref={this.refsMessageBox} key="ccmessagebox_b" id="ccMessageBox" className="ccMessageBox" style={ccMessageBoxStyle}>
+                    
+                    </Row>
+                </div>
             );
         } else {
 
             return (
-                <div id="ccMessageBoxContainer">
-                    <Row ref={this.refsMessageBox} id="ccMessageBox" className="ccMessageBox" style={ccMessageBoxStyle} >
-                        {
-                            messageUser.message.map((msg, index) => (
-                                <CCMessage key={msg.id} msgData={msg} />
-                            ))
-                        }
-                    </Row>
-                  
-                    <Row class={classVar.join(' ')} style={ccNewMessageNotifierStyle}>
-                            <span>Unread message ▼</span>
+                <div id="ccMessageBoxContainer" key="15646896846" >
+                                     
+                        <div ref={this.refsMessageBox} key="ccmessagebox_d"  id="ccMessageBox" className="ccMessageBox row" style={ccMessageBoxStyle}>
+                       
+                            {
+                                messageUser.message.map((msg, index) => {
+                                
+                                
+                                if(index == messageUser.length-1){
+                                    console.log("checking ccm index : " + index);        
+                                    this.scrollToBottom();
+                               }
+                                return    (
+                                    <CCMessage key={msg.id} msgData={msg} />
+                                )
+
+                                    
+                                
+                                
+                            
+                                })
+                            }
+
+                            
+
+                        </div>
+                        
+                    
+                    <Row key="ccunreadMessage" class={classVar.join(' ')} style={ccNewMessageNotifierStyle} onClick = {this.scrollToBottom.bind(this)}>
+                            <span>Recent message ▼</span>
                     </Row>
 
                 </div>

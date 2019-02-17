@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Row, Col, Button, Tooltip } from "react-bootstrap";
 import { connect } from "react-redux";
 import {CometChat} from "@cometchat-pro/chat";
-
 import CameraModal from './../modal/CameraModal';
 import * as utils from './../../lib/uiComponentLib';
 
@@ -30,10 +29,11 @@ class ccMessageFooter extends Component {
   }
 
   handleEnterPressed(e) {
-    if (e.key == "Enter") {
-      console.log("enter pressed here! ");
-    } else {
-      var content = this.ccMessageEditorBox.innerHTML;
+
+    if (e.key == "Enter" || e.key == "Space") {
+      console.log("key pressed : " + e.key);
+     // var content = this.ccMessageEditorBox.innerText;
+      
     }
   }
 
@@ -42,8 +42,8 @@ class ccMessageFooter extends Component {
   }
 
   async sendTextMessage() {
-    var content = this.ccMessageEditorBox.innerHTML;
-    console.log("inside message handler : " + content);
+    var content = this.ccMessageEditorBox.textContent.trim();
+    console.log("inside message handler : " + content + "\n Message content : " + content.length );
     if (content.length > 0) {
       try {
         await this.props.sendMessage(
@@ -51,7 +51,7 @@ class ccMessageFooter extends Component {
           this.props.activeUser,
           this.props.activeMessageType
         );
-        this.ccMessageEditorBox.innerHTML = "";
+        this.ccMessageEditorBox.textContent = "";
       } catch (error) {
         console.log(error);
       }
