@@ -5,40 +5,28 @@ import CCGroup from "./CCGroup";
 import * as utils from './../../lib/uiComponentLib';
 import * as actionCreator from '../../store/actions/cc_action';
 
+
+
 class CCGroupList extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            _activeGroupUID: this.props.activeGroups.id
+            _activeGroupUID: this.props.activeGroups.id,
+           
         }       
     }
 
 
+
     handleClickUser = (group) => {
-
-        switch(group.type){
-        case "public":
-            console.log("group type: ", (group.hasJoined));
-            if(group.hasJoined == false){
-               actionCreator.joinGroup(group);
-            }
-
-        break;
-
-        case "password":
-        console.log("group type: ", (group.type));
-        break;
-        
-        case "private":
-        console.log("group type: ", (group.type));
-        break;
-        
-
-        }
-
+       
+        // if(group.hasJoined == false){
+        //     actionCreator.joinGroup(group);
+        // }
         this.props.updateActiveMessage(group.guid);
+        
         this.setState({ _activeGroupUID: group.guid });
     }
 
@@ -62,6 +50,7 @@ class CCGroupList extends Component {
 
         console.log("inside ccgrplist render");
        
+      
         
         return (
             this.props.groupList.map((el, index) => (
@@ -70,10 +59,13 @@ class CCGroupList extends Component {
                 key={el.guid} 
                 status={el.type} 
                 guid = {el.guid}
+                group_name = {el.name}
+                groupData = {el}
                 
                 avt={utils.CheckEmpty(el.icon) ? el.icon : false} 
                 showMessageEvent={this.handleClickUser.bind(this, el)}>
-                    {el.name}
+                    
+                   
                 </CCGroup>
             ))
         );

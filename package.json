@@ -5,10 +5,10 @@
   "main": "webpack.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --mode development --content-base test --inline --hot --https true --host localhost",
+    "dev": "webpack-dev-server --mode development --content-base test --inline --hot --https true --host localhost --port 5000",
     "build": "webpack --mode production"
   },
-  "author": "kshitiz",
+  "author": "kshitiz| cometchat inc.",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.2.0",
@@ -35,7 +35,7 @@
     "webpack-dev-server": "^3.1.14"
   },
   "dependencies": {
-    "@cometchat-pro/chat": "^1.1.0",
+    "@cometchat-pro/chat": "^1.2.1-beta.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.8",
     "@fortawesome/free-brands-svg-icons": "^5.5.0",
     "@fortawesome/free-solid-svg-icons": "^5.5.0",

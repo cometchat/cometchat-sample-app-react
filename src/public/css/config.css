@@ -150,6 +150,30 @@ input:focus, select:focus, textarea:focus, button:focus {
     padding-top: 0px !important;
 }
 
+.sidebarUserListItemStatus[data="online"]::before{
+    content: '';
+    display: inline-flex;
+    width: 8px;
+    height: 8px;
+    margin-right: 4px;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    background-color: #3fb618;
+}
+
+.sidebarUserListItemStatus[data="offline"]::before{
+    content: '';
+    display: inline-flex;
+    width: 8px;
+    height: 8px;
+    margin-right: 10px;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    background-color: #ea3030;
+}
+
 /* Message CSS */
 
 .ccMessageBox {
@@ -584,13 +608,14 @@ nav nav-pills>li>a {
     border-bottom: 0px;
 }
 
+
 .cameraModalBackIcon, .imageViewerModalBackIcon {
     height: 32px;
     width: 32px;
     color: #ffffff;
 }
 
-.cameraCaptureModalContent, .imageViewerModalContent, .CallModalContent {
+.cameraCaptureModalContent, .imageViewerModalContent, .CallModalContent,.createGroupModalContent {
     height: 100%;
     width: 100%;
     align-items: center;
@@ -796,3 +821,236 @@ nav nav-pills>li>a {
     background: red;
     cursor: pointer;
 }
+
+/* Create Group Modal */
+.groupCreateModal{
+    background-color: rgba(0, 0, 0, 0.75);
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #fff;
+}
+
+.createGroupFormContainer{
+    background: #fff;
+    color: #000;
+    width: 38%;
+    border-radius: 20px;
+    padding: 42px;
+}
+
+.createGroupButtonCancel{
+    background-color: #ffffff !important;
+    border-color: #2636be !important;
+    border-radius: 20px;
+    align-content: center;
+    color: #2636be !important;
+    width: 100%;
+    box-shadow: #0000000c 0 13px 20px;
+    align-self: center;
+    margin-top: 32px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.createGroupButton{
+    background-color: #2636be !important;
+    border-color: #2636be !important;
+    border-radius: 20px;
+    align-content: center;
+    width: 100%;
+    box-shadow: #0000000c 0 13px 20px;
+    align-self: center;
+    margin-top: 32px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+
+/* Group Profile Modal */
+
+.groupProfileModal{
+    position: absolute;
+    width: 32%;
+    top: 0;
+    right: 0;
+    overflow: hidden;
+    color: #000;
+    border-radius: 0 20px 0 0;
+    z-index: 100;
+    box-shadow: -1px 0px 20px 0px #1312122e;
+}
+
+.groupProfileModelHeader{
+    box-sizing: border-box;
+    height: 74px;
+    position: relative;
+    padding: 16px !important;
+    border: 1px solid #d8d8d8;
+    border-bottom: #d8d8d8 1px solid;
+    box-shadow: 0px 1px 20px 0px #d8d8d8;
+    border-top-right-radius: 20px;
+    background: white;
+    color: black;
+    display: flex;
+    align-items: center;
+}
+
+.groupProfileInfoContainer{
+    height: 90%;
+    overflow: scroll;
+    background: #d8d8d8;
+
+}
+
+.profileImageRow{
+    margin: unset;
+    padding: 30px;
+    background: white;
+}
+
+.profileImageRow img{
+    height: 164px;    
+    width: 164px;    
+    border-radius: 50%;
+    box-shadow: 0px 0px 2px 0px #d8d8d8;
+    border-radius: 50%;
+    border: 1px solid #d8d8d8;
+}
+
+.profileNameRow, .profileGroupMemberListRow,.profileGroupLeaveButton{
+    margin: unset;
+    background: white;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.profileGroupLeaveButton{
+    margin-bottom: 40px;
+    cursor: pointer;
+}
+
+.profileImageRow>div{
+    text-align:center;
+}
+
+.profileName,.profileGroupMemberListTitle{
+    height: 42px;
+    font-size: 16px;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: normal;
+}
+
+.profileGroupMemberName{
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 8px;
+    display: inline-flex;
+    margin-bottom: 4px;
+    margin-top: 4px;
+    align-items: center;
+    padding: unset;
+}
+
+.profileActionContainer{
+    display: inline-flex;
+    padding: unset;
+}
+.profileGroupMemberKickButton,.profileGroupMemberBanButton{
+    margin-left: 4px;
+    height: 24px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    background: #33eb43;
+    padding: 16px;
+    color: white;
+}
+
+.profileGroupMemberBanButton{
+    background: #ea3030;
+}
+
+.profileGroupMemberName img{
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: normal;
+}
+
+.profileGroupMemberName span{
+    height: 24px;
+    font-size: 14px;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: normal;
+}
+
+.groupProfileCloseButton{
+    padding: unset;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width: 32px;
+    cursor:pointer;
+}
+
+.groupProfileTitle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+}
+
+.groupProfileLeaveGroupText{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    font-size: 16px;
+    height: 42px;
+}
+
+.groupProfileLeaveButton{
+    padding: unset;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: red;
+    height: 42px;
+}
+
+/* group action */
+
+.actionMessageSpan{
+    background: #2636be;
+    border-radius: 20px;
+    padding: 14px;
+    font-size: 12px;
+    color: white
+}
+
+.messageActionsContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 8px;
+}
+
+

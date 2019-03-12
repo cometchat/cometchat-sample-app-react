@@ -5,9 +5,13 @@ import Layout from "./layouts/Layout";
 import {isEmpty} from "./lib/uiComponentLib";
 import Login from "./components/login/Login";
 
+import * as action from "./store/actions/cc_action";
+
 class App extends Component {  
    
-
+componentDidMount(){
+   // this.props.login("superhero10");
+}
     render() {    
         return (
             <CheckLoginUser loggedStatus = {this.props.loggedInUser} cc_layout = {this.props.cc_layout}/> 
@@ -49,7 +53,7 @@ const mapStateToProps = state => {
   
 const mapDispachToProps = dispatch => {
     return {
-        
+        login : (uid) => dispatch(action.loginInCC(dispatch,uid))
     };
 };
 

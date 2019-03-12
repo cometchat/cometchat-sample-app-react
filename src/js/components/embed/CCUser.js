@@ -25,7 +25,7 @@ export default class CCUser extends Component {
                     <div className="sidebarUserListItemTitle">
                         <span >{this.props.children}</span>
                     </div>
-                    <div className="sidebarUserListItemStatus">
+                    <div className="sidebarUserListItemStatus" data={this.props.status}>
                         <span >{this.props.status}</span>
                     </div>
 

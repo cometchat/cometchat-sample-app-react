@@ -11,8 +11,9 @@ export default class CCManager {
   static cometchat = null;
 
 
-  static appId        =   '{APP_ID}';     //Enter your App ID
-  static apiKey       =   '{API_KEY}';    //Enter your API KEY
+  static appId        =   'APP_ID';     //Enter your App ID
+  static apiKey       =   'API_KEY';    //Enter your API KEY
+
 
 
   static LISTENER_KEY_MESSAGE = "msglistener";
@@ -20,8 +21,11 @@ export default class CCManager {
   static LISTENER_KEY_GROUP = "grouplistener";
   static LISTENER_KEY_CALL = "calllistener";
 
-
-
+  static GroupType = {
+    'PUBLIC':CometChat.GROUP_TYPE.PUBLIC,
+    'PRIVATE':CometChat.GROUP_TYPE.PRIVATE,
+    'PASSWORD':CometChat.GROUP_TYPE.PASSWORD
+  };
   static userRequest = null;
   static groupRequest = null;
 
@@ -102,10 +106,12 @@ export default class CCManager {
           onUserOnline: onlineUser => {
             console.log("On User Online :=>", { onlineUser });
             //User came online
+            this.handleOnUserOnline(onlineUser,dispatch);
           },
           onUserOffline: offlineUser => {
             console.log("On User Offline :=>", { offlineUser });
             //User went offline
+            this.handleOnUserOffline(offlineUser,dispatch);
           }
         })
       );
@@ -114,6 +120,13 @@ export default class CCManager {
     }
   }
 
+  static handleOnUserOnline = (user,dispatch)=>{
+    actionCreator.handleOnUserOnline(user,dispatch);
+  }
+
+  static handleOnUserOffline = (user,dispatch)=>{
+    actionCreator.handleOnUserOffline(user,dispatch);
+  }
 
   static handleIncomingCall = (call,dispatch) => {
     actionCreator.handleIncomingCall(call, dispatch);
@@ -242,6 +255,10 @@ export default class CCManager {
     CometChat.removeGroupListener(this.LISTENER_KEY_GROUP);
     CometChat.removeCallListener(this.LISTENER_KEY_CALL);
     
+  }
+
+  static getGroupMembersRequestBuilder(GUID,limit){
+    return new CometChat.GroupMembersRequestBuilder(GUID).setLimit(limit).build();
   }
 
 }

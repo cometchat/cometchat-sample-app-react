@@ -126,6 +126,10 @@ const reducers = (state = intialState, action)=> {
             };
             
         break;
+
+        case 'deleteActiveMessage' : {
+            newState.activeMessage = {};
+        }
     }
     return newState;
 }

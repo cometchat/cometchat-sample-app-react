@@ -87,11 +87,11 @@ class CCMessage extends Component {
             break;
             
             case CometChat.CATEGORY_ACTION :
-
+                    console.log("inside category action :",  this.props.msgData);
                     //to handle group action
                 return (
-                    <div key={msg.msgId}>
-                        <MessageAction msg={msg} openImageViewer={(image)=>this.openModalHandler.bind(this,image)}/>
+                    <div key={msg.msgId} className="messageActionsContainer">
+                        <MessageAction msg={this.props.msgData} openImageViewer={(image)=>this.openModalHandler.bind(this,image)}/>
                         
                     </div>
                 );      
@@ -115,8 +115,7 @@ function MessageCall(props){
 }
 
 function MessageAction(props){
-    // return (<h3> {props.msg.message} </h3>);
-   return null;
+    return (<span className="actionMessageSpan"> {props.msg.message} </span>);
 }
 
 

@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import * as utils from './../../lib/uiComponentLib';
 
 import * as actionCreator from "./../../store/actions/cc_action";
+import GroupProfileModal from "./../modal/GroupProfileModal";
 
 import icon_audio from "./../../../public/img/icon_audio_call.svg";
 import icon_more from "./../../../public/img/icon_more_header.svg";
@@ -23,7 +24,7 @@ class CCMessageHeader extends Component {
         super(props);
 
         this.state = {
-            showModal : false,
+            showModalProfile : false,
             callType : ""
         }
     }
@@ -38,34 +39,57 @@ class CCMessageHeader extends Component {
             call_type:callTypes,
             call_user:this.props.profile.type,
         }
-
-        
+      
 
         this.props.startCall(initCall);
+    }
+
+    componentWillUpdate(){
+        if(this.state.showModalProfile){
+            this.hideModal();
+        }
+        return true;
+    }
+
+    showModal(){
+        if(this.props.profile.type == "group"){
+            this.setState({showModalProfile:true});
+        }
+        
+    }
+
+    hideModal(){
+        this.setState({showModalProfile:false});
     }
 
     render() {
 
         
         var profileData = {};
+        var showProfile = null;
 
         if (this.props.profile.type == 'user') {
             var userdata = this.props.userList.find(user => user.uid === this.props.profile.id);
             profileData.name    = userdata.name;
             profileData.avatar  = utils.CheckEmpty(userdata.avatar) ? userdata.avatar : Userthumbnail ;
             profileData.status  = userdata.status;
+            
         } else {
             var groupData = this.props.groupList.find(group => group.guid === this.props.profile.id);
             profileData.name    = groupData.name;
             profileData.avatar  = utils.CheckEmpty(groupData.icon) ? groupData.icon : Groupthumbnail ;
             profileData.status  = groupData.description;
+
+            showProfile = this.state.showModalProfile ? <GroupProfileModal groupData={groupData} profileData={profileData} close={this.hideModal.bind(this)} /> :null;
         }
+
+        
         
 
         return (
             <Row className="ccMessageHeader">
-
-                <Col lg={8} className="cc-no-padding h-100">
+                {showProfile}    
+                <Col lg={7} className="cc-no-padding h-100" onClick={this.showModal.bind(this)} style={{cursor:"pointer"}}>
                     <span className="messageHeaderAvatar">
                         <img className="userAvatar img-circle" src={profileData.avatar}
                             height="42px" width="42px" />
@@ -79,7 +103,7 @@ class CCMessageHeader extends Component {
                     </div>
                 </Col>
 
-                <Col lg={4} className="cc-no-padding h-100">
+                <Col lg={5} className="cc-no-padding h-100">
                     <div className="ccMessageHeaderMenu">
                         <span className="ccmessageHeaderIcon " dangerouslySetInnerHTML={{__html:icon_audio}} 
                             onClick={this.initiateCall.bind(this,'audio',profileData.name,profileData.avatar)}/>

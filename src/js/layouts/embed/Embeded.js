@@ -21,6 +21,7 @@ class Embeded extends Component {
     }
     componentDidMount() {
         
+        
     }
     
     render() {
@@ -109,8 +110,7 @@ const mapStateToProps = (store) => {
 
 const mapDispachToProps = dispatch => {
     return {
-        fetchUser: (limit) => dispatch(actionCreator.getUsers(limit)),
-        fetchGroup: (limit) => dispatch(actionCreator.getGroups(limit)),
+            
         
     };
 };

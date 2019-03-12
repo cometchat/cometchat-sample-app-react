@@ -45,6 +45,9 @@ class CCLeftSidebar extends Component {
         }
     }
 
+    componentDidMount(){
+        this.props.addUserListener();
+    }
 
     handleSelect(tabName) {
         this.setState({ activeTab: tabName });
@@ -74,7 +77,7 @@ class CCLeftSidebar extends Component {
         return (
             <div className="ccMainContainer">
 
-                <CCLeftSidebarHeader tabTitle={this.state.activeTab}></CCLeftSidebarHeader>
+                <CCLeftSidebarHeader activeTab={this.state.activeTab}  tabTitle={this.state.activeTab}></CCLeftSidebarHeader>
 
                 <Tab.Container id="sidebarTabContainer" defaultActiveKey={this.state.activeTab} >
                     <Row className="clearfix">
@@ -127,6 +130,7 @@ const mapDispachToProps = dispatch => {
     return {
         fetchUser: () => dispatch(actionCreator.getNextUserList()),
         fetchGroup: () => dispatch(actionCreator.getNextGroupList()),
+        addUserListener : () => actionCreator.addUserListener(dispatch),
     };
 };
 

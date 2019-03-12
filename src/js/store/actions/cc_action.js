@@ -26,6 +26,40 @@ export const setUserSession = val => {
   };
 };
 
+//setUserOnline
+
+export const handleOnUserOnline = (user,dispatch)=>{
+  
+  console.log("inside handleOnUserOnline", user);
+  return dispatch(setUserOnline(user));
+
+}
+
+
+
+export const handleOnUserOffline = (user,dispatch)=>{
+  
+  console.log("inside handleOnUserOnline", user);
+  return dispatch(setUserOffline(user));
+
+}
+
+export const setUserOnline = (user) => {
+  
+  return {
+    type: "setUserOnline",
+    data: user    
+  };
+};
+
+export const setUserOffline = (user) => {
+  
+  return {
+    type: "setUserOffline",
+    data: user    
+  };
+};
+
 //setActiveUser
 
 export const setActiveMessages = (uid, type) => {
@@ -130,16 +164,19 @@ export const updateGroupList = val => {
   };
 };
 
-//addMessageListener
+//addListener
 
 export const addMessageListener = dispatch => {
   console.log("inside addMessageListener ccAction", { dispatch });
   CCManager.addMessageListener(dispatch);
-  CCManager.addUserEventListener(dispatch);
   CCManager.addGroupEventListener(dispatch);
   CCManager.addCallListener(dispatch);
   dispatch(updateHandler());
 };
+
+export const addUserListener = dispatch =>{
+  CCManager.addUserEventListener(dispatch);
+}
 
 //handle action message
 
@@ -185,9 +222,12 @@ export const sendTextMessage = (uid, text, msgType) => {
       );
     };
   }else{
+
     return dispatch => {
       CometChat.sendMessage(textMessage).then(
         message => {
+            // console.log("mesage callback : " + JSON.stringify(message));
+            return dispatch(updateMessage(uid, message, "sendText"));
         },
         error => {
           console.log("mesage callback error : " + JSON.stringify(error));
@@ -268,16 +308,33 @@ export const startFetching = () => {
 };
 
 
-export const joinGroup =(group)=>{
-
-  console.log("inside group");
-
-  CometChat.joinGroup(group.guid,group.name,CometChat.Group.Type.Public,'').then(
-    groupData =>{
-      console.log("Joined Group", groupData);
-    }
-  )
+export const joinPublicGroup =(group)=>{
+  return CometChat.joinGroup(group.guid,CometChat.GROUP_TYPE.PUBLIC,'');
 }
+
+export const joinPasswordGroup =(group,password)=>{
+  console.log("GROUP DATA : " + JSON.stringify(group));
+  console.log("Group Password : "  + password);
+  return CometChat.joinGroup(group.guid,CometChat.GROUP_TYPE.PASSWORD,password);
+}
+
+export const joinPrivateGroup =(group)=>{
+  return CometChat.joinGroup(group.guid,CometChat.GROUP_TYPE.PRIVATE,'');
+}
+
+
+
+export const updateGroupJoined = (group,tag="group joined") =>{
+  
+  return {
+    type: "group_joined", 
+    data: group,
+    tags: tag
+  };
+}
+
+
+
 
 export const showCallScreen = (call,tag="showCallScreen") =>{
   
@@ -506,4 +563,73 @@ export const updateCallToCancel = (tag) => {
     tags: tag
   };
 };
+
+// group actions
+
+export const createGroup=(data)=>{
+  var GUID = data.guid;
+  var groupName = data.groupName;
+  var groupType = data.groupType;
+  var password = data.password;
+
+  var group = new CometChat.Group(GUID, groupName, groupType, password);
+
+  return dispatch => {
+    CometChat.createGroup(group).then(
+      group => {
+        console.log("Group created successfully:", group);
+           dispatch(updateGroup(group));
+      },
+      error => {
+        console.log("Group creation failed with exception:", error);
+      }
+    );
+  }
+  
+}
+
+
+export const updateGroup = (data) => {
+  return {
+    type: "updateGroup",     
+    group: data
+  };
+};
+
+//leave group 
+
+export const leaveGroup=(group_id)=>{
+  console.log("Group id to leave", group_id);
+  return (dispatch) => {
+    console.log("Group id to leave inside", arguments);
+    CometChat.leaveGroup(group_id).then(
+      hasLeft => {
+        console.log("Group left successfully:", hasLeft);
+        dispatch(deleteActiveMessage());
+        dispatch(updateGroupLeft(group_id));
+      },
+      
+      error => {
+        console.log("Group leaving failed with exception:", error);
+      }
+    );
+  }
+}
+
+export const deleteActiveMessage = () => {
+  return {
+    type:"deleteActiveMessage",
+    group:""
+  }
+}
+
+export const updateGroupLeft = (guid) =>{
+
+  console.log("Group left successfully:updateGroupLeft");
+  return{
+    type:"group_left",
+    data: guid,
+    tag:"left_group"
+  }
+}
 
