@@ -62,7 +62,7 @@ printf "\n Repo is Present, SKIPPING Downloading...[\e[32m*\e[0m] \n"
 echo "" 
 else	
 
-wget -q -c https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/archive/master.zip -O $DIR.tar.gz || curl -LJ https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/archive/master.zip -o $DIR.tar.gz
+wget -q -c https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/archive/master.tar.gz -O $DIR.tar.gz || curl -LJ https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/archive/master.tar.gz -o $DIR.tar.gz
 
 printf "\n Sample App is downloaded to \e[34$WDIR/$DIR\e[0 \n"
 echo ""
@@ -70,7 +70,7 @@ echo ""
 
 echo "=========== Upacking Sample App ==========="
 
-tar xvzf $DIR.tar.gz &> /dev/null
+tar -zxvf $DIR.tar.gz &> /dev/null
 
 mv javascript-reactjs-chat-app-master $DIR 
 
