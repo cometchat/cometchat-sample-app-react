@@ -5,7 +5,8 @@
   "main": "webpack.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --mode development --content-base test --inline --hot --https true --host localhost --port 5000",
+    "dev": "webpack-dev-server --mode development --content-base test --inline --hot --host localhost --port 5000",
+    "sdev": "webpack-dev-server --mode development --content-base test --inline --hot --https true --host localhost --port 5000",
     "build": "webpack --mode production"
   },
   "author": "kshitiz| cometchat inc.",

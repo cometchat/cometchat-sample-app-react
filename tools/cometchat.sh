@@ -4,6 +4,8 @@
 DIR="cometchat-sample"
 CCMANAGER_PATH="src/js/lib/cometchat/"
 
+WDIR=$(pwd)
+
 while getopts :k:i:d: options; do
 
 	case $options in 
@@ -60,9 +62,9 @@ printf "\n Repo is Present, SKIPPING Downloading...[\e[32m*\e[0m] \n"
 echo "" 
 else	
 
-curl -LJ https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/archive/master.zip -o $DIR.tar.gz
+wget -q -c https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/archive/master.zip -O $DIR.tar.gz || curl -LJ https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/archive/master.zip -o $DIR.tar.gz
 
-printf "\n Sample App is downloaded to \e[34 $(pwd)/$DIR \e[0 \n"
+printf "\n Sample App is downloaded to \e[34$WDIR/$DIR\e[0 \n"
 echo ""
 
 
@@ -100,12 +102,37 @@ echo ""
 
 
 
-
 echo "=========== Starting React Server ==========="
+
+echo ""
+echo "============================="
+echo "CometChat Demo is now live at: http://localhost:5000"
+echo "(If you'd like to test video calling, visit https://localhost:5000 and accept the warning)"
+echo "============================="
+
+
+
 if [ $WENV ]
 then
+
+echo "Do you want to secured server(https) ? Please  (y/n) : "
+
+read SECURE_SERVER
+
 # for dev 
-	npm run dev -- --cc_apikey $APIKEY --cc_appId $APPID
+case $SECURE_SERVER in 
+			y):
+					npm run sdev -- --cc_apikey $APIKEY --cc_appId $APPID 
+				;;
+
+			n)
+				npm run dev -- --cc_apikey $APIKEY --cc_appId $APPID 
+				;;
+			*)
+				echo "Incorrect Input, Starting insecure server"
+				npm run dev -- --cc_apikey $APIKEY --cc_appId $APPID 
+				;;
+esac
 
 else
 # for build 
