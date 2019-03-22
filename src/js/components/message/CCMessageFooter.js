@@ -354,7 +354,7 @@ class ccMessageFooter extends Component {
 
 var ccMessageFooterStyle = {
   position: "absolute",
-  minHeight: "65px",
+  minHeight: "64px",
   maxHeight: "200px",
   backgroundColor: "#FFFFFF",
   bottom: "0px",

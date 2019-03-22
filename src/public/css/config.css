@@ -210,6 +210,18 @@ input:focus, select:focus, textarea:focus, button:focus {
     background-color: #ea3030;
 }
 
+
+.bottomNav ul .active[role="presentation"]>a .tab_title, .bottomNav ul .active[role="presentation"]>a>span{
+    color: #2636be !important;
+    font-weight:600;
+}
+
+.bottomNav ul>li[role="presentation"]>a>span{
+    color: #000000 !important;
+}
+
+
+
 /* Message CSS */
 
 .ccMessageBox {
@@ -235,7 +247,7 @@ input:focus, select:focus, textarea:focus, button:focus {
 }
 
 .ccMessageFooterMenu {
-    padding: 8px 8px;
+    padding: 4px 0 4px;
     height: 100%;
     font-size: 24px;
 }

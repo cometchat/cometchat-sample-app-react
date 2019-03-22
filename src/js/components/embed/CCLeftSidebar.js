@@ -18,7 +18,7 @@ import tab_icon_contact from './../../../public/img/icon_tab_contact.svg';
 import tab_icon_group from './../../../public/img/icon_tab_group.svg';
 
 
-var heightCCUserList = utils.calculateAvailableHeight(78, 65, "ccleftsidebar");
+var heightCCUserList = utils.calculateAvailableHeight(74, 63, "ccleftsidebar");
 
 
 
@@ -93,7 +93,7 @@ class CCLeftSidebar extends Component {
                                 </Tab.Pane>
                             </Tab.Content>
                         </div>
-                        <Col sm={12} className="cc-no-padding bg-white">
+                        <Col sm={12} className="cc-no-padding bg-white bottomNav">
                             <Nav bsStyle="pills" justified
                                 onSelect={key => this.handleSelect(key)}
                             >
@@ -102,11 +102,11 @@ class CCLeftSidebar extends Component {
                                     <div className="tab_title">Chats</div>
                                 </NavItem> */}
                                 <NavItem eventKey="contacts">
-                                    <SVGInline svg={tab_icon_contact} className="tab-icon" height="20px" width="20px" />
+                                    <span dangerouslySetInnerHTML={{ __html: tab_icon_contact}} className="tab-icon" height="20px" width="20px" />
                                     <div className="tab_title">Contacts</div>
                                 </NavItem>
                                 <NavItem eventKey="groups">
-                                    <SVGInline svg={tab_icon_group} className="tab-icon" height="20px" width="20px" />
+                                    <span  dangerouslySetInnerHTML={{ __html: tab_icon_group}} className="tab-icon" height="20px" width="20px" />
                                     <div className="tab_title">Groups</div>
                                 </NavItem>
 

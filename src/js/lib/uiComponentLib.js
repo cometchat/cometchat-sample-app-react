@@ -30,6 +30,8 @@ export function calculateAvailableHeight(top = 0 ,bottom = 0,tag="system"){
     var availableHeight = cc_app.offsetHeight;
     var totalAvailableHeightDiv = (availableHeight - (top + bottom));
 
+    console.log(tag + " height calculated value : " + totalAvailableHeightDiv);
+
     return (totalAvailableHeightDiv);
   
 }
