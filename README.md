@@ -106,7 +106,7 @@ npm run dev
 
 ```
 
-Navigate to **localhost:5000** to check sample app.  You can update host in **package.json** file.   
+Navigate to **localhost:8080** to check sample app.  You can update host in **package.json** file.   
   
 
 2. Build the sample

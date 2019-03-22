@@ -3,6 +3,11 @@ import { Row, Col, Button, FormGroup, FormControl, ControlLabel } from "react-bo
 import { connect } from 'react-redux';
 import * as actionCreator from './../../store/actions/cc_action';
 
+var captainAmerica = require("./../../../public/img/captainamerica.png");
+var ironMan = require("./../../../public/img/ironman.png");
+var spiderman = require("./../../../public/img/spiderman.png");
+var wolverine = require("./../../../public/img/wolverine.png");
+
  class Login extends Component {
   constructor(props) {
     super(props);
@@ -30,6 +35,11 @@ import * as actionCreator from './../../store/actions/cc_action';
     this.props.setUserSession(user);
   }
 
+  handleUserListItemClick = (user) =>{
+    console.log("user : "+ user);
+    this.props.setUserSession(user);
+  }
+
   render() {
     return (
       <Row className="logincontainer border-radius-top">
@@ -43,6 +53,7 @@ import * as actionCreator from './../../store/actions/cc_action';
                 className = "border-radius-full box-shadow border color-border font-size-20 H-64"
                 type="Text"
                 value={this.state.email}
+                 placeholder="Enter UserId"
                 onChange={this.handleChange}
               />
             </FormGroup>
@@ -52,11 +63,57 @@ import * as actionCreator from './../../store/actions/cc_action';
               bsSize="large"
               disabled={!this.validateForm()}
               type="submit"
+             
             >
               Login
             </Button>
           </form>
+
+          <div className="loginSampleContainer" >
+
+            <label>Haven't created a user yet? Select one of our default users for testing:</label>
+
+            <div className="loginSampleUser" onClick={this.handleUserListItemClick.bind(this,"superhero1")} >
+              <img className="loginSampleAvatar" src={ironMan} width={32} />
+              <div className="loginSampleUserNameContainer"> 
+                <div className="loginSampleUserName"> IronMan </div>
+                <div className="loginSampleUserId"> superhero1</div>
+              </div>
+            </div>
+
+
+            <div className="loginSampleUser" onClick={this.handleUserListItemClick.bind(this,"superhero2")}>
+              <img className="loginSampleAvatar" src={captainAmerica} width={32} />
+              <div className="loginSampleUserNameContainer"> 
+                <div className="loginSampleUserName"> Captain America  </div>
+                <div className="loginSampleUserId"> superhero2</div>
+              </div>
+            </div>
+
+
+            <div className="loginSampleUser" onClick={this.handleUserListItemClick.bind(this,"superhero3")} >
+              <img className="loginSampleAvatar" src={spiderman} width={32} />
+              <div className="loginSampleUserNameContainer"> 
+                <div className="loginSampleUserName"> SpiderMan </div>
+                <div className="loginSampleUserId"> superhero3</div>
+              </div>
+            </div>
+
+
+            <div className="loginSampleUser"onClick={this.handleUserListItemClick.bind(this,"superhero4")} >
+              <img className="loginSampleAvatar" src={wolverine} width={32} />
+              <div className="loginSampleUserNameContainer"> 
+                <div className="loginSampleUserName"> Wolverine </div>
+                <div className="loginSampleUserId"> superhero4</div>
+              </div>
+            </div>
+
+
+            
+          </div>
         </Col>
+
+
       </Row>
     );
   }

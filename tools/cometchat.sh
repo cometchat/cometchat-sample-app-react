@@ -115,25 +115,26 @@ echo "============================="
 if [ $WENV ]
 then
 
-echo "Do you want to secured server(https) ? Please  (y/n) : "
+# echo "Do you want to secured server(https) ? Please  (y/n) : "
 
-read SECURE_SERVER
+# read SECURE_SERVER
 
-# for dev 
-case $SECURE_SERVER in 
-			y):
-					npm run sdev -- --cc_apikey $APIKEY --cc_appId $APPID 
-				;;
+# # for dev 
+# case $SECURE_SERVER in 
+# 			y):
+# 					npm run sdev -- --cc_apikey $APIKEY --cc_appId $APPID 
+# 				;;
 
-			n)
-				npm run dev -- --cc_apikey $APIKEY --cc_appId $APPID 
-				;;
-			*)
-				echo "Incorrect Input, Starting insecure server"
-				npm run dev -- --cc_apikey $APIKEY --cc_appId $APPID 
-				;;
-esac
+# 			n)
+# 				npm run dev -- --cc_apikey $APIKEY --cc_appId $APPID 
+# 				;;
+# 			*)
+# 				echo "Incorrect Input, Starting insecure server"
+# 				npm run dev -- --cc_apikey $APIKEY --cc_appId $APPID 
+# 				;;
+# esac
 
+npm run dev -- --cc_apikey $APIKEY --cc_appId $APPID 
 else
 # for build 
 	npm run build -- --cc_apikey $APIKEY --cc_appId $APPID

@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-import SVGInline  from "react-svg-inline";
-
 import { Row, Col, OverlayTrigger, Button, Popover } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -11,9 +9,10 @@ import iconMore from './../../../public/img/icon_more.svg';
 
 import GroupCreateModal from "./../modal/GroupCreateModal";
 
+import * as action from "./../../store/actions/cc_action";
+import { connect } from "react-redux";
 
-
-export default class CCLeftSidebarHeader extends Component {
+class CCLeftSidebarHeader extends Component {
 
     constructor(props) {
         super(props);
@@ -22,6 +21,11 @@ export default class CCLeftSidebarHeader extends Component {
             showCreateModal : false,
         }
 
+    }
+
+    handleLogoutClick=()=>{
+        console.log("inside logout event here" + this);
+        this.props.logout();
     }
 
 
@@ -47,32 +51,45 @@ export default class CCLeftSidebarHeader extends Component {
             <div>
                 <span class="font-title color-font-title size-title">{tabName}</span>
                 
-                <div className="header-icon">
-                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popoverClickRootClose}>
-                        <SVGInline svg={ iconMore } className="header-icon" height="32px" width="20px"/> 
+                
+                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popoverClickRootClose(this.handleLogoutClick)} >
+                    
+                        <div dangerouslySetInnerHTML={{ __html: iconMore }} className="header-icon" /> 
+                    
                     </OverlayTrigger>
 
-                </div>
+                
 
-                <div className="header-icon margin-right-10" onClick={this.handleCreateNewGroup.bind(this,this.props.activeTab)} >
-                    <SVGInline svg={ iconNewMessage } className="header-icon" height="32px" width="20px"  /> 
-                </div>
+                    <div className="header-icon margin-right-10" onClick={this.handleCreateNewGroup.bind(this,this.props.activeTab)}  dangerouslySetInnerHTML={{ __html: iconNewMessage }} ></div>
 
-                {createGroup}
-
-
-
-
+                    {createGroup}
             </div>
 
         </Row>);
     }
 }
 
-const popoverClickRootClose = (
-    <Popover id="popover-trigger-click-root-close">
-        <h3>Setting List here</h3>
+const popoverClickRootClose = (event)=> {
+ return (
+    <Popover id="popover-trigger-click-root-close" onClick={event}>
+        <div>
+            <span>  Logout   </span> 
+        </div>
     </Popover>
-);
+ ) ;  
+};
 
 
+const mapStateToProps = state => {
+    return {
+      
+    };
+};
+  
+const mapDispachToProps = dispatch => {
+    return {
+        logout : () => dispatch(action.logout(dispatch)),
+    };
+};
+
+export default connect(mapStateToProps,mapDispachToProps)(CCLeftSidebarHeader);

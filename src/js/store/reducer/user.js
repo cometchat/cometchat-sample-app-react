@@ -53,8 +53,9 @@ const reducers = (state = intialState, action) => {
             console.log("inside user reducers : " + JSON.stringify(action.user));
             newState.loggedInUser = action.user;
             break;
-        case 'unsetUserSession':
 
+        case 'unsetUserSession':
+        newState.loggedInUser = {};
         break;
 
         case 'setUserOnline' :

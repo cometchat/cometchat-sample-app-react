@@ -26,6 +26,28 @@ export const setUserSession = val => {
   };
 };
 
+export const logout  = (dispatch) => {
+  return dispatch =>{
+    CometChat.logout().then(
+      success => {
+        console.log("Logout completed successfully");
+        return dispatch(unsetUserSession());
+      },error=>{
+      //Logout failed with exception
+      console.log("Logout failed with exception:",{error});
+    })
+
+  };
+};
+
+
+export const unsetUserSession = () => {
+  return {
+    type: "unsetUserSession",
+    
+  };
+};
+
 //setUserOnline
 
 export const handleOnUserOnline = (user,dispatch)=>{
