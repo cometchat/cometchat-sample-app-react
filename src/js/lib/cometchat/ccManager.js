@@ -12,8 +12,8 @@ export default class CCManager {
 
 
 
-  //  static appId        =   'ZZZ_CC_APPID'   ;   //Enter your App ID
-  //  static apiKey       =   'ZZZ_CC_APIKEY'  ;  //Enter your API KEY
+  static appId        =   'ZZZ_CC_APPID'   ;   //Enter your App ID
+  static apiKey       =   'ZZZ_CC_APIKEY'  ;  //Enter your API KEY
 
 
    static appId        =   '99d9de0b0b33'   ;   //Enter your App ID
