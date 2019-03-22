@@ -35,11 +35,11 @@ class CCMessageBox extends Component {
     }
 
     componentWillMount(){
-        this.fetchfirstTimeMessage(this.props.activeUser.id);
+        this.fetchfirstTimeMessage(this.props.activeUser.type, this.props.activeUser.id);
     }
 
 
-    fetchfirstTimeMessage(userid){
+    fetchfirstTimeMessage(userType,userid){
         
         var messageUser = this.props.messageList.findIndex((e) => e.muid == userid);
     
@@ -47,7 +47,7 @@ class CCMessageBox extends Component {
       if (messageUser == -1) {
           try{
             console.log("inside fetch Message : " + userid);
-            this.props.getMessage(this.props.activeUser.type,userid,50);
+            this.props.getMessage(userType,userid,50);
             
           }catch(error){
             console.log(error);
@@ -61,9 +61,9 @@ class CCMessageBox extends Component {
         console.log("next props messagebox : " + JSON.stringify(nextProps) );
 
         if(nextProps.activeUser != this.props.activeUser){
-            this.fetchfirstTimeMessage(nextProps.activeUser.id);
+            this.fetchfirstTimeMessage(nextProps.activeUser.type,nextProps.activeUser.id);
 
-            this.showUnReadButton();
+            //this.showUnReadButton();
             
         }
         return true;
@@ -92,11 +92,12 @@ class CCMessageBox extends Component {
         if (bottom) {      
           
             console.log("reached bottom");
+            // this.hideUnReadButton();
 
           }else{
             console.log("reached not bottom");
             node.scrollTop  = node.scrollHeight ;
-            this.hideUnReadButton();
+            //this.showUnReadButton();
           } 
       }
 
@@ -109,7 +110,7 @@ class CCMessageBox extends Component {
 
         let classVar = ['messageBoxNewMessageNotification'];
 
-        if (this.state.displayStatusNewMessage) {
+        if (displayStatus) {
             classVar.push('displayBlock');
         }else{
             classVar.push('hideBlock');

@@ -246,7 +246,7 @@ function IncomingMessage(props) {
         break;
 
         default :
-        return (<h2>deafult message</h2>);
+        return null;
         break;
     }
 
@@ -345,7 +345,7 @@ function OutgoingMessage(props) {
         break;
 
         default:
-        return (<h2>default message</h2>);
+            return null;
         break;
     }
 
