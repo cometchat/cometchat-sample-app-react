@@ -106,8 +106,9 @@ echo "=========== Starting React Server ==========="
 
 echo ""
 echo "============================="
-echo "CometChat Demo is now live at: http://localhost:5000"
-echo "(If you'd like to test video calling, visit https://localhost:5000 and accept the warning)"
+echo "CometChat Demo is now live at: https://localhost:5000"
+printf "\n  You will recieve 'Your connection is not private' error. \n To Resolve this issue :  \n 1. Please accept the https warning in your browser by clicking Advanced \n2. Proceed to localhost (unsafe) \n "
+echo ""
 echo "============================="
 
 
