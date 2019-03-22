@@ -47,7 +47,7 @@ if which node > /dev/null
 		
     else
 
-		printf " Please install Node and Npm"
+		printf " Please install Node and NPM"
 		exit;
 fi
 
@@ -64,11 +64,11 @@ else
 
 wget -q -c https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/archive/master.tar.gz -O $DIR.tar.gz || curl -LJ https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/archive/master.tar.gz -o $DIR.tar.gz
 
-printf "\n Sample App is downloaded to \e[34$WDIR/$DIR\e[0 \n"
+printf "\n Sample App is downloaded to \e[34 $WDIR/$DIR\e[0 \n"
 echo ""
 
 
-echo "=========== Upacking Sample App ==========="
+echo "=========== Unpacking Sample App ==========="
 
 tar -zxvf $DIR.tar.gz &> /dev/null
 
@@ -134,7 +134,7 @@ then
 # 				;;
 # esac
 
-npm run dev -- --cc_apikey $APIKEY --cc_appId $APPID 
+npm run sdev -- --cc_apikey $APIKEY --cc_appId $APPID 
 else
 # for build 
 	npm run build -- --cc_apikey $APIKEY --cc_appId $APPID
