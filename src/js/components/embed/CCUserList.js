@@ -41,7 +41,7 @@ class CCUserList extends Component {
         activeClass={activeUserId == el.uid ? "active" : ""}
         key={el.uid}
         uid={el.uid}
-        status={el.status}
+        status={el.hasOwnProperty("typeStatus")?((el.typeStatus == true)?"Typing...":el.status):el.status}
         avt={utils.CheckEmpty(el.avatar) ? el.avatar : false}
         showMessageEvent={this.handleClickUser.bind(this, el.uid)}
       >

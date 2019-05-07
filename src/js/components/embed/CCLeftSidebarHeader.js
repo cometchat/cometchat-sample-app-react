@@ -12,6 +12,8 @@ import GroupCreateModal from "./../modal/GroupCreateModal";
 import * as action from "./../../store/actions/cc_action";
 import { connect } from "react-redux";
 
+import translate from "./../../lib/localization/translate";
+
 class CCLeftSidebarHeader extends Component {
 
     constructor(props) {
@@ -45,11 +47,13 @@ class CCLeftSidebarHeader extends Component {
     render() {
 
         let title = this.props.tabTitle;
-        let tabName = title.charAt(0).toUpperCase() + title.slice(1);
+        //let tabName = title.charAt(0).toUpperCase() + title.slice(1);
+        let tabName = title.charAt(0) + title.slice(1);
+        
         const createGroup = this.state.showCreateModal ?<GroupCreateModal close={this.hideGroupCreateModal.bind(this)} /> :null;
         return (<Row className="sidebarHeader">
             <div>
-                <span class="font-title color-font-title size-title">{tabName}</span>
+                <span class="font-title color-font-title size-title">{translate[title]}</span>
                 
                 
                     <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popoverClickRootClose(this.handleLogoutClick)} >
@@ -73,7 +77,7 @@ const popoverClickRootClose = (event)=> {
  return (
     <Popover id="popover-trigger-click-root-close" onClick={event}>
         <div>
-            <span>  Logout   </span> 
+            <span>{translate.logout}</span> 
         </div>
     </Popover>
  ) ;  

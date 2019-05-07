@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import {CometChat} from "@cometchat-pro/chat";
 import CameraModal from './../modal/CameraModal';
 import * as utils from './../../lib/uiComponentLib';
-
+import translate from './../../lib/localization/translate';
 import * as actionCreator from "./../../store/actions/cc_action";
 
 import icon_attach from "./../../../public/img/icon_attach.svg";
@@ -28,13 +28,55 @@ class ccMessageFooter extends Component {
     };
   }
 
-  handleEnterPressed(e) {
+  componentWillUpdate(){
+    this.ccMessageEditorBox.textContent = "";
+  }
 
+  handleEnterPressed=(e)=>{
+    //console.log("key pressed : " + e.key);
+    
     if (e.key == "Enter" || e.key == "Space") {
       console.log("key pressed : " + e.key);
      // var content = this.ccMessageEditorBox.innerText;
       
     }
+    let content = this.ccMessageEditorBox.textContent.trim();
+    if(content.length > 0){
+      this.startTyping(content);
+    }else{
+      this.endTyping();
+    }
+  }
+
+  startTyping=(content)=>{
+    
+      if(this.props.activeMessageType == "user"){
+        
+        let receiverId =  this.props.activeUser;
+        let receiverType = CometChat.RECEIVER_TYPE.USER;
+        let metadata = {
+          text : content
+        };
+
+        let typingNotification = new CometChat.TypingIndicator(receiverId,receiverType,metadata);
+        CometChat.startTyping(typingNotification);
+      }
+  }
+
+  endTyping=()=>{
+    
+    if(this.props.activeMessageType == "user"){
+      
+      let receiverId =  this.props.activeUser;
+      let receiverType = CometChat.RECEIVER_TYPE.USER;
+      let metadata = {
+        text : ""
+      };
+    
+      let typingNotification = new CometChat.TypingIndicator(receiverId,receiverType,metadata);
+      CometChat.endTyping(typingNotification);
+    }
+    
   }
 
   handleMessage(e) {
@@ -331,7 +373,7 @@ class ccMessageFooter extends Component {
             <div
               className="ccMessageEditorBox border border-radius-full color-border-grey"
               contentEditable="true"
-              data-placeholder="Type a message..."
+              data-placeholder={translate.message_editor_placeholder}
               ref={div => {
                 this.ccMessageEditorBox = div;
               }}

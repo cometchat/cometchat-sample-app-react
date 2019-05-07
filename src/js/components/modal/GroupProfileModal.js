@@ -40,7 +40,7 @@ class GroupProfileModal extends React.PureComponent {
     getGroupMembers(){        
         this.groupMemberRequest.fetchNext().then(
 	        groupMemberList => {
-
+                    console.log("groupMemberList", groupMemberList);
                 if(groupMemberList.length > 0){
 
                     //groupMemberList.map((group) =>{
@@ -82,7 +82,7 @@ class GroupProfileModal extends React.PureComponent {
             </Row>):null);
 
         console.log("loggedin user is admin : " , groupLoggedinUser);
-
+        console.log("get user count " + this.state.groupMembers.length);
 
         return ( 
             <Modal >
@@ -111,9 +111,9 @@ class GroupProfileModal extends React.PureComponent {
                                 <span className="profileGroupMemberListTitle">Members</span>
                             </Col>
 
-                            {
+                            {   
                                 this.state.groupMembers.map((member,index)=>(
-                                    <MemberView name={member.user.name} member={member}/>
+                                    <MemberView name={member.name} member={member}/>
                                 ))
                             }
                         </Row>
@@ -141,15 +141,17 @@ class GroupProfileModal extends React.PureComponent {
 
 function MemberView (props) {
 
+    console.log("ads", props)
+
     var memberName = "";
     if(props.member.scope == "admin"){
         console.log("member scope " + props.member.scope);
-        memberName = props.member.user.name + "(admin)";
+        memberName = props.member.name + "(admin)";
 
     }else if(props.member.scope == "moderator"){
-        memberName = props.member.user.name + "(moderator)";
+        memberName = props.member.name + "(moderator)";
     }else{
-        memberName = props.member.user.name;
+        memberName = props.member.name;
     }
 
     if(props.member.isBanned == 1){
@@ -164,7 +166,7 @@ function MemberView (props) {
             
                 <Col lg={7} className="profileGroupMemberName">
                
-                    <img src = {(utils.CheckEmpty(props.member.user.avatar) ? props.member.user.avatar:user_thumbnail)} />
+                    <img src = {(utils.CheckEmpty(props.member.avatar) ? props.member.avatar:user_thumbnail)} />
                 
                     <span className="">                   
                         {memberName}                

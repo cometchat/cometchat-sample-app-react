@@ -8,6 +8,7 @@ import * as actionCreator from './../../store/actions/cc_action';
 import SplashLoader from "../../components/SplashLoader";
 
 import CCCallController from "./../../components/CCCallController";
+import translate from "../../lib/localization/translate";
 
 
 class Embeded extends Component {
@@ -85,8 +86,8 @@ function BlankMessageContainer(props) {
             <div class="middle">
                 <div class="inner">
                     <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil" />
-                    <h1>Start Chatting </h1>
-                    <p>Once upon a midnight dreary...</p>
+                    <h1>{translate.blankMessage_title}</h1>
+                    <p>{translate.blankMessage_message}</p>
                 </div>
             </div>
         </div>

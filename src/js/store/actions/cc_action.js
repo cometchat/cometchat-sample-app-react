@@ -44,7 +44,6 @@ export const logout  = (dispatch) => {
 export const unsetUserSession = () => {
   return {
     type: "unsetUserSession",
-    
   };
 };
 
@@ -222,6 +221,71 @@ export const handleMessage = (msg, dispatch) => {
   }  
 };
 
+//handle message delivered
+export const handleMessageDelivered=(message,dispatch)=>{
+
+  console.log("Message receipt : " + JSON.stringify(message));
+  //return null;
+   if(message.receiverType=="user"){
+     dispatch(updateMessageDelivered(message.sender.uid, message.messageId,message.timestamp, " message "));
+   }
+}
+
+export const updateMessageDelivered = (user,msgid,timestamp,tag)=>{
+  console.log("kshitiz",msgid );
+  console.log("kshitiz",user );
+  return {
+    type: "updateMessageDelivered",
+    msgid: msgid,
+    uid: user,
+    deliveredAt:timestamp,
+    tags: tag
+  };
+}
+
+
+
+export const handleMessageRead=(message,dispatch)=>{
+  
+  if(message.receiverType=="user"){
+    dispatch(updateMessageRead(message.sender.uid, message.messageId,message.timestamp, " message "));
+  }
+
+}
+
+export const updateMessageRead = (user, msgid,timestamp,tag)=>{
+  console.log("kshitiz",msgid );
+  console.log("kshitiz",user );
+  return {
+    type: "updateMessageRead",
+    msgid: msgid,
+    uid: user,
+    readAt:timestamp,
+    tags: tag
+  };
+}
+
+
+export const handleStartTyping = (typing,dispatch) =>{
+  dispatch(setUserTypingStatus(typing.sender.uid,true,"start Typing"));
+}
+
+
+export const handleEndTyping = (typing,dispatch) =>{
+  dispatch(setUserTypingStatus(typing.sender.uid,false,"End Typing"));
+}
+
+export const setUserTypingStatus = (user,typingStatus,tag)=>{
+
+  return {
+    type: "setUserTypingStatus",
+    uid:user,
+    typeStatus:typingStatus,
+    tags: tag
+  };
+}
+
+
 //sendTextMessage
 
 export const sendTextMessage = (uid, text, msgType) => {
@@ -289,6 +353,7 @@ export const updateMessage = (user, val, tag) => {
     tags: tag
   };
 };
+
 
 export const updateMessageList = (message, val) => {
   return {

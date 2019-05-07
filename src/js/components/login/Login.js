@@ -3,6 +3,8 @@ import { Row, Col, Button, FormGroup, FormControl, ControlLabel } from "react-bo
 import { connect } from 'react-redux';
 import * as actionCreator from './../../store/actions/cc_action';
 
+import translate from './../../lib/localization/translate';
+
 var captainAmerica = require("./../../../public/img/captainamerica.png");
 var ironMan = require("./../../../public/img/ironman.png");
 var spiderman = require("./../../../public/img/spiderman.png");
@@ -47,13 +49,13 @@ var wolverine = require("./../../../public/img/wolverine.png");
         <Col md={4} class="login-form-container">
           <form onSubmit={this.handleSubmit}>
             <FormGroup controlId="email" >
-              <ControlLabel>Username</ControlLabel>
+              <ControlLabel>{translate.username}</ControlLabel>
               <FormControl
                 autoFocus
                 className = "border-radius-full box-shadow border color-border font-size-20 H-64"
                 type="Text"
                 value={this.state.email}
-                 placeholder="Enter UserId"
+                 placeholder={translate.login_placeholder}
                 onChange={this.handleChange}
               />
             </FormGroup>
@@ -65,13 +67,16 @@ var wolverine = require("./../../../public/img/wolverine.png");
               type="submit"
              
             >
-              Login
+              {translate.login}
             </Button>
           </form>
 
           <div className="loginSampleContainer" >
 
-            <label>Haven't created a user yet? Select one of our default users for testing:</label>
+            
+
+            <label>{translate.login_message}</label>
+            {/* //Haven't created a user yet? Select one of our default users for testing: */}
 
             <div className="loginSampleUser" onClick={this.handleUserListItemClick.bind(this,"superhero1")} >
               <img className="loginSampleAvatar" src={ironMan} width={32} />

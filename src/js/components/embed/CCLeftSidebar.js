@@ -8,6 +8,7 @@ import CCGroupList from './CCGroupList';
 import * as utils from './../../lib/uiComponentLib';
 
 import * as actionCreator from './../../store/actions/cc_action';
+import translate from './../../lib/localization/translate';
 
 import SVGInline from "react-svg-inline";
 
@@ -103,11 +104,11 @@ class CCLeftSidebar extends Component {
                                 </NavItem> */}
                                 <NavItem eventKey="contacts">
                                     <span dangerouslySetInnerHTML={{ __html: tab_icon_contact}} className="tab-icon" height="20px" width="20px" />
-                                    <div className="tab_title">Contacts</div>
+                                    <div className="tab_title">{translate.contacts}</div>
                                 </NavItem>
                                 <NavItem eventKey="groups">
                                     <span  dangerouslySetInnerHTML={{ __html: tab_icon_group}} className="tab-icon" height="20px" width="20px" />
-                                    <div className="tab_title">Groups</div>
+                                    <div className="tab_title">{translate.groups}</div>
                                 </NavItem>
 
                             </Nav>

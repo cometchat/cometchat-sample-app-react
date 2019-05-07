@@ -72,7 +72,17 @@ class CCMessageHeader extends Component {
             var userdata = this.props.userList.find(user => user.uid === this.props.profile.id);
             profileData.name    = userdata.name;
             profileData.avatar  = utils.CheckEmpty(userdata.avatar) ? userdata.avatar : Userthumbnail ;
-            profileData.status  = userdata.status;
+           
+
+            if(userdata.hasOwnProperty("typeStatus")){
+                if(userdata.typeStatus == true){
+                    profileData.status  = "Typing...";
+                }else{
+                    profileData.status  = userdata.status;
+                }
+            }else{
+                profileData.status  = userdata.status;
+            }
             
         } else {
             var groupData = this.props.groupList.find(group => group.guid === this.props.profile.id);

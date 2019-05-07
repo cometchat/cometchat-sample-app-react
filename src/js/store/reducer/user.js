@@ -79,6 +79,27 @@ const reducers = (state = intialState, action) => {
 
         break;
 
+        case 'setUserTypingStatus' :
+            console.log("inside user reducer", action.uid);
+
+            var index = newState.usersList.findIndex(user => user.uid == action.uid);
+
+            if(index != -1 ){
+
+                let usersList = [...state.usersList];
+
+                usersList[index] = {...usersList[index],typeStatus:action.typeStatus};
+
+                const newUpdatedState = {...state,usersList};
+
+                console.log("User online : ", JSON.stringify(newUpdatedState));
+
+                return newUpdatedState;
+            }
+
+
+        break;
+
         case 'setUserOffline' :
             var index1 = newState.usersList.findIndex(user => user.uid == action.data.uid);
 

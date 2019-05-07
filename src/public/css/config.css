@@ -338,6 +338,12 @@ input:focus, select:focus, textarea:focus, button:focus {
     position: absolute;
     bottom: 0;
 }
+.time_date[mesasgestatus=sent], .time_date[mesasgestatus=delivered], .time_date[mesasgestatus=read]{
+    height: 16px;
+    width: 16px;
+    margin: 0px 2px !important;
+    color: #2636be !important;
+}
 
 .outgoing_msg {
     margin: 20px 8px;

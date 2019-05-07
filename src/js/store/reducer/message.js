@@ -27,6 +27,66 @@ const reducers = (state = intialState, action)=> {
             
         break;
 
+        case 'updateMessageDelivered':
+        
+            let msgDindex = newState.messages.findIndex(userMessage =>userMessage.muid === action.uid);
+
+            
+            console.log("kshitiz","single message received index : " + action.deliveredAt );
+            if(msgDindex != -1 ){
+
+                //uid is present    
+                var copyPSMessageState = Object.assign({},state.messages[msgDindex]);
+
+                console.log("Kshitiz",copyPSMessageState);
+                
+                const messageIndex = copyPSMessageState.message.findIndex(message=>message.id=== action.msgid);
+                
+                if(messageIndex != -1){
+                    console.log("kshitiz","single message received index : " + messageIndex );
+                    console.log("kshitiz",);
+                  
+                    const newMessageState = {...copyPSMessageState.message[messageIndex],"deliveredAt": action.deliveredAt};
+                    copyPSMessageState.message[messageIndex]=newMessageState;
+        
+                    console.log("kshitiz", JSON.stringify(copyPSMessageState));
+                    const PSMessageState = update(state,{messages:{msgDindex:{$set:[copyPSMessageState]}}});
+                    console.log("message delivered single : ", JSON.stringify(PSMessageState));
+                    return PSMessageState;
+                }
+            }
+
+        break;
+
+        case 'updateMessageRead':
+        
+        let msgReadIndex = newState.messages.findIndex(userMessage =>userMessage.muid === action.uid);
+        console.log("kshitiz","single message received index : " + action.readAt );
+        
+        if(msgReadIndex != -1 ){
+
+            //uid is present    
+            var copyPSMessageState = Object.assign({},state.messages[msgReadIndex]);
+
+            console.log("Kshitiz",copyPSMessageState);
+            
+            const messageIndex = copyPSMessageState.message.findIndex(message=>message.id=== action.msgid);
+            
+            if(messageIndex != -1){
+                console.log("kshitiz","single message received index : " + messageIndex );
+                console.log("kshitiz",);
+                const newMessageState = {...copyPSMessageState.message[messageIndex],"readAt": action.readAt};
+                copyPSMessageState.message[messageIndex]=newMessageState;
+    
+                console.log("kshitiz", JSON.stringify(copyPSMessageState));
+                const PSMessageState = update(state,{messages:{msgReadIndex:{$set:[copyPSMessageState]}}});
+                console.log("message delivered single : ", JSON.stringify(PSMessageState));
+                return PSMessageState;
+            }
+        }
+
+    break;
+
         case 'updateMessage':
           
             console.log(action.tags + " : " + JSON.stringify(action.uid));

@@ -11,6 +11,8 @@ import { CometChat} from "@cometchat-pro/chat";
 import ImageViewerModal from './../modal/ImageViewerModal';
 
 import icon_msg_file from './../../../public/img/icon_msg_file.svg';
+import icon_msg_delivered from './../../../public/img/icon_delivered.svg';
+import icon_read from './../../../public/img/icon_read.svg';
 
 
 class CCMessage extends Component {
@@ -24,6 +26,8 @@ class CCMessage extends Component {
             imageUrl:""
         }
     }
+
+
 
     openModalHandler = (image) => {
 
@@ -44,6 +48,8 @@ class CCMessage extends Component {
             
           });
       }
+
+     
 
     
 
@@ -80,7 +86,7 @@ class CCMessage extends Component {
                 //to handle all messages
                 return (
                     <div key={msg.msgId}>
-                        <MessageType msg={msg} openImageViewer={(image)=>this.openModalHandler.bind(this,image)}/>
+                        <MessageType msg={msg} msgData={this.props.msgData} openImageViewer={(image)=>this.openModalHandler.bind(this,image)}/>
                         {imageViewerModal}
                     </div>
                 );        
@@ -120,7 +126,10 @@ function MessageAction(props){
 
 
 
-
+function handleReadAt(message){
+    CometChat.markMessageAsRead(message);
+    console.log("inside mark MesssageRead", message );
+  }
 function MessageType(props) {
     if (props.msg.loggedInUser == props.msg.sid) {
 
@@ -136,6 +145,10 @@ function MessageType(props) {
 
 function IncomingMessage(props) {
     console.log("Mesage : type : " + props.msg.msgType);
+    if(props.msgData.readAt == undefined){
+        handleReadAt(props.msgData);
+    }
+
     switch(props.msg.msgType){
         case CometChat.MESSAGE_TYPE.IMAGE : {
             let image = props.msg.data.url;
@@ -255,7 +268,30 @@ function IncomingMessage(props) {
 }
 
 function OutgoingMessage(props) {
+    let messageStatus=null;
+    console.log("inside outgoing",props.msgData);
+    // if(props.msgData.sentAt != undefined || props.msgData.deliveredAt != undefined){
+    //     messageStatus = (<span mesasgeStatus="sent" className="time_date color-light-tint-font">sent</span>);
+    // }
+    
+  
+    if(props.msgData.receiverType != "group"){
+        if(props.msgData.readAt != undefined){
+            messageStatus = (<span mesasgeStatus="read" className="time_date color-light-tint-font" dangerouslySetInnerHTML={{__html:icon_read}}></span>);
+        }else{
+            if(props.msgData.deliveredAt != undefined){
+                messageStatus = (<span mesasgeStatus="delivered" className="time_date color-light-tint-font" dangerouslySetInnerHTML={{__html:icon_msg_delivered}}></span>);
+            }else{
+                if(props.msgData.sentAt != undefined){
+                    messageStatus = (<span mesasgeStatus="delivered" className="time_date color-light-tint-font" dangerouslySetInnerHTML={{__html:icon_msg_delivered}}></span>);
+                }
+            }
+        }
+    }
 
+    
+
+    console.log("messageStatus",messageStatus);
     switch(props.msg.msgType){
         case CometChat.MESSAGE_TYPE.IMAGE : {
             return (
@@ -264,6 +300,7 @@ function OutgoingMessage(props) {
                         <div className="sent_withd_msg">
                             <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
                             <img class="" src={props.msg.data.url}/>
+                            {messageStatus}
                         </div>
                     </div>
                 </div>       
@@ -280,6 +317,7 @@ function OutgoingMessage(props) {
                         <video preload="auto" controls>
                             <source src={props.msg.data.url}/>
                         </video>
+                        {messageStatus}
                     </div>
                 </div>
             </div>   
@@ -298,6 +336,7 @@ function OutgoingMessage(props) {
                             <audio preload="auto" controls>
                                 <source src={props.msg.data.url}/>
                             </audio>
+                            {messageStatus}
                         </div>
                     </div>
                 </div>                 
@@ -322,6 +361,7 @@ function OutgoingMessage(props) {
                                 </div> 
                             </p>
                         </a>
+                        {messageStatus}
                     </div>
                 </div>
             </div>
@@ -330,6 +370,8 @@ function OutgoingMessage(props) {
         break;
 
         case CometChat.MESSAGE_TYPE.TEXT : {
+
+           
             return (
                 <div className="outgoing_msg">
                     <div className="sent_msg">
@@ -337,6 +379,7 @@ function OutgoingMessage(props) {
                             <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
                             <p class="color-background border-radius-no-bottom-right color-font-white">{props.msg.data.text}
                             </p>
+                            {messageStatus}
                         </div>
                     </div>
                 </div>

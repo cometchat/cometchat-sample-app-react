@@ -92,8 +92,28 @@ export default class CCManager {
           console.log("Incoming Message Log", { message });
           // handle media message
           this.handleMessage(message, dispatch);
+        },
+        
+        onMessageDelivered: (messageReceipt) => {
+          console.log("MessageDeliverd", {messageReceipt});
+          this.handleMessageDelivered(messageReceipt, dispatch);
+        },
+        
+        onMessageRead: (messageReceipt) => {
+          console.log("MessageRead", {messageReceipt});
+          this.handleMessageRead(messageReceipt, dispatch);
+        },
+
+        onTypingStarted: (typingIndicator) => {
+          console.log("Typing started :", typingIndicator);
+          this.handleStartTyping(typingIndicator,dispatch);
+        },
+        
+        onTypingEnded: (typingIndicator) => {
+          console.log("Typing ended :", typingIndicator);
+          this.handleEndTyping(typingIndicator,dispatch);
         }
-      })
+      })      
     );
   }
 
@@ -227,6 +247,21 @@ export default class CCManager {
     actionCreator.handleMessage(message, dispatch);
   }
 
+  static handleMessageDelivered(message,dispatch){
+    actionCreator.handleMessageDelivered(message,dispatch);
+  }
+
+  static handleMessageRead(message,dispatch){
+    actionCreator.handleMessageRead(message,dispatch);
+  }
+
+  static handleStartTyping(typingIndicator,dispatch){
+    actionCreator.handleStartTyping(typingIndicator,dispatch);
+  }
+
+  static handleEndTyping(typingIndicator,dispatch){
+    actionCreator.handleEndTyping(typingIndicator,dispatch);
+  }
 
   static handleActionMessage(action, dispatch) {}
 
