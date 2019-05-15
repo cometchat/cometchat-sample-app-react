@@ -109,20 +109,24 @@ npm run dev
 Navigate to **localhost:8080** to check sample app.  You can update host in **package.json** file.   
   
 
-2. Build the sample
+2. Build the sample app
+
+
+
+When the modification is complete, you'll need to bundle the file using `webpack`. 
 
   
-
-When the modification is complete, you'll need to bundle the file using `webpack`. The bundled file "cc-ui-min.js" are created in the `test` folder.
-
-Please check `webpack.config.js` for settings.
-  
-
 ```bash
 
 npm run build
 
 ```
+
+The bundled file "cc-ui-min.js" are created in the `test` folder.
+
+Please check `webpack.config.js` for settings.
+  
+
 
 <br></br>
 
