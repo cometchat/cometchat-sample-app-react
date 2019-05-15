@@ -113,7 +113,7 @@ Navigate to **localhost:8080** to check sample app.  You can update host in **pa
 
   
 
-When the modification is complete, you'll need to bundle the file using `webpack`. The bundled files are created in the `test` folder.
+When the modification is complete, you'll need to bundle the file using `webpack`. The bundled file "cc-ui-min.js" are created in the `test` folder.
 
 Please check `webpack.config.js` for settings.
   
