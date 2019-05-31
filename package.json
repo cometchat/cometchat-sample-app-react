@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --mode development --content-base test --inline --hot --host localhost --port 5000",
+    "prettify": "prettier --write {src/**/*.{js,jsx,json,css,scss}}",
     "sdev": "webpack-dev-server --mode development --content-base test --inline --hot --https true --host localhost --port 5000",
     "build": "webpack --mode production"
   },
@@ -28,6 +29,9 @@
     "babel-preset-react": "^6.24.1",
     "css-loader": "^1.0.1",
     "file-loader": "^3.0.1",
+    "husky": "^2.3.0",
+    "lint-staged": "^8.1.7",
+    "prettier": "^1.17.1",
     "raw-loader": "^1.0.0",
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",
@@ -49,5 +53,16 @@
     "react-svg-inline": "^2.1.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,json,css,scss}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }
