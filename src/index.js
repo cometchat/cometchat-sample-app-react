@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
+import CCManager from "./js/lib/cometchat/ccManager";
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { reducers } from "./js/store/reducer";
@@ -19,7 +20,6 @@ dom.watch();
 const rootReducers = combineReducers(reducers);
 const store = createStore(rootReducers, applyMiddleware(thunk));
 
-import CCManager from "./js/lib/cometchat/ccManager";
 CCManager.init(store.dispatch);
 
 const app = document.getElementById("cometchat");
