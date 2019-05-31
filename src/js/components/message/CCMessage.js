@@ -3,9 +3,7 @@ import { connect } from "react-redux";
 import * as util from "./../../lib/uiComponentLib";
 import * as utils from "./../../lib/uiComponentLib";
 
-var Userthumbnail = require("./../../../public/img/user.png");
-var Groupthumbnail = require("./../../../public/img/group.jpg");
-
+import Userthumbnail from "./../../../public/img/user.png";
 import { CometChat } from "@cometchat-pro/chat";
 
 import ImageViewerModal from "./../modal/ImageViewerModal";
