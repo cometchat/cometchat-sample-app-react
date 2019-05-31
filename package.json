@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --mode development --content-base test --inline --hot --host localhost --port 5000",
-    "prettify": "prettier --write {src/**/*.{js,jsx,json,css,scss}}",
+    "prettify": "prettier --write src/**/*.{js,jsx,json,css,scss}",
     "sdev": "webpack-dev-server --mode development --content-base test --inline --hot --https true --host localhost --port 5000",
     "build": "webpack --mode production"
   },

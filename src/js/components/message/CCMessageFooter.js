@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Row, Col, Button, Tooltip } from "react-bootstrap";
 import { connect } from "react-redux";
-import {CometChat} from "@cometchat-pro/chat";
-import CameraModal from './../modal/CameraModal';
-import * as utils from './../../lib/uiComponentLib';
-import translate from './../../lib/localization/translate';
+import { CometChat } from "@cometchat-pro/chat";
+import CameraModal from "./../modal/CameraModal";
+import * as utils from "./../../lib/uiComponentLib";
+import translate from "./../../lib/localization/translate";
 import * as actionCreator from "./../../store/actions/cc_action";
 
 import icon_attach from "./../../../public/img/icon_attach.svg";
@@ -22,62 +22,64 @@ class ccMessageFooter extends Component {
 
     this.inputRef = React.createRef();
 
-    this.state = { 
-      showAttach: false, 
-      isShowingCameraModal:false
+    this.state = {
+      showAttach: false,
+      isShowingCameraModal: false
     };
   }
 
-  componentWillUpdate(){
+  componentWillUpdate() {
     this.ccMessageEditorBox.textContent = "";
   }
 
-  handleEnterPressed=(e)=>{
+  handleEnterPressed = e => {
     //console.log("key pressed : " + e.key);
-    
+
     if (e.key == "Enter" || e.key == "Space") {
       console.log("key pressed : " + e.key);
-     // var content = this.ccMessageEditorBox.innerText;
-      
+      // var content = this.ccMessageEditorBox.innerText;
     }
     let content = this.ccMessageEditorBox.textContent.trim();
-    if(content.length > 0){
+    if (content.length > 0) {
       this.startTyping(content);
-    }else{
+    } else {
       this.endTyping();
     }
-  }
+  };
 
-  startTyping=(content)=>{
-    
-      if(this.props.activeMessageType == "user"){
-        
-        let receiverId =  this.props.activeUser;
-        let receiverType = CometChat.RECEIVER_TYPE.USER;
-        let metadata = {
-          text : content
-        };
-
-        let typingNotification = new CometChat.TypingIndicator(receiverId,receiverType,metadata);
-        CometChat.startTyping(typingNotification);
-      }
-  }
-
-  endTyping=()=>{
-    
-    if(this.props.activeMessageType == "user"){
-      
-      let receiverId =  this.props.activeUser;
+  startTyping = content => {
+    if (this.props.activeMessageType == "user") {
+      let receiverId = this.props.activeUser;
       let receiverType = CometChat.RECEIVER_TYPE.USER;
       let metadata = {
-        text : ""
+        text: content
       };
-    
-      let typingNotification = new CometChat.TypingIndicator(receiverId,receiverType,metadata);
+
+      let typingNotification = new CometChat.TypingIndicator(
+        receiverId,
+        receiverType,
+        metadata
+      );
+      CometChat.startTyping(typingNotification);
+    }
+  };
+
+  endTyping = () => {
+    if (this.props.activeMessageType == "user") {
+      let receiverId = this.props.activeUser;
+      let receiverType = CometChat.RECEIVER_TYPE.USER;
+      let metadata = {
+        text: ""
+      };
+
+      let typingNotification = new CometChat.TypingIndicator(
+        receiverId,
+        receiverType,
+        metadata
+      );
       CometChat.endTyping(typingNotification);
     }
-    
-  }
+  };
 
   handleMessage(e) {
     this.sendTextMessage();
@@ -85,7 +87,12 @@ class ccMessageFooter extends Component {
 
   async sendTextMessage() {
     var content = this.ccMessageEditorBox.textContent.trim();
-    console.log("inside message handler : " + content + "\n Message content : " + content.length );
+    console.log(
+      "inside message handler : " +
+        content +
+        "\n Message content : " +
+        content.length
+    );
     if (content.length > 0) {
       try {
         await this.props.sendMessage(
@@ -101,142 +108,164 @@ class ccMessageFooter extends Component {
   }
 
   getFileGallery = e => {
-    
     var ele = document.getElementById("ccMessageInputGallery");
 
     var files = ele.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      this.sendMediaMessage(file,CometChat.MESSAGE_TYPE.IMAGE);
-     
+      this.sendMediaMessage(file, CometChat.MESSAGE_TYPE.IMAGE);
+
       //   console.log(
       //     "filename : " + file.name + " : " + file.type + " : " + file.size
       //   );
     }
 
     this.toggleAttachMenu();
-
   };
 
-
-  getFileVideo=e=>{
+  getFileVideo = e => {
     var ele = document.getElementById("ccMessageInputVideo");
 
     var files = ele.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      this.sendMediaMessage(file,CometChat.MESSAGE_TYPE.VIDEO);
-      
-      console.log( "filename : " + JSON.stringify(file) + "\n" +file.name + " : " + file.type + " : " + file.size  );
+      this.sendMediaMessage(file, CometChat.MESSAGE_TYPE.VIDEO);
 
+      console.log(
+        "filename : " +
+          JSON.stringify(file) +
+          "\n" +
+          file.name +
+          " : " +
+          file.type +
+          " : " +
+          file.size
+      );
     }
 
     this.toggleAttachMenu();
+  };
 
-  }
-
-  getFileAudio=e=>{
+  getFileAudio = e => {
     console.log("e target :", e.target);
     var ele = document.getElementById("ccMessageInputAudio");
 
     var files = ele.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      this.sendMediaMessage(file,CometChat.MESSAGE_TYPE.AUDIO);      
-      console.log( "filename : " + JSON.stringify(file) + "\n" +file.name + " : " + file.type + " : " + file.size  );
-
+      this.sendMediaMessage(file, CometChat.MESSAGE_TYPE.AUDIO);
+      console.log(
+        "filename : " +
+          JSON.stringify(file) +
+          "\n" +
+          file.name +
+          " : " +
+          file.type +
+          " : " +
+          file.size
+      );
     }
 
     this.toggleAttachMenu();
-
-  }
+  };
 
   getFile = e => {
-      console.log("e target :", e.target);
-      var ele = document.getElementById("ccMessageInputFile");
+    console.log("e target :", e.target);
+    var ele = document.getElementById("ccMessageInputFile");
 
-      var files = ele.files;
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        this.sendMediaMessage(file,CometChat.MESSAGE_TYPE.FILE);      
-        console.log( "filename : " + JSON.stringify(file) + "\n" +file.name + " : " + file.type + " : " + file.size  );
+    var files = ele.files;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      this.sendMediaMessage(file, CometChat.MESSAGE_TYPE.FILE);
+      console.log(
+        "filename : " +
+          JSON.stringify(file) +
+          "\n" +
+          file.name +
+          " : " +
+          file.type +
+          " : " +
+          file.size
+      );
+    }
 
-      }
-
-      this.toggleAttachMenu();
-
-  }
+    this.toggleAttachMenu();
+  };
 
   handleMediaMessageGallery = e => {
     document.getElementById("ccMessageInputGallery").click();
   };
 
-  handleMediaMessageVideo = e =>{
+  handleMediaMessageVideo = e => {
     document.getElementById("ccMessageInputVideo").click();
   };
 
-  handleMediaMessageAudio = e =>{
+  handleMediaMessageAudio = e => {
     document.getElementById("ccMessageInputAudio").click();
   };
 
-  handleMediaMessageFile = e =>{
+  handleMediaMessageFile = e => {
     document.getElementById("ccMessageInputFile").click();
-  }
+  };
 
-
-
-  handleAttachMenu = (e) =>{
-
+  handleAttachMenu = e => {
     this.toggleAttachMenu();
-  }
+  };
 
-  toggleAttachMenu(){
-    if(this.state.showAttach){
+  toggleAttachMenu() {
+    if (this.state.showAttach) {
       document.getElementById("attachMenuContainer").style.opacity = "0";
-      document.getElementsByClassName("attachIcon")[0].setAttribute("active", "false");
-      document.getElementById("attachMenuContainer").setAttribute("active", "false");
+      document
+        .getElementsByClassName("attachIcon")[0]
+        .setAttribute("active", "false");
+      document
+        .getElementById("attachMenuContainer")
+        .setAttribute("active", "false");
 
       this.setState({
-          showAttach: false
+        showAttach: false
       });
-    }else{
+    } else {
       document.getElementById("attachMenuContainer").style.opacity = "1";
-      document.getElementsByClassName("attachIcon")[0].setAttribute("active", "true");
-      document.getElementById("attachMenuContainer").setAttribute("active", "true");
+      document
+        .getElementsByClassName("attachIcon")[0]
+        .setAttribute("active", "true");
+      document
+        .getElementById("attachMenuContainer")
+        .setAttribute("active", "true");
       this.setState({
         showAttach: true
       });
     }
   }
 
-  openModalHandler = (modalName) => {
-
-    switch(modalName){
-      case 'camera':    this.setState({isShowingCameraModal: true}); break;
+  openModalHandler = modalName => {
+    switch (modalName) {
+      case "camera":
+        this.setState({ isShowingCameraModal: true });
+        break;
     }
-    
-  }
+  };
 
   closeModalHandler = () => {
-      this.setState({
-          isShowingCameraModal: false
-      });
-  }
+    this.setState({
+      isShowingCameraModal: false
+    });
+  };
 
-  recieveCaptureImage = (data) =>{
+  recieveCaptureImage = data => {
     console.log("received data ccfooter: " + data);
-    //onrecieve data 
+    //onrecieve data
 
-    let fileObject = utils.dataURLtoFile(data, 'a.png')
+    let fileObject = utils.dataURLtoFile(data, "a.png");
     this.closeModalHandler();
     this.toggleAttachMenu();
 
-
-    this.sendMediaMessage(fileObject,CometChat.MESSAGE_TYPE.IMAGE);
-  }
+    this.sendMediaMessage(fileObject, CometChat.MESSAGE_TYPE.IMAGE);
+  };
 
   //send media message
-  async sendMediaMessage(content,mediaType) {
+  async sendMediaMessage(content, mediaType) {
     try {
       await this.props.sendMediaMessage(
         content,
@@ -250,84 +279,115 @@ class ccMessageFooter extends Component {
   }
 
   render() {
+    const cameraModal = this.state.isShowingCameraModal ? (
+      <CameraModal
+        sendMessage={this.recieveCaptureImage.bind(this)}
+        handleClose={this.closeModalHandler.bind(this)}
+      />
+    ) : null;
 
-    const cameraModal  = this.state.isShowingCameraModal ? (<CameraModal sendMessage = {this.recieveCaptureImage.bind(this)} handleClose={this.closeModalHandler.bind(this)}/>) : null;
-
-    
     return (
       <div>
-         <Row id="attachMenuContainer" class="attachMenuContainer" active="false">
+        <Row
+          id="attachMenuContainer"
+          class="attachMenuContainer"
+          active="false"
+        >
           <div class="attachMenuWrapper">
-            <Col lg={2} class="attachMenu" onClick={this.handleMediaMessageGallery.bind(this)}>
+            <Col
+              lg={2}
+              class="attachMenu"
+              onClick={this.handleMediaMessageGallery.bind(this)}
+            >
               <center>
-              <input
-                id="ccMessageInputGallery"
-                multiple={true}
-                name="ccMessageInputFile"
-                type="file"
-                accept="audio/*,video/*,image/*"
-                ref={this.inputRef}
-                style={ccMessageInputFile}
-                onChange={this.getFileGallery.bind(this)}
-              />
-                <div class="attachMenuIcon color-font-theme" dangerouslySetInnerHTML={{ __html: icon_attach_gallery }}></div>
-              </center>
-              <div class=" attachMenuText color-font"> 
-                  Gallery
-              </div> 
-            </Col>
-
-            <Col lg={2} class="attachMenu" onClick={this.openModalHandler.bind(this,'camera')}>
-              <center>
-                <div class="attachMenuIcon color-font-theme" dangerouslySetInnerHTML={{ __html: icon_attach_cam }}></div>
-              </center>
-
-              <div class=" attachMenuText color-font"> 
-                  Camera
-              </div> 
-            </Col>
-
-            <Col lg={2} class="attachMenu" onClick={this.handleMediaMessageVideo.bind(this)} >
-              <center>
-              <input
-                id="ccMessageInputVideo"
-                multiple={true}
-                name="ccMessageInputFile"
-                type="file"
-                accept="video/x-ms-wmv,video/x-msvideo,video/quicktime,*.mkv,*.3gpp,video/MP2T,application/x-mpegURL,video/3gpp,video/mp4,video/x-m4v"
-                ref={this.inputRef}
-                onChange={this.getFileVideo.bind(this)}
-                style={ccMessageInputFile}
+                <input
+                  id="ccMessageInputGallery"
+                  multiple={true}
+                  name="ccMessageInputFile"
+                  type="file"
+                  accept="audio/*,video/*,image/*"
+                  ref={this.inputRef}
+                  style={ccMessageInputFile}
+                  onChange={this.getFileGallery.bind(this)}
                 />
-                <div class="attachMenuIcon color-font-theme" dangerouslySetInnerHTML={{ __html: icon_attach_video }}></div>
-              </center>
-
-              <div class=" attachMenuText color-font"> 
-                  Video
-              </div> 
-            </Col>
-
-            <Col lg={2} class="attachMenu" onClick={this.handleMediaMessageAudio.bind(this)}>
-              <center>
-              <input
-                id="ccMessageInputAudio"
-                multiple={true}
-                name="ccMessageInputFile"
-                type="file"
-                accept="audio/*"
-                ref={this.inputRef}
-                onChange={this.getFileAudio.bind(this)}
-                style={ccMessageInputFile}
+                <div
+                  class="attachMenuIcon color-font-theme"
+                  dangerouslySetInnerHTML={{ __html: icon_attach_gallery }}
                 />
-                <div class="attachMenuIcon color-font-theme" dangerouslySetInnerHTML={{ __html: icon_attach_mic }}></div>
               </center>
-
-              <div class=" attachMenuText color-font"> 
-                  Audio
-              </div> 
+              <div class=" attachMenuText color-font">Gallery</div>
             </Col>
 
-            <Col lg={2} class="attachMenu" onClick={this.handleMediaMessageFile.bind(this)}>
+            <Col
+              lg={2}
+              class="attachMenu"
+              onClick={this.openModalHandler.bind(this, "camera")}
+            >
+              <center>
+                <div
+                  class="attachMenuIcon color-font-theme"
+                  dangerouslySetInnerHTML={{ __html: icon_attach_cam }}
+                />
+              </center>
+
+              <div class=" attachMenuText color-font">Camera</div>
+            </Col>
+
+            <Col
+              lg={2}
+              class="attachMenu"
+              onClick={this.handleMediaMessageVideo.bind(this)}
+            >
+              <center>
+                <input
+                  id="ccMessageInputVideo"
+                  multiple={true}
+                  name="ccMessageInputFile"
+                  type="file"
+                  accept="video/x-ms-wmv,video/x-msvideo,video/quicktime,*.mkv,*.3gpp,video/MP2T,application/x-mpegURL,video/3gpp,video/mp4,video/x-m4v"
+                  ref={this.inputRef}
+                  onChange={this.getFileVideo.bind(this)}
+                  style={ccMessageInputFile}
+                />
+                <div
+                  class="attachMenuIcon color-font-theme"
+                  dangerouslySetInnerHTML={{ __html: icon_attach_video }}
+                />
+              </center>
+
+              <div class=" attachMenuText color-font">Video</div>
+            </Col>
+
+            <Col
+              lg={2}
+              class="attachMenu"
+              onClick={this.handleMediaMessageAudio.bind(this)}
+            >
+              <center>
+                <input
+                  id="ccMessageInputAudio"
+                  multiple={true}
+                  name="ccMessageInputFile"
+                  type="file"
+                  accept="audio/*"
+                  ref={this.inputRef}
+                  onChange={this.getFileAudio.bind(this)}
+                  style={ccMessageInputFile}
+                />
+                <div
+                  class="attachMenuIcon color-font-theme"
+                  dangerouslySetInnerHTML={{ __html: icon_attach_mic }}
+                />
+              </center>
+
+              <div class=" attachMenuText color-font">Audio</div>
+            </Col>
+
+            <Col
+              lg={2}
+              class="attachMenu"
+              onClick={this.handleMediaMessageFile.bind(this)}
+            >
               <input
                 id="ccMessageInputFile"
                 multiple={true}
@@ -335,36 +395,40 @@ class ccMessageFooter extends Component {
                 type="file"
                 ref={this.inputRef}
                 onChange={this.getFile.bind(this)}
-                style={ccMessageInputFile} />
+                style={ccMessageInputFile}
+              />
 
               <center>
-                <div class="attachMenuIcon color-font-theme" dangerouslySetInnerHTML={{ __html: icon_attach_file }}></div>
+                <div
+                  class="attachMenuIcon color-font-theme"
+                  dangerouslySetInnerHTML={{ __html: icon_attach_file }}
+                />
               </center>
 
-              <div class=" attachMenuText color-font"> 
-                  Files
-              </div> 
+              <div class=" attachMenuText color-font">Files</div>
             </Col>
 
             <Col lg={2} class="attachMenu">
               <center>
-                <div class="attachMenuIcon color-font-theme" dangerouslySetInnerHTML={{ __html: icon_attach_location }}></div>
+                <div
+                  class="attachMenuIcon color-font-theme"
+                  dangerouslySetInnerHTML={{ __html: icon_attach_location }}
+                />
               </center>
 
-              <div class=" attachMenuText color-font"> 
-                  Location
-              </div> 
+              <div class=" attachMenuText color-font">Location</div>
             </Col>
-          </div>     
-          
+          </div>
         </Row>
         <Row style={ccMessageFooterStyle}>
           <Col lg={2} className="cc-no-padding h-100 align-center">
-            <div className="ccMessageFooterMenu" onClick={this.handleAttachMenu.bind(this)} >
-             
+            <div
+              className="ccMessageFooterMenu"
+              onClick={this.handleAttachMenu.bind(this)}
+            >
               <span
                 className="attachIcon color-font-theme"
-                active="false"                
+                active="false"
                 dangerouslySetInnerHTML={{ __html: icon_attach }}
               />
             </div>
@@ -380,15 +444,18 @@ class ccMessageFooter extends Component {
               onKeyUp={this.handleEnterPressed.bind(this)}
             />
           </Col>
-          <Col lg={2} className="cc-no-padding h-100 align-center" >
+          <Col lg={2} className="cc-no-padding h-100 align-center">
             <div className="ccMessageFooterMenu">
-              <span className="cc-icon sendButton " onClick={this.handleMessage.bind(this)} dangerouslySetInnerHTML={{__html:icon_send}}/>
+              <span
+                className="cc-icon sendButton "
+                onClick={this.handleMessage.bind(this)}
+                dangerouslySetInnerHTML={{ __html: icon_send }}
+              />
             </div>
           </Col>
         </Row>
 
         {cameraModal}
-
       </div>
     );
   }
@@ -423,9 +490,10 @@ const mapStateToProps = store => {
 
 const mapDispachToProps = dispatch => {
   return {
-    sendMessage: (content, uid, msgType) =>         dispatch(actionCreator.sendTextMessage(uid, content, msgType)),
-    sendMediaMessage: (content, uid, msgType,mediaType) =>    dispatch(actionCreator.sendMediaMessage(uid, content, msgType,mediaType)),
-    
+    sendMessage: (content, uid, msgType) =>
+      dispatch(actionCreator.sendTextMessage(uid, content, msgType)),
+    sendMediaMessage: (content, uid, msgType, mediaType) =>
+      dispatch(actionCreator.sendMediaMessage(uid, content, msgType, mediaType))
   };
 };
 
