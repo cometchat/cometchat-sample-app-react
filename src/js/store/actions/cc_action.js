@@ -645,7 +645,7 @@ export const updateGroup = data => {
 export const leaveGroup = group_id => {
   console.log("Group id to leave", group_id);
   return dispatch => {
-    console.log("Group id to leave inside", arguments);
+    console.log("Group id to leave inside");
     CometChat.leaveGroup(group_id).then(
       hasLeft => {
         console.log("Group left successfully:", hasLeft);
