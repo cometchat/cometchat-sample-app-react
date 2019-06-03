@@ -295,4 +295,8 @@ export default class CCManager {
     return new CometChat.GroupMembersRequestBuilder(GUID).setLimit(limit).build();
   }
 
+  static getBlockedUsersRequestBuilder(limit=100){
+    return new CometChat.BlockedUsersRequestBuilder().setLimit(limit).build();
+  }
+
 }

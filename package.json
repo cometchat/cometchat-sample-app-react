@@ -36,7 +36,7 @@
     "webpack-dev-server": "^3.1.14"
   },
   "dependencies": {
-    "@cometchat-pro/chat": "^1.4.1",
+    "@cometchat-pro/chat": "^1.5.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.8",
     "@fortawesome/free-brands-svg-icons": "^5.5.0",
     "@fortawesome/free-solid-svg-icons": "^5.5.0",

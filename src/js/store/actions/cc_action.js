@@ -720,3 +720,42 @@ export const updateGroupLeft = (guid) =>{
   }
 }
 
+
+
+export const blockUser = (userlist)=>{
+  var usersList = [userlist];
+
+  return (dispatch) => {
+    CometChat.blockUsers(usersList).then(
+      list => {
+        console.log("users list blocked", { list });
+      }, error => {
+        console.log("Blocking user fails with error", error);
+      });
+    }
+}
+
+
+export const unblockUser = (userlist)=>{
+  var usersList = ["UID1", "UID2", "UID3"];
+
+  return (dispatch) => {
+    CometChat.unblockUsers(usersList).then(
+      list => {
+          console.log("users list unblocked", { list });
+      }, error => {
+          console.log("unblocking user fails with error", error);
+      }
+    );
+  }
+}
+
+export const removeUser = (uid) =>{
+
+  
+  return{
+    type:"deleteUser",
+    data: uid,
+    tag:"deleteuser"
+  }
+};

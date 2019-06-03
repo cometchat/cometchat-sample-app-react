@@ -45,6 +45,10 @@ const reducers = (state = intialState, action) => {
             break;
 
         case 'deleteUser':
+                var index = newState.usersList.findIndex( user => user.uid === action.data);
+
+                newState.usersList.splice(index,1);
+
             
             break;
 

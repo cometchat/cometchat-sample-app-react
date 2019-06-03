@@ -1115,3 +1115,97 @@ nav nav-pills>li>a {
 }
 
 
+/* messageHeaderMenuIcon */
+
+.messageHeaderMenuIcon{
+    height: 28px;
+    width: 28px;
+    padding: 4px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    background: #2f36be;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.messageHeaderMenuItem{
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    padding: 7px;
+}
+.popover-content{
+    padding: 8px;
+}
+
+
+/* blocked user list */
+
+.blockedUserContainer{
+
+    height: 100%;
+    width: 0;
+    position: absolute;
+    z-index: 9;
+    top: 0;
+    left: 0;
+    background-color: #d8d8d8;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+
+.buHeader{
+    box-sizing: border-box !important;
+    justify-content: space-between !important;
+    padding: 20px 20px 20px 20px !important;
+    height: 10%;
+}
+
+.buHeaderClose{
+    float: left;
+    margin-right: 16px;
+}
+.buUserList{
+    margin: 0px 16px;
+    height: 90%;
+    background: white;
+    border-top-right-radius: 16px;
+    border-top-left-radius: 16px;
+    overflow: auto;
+    padding: 8px 0 0 0;
+}
+
+.buCloseButton{
+    height: 100%;
+    position: absolute;
+    right: 14px;
+    top: 0;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    color: #a2a2a2;
+    font-size: 23px;
+}
+
+.buUserTitle{    flex: 1 1 0%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: rgba(0, 0, 0, 1);
+    font-size: 15px !important;
+    font-weight: 400;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+.buNoUserList{
+    display: flex;
+    height: 90%;
+    justify-content: center;
+    align-items: center
+}

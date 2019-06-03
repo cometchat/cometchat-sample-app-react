@@ -48,7 +48,7 @@ class Embeded extends Component {
 
                 <Grid fluid={true} className="border-radius-top bg-white h-100pr">
                     <Row className="ccShowGrid">
-                        <Col xs={12} lg={4} className = "border-radius-top-no-right h-100pr color-left-panel">
+                        <Col xs={12} lg={4} className = "border-radius-top-no-right h-100pr color-left-panel" style={{overflow:"hidden"}}>
                             <CCLeftSidebar></CCLeftSidebar>
                         </Col>
                         <Col xsHidden lg={8} style={{ height: "100%" }}>

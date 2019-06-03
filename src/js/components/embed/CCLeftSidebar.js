@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import CCLeftSidebarHeader from './CCLeftSidebarHeader';
 import CCUserList from './CCUserList';
 import CCGroupList from './CCGroupList';
+import CCBlockedUserList from './CCBlockedUserList';
 import * as utils from './../../lib/uiComponentLib';
 
 import * as actionCreator from './../../store/actions/cc_action';
@@ -43,6 +44,7 @@ class CCLeftSidebar extends Component {
 
         this.state = {
             activeTab: "contacts",
+            showBlockedUserList : false,
         }
     }
 
@@ -52,6 +54,12 @@ class CCLeftSidebar extends Component {
 
     handleSelect(tabName) {
         this.setState({ activeTab: tabName });
+    }
+
+    handleBlockedUserVisibility(){
+        console.log("reaching inside blockeduservisi");
+        var visibility = !this.state.showBlockedUserList;
+        this.setState({showBlockedUserList:visibility});
     }
 
     sidebarScrollContainer = (node) =>{
@@ -74,12 +82,15 @@ class CCLeftSidebar extends Component {
 
 
     render() {
-
+            var blockedUserList = this.state.showBlockedUserList ? <CCBlockedUserList handlblockedUserEvent={this.handleBlockedUserVisibility.bind(this)}></CCBlockedUserList>:null;
         return (
             <div className="ccMainContainer">
+                {blockedUserList}
 
-                <CCLeftSidebarHeader activeTab={this.state.activeTab}  tabTitle={this.state.activeTab}></CCLeftSidebarHeader>
+                <CCLeftSidebarHeader handlblockedUserEvent={this.handleBlockedUserVisibility.bind(this)} activeTab={this.state.activeTab}  tabTitle={this.state.activeTab}></CCLeftSidebarHeader>
 
+                
+                
                 <Tab.Container id="sidebarTabContainer" defaultActiveKey={this.state.activeTab} >
                     <Row className="clearfix">
                         <div key="sidebarScrollContainer" ref={this.sidebarScrollContainer} className="cc-no-padding border border-radius-top bg-white color-border " style={ccUserStyle} >
