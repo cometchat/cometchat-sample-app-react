@@ -85,6 +85,52 @@ const reducers = (state = intialState, action)=> {
 
         break;
 
+
+        case 'UPDATE_MESSAGE_UNREAD_COUNT_GROUP_LIST':
+
+                var unreadData = Object.keys(action.data); 
+
+                if(unreadData.length === 0){
+    
+                 }else{
+                    let groupsList = [...state.groupsList];
+    
+                    unreadData.map( uidkey => {
+                        var index = newState.groupsList.findIndex(group =>group.guid === uidkey);
+    
+                        if(index != -1 ){
+                            groupsList[index] = {...groupsList[index],unreadCount:action.data[uidkey]};
+                        }
+                    });
+    
+                    const newUpdatedState = {...state,groupsList};
+    
+                    return newUpdatedState;
+                }
+
+        break;
+
+
+        case 'UNSET_MESSAGE_UNREAD_COUNT_GROUP':
+
+                var index1 = newState.groupsList.findIndex(group =>group.guid === action.data);
+
+                if(index1 != -1 ){
+    
+                    let groupsList = [...state.groupsList];
+    
+                    groupsList[index1] = {...groupsList[index1],unreadCount:0};
+    
+                    const newUpdatedState1 = {...state,groupsList};
+    
+                    console.log("User online : ", JSON.stringify(newUpdatedState1));
+    
+                    return newUpdatedState1;
+                }
+
+
+        break;
+
         
     }
     return newState;

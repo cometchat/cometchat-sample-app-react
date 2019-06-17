@@ -3,6 +3,7 @@ import { Row,} from 'react-bootstrap';
 
 
 var Userthumbnail = require('./../../../public/img/user.png');
+import icon_close from './../../../public/img/icon_close.svg';
 export default class CCBlockedUser extends Component {
 
     constructor(props){
@@ -25,8 +26,8 @@ export default class CCBlockedUser extends Component {
                     </div> */}
 
 
-                    <div className="buCloseButton">
-                        X
+                    <div className="buCloseButton" dangerouslySetInnerHTML={{__html:icon_close}}>
+                        
                     </div>
 
 

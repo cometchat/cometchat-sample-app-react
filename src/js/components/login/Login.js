@@ -9,14 +9,16 @@ var captainAmerica = require("./../../../public/img/captainamerica.png");
 var ironMan = require("./../../../public/img/ironman.png");
 var spiderman = require("./../../../public/img/spiderman.png");
 var wolverine = require("./../../../public/img/wolverine.png");
-
+import './login.scss';
  class Login extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      loginbtn: translate.login,
+      loginLoader:false,
     };
   }
 
@@ -32,14 +34,44 @@ var wolverine = require("./../../../public/img/wolverine.png");
 
   handleSubmit = event => {
     event.preventDefault();
-    var user = this.state.email;
+
+    if(!this.state.loginloader){
+      var user = this.state.email;
+      this.setState({
+        loginbtn:translate.login_processing,
+        loginLoader:true
+      });
+
+      var dom = document.getElementById('loginButton'); 
+     dom.classList.add('animation-loader');
+     dom.removeAttribute('disabled');
+
+     document.getElementById('email').setAttribute('disabled',true);
+      
+      this.props.setUserSession(user);
+
+    }
     
-    this.props.setUserSession(user);
   }
 
   handleUserListItemClick = (user) =>{
-    console.log("user : "+ user);
-    this.props.setUserSession(user);
+
+    if(!this.state.loginLoader){
+    console.log("user : " ,  user);
+    this.setState({
+        loginbtn:translate.login_processing,
+        loginLoader:true
+    });
+    
+     var dom = document.getElementById('loginButton'); 
+     dom.classList.add('animation-loader');
+     dom.removeAttribute('disabled');
+
+     document.getElementById('email').setAttribute('disabled',true);
+     //console.log(dom.getAttribute('class'));
+      this.props.setUserSession(user);
+    }
+    
   }
 
   render() {
@@ -62,12 +94,15 @@ var wolverine = require("./../../../public/img/wolverine.png");
             <Button
               className="cc-submit-btn"
               block
+              id="loginButton"
+              
               bsSize="large"
               disabled={!this.validateForm()}
-              type="submit"
-             
+              type="submit"             
             >
-              {translate.login}
+
+              {this.state.loginbtn}
+
             </Button>
           </form>
 
@@ -76,7 +111,7 @@ var wolverine = require("./../../../public/img/wolverine.png");
             
 
             <label>{translate.login_message}</label>
-            {/* //Haven't created a user yet? Select one of our default users for testing: */}
+            
 
             <div className="loginSampleUser" onClick={this.handleUserListItemClick.bind(this,"superhero1")} >
               <img className="loginSampleAvatar" src={ironMan} width={32} />

@@ -338,7 +338,14 @@ input:focus, select:focus, textarea:focus, button:focus {
     position: absolute;
     bottom: 0;
 }
-.time_date[mesasgestatus=sent], .time_date[mesasgestatus=delivered], .time_date[mesasgestatus=read]{
+.time_date[mesasgestatus=sent],.time_date[mesasgestatus=delivered]{
+    height: 16px;
+    width: 16px;
+    margin: 0px 2px !important;
+    color: #d8d8d8 !important;
+}
+
+  .time_date[mesasgestatus=read]{
     height: 16px;
     width: 16px;
     margin: 0px 2px !important;
@@ -1208,4 +1215,29 @@ nav nav-pills>li>a {
     height: 90%;
     justify-content: center;
     align-items: center
+}
+
+
+.unreadCounter_div{
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 24px;
+    margin-right: 8px;
+}
+
+.unreadBadge{
+    background: #ea2f30;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border-radius: 50%;
+    font-size: 10px;
 }

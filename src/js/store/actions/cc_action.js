@@ -130,6 +130,70 @@ export const getNextUserList = () => {
   };
 };
 
+export const updateUserUnReadMessage =() =>{
+   return dispatch =>{ CometChat.getUnreadMessageCountForAllUsers().then(
+     array => {
+      console.log("Message count fetched", array);
+      return dispatch(updateMessageUnreadCount(array));
+
+      return 
+    }, error => {
+      console.log("Error in getting message count", error);
+    });
+
+  }
+};
+
+export const updateMessageUnreadCount=(list)=>{
+  return {
+    type:"UPDATE_MESSAGE_UNREAD_COUNT_LIST",
+    data : list
+  } 
+}
+
+export const updateGroupUnReadMessage=()=>{
+  return dispatch =>{ 
+    CometChat.getUnreadMessageCountForAllGroups().then(array => {
+      console.log("Message count fetched", array);
+      return dispatch(updateMessageGroupUnreadCount(array));
+    }, error => {
+      console.log("Error in getting message count", error);
+    });
+ }
+}
+
+
+export const updateMessageGroupUnreadCount=(list)=>{
+  return {
+    type:"UPDATE_MESSAGE_UNREAD_COUNT_GROUP_LIST",
+    data : list
+  } 
+}
+
+export const unsetUnReadMessage = (uid) => {
+
+  return {
+    type:'UNSET_MESSAGE_UNREAD_COUNT_USER',
+    data:uid
+  }
+};
+
+export const unsetUnReadGroupMessage = (uid) => {
+
+  return {
+    type:'UNSET_MESSAGE_UNREAD_COUNT_GROUP',
+    data:uid
+  }
+};
+
+
+
+
+
+
+
+
+
 export const updateHandler = () => {
   return {
     type: "UPDATED_STAGE"

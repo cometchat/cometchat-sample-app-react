@@ -104,6 +104,52 @@ const reducers = (state = intialState, action) => {
 
         break;
 
+
+        case 'UNSET_MESSAGE_UNREAD_COUNT_USER' : 
+            var index1 = newState.usersList.findIndex(user => user.uid == action.data);
+
+            if(index1 != -1 ){
+
+                let usersList = [...state.usersList];
+
+                usersList[index1] = {...usersList[index1],unreadCount:0};
+
+                const newUpdatedState1 = {...state,usersList};
+
+                console.log("User online : ", JSON.stringify(newUpdatedState1));
+
+                return newUpdatedState1;
+            }
+
+        break;
+
+        case 'UPDATE_MESSAGE_UNREAD_COUNT_LIST' :
+
+            var unreadData = Object.keys(action.data); 
+
+            if(unreadData.length === 0){
+
+             }else{
+                let usersList = [...state.usersList];
+
+                unreadData.map( uidkey => {
+                    var index = newState.usersList.findIndex(user => user.uid == uidkey);
+
+                    if(index != -1 ){
+                        usersList[index] = {...usersList[index],unreadCount:action.data[uidkey]};
+                    }
+                });
+
+                const newUpdatedState = {...state,usersList};
+
+                return newUpdatedState;
+            }
+
+
+
+
+        break;
+
         case 'setUserOffline' :
             var index1 = newState.usersList.findIndex(user => user.uid == action.data.uid);
 

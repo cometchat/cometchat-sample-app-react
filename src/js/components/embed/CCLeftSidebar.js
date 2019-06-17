@@ -48,6 +48,11 @@ class CCLeftSidebar extends Component {
         }
     }
 
+    componentWillMount(){
+        this.props.updateUserUnReadMessage();
+        this.props.updateGroupUnReadMessage();
+      }
+
     componentDidMount(){
         this.props.addUserListener();
     }
@@ -143,6 +148,8 @@ const mapDispachToProps = dispatch => {
         fetchUser: () => dispatch(actionCreator.getNextUserList()),
         fetchGroup: () => dispatch(actionCreator.getNextGroupList()),
         addUserListener : () => actionCreator.addUserListener(dispatch),
+        updateUserUnReadMessage : () => dispatch(actionCreator.updateUserUnReadMessage()),
+        updateGroupUnReadMessage: ()=> dispatch(actionCreator.updateGroupUnReadMessage()),
     };
 };
 

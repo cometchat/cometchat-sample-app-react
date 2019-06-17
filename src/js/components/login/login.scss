@@ -1,0 +1,45 @@
+.animation-loader:after{
+    content: '';
+    -webkit-animation: mymove 5s infinite; /* Safari 4.0 - 8.0 */
+    animation: mymove 5s infinite ;  
+    height: 16px;
+    transition:border-color ease-out;
+    -webkit-transition: border-color  ease-out;   
+    -moz-transition: border-color  ease-out ;
+    -o-transition:border-color  ease-out;
+    width: 16px;
+    display: inline-flex;
+    border-radius: 50%;
+    border:3px dotted white;
+    margin-left:4px !important;
+    
+}
+
+// /* Safari 4.0 - 8.0 
+// @-webkit-keyframes mymove {
+// 0% { transform: rotate(0); border-color:#ff5722; }
+// 50%   { transform: rotate(360deg); border-color:#8bc34a; }
+// 100% { transform: rotate(720deg); border-color:#81d4fa; }
+// }
+
+// /* Standard syntax 
+// @keyframes mymove {
+//     0%      { transform: rotate(0); border-color:#ff5722; }
+//     50%     { transform: rotate(360deg); border-color:#8bc34a; }
+//     75%     {  transform: rotate(540deg); border-color:#81d4fa; }
+//     100%    { transform: rotate(720deg); border-color:#ff5722; }
+// }*/
+
+@-webkit-keyframes mymove {
+    0% { transform: rotate(0); }
+    50%   { transform: rotate(360deg);  }
+    100% { transform: rotate(720deg);  }
+    }
+    
+    /* Standard syntax */
+    @keyframes mymove {
+        0%      { transform: rotate(0);  }
+        50%     { transform: rotate(360deg);  }
+        75%     {  transform: rotate(540deg);  }
+        100%    { transform: rotate(720deg);  }
+    }

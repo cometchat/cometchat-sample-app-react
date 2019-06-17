@@ -17,6 +17,7 @@ class CCUserList extends Component {
 
   handleClickUser = uid => {
     this.props.updateActiveMessage(uid);
+    this.props.unsetUnReadMessage(uid);
     this.setState({ _activeUserUID: uid });
   };
 
@@ -41,6 +42,7 @@ class CCUserList extends Component {
         activeClass={activeUserId == el.uid ? "active" : ""}
         key={el.uid}
         uid={el.uid}
+        unreadCount = {el.hasOwnProperty("unreadCount")? el.unreadCount : 0 }
         status={el.hasOwnProperty("typeStatus")?((el.typeStatus == true)?"Typing...":el.status):el.status}
         avt={utils.CheckEmpty(el.avatar) ? el.avatar : false}
         showMessageEvent={this.handleClickUser.bind(this, el.uid)}
@@ -62,7 +64,8 @@ const mapDispachToProps = dispatch => {
   return {
     updateActiveMessage: (key, type = "user") =>
       dispatch(actionCreator.setActiveMessages(key, type)),
-    fetchUser: limit => dispatch(actionCreator.getUsers(limit))
+    fetchUser: limit => dispatch(actionCreator.getUsers(limit)),
+    unsetUnReadMessage:(uid)=> dispatch(actionCreator.unsetUnReadMessage(uid)),
   };
 };
 

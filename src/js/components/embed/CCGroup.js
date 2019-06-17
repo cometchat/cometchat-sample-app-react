@@ -24,6 +24,7 @@ var Groupthumbnail = require('./../../../public/img/group.jpg');
         this.props.updateGroupDetailsJoined(this.props.groupData); 
         this.props.showMessageEvent();
     }
+
     handleClickGroup =()=>{
 
         var group = this.props.groupData;
@@ -96,7 +97,7 @@ var Groupthumbnail = require('./../../../public/img/group.jpg');
         if (CheckEmpty(this.props.activeClass)) {
             classVar.push(this.props.activeClass);
         }
-
+        var unreadBadge = this.props.unreadCount > 0 ?( <div className="unreadCounter_div"><span className="unreadBadge"> {this.props.unreadCount}</span></div>):null;
         const passwordModal = this.state.showPasswordModal ? <PasswordRequestModal group={this.props.groupData} joinGroup={this.joinGroup.bind(this)} close={this.hidePasswordModal.bind(this)}></PasswordRequestModal>:null;
     
         return (
@@ -114,6 +115,7 @@ var Groupthumbnail = require('./../../../public/img/group.jpg');
                     <div className="sidebarUserListItemStatus">
                         <span >{this.props.status}</span>
                     </div>
+                    {unreadBadge}
                 
 
                 </Row>

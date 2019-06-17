@@ -15,6 +15,7 @@ export default class CCManager {
   static appId        =   'ZZZ_CC_APPID'   ;   //Enter your App ID
   static apiKey       =   'ZZZ_CC_APIKEY'  ;  //Enter your API KEY
 
+
   static LISTENER_KEY_MESSAGE = "msglistener";
   static LISTENER_KEY_USER = "userlistener";
   static LISTENER_KEY_GROUP = "grouplistener";
@@ -46,7 +47,7 @@ export default class CCManager {
   }
   
   static setUserRequestBuilder(limit){
-    CCManager.userRequest = new CometChat.UsersRequestBuilder().setLimit(limit).build();
+    CCManager.userRequest = new CometChat.UsersRequestBuilder().setLimit(limit).hideBlockedUsers(true).build();
   }
 
   static setGroupRequestBuilder(limit){

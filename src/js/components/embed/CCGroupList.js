@@ -18,6 +18,10 @@ class CCGroupList extends Component {
         }       
     }
 
+    // componentWillMount(){
+    //    this.props.updateGroupUnReadMessage();
+    // }
+    
 
 
     handleClickUser = (group) => {
@@ -25,6 +29,7 @@ class CCGroupList extends Component {
         // if(group.hasJoined == false){
         //     actionCreator.joinGroup(group);
         // }
+        this.props.unsetUnReadMessage(group.guid);
         this.props.updateActiveMessage(group.guid);
         
         this.setState({ _activeGroupUID: group.guid });
@@ -61,7 +66,7 @@ class CCGroupList extends Component {
                 guid = {el.guid}
                 group_name = {el.name}
                 groupData = {el}
-                
+                unreadCount = {el.hasOwnProperty("unreadCount")? el.unreadCount : 0 }
                 avt={utils.CheckEmpty(el.icon) ? el.icon : false} 
                 showMessageEvent={this.handleClickUser.bind(this, el)}>
                     
@@ -83,6 +88,8 @@ const mapDispachToProps = dispatch => {
     return {
         updateActiveMessage: (key, type = "group") => dispatch(actionCreator.setActiveMessages(key, type)),
         fetchGroup: (limit) => dispatch(actionCreator.getGroups(limit)),
+        
+        unsetUnReadMessage:()=> (guid)=>dispatch(actionCreator.unsetUnReadGroupMessage(guid))
 
     };
 };

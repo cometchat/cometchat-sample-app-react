@@ -7,6 +7,13 @@ var Userthumbnail = require('./../../../public/img/user.png');
 
 export default class CCUser extends Component {
 
+    constructor(props){
+        super(props);
+       
+    }
+
+    
+
     render() {
 
         let classVar = ['userItem'];
@@ -14,6 +21,8 @@ export default class CCUser extends Component {
         if (CheckEmpty(this.props.activeClass)) {
             classVar.push(this.props.activeClass);
         }
+
+        var unreadBadge = this.props.unreadCount > 0 ?( <div className="unreadCounter_div"><span className="unreadBadge"> {this.props.unreadCount}</span></div>):null;
 
         return (
             <div key={this.props.uid} onClick={this.props.showMessageEvent} >
@@ -26,8 +35,10 @@ export default class CCUser extends Component {
                         <span >{this.props.children}</span>
                     </div>
                     <div className="sidebarUserListItemStatus" data={this.props.status}>
-                        <span >{this.props.status}</span>
+                        <span>{this.props.status}</span>
                     </div>
+
+                    {unreadBadge} 
 
 
                 </Row>

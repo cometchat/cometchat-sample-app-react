@@ -8,6 +8,8 @@ import { connect } from 'react-redux';
 import * as action from "./../../store/actions/cc_action";
 
 
+
+
  class CCBlockedUserList extends Component{
     constructor(props){
         super(props);
@@ -24,8 +26,16 @@ import * as action from "./../../store/actions/cc_action";
          this.fetchBlockedUserList()
     }
 
+    showShimmer(){
+        console.log("showshimmer");
+    }
+
+    hideShimmer(){
+        console.log("hideshimmer");
+    }
+
     fetchBlockedUserList(){
-               
+        this.showShimmer();       
         this.blockedUsersRequest.fetchNext().then(
             userList => {        
                 console.log("Blocked user list received:", userList);        
@@ -33,6 +43,7 @@ import * as action from "./../../store/actions/cc_action";
                     var newState = {...this.state}
                     newState.userlist = userList;
                     this.setState(newState);
+                    this.hideShimmer();
                 }
             },
             error => {

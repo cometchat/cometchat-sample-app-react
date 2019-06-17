@@ -283,7 +283,7 @@ function OutgoingMessage(props) {
                 messageStatus = (<span mesasgeStatus="delivered" className="time_date color-light-tint-font" dangerouslySetInnerHTML={{__html:icon_msg_delivered}}></span>);
             }else{
                 if(props.msgData.sentAt != undefined){
-                    messageStatus = (<span mesasgeStatus="delivered" className="time_date color-light-tint-font" dangerouslySetInnerHTML={{__html:icon_msg_delivered}}></span>);
+                    messageStatus = (<span mesasgeStatus="sent" className="time_date color-light-tint-font" dangerouslySetInnerHTML={{__html:icon_msg_delivered}}></span>);
                 }
             }
         }

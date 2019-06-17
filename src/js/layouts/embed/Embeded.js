@@ -5,7 +5,7 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import CCLeftSidebar from '../../components/embed/CCLeftSidebar';
 import CCMessageContainer from '../../components/message/CCMessageContainer';
 import * as actionCreator from './../../store/actions/cc_action';
-import SplashLoader from "../../components/SplashLoader";
+import SplashLoader from "../../components/splash/SplashLoader";
 
 import CCCallController from "./../../components/CCCallController";
 import translate from "../../lib/localization/translate";

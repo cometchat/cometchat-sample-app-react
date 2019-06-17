@@ -76,7 +76,8 @@ class CCMessageHeader extends Component {
 
     render() {
 
-        const showMore = this.props.profile.type == 'user'? <span className="ccmessageHeaderIcon " dangerouslySetInnerHTML={{__html:icon_more}}/>:null;
+        const showMore = this.props.profile.type == 'user'? ( <OverlayTrigger ref={this.overlayRef} trigger="click" rootClose placement="bottom" overlay={popoverClickRootClose(this.handleblockUser.bind(this,this.props.profile.id))} >
+        <span className="ccmessageHeaderIcon " dangerouslySetInnerHTML={{__html:icon_more}}/></OverlayTrigger>):null;
         var profileData = {};
         var showProfile = null;
 
@@ -133,9 +134,7 @@ class CCMessageHeader extends Component {
                         <span className="ccmessageHeaderIcon " dangerouslySetInnerHTML={{__html:icon_video}}
                          onClick={this.initiateCall.bind(this,'video',profileData.name,profileData.avatar)}/>
 
-                         <OverlayTrigger ref={this.overlayRef} trigger="click" rootClose placement="bottom" overlay={popoverClickRootClose(this.handleblockUser.bind(this,this.props.profile.id))} >
                          {showMore}
-                         </OverlayTrigger>
                         
                     </div>
                 </Col>                
@@ -145,7 +144,8 @@ class CCMessageHeader extends Component {
 }
 
 
-const popoverClickRootClose = (event)=> {
+const popoverClickRootClose = (event )=> {
+
     return (
        <Popover id="popover-trigger-click-root-close"  onClick={event} >
            <div>

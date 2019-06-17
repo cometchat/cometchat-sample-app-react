@@ -3,6 +3,7 @@
 const lang = {
     'username':'Username',
     'login':'Login',
+    'login_processing':"Processing",
     'login_message':'Haven\'t created a user yet? Select one of our default users for testing',
     'login_placeholder':'Enter UserId',
     'groups': "Groups",
