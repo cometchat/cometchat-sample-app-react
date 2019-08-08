@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 import * as util from './../../lib/uiComponentLib';
 import * as utils from './../../lib/uiComponentLib';
+
+import * as actionCreator from './../../store/actions/cc_action';
 
 var Userthumbnail = require('./../../../public/img/user.png');
 var Groupthumbnail = require('./../../../public/img/group.jpg');
@@ -9,10 +12,12 @@ var Groupthumbnail = require('./../../../public/img/group.jpg');
 import { CometChat} from "@cometchat-pro/chat";
 
 import ImageViewerModal from './../modal/ImageViewerModal';
+import EditMessageModal from './../modal/EditMessageModal';
 
 import icon_msg_file from './../../../public/img/icon_msg_file.svg';
 import icon_msg_delivered from './../../../public/img/icon_delivered.svg';
 import icon_read from './../../../public/img/icon_read.svg';
+
 
 
 class CCMessage extends Component {
@@ -25,6 +30,8 @@ class CCMessage extends Component {
             showModal : false,
             imageUrl:""
         }
+
+        this.overlayMessageOptionRef = React.createRef();
     }
 
 
@@ -35,25 +42,79 @@ class CCMessage extends Component {
 
         this.setState({
             showModal: true,
-            imageUrl:image
+            imageUrl:image,
+            showModalEdit:false,
         });
           
                 
-      }
+    }
+
+    openEditModalHandler = () => {
+
+        
+
+        this.setState({
+            showModal: false,
+            imageUrl:"",
+            showModalEdit:true,
+        });
+          
+                
+    }
+
+
+
     
-      closeModalHandler = () => {
+    closeModalHandler = () => {
           this.setState({
             showModal: false,
+            showModalEdit:false,
             image:""
             
           });
-      }
+    }
+
+    deleteMessage(id){
+          console.log("message deleted clicked: " + id);
+
+          this.props.deleteMessageHandle(id);
+          this.overlayMessageOptionRef.current.hide();
+    }
+
+
+    editMessage (data){
+        
+        console.log("message edited clicked : " , data );
+
+        var event = new CustomEvent("editMessage", {
+                detail:{
+                    message: data
+                }            
+            }
+        );
+        
+        document.dispatchEvent(event); 
+        this.overlayMessageOptionRef.current.hide();
+
+       
+    }
 
      
 
     
 
     render() {
+
+        if(this.props.msgData.hasOwnProperty('deletedAt')){
+            return null;
+        }
+
+        const clickEvents = {
+            edit:()=>this.editMessage.bind(this,this.props.msgData),
+            delete:(id)=>this.deleteMessage.bind(this,id)
+
+        };
+
         console.log("message : " + JSON.stringify(this.props.msgData));
         var msg = {
             msgId : this.props.msgData.id,
@@ -70,6 +131,8 @@ class CCMessage extends Component {
 
         const imageViewerModal  = this.state.showModal ? (<ImageViewerModal image_src={this.state.imageUrl} handleClose={this.closeModalHandler.bind(this)}/>) : null;
 
+        const editMessageModal = this.state.showModalEdit ? (<EditMessageModal message={this.props.msgData} handleClose = {this.closeModalHandler.bind(this)} />):null;
+
         switch(this.props.msgData.category){
             case CometChat.CATEGORY_CALL: 
                 return (
@@ -85,22 +148,30 @@ class CCMessage extends Component {
             
                 //to handle all messages
                 return (
+                
+                    
                     <div key={msg.msgId}>
-                        <MessageType msg={msg} msgData={this.props.msgData} openImageViewer={(image)=>this.openModalHandler.bind(this,image)}/>
+                        <MessageType overlay={this.overlayMessageOptionRef} msg={msg} event={clickEvents} msgData={this.props.msgData} openImageViewer={(image)=>this.openModalHandler.bind(this,image)}/>
                         {imageViewerModal}
-                    </div>
+                        {editMessageModal}
+                    </div> 
+                
+                
+                   
                 );        
             break;
             
             case CometChat.CATEGORY_ACTION :
                     console.log("inside category action :",  this.props.msgData);
+
+                    return null;
                     //to handle group action
-                return (
-                    <div key={msg.msgId} className="messageActionsContainer">
-                        <MessageAction msg={this.props.msgData} openImageViewer={(image)=>this.openModalHandler.bind(this,image)}/>
+                // return (
+                //     <div key={msg.msgId} className="messageActionsContainer">
+                //         <MessageAction msg={this.props.msgData} openImageViewer={(image)=>this.openModalHandler.bind(this,image)}/>
                         
-                    </div>
-                );      
+                //     </div>
+                // );      
             break;
 
         }
@@ -275,7 +346,7 @@ function OutgoingMessage(props) {
     // }
     
   
-    if(props.msgData.receiverType != "group"){
+    // if(props.msgData.receiverType != "group"){
         if(props.msgData.readAt != undefined){
             messageStatus = (<span mesasgeStatus="read" className="time_date color-light-tint-font" dangerouslySetInnerHTML={{__html:icon_read}}></span>);
         }else{
@@ -287,7 +358,7 @@ function OutgoingMessage(props) {
                 }
             }
         }
-    }
+    // }
 
     
 
@@ -370,17 +441,27 @@ function OutgoingMessage(props) {
         break;
 
         case CometChat.MESSAGE_TYPE.TEXT : {
+            var eventData = {
+                msgId: props.msg.msgId,
+                event: props.event,
+            };
 
+            
            
             return (
                 <div className="outgoing_msg">
                     <div className="sent_msg">
+                    
                         <div className="sent_withd_msg">
-                            <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
-                            <p class="color-background border-radius-no-bottom-right color-font-white">{props.msg.data.text}
-                            </p>
-                            {messageStatus}
+                         
+                                <span className="time_date color-light-tint-font">{util.convertStringToDate(props.msg.sendAt)}</span>
+                                <OverlayTrigger ref={props.overlay} trigger={['click', 'scroll','focus']}  rootCloseEvent="focus" rootClose placement="right" overlay={popoverClickRootClose(eventData)} >
+                                    <p class="color-background border-radius-no-bottom-right color-font-white">{props.msg.data.text}</p>
+                                </OverlayTrigger>
+                                {messageStatus}
+                            
                         </div>
+                  
                     </div>
                 </div>
             );
@@ -396,6 +477,25 @@ function OutgoingMessage(props) {
  
 }
 
+
+const popoverClickRootClose = (eventData)=> {
+    console.log("msgid : " , eventData.msgId);
+    return (
+       <Popover id="popover-trigger-click-root-close" >
+           <div>
+   
+               <span className="messageHeaderMenuItem" onClick={eventData.event.edit()} >
+                    Edit
+               </span> 
+   
+               <span className="messageHeaderMenuItem" onClick={eventData.event.delete(eventData.msgId)}>
+                   Delete
+               </span> 
+           </div>
+       </Popover>
+    ) ;  
+   };
+
 const mapStateToProps = (store) => {
     return {
         loggedUid: store.users.loggedInUser.uid,
@@ -406,6 +506,8 @@ const mapStateToProps = (store) => {
 
 const mapDispachToProps = dispatch => {
     return {
+        deleteMessageHandle : (messageId) => dispatch(actionCreator.handleDeleteMessage(messageId)),
+        
     };
 };
 

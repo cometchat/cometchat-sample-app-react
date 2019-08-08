@@ -75,7 +75,8 @@ typings/
 #Build output 
 test/cc-ui.js
 
-.DS_Store
+
+*.DS_Store
 
 src/.DS_Store
 

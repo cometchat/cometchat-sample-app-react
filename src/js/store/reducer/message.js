@@ -20,11 +20,50 @@ const reducers = (state = intialState, action)=> {
         
         case 'getNewMessage': 
             
-            break;
+        break;
 
-        case 'deleteMessages': 
-                   
-            
+        case 'editMessage':
+
+            console.log("Edit Message : " + action.msgid);
+
+            let msgUserEditIndex =  newState.messages.findIndex(userMessage =>userMessage.muid === action.uid);
+
+            if(msgUserEditIndex != 1){
+
+                var newEditState = Object.assign({},state.messages[msgUserEditIndex]);
+
+                const msgEditIndex = newEditState.message.findIndex(message=> message.id === action.msgid);
+                
+                newEditState.message[msgEditIndex] = action.msgdata;
+
+                const editMessageState = update(state,{messages:{msgUserEditIndex:{$set:newEditState}}});
+
+                return editMessageState;
+
+
+            }
+
+
+        break;
+
+        case 'deleteMessage': 
+              console.log("message to delete : " + action.msgid);     
+
+              let msguserDelIndex =  newState.messages.findIndex(userMessage =>userMessage.muid === action.uid);
+
+              if(msguserDelIndex != -1 ){
+
+                var newDelState = Object.assign({},state.messages[msguserDelIndex]);
+
+                const msgDelIndex = newDelState.message.findIndex(message=>message.id=== action.msgid);
+
+                newDelState.message.splice(msgDelIndex,1);
+
+                const DelMessageState = update(state,{messages:{msguserDelIndex:{$set:[newDelState]}}});
+                console.log("Delete Message : " +  DelMessageState);
+                return DelMessageState;
+
+              }
         break;
 
         case 'updateMessageDelivered':

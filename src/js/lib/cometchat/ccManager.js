@@ -12,8 +12,8 @@ export default class CCManager {
 
 
 
-  static appId        =   'ZZZ_CC_APPID'   ;   //Enter your App ID
-  static apiKey       =   'ZZZ_CC_APIKEY'  ;  //Enter your API KEY
+  static appId        =   '3808e6ab1cd3e9'   ;   //Enter your App ID
+  static apiKey       =   '6984d3bc040e7143026bdb4504e22490072f16db'  ;  //Enter your API KEY
 
 
   static LISTENER_KEY_MESSAGE = "msglistener";
@@ -78,6 +78,7 @@ export default class CCManager {
     }
     
   }
+  
 
   static addMessageListener(dispatch) {
     console.log("ccmangr addMessageListener: ");
@@ -113,7 +114,19 @@ export default class CCManager {
         onTypingEnded: (typingIndicator) => {
           console.log("Typing ended :", typingIndicator);
           this.handleEndTyping(typingIndicator,dispatch);
+        },
+
+        onMessageDeleted: (message) => {
+                   
+          this.handleDeleteMessage(message,dispatch);
+        },
+
+        onMessageEdited: message => {
+          this.handleEditedMessage(message,dispatch);
+                  
         }
+
+
       })      
     );
   }
@@ -138,6 +151,15 @@ export default class CCManager {
     } catch (err) {
       console.log("User event error ", { err });
     }
+  }
+  static handleDeleteMessage=(message,dispatch)=>{
+    dispatch(actionCreator.deleteMessageReceived(message));
+  }
+
+  static handleEditedMessage = (message, dispatch) => {
+    console.log("Edited Message", message);    
+    dispatch(actionCreator.editMessageReceived(message));
+
   }
 
   static handleOnUserOnline = (user,dispatch)=>{

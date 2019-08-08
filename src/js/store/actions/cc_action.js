@@ -296,8 +296,7 @@ export const handleMessageDelivered=(message,dispatch)=>{
 }
 
 export const updateMessageDelivered = (user,msgid,timestamp,tag)=>{
-  console.log("kshitiz",msgid );
-  console.log("kshitiz",user );
+
   return {
     type: "updateMessageDelivered",
     msgid: msgid,
@@ -823,3 +822,84 @@ export const removeUser = (uid) =>{
     tag:"deleteuser"
   }
 };
+
+
+export const handleDeleteMessage = (messageId,dispatch) => {
+
+  console.log("Message deleted", messageId);
+
+  return (dispatch) =>{
+    CometChat.deleteMessage(messageId).then(
+        message => {
+          console.log("Message deleted", message);
+          dispatch(deleteMessage(message));
+        },
+        error => {
+          console.log("Message delete failed with error:", error);
+        }
+    );
+  }
+}
+
+export const deleteMessage = (message) =>{
+  return {
+    type:'deleteMessage',
+    msgid:message.id,
+    uid : message.receiver,
+    tag:"deletemessage"
+  }
+}
+
+export const deleteMessageReceived = (message) =>{
+  return {
+    type:'deleteMessage',
+    msgid:message.id,
+    uid : message.sender.uid,
+    tag:"deletemessage"
+  }
+}
+
+
+export const handleEditMessage = (receiverID,messageText,messageId) => {
+
+  return (dispatch) =>{
+
+    let messageType = CometChat.MESSAGE_TYPE.TEXT;
+    let receiverType = CometChat.RECEIVER_TYPE.USER
+    
+    let textMessage = new CometChat.TextMessage(receiverID, messageText, messageType, receiverType);
+    
+    textMessage.setId(messageId);
+
+    CometChat.editMessage(textMessage).then(
+        message => {
+            console.log("Message Edited", message);
+            dispatch(editMessage(message));
+        },
+        error => {
+            console.log("Message editing failed with error:", error);
+        }
+    );
+
+  }
+}
+
+export const editMessage = (message) =>{
+  return {
+    type:'editMessage',
+    msgid:message.id,
+    uid : message.receiver,
+    msgdata:message,
+    tag:"editMessage"
+  }
+}
+
+export const editMessageReceived = (message) =>{
+  return {
+    type:'editMessage',
+    msgid:message.id,
+    uid : message.sender.uid,
+    msgdata:message,
+    tag:"editMessage"
+  }
+}

@@ -16,6 +16,7 @@ import icon_attach_cam from "./../../../public/img/icon_attach_cam.svg";
 import icon_attach_video from "./../../../public/img/icon_attach_video.svg";
 import icon_attach_file from "./../../../public/img/icon_attach_file.svg";
 
+
 class ccMessageFooter extends Component {
   constructor(props) {
     super(props);
@@ -24,9 +25,39 @@ class ccMessageFooter extends Component {
 
     this.state = { 
       showAttach: false, 
-      isShowingCameraModal:false
+      isShowingCameraModal:false,
+      editMode : false,
+      editMessage:"",
+      editMessageDetails:null
     };
+    
+    this.subscribe();
+    
   }
+
+  subscribe(){
+
+    document.addEventListener("editMessage", (e) => {
+        var message  = e.detail.message;
+        console.log('custom message triggered  : ' , e.detail.message);
+
+        this.setState({
+          editMode:true,
+          editMessage:message.data.text,
+          editMessageDetails:message
+        });
+
+   
+
+       
+    });
+  
+  }
+  
+
+  
+  //Assign the event handler to an event:
+  
 
   componentWillUpdate(){
     this.ccMessageEditorBox.textContent = "";
@@ -81,6 +112,8 @@ class ccMessageFooter extends Component {
 
   handleMessage(e) {
     this.sendTextMessage();
+
+    
   }
 
   async sendTextMessage() {
@@ -88,11 +121,27 @@ class ccMessageFooter extends Component {
     console.log("inside message handler : " + content + "\n Message content : " + content.length );
     if (content.length > 0) {
       try {
-        await this.props.sendMessage(
-          content,
-          this.props.activeUser,
-          this.props.activeMessageType
-        );
+        if(this.state.editMode){
+         await this.props.sendEditTextMessage(
+           content,
+           this.state.editMessageDetails.id,
+           this.state.editMessageDetails.receiver
+         );
+          this.setState({
+            editMode:false,
+            editMessage:"",
+            editMessageDetails:null
+          });
+          
+        }else{
+          await this.props.sendMessage(
+            content,
+            this.props.activeUser,
+            this.props.activeMessageType
+          );
+        
+        }
+       
         this.ccMessageEditorBox.textContent = "";
       } catch (error) {
         console.log(error);
@@ -378,7 +427,7 @@ class ccMessageFooter extends Component {
                 this.ccMessageEditorBox = div;
               }}
               onKeyUp={this.handleEnterPressed.bind(this)}
-            />
+            >{this.state.editMessage}</div>
           </Col>
           <Col lg={2} className="cc-no-padding h-100 align-center" >
             <div className="ccMessageFooterMenu">
@@ -425,6 +474,7 @@ const mapDispachToProps = dispatch => {
   return {
     sendMessage: (content, uid, msgType) =>         dispatch(actionCreator.sendTextMessage(uid, content, msgType)),
     sendMediaMessage: (content, uid, msgType,mediaType) =>    dispatch(actionCreator.sendMediaMessage(uid, content, msgType,mediaType)),
+    sendEditTextMessage : (content,messageId,receiverID) => dispatch(actionCreator.handleEditMessage(receiverID,content,messageId)),
     
   };
 };

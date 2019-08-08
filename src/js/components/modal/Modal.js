@@ -16,10 +16,7 @@ export default class Modal extends React.Component {
     // modal components into the modal container.
     this.el = document.createElement('div');
     this.el.style.display = "block";
-    
-
-    console.log("inside the modal");
-    
+   
   }
 
   componentDidMount() {

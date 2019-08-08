@@ -20,7 +20,7 @@ import tab_icon_contact from './../../../public/img/icon_tab_contact.svg';
 import tab_icon_group from './../../../public/img/icon_tab_group.svg';
 
 
-var heightCCUserList = utils.calculateAvailableHeight(74, 63, "ccleftsidebar");
+var heightCCUserList = utils.calculateAvailableHeight(124 , 63, "ccleftsidebar");
 
 
 
@@ -45,7 +45,9 @@ class CCLeftSidebar extends Component {
         this.state = {
             activeTab: "contacts",
             showBlockedUserList : false,
-        }
+        };
+
+        this.searchbarRef = React.createRef();
     }
 
     componentWillMount(){
@@ -58,6 +60,9 @@ class CCLeftSidebar extends Component {
     }
 
     handleSelect(tabName) {
+        
+        this.searchbarRef.current.value = "";
+        this.closeSearchMode();
         this.setState({ activeTab: tabName });
     }
 
@@ -84,6 +89,38 @@ class CCLeftSidebar extends Component {
           } 
         }    
       }
+      handleTextChange = (e) =>{
+        console.log("Text updated : " , e.target.value);
+
+        var event = null;
+        if( this.state.activeTab == "groups"){
+            event = new CustomEvent("fetchGroupKey", {
+                detail:{
+                    key: e.target.value
+                }            
+            });
+        }else{
+            event = new CustomEvent("fetchUserKey", {
+                detail:{
+                    key: e.target.value
+                }            
+            });
+        }
+              
+    
+        document.dispatchEvent(event); 
+
+      }  
+
+      closeSearchMode(){
+          var event = new CustomEvent("fetchUserKey",{ 
+              detail:{
+                  key:""
+              }
+          });
+
+          document.dispatchEvent(event);
+      }
 
 
     render() {
@@ -95,7 +132,9 @@ class CCLeftSidebar extends Component {
                 <CCLeftSidebarHeader handlblockedUserEvent={this.handleBlockedUserVisibility.bind(this)} activeTab={this.state.activeTab}  tabTitle={this.state.activeTab}></CCLeftSidebarHeader>
 
                 
-                
+                <Row> 
+                    <input ref={this.searchbarRef} type="Text" style={searchBarStyle} placeholder={`Search ${this.state.activeTab}`} onKeyUp={this.handleTextChange.bind(this)}/>
+                </Row> 
                 <Tab.Container id="sidebarTabContainer" defaultActiveKey={this.state.activeTab} >
                     <Row className="clearfix">
                         <div key="sidebarScrollContainer" ref={this.sidebarScrollContainer} className="cc-no-padding border border-radius-top bg-white color-border " style={ccUserStyle} >
@@ -135,8 +174,19 @@ class CCLeftSidebar extends Component {
             </div>
         );
     }
+
+  
 }
 
+var searchBarStyle = {
+        height : "40px",
+        width : "90%",
+        margin:  "0 5% 20px 5%",
+        border: "none",
+        borderRadius: "20px",
+        padding: "16px",
+        fontSize: "14px"
+    };
 
 const mapStateToProps = (store) => {
     return {
