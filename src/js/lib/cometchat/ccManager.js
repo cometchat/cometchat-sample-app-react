@@ -12,8 +12,8 @@ export default class CCManager {
 
 
 
-  static appId        =   '3808e6ab1cd3e9'   ;   //Enter your App ID
-  static apiKey       =   '6984d3bc040e7143026bdb4504e22490072f16db'  ;  //Enter your API KEY
+  static appId        =   'ZZZ_CC_APPID'   ;   //Enter your App ID
+  static apiKey       =   'ZZZ_CC_APIKEY'  ;  //Enter your API KEY
 
 
   static LISTENER_KEY_MESSAGE = "msglistener";
@@ -30,9 +30,6 @@ export default class CCManager {
   static groupRequest = null;
 
   static init(dispatcher) {
-
-    console.log("Appid : " + this.appId);
-    console.log("Appid : " + CometChat);
 
     //initialize cometchat manager
     CometChat.init(this.appId);

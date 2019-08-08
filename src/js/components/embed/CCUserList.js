@@ -53,7 +53,7 @@ class CCUserList extends Component {
   fetchUserWithSearchKey(key){
      var current = this;
 
-    let usersRequest = new CometChat.UsersRequestBuilder().setLimit(100).setSearchKeyword(key).build();
+    let usersRequest = new CometChat.UsersRequestBuilder().setLimit(100).setSearchKeyWord(key).build();
 
     usersRequest.fetchNext().then(
       userList => {

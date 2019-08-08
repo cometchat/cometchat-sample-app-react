@@ -42,7 +42,7 @@ class CCGroupList extends Component {
 
 
       fetchGroupsWithSearchKey=(key)=>{
-        let groupsRequest = new CometChat.GroupsRequestBuilder().setLimit(100).setSearchKeyword(key).build();
+        let groupsRequest = new CometChat.GroupsRequestBuilder().setLimit(100).setSearchKeyWord(key).build();
 
         groupsRequest.fetchNext().then(
             groupList => {
