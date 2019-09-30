@@ -8,17 +8,13 @@ const initialState = {
 
 const reducers = (state = initialState, action) => {
     const newState = { ...state };
-
-    //ToDo : dummy actions for
     switch (action.type) {
         case 'UPDATED_STAGE':
             newState.splashHandler.stage += (100/3);
-            
             if(newState.splashHandler.stage >= 100){
                 newState.splashHandler.syncStarted = 0;
                 newState.splashHandler.showLoader = false;
             }
-            console.log("Inside Splash handler : " + newState.splashHandler.stage);
         break;
 
         case 'SHOW_LOADER':
@@ -36,6 +32,5 @@ const reducers = (state = initialState, action) => {
     }
     return newState;
 }
-
 
 export default reducers;
