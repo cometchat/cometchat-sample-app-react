@@ -1,17 +1,11 @@
 import React,{Component} from "react";
 import { connect } from "react-redux";
-
 import Layout from "./layouts/Layout";
 import {isEmpty} from "./lib/uiComponentLib";
 import Login from "./components/login/Login";
-
 import * as action from "./store/actions/cc_action";
 
-class App extends Component {  
-   
-componentDidMount(){
-   // this.props.login("superhero10");
-}
+class App extends Component {
     render() {    
         return (
             <CheckLoginUser loggedStatus = {this.props.loggedInUser} cc_layout = {this.props.cc_layout}/> 
@@ -21,17 +15,11 @@ componentDidMount(){
 
 
 function CheckLoginUser(props){
-
-    
-
     if(isEmpty(props.loggedStatus)){
-        console.log("show login screen");
         return <ShowLoginPage/>;
     }else{
-        console.log("show Messenger");
         return <ShowMessenger cc_layout = {props.cc_layout}/>;
     }
-
 }
 
 function ShowMessenger(props) {
@@ -46,7 +34,6 @@ function ShowLoginPage(props) {
 
 const mapStateToProps = state => {
     return {
-      
       loggedInUser : state.users.loggedInUser
     };
 };

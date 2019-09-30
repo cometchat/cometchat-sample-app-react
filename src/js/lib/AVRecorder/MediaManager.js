@@ -4,32 +4,20 @@ export default class MediaManager{
     static videoPlayer = null;
     static streamVideo = null;
     static recorder = null;
-
     
     static initCamera(domObject){
-
         MediaManager.videoPlayer = domObject;
-
-        console.log("object" , MediaManager.videoPlayer);
-
-
         if (this.hasGetUserMedia()) {
-            // Good to go!
             if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-           
                 navigator.mediaDevices.getUserMedia({ video: true})
-                .then((streamData)=>{
-                    //console.log(streamData);
-    
+                .then((streamData)=>{    
                     this.stream = streamData;
                     this.startPlaying();
                 });
             }
-
-        } else {
+        }else{
             alert('getUserMedia() is not supported by your browser');
         }
-     
     }
 
     static hasGetUserMedia = ()=> {
@@ -42,15 +30,12 @@ export default class MediaManager{
     }
 
     static stopPlaying(){
-
         this.videoPlayer.pause();
-
-        if (this.stream) {
+        if (this.stream){
             this.stream.getTracks().forEach(function(track) {
                track.stop();
-             });
-         }
-        
+            });
+        }
     }
 
     startRecordingVideo(){
@@ -59,28 +44,19 @@ export default class MediaManager{
     }
 
     stopRecording(){
-
-        recorder.ondataavailable = e => {    
-                   
+        recorder.ondataavailable = e => {
             let fileName = ['video_', (new Date() + '').slice(4, 28), '.webm'].join('');
-            
             return URL.createObjectURL(e.data);
-            
         };
-
         recorder.stop();
     }
 
     static captureImage=()=>{
-
         const canvas = document.createElement('canvas');
         canvas.width = MediaManager.videoPlayer.videoWidth;
         canvas.height = MediaManager.videoPlayer.videoHeight;
-        
         canvas.getContext('2d').drawImage(MediaManager.videoPlayer, 0, 0);
-        
         return canvas.toDataURL('image/png');
     }
     
 }
-
