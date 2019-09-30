@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import { Row, Col, Button, Tooltip } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { connect } from "react-redux";
 import {CometChat} from "@cometchat-pro/chat";
 import CameraModal from './../modal/CameraModal';
 import * as utils from './../../lib/uiComponentLib';
 import translate from './../../lib/localization/translate';
 import * as actionCreator from "./../../store/actions/cc_action";
-
 import icon_attach from "./../../../public/img/icon_attach.svg";
 import icon_send from "./../../../public/img/icon_send.svg";
 import icon_attach_gallery from "./../../../public/img/icon_attach_gallery.svg";
@@ -16,13 +15,11 @@ import icon_attach_cam from "./../../../public/img/icon_attach_cam.svg";
 import icon_attach_video from "./../../../public/img/icon_attach_video.svg";
 import icon_attach_file from "./../../../public/img/icon_attach_file.svg";
 
-
 class ccMessageFooter extends Component {
+
   constructor(props) {
     super(props);
-
     this.inputRef = React.createRef();
-
     this.state = { 
       showAttach: false, 
       isShowingCameraModal:false,
@@ -30,47 +27,21 @@ class ccMessageFooter extends Component {
       editMessage:"",
       editMessageDetails:null
     };
-    
     this.subscribe();
-    
   }
 
   subscribe(){
-
     document.addEventListener("editMessage", (e) => {
-        var message  = e.detail.message;
-        console.log('custom message triggered  : ' , e.detail.message);
-
-        this.setState({
-          editMode:true,
-          editMessage:message.data.text,
-          editMessageDetails:message
-        });
-
-   
-
-       
+      var message  = e.detail.message;
+      this.setState({editMode:true,editMessage:message.data.text,editMessageDetails:message}); 
     });
-  
   }
-  
-
-  
-  //Assign the event handler to an event:
-  
 
   componentWillUpdate(){
     this.ccMessageEditorBox.textContent = "";
   }
 
   handleEnterPressed=(e)=>{
-    //console.log("key pressed : " + e.key);
-    
-    if (e.key == "Enter" || e.key == "Space") {
-      console.log("key pressed : " + e.key);
-     // var content = this.ccMessageEditorBox.innerText;
-      
-    }
     let content = this.ccMessageEditorBox.textContent.trim();
     if(content.length > 0){
       this.startTyping(content);
@@ -80,68 +51,43 @@ class ccMessageFooter extends Component {
   }
 
   startTyping=(content)=>{
-    
-      if(this.props.activeMessageType == "user"){
-        
-        let receiverId =  this.props.activeUser;
-        let receiverType = CometChat.RECEIVER_TYPE.USER;
-        let metadata = {
-          text : content
-        };
-
-        let typingNotification = new CometChat.TypingIndicator(receiverId,receiverType,metadata);
-        CometChat.startTyping(typingNotification);
-      }
+    if(this.props.activeMessageType == "user"){
+      let receiverId =  this.props.activeUser;
+      let receiverType = CometChat.RECEIVER_TYPE.USER;
+      let metadata = {
+        text : content
+      };
+      let typingNotification = new CometChat.TypingIndicator(receiverId,receiverType,metadata);
+      CometChat.startTyping(typingNotification);
+    }
   }
 
   endTyping=()=>{
-    
     if(this.props.activeMessageType == "user"){
-      
       let receiverId =  this.props.activeUser;
       let receiverType = CometChat.RECEIVER_TYPE.USER;
       let metadata = {
         text : ""
       };
-    
       let typingNotification = new CometChat.TypingIndicator(receiverId,receiverType,metadata);
       CometChat.endTyping(typingNotification);
     }
-    
   }
 
   handleMessage(e) {
     this.sendTextMessage();
-
-    
   }
 
   async sendTextMessage() {
     var content = this.ccMessageEditorBox.textContent.trim();
-    console.log("inside message handler : " + content + "\n Message content : " + content.length );
     if (content.length > 0) {
       try {
         if(this.state.editMode){
-         await this.props.sendEditTextMessage(
-           content,
-           this.state.editMessageDetails.id,
-           this.state.editMessageDetails.receiver
-         );
-          this.setState({
-            editMode:false,
-            editMessage:"",
-            editMessageDetails:null
-          });
-          
+          await this.props.sendEditTextMessage(content,this.state.editMessageDetails.id,this.state.editMessageDetails.receiver);
+          this.setState({editMode:false,editMessage:"",editMessageDetails:null});
         }else{
-          await this.props.sendMessage(
-            content,
-            this.props.activeUser,
-            this.props.activeMessageType
-          );
-        
+          await this.props.sendMessage(content,this.props.activeUser,this.props.activeMessageType);
         }
-       
         this.ccMessageEditorBox.textContent = "";
       } catch (error) {
         console.log(error);
@@ -150,70 +96,44 @@ class ccMessageFooter extends Component {
   }
 
   getFileGallery = e => {
-    
     var ele = document.getElementById("ccMessageInputGallery");
-
     var files = ele.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       this.sendMediaMessage(file,CometChat.MESSAGE_TYPE.IMAGE);
-     
-      //   console.log(
-      //     "filename : " + file.name + " : " + file.type + " : " + file.size
-      //   );
     }
-
     this.toggleAttachMenu();
-
   };
 
 
   getFileVideo=e=>{
     var ele = document.getElementById("ccMessageInputVideo");
-
     var files = ele.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       this.sendMediaMessage(file,CometChat.MESSAGE_TYPE.VIDEO);
-      
-      console.log( "filename : " + JSON.stringify(file) + "\n" +file.name + " : " + file.type + " : " + file.size  );
-
     }
-
     this.toggleAttachMenu();
-
   }
 
   getFileAudio=e=>{
-    console.log("e target :", e.target);
     var ele = document.getElementById("ccMessageInputAudio");
-
     var files = ele.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      this.sendMediaMessage(file,CometChat.MESSAGE_TYPE.AUDIO);      
-      console.log( "filename : " + JSON.stringify(file) + "\n" +file.name + " : " + file.type + " : " + file.size  );
-
+      this.sendMediaMessage(file,CometChat.MESSAGE_TYPE.AUDIO);
     }
-
     this.toggleAttachMenu();
-
   }
 
   getFile = e => {
-      console.log("e target :", e.target);
-      var ele = document.getElementById("ccMessageInputFile");
-
-      var files = ele.files;
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        this.sendMediaMessage(file,CometChat.MESSAGE_TYPE.FILE);      
-        console.log( "filename : " + JSON.stringify(file) + "\n" +file.name + " : " + file.type + " : " + file.size  );
-
-      }
-
-      this.toggleAttachMenu();
-
+    var ele = document.getElementById("ccMessageInputFile");
+    var files = ele.files;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      this.sendMediaMessage(file,CometChat.MESSAGE_TYPE.FILE);
+    }
+    this.toggleAttachMenu();
   }
 
   handleMediaMessageGallery = e => {
@@ -232,10 +152,7 @@ class ccMessageFooter extends Component {
     document.getElementById("ccMessageInputFile").click();
   }
 
-
-
   handleAttachMenu = (e) =>{
-
     this.toggleAttachMenu();
   }
 
@@ -244,65 +161,42 @@ class ccMessageFooter extends Component {
       document.getElementById("attachMenuContainer").style.opacity = "0";
       document.getElementsByClassName("attachIcon")[0].setAttribute("active", "false");
       document.getElementById("attachMenuContainer").setAttribute("active", "false");
-
-      this.setState({
-          showAttach: false
-      });
+      this.setState({showAttach: false});
     }else{
       document.getElementById("attachMenuContainer").style.opacity = "1";
       document.getElementsByClassName("attachIcon")[0].setAttribute("active", "true");
       document.getElementById("attachMenuContainer").setAttribute("active", "true");
-      this.setState({
-        showAttach: true
-      });
+      this.setState({showAttach: true});
     }
   }
 
   openModalHandler = (modalName) => {
-
     switch(modalName){
       case 'camera':    this.setState({isShowingCameraModal: true}); break;
     }
-    
   }
 
   closeModalHandler = () => {
-      this.setState({
-          isShowingCameraModal: false
-      });
+    this.setState({isShowingCameraModal: false});
   }
 
   recieveCaptureImage = (data) =>{
-    console.log("received data ccfooter: " + data);
-    //onrecieve data 
-
     let fileObject = utils.dataURLtoFile(data, 'a.png')
     this.closeModalHandler();
     this.toggleAttachMenu();
-
-
     this.sendMediaMessage(fileObject,CometChat.MESSAGE_TYPE.IMAGE);
   }
 
-  //send media message
   async sendMediaMessage(content,mediaType) {
     try {
-      await this.props.sendMediaMessage(
-        content,
-        this.props.activeUser,
-        this.props.activeMessageType,
-        mediaType
-      );
+      await this.props.sendMediaMessage(content,this.props.activeUser,this.props.activeMessageType,mediaType);
     } catch (error) {
       console.log(error);
     }
   }
 
   render() {
-
     const cameraModal  = this.state.isShowingCameraModal ? (<CameraModal sendMessage = {this.recieveCaptureImage.bind(this)} handleClose={this.closeModalHandler.bind(this)}/>) : null;
-
-    
     return (
       <div>
          <Row id="attachMenuContainer" class="attachMenuContainer" active="false">
@@ -475,11 +369,7 @@ const mapDispachToProps = dispatch => {
     sendMessage: (content, uid, msgType) =>         dispatch(actionCreator.sendTextMessage(uid, content, msgType)),
     sendMediaMessage: (content, uid, msgType,mediaType) =>    dispatch(actionCreator.sendMediaMessage(uid, content, msgType,mediaType)),
     sendEditTextMessage : (content,messageId,receiverID) => dispatch(actionCreator.handleEditMessage(receiverID,content,messageId)),
-    
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispachToProps
-)(ccMessageFooter);
+export default connect(mapStateToProps,mapDispachToProps)(ccMessageFooter);

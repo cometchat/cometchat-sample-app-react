@@ -4,35 +4,18 @@ import { isEmpty } from "./../../lib/uiComponentLib";
 import { Grid, Row, Col } from 'react-bootstrap';
 import CCLeftSidebar from '../../components/embed/CCLeftSidebar';
 import CCMessageContainer from '../../components/message/CCMessageContainer';
-import * as actionCreator from './../../store/actions/cc_action';
 import SplashLoader from "../../components/splash/SplashLoader";
-
 import CCCallController from "./../../components/CCCallController";
 import translate from "../../lib/localization/translate";
-
 
 class Embeded extends Component {
 
     constructor(props) {
         super(props);
     }
-
-    componentWillMount() {
-      
-    }
-    componentDidMount() {
-        
-        
-    }
     
     render() {
-
-
-     
-        console.log("showloader : " + this.props.showLoader);
-
         if (this.props.showLoader) {
-
             return (
                 <Grid fluid={true} className="border-radius-top bg-white h-100pr">
                     <Row className="ccShowGrid bg-white border-radius-top ">
@@ -40,12 +23,8 @@ class Embeded extends Component {
                     </Row>
                 </Grid>
             );
-
         } else {
-
-            console.log("inside embedded : ", this.props.activeMessage );
             return (
-
                 <Grid fluid={true} className="border-radius-top bg-white h-100pr">
                     <Row className="ccShowGrid">
                         <Col xs={12} lg={4} className = "border-radius-top-no-right h-100pr color-left-panel" style={{overflow:"hidden"}}>
@@ -55,21 +34,15 @@ class Embeded extends Component {
                             <ActiveUserMessageContainer dataContent={this.props.activeMessage} />
                         </Col>
                     </Row>
-
                     <CCCallController/>
                 </Grid>
             );
         }
-
-
-
-    };
-
+    }
 
 }
 
 function ActiveUserMessageContainer(props) {
-
     const contentType = props.dataContent;
     if (isEmpty(contentType)) {
         return <BlankMessageContainer />;
@@ -77,8 +50,6 @@ function ActiveUserMessageContainer(props) {
         return <ShowActiveMessage />;
     }
 }
-
-
 
 function BlankMessageContainer(props) {
     return (
@@ -94,26 +65,15 @@ function BlankMessageContainer(props) {
     );
 }
 
-
 function ShowActiveMessage(props) {
     return <CCMessageContainer />;
 }
-
 
 const mapStateToProps = (store) => {
     return {
         activeMessage: store.message.activeMessage,
         showLoader: store.app.splashHandler.showLoader,
-     
-        
     };
 };
 
-const mapDispachToProps = dispatch => {
-    return {
-            
-        
-    };
-};
-
-export default connect(mapStateToProps, mapDispachToProps)(Embeded);
+export default connect(mapStateToProps, null)(Embeded);

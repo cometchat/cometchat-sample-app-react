@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {Grid, Row, Col } from "react-bootstrap";
+import { Col } from "react-bootstrap";
 import * as actionCreator from './../../store/actions/cc_action';
 import './style.sass';
 
@@ -13,9 +13,7 @@ class SplashLoader extends Component {
         }
     }
 
-
     async fetchAllInit() {
-
         try {
             await this.props.fetchUser(50);
             await this.props.fetchGroup(50);
@@ -27,21 +25,15 @@ class SplashLoader extends Component {
 
 
     render() {
-
         return (
-       
-                <Col lg={12} className="splashContainer">
-
+            <Col lg={12} className="splashContainer">
                 <div class="loaderContainer">Loading <span class="loader__dot">.</span>
                     <span class="loader__dot">.</span>
                     <span class="loader__dot">.</span>
                     <span class="loader__dot">.</span>
                 </div>
-
-                </Col>
-       
+            </Col>
         );
-
     }
 
 }

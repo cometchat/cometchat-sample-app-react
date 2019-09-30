@@ -1,20 +1,14 @@
 /**
  * CCManager class : To manage cometchat SDK
  */
-
 import {CometChat} from "@cometchat-pro/chat";
-
 import * as actionCreator from "./../../store/actions/cc_action";
-
 
 export default class CCManager {
   static cometchat = null;
-
-
-
   static appId        =   'ZZZ_CC_APPID'   ;   //Enter your App ID
   static apiKey       =   'ZZZ_CC_APIKEY'  ;  //Enter your API KEY
-
+  static appSetting   =   new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion('eu').build();
 
   static LISTENER_KEY_MESSAGE = "msglistener";
   static LISTENER_KEY_USER = "userlistener";
@@ -30,16 +24,13 @@ export default class CCManager {
   static groupRequest = null;
 
   static init(dispatcher) {
-
-    //initialize cometchat manager
-    CometChat.init(this.appId);
+    CometChat.init(this.appId,this.appSetting);
   }
 
   static getInstance() {
     if (CCManager.cometchat == null) {
-      CCManager.cometchat = CometChat.init(this.appId);
+      CCManager.cometchat = CometChat.init(this.appId,this.appSetting);
     }
-
     return CCManager.cometchat;
   }
   
@@ -53,9 +44,9 @@ export default class CCManager {
 
   static getTextMessage(uid, text, msgType) {
     if (msgType == "user") {
-      return new CometChat.TextMessage(uid, text, CometChat.MESSAGE_TYPE.TEXT, CometChat.RECEIVER_TYPE.USER);
+      return new CometChat.TextMessage(uid, text, CometChat.RECEIVER_TYPE.USER);
     } else {
-      return new CometChat.TextMessage(uid, text, CometChat.MESSAGE_TYPE.TEXT, CometChat.RECEIVER_TYPE.GROUP);
+      return new CometChat.TextMessage(uid, text, CometChat.RECEIVER_TYPE.GROUP);
     }
   }
 
@@ -73,57 +64,36 @@ export default class CCManager {
     }else{
       return new CometChat.Call(uid, callType, CometChat.RECEIVER_TYPE.GROUP);
     }
-    
   }
-  
 
   static addMessageListener(dispatch) {
-    console.log("ccmangr addMessageListener: ");
     CometChat.addMessageListener(
       this.LISTENER_KEY_MESSAGE,
       new CometChat.MessageListener({
         onTextMessageReceived: message => {
-          console.log("Incoming Message Log", { message });
-          // Handle text message
           this.handleMessage(message, dispatch);
         },
         onMediaMessageReceived: message => {
-          console.log("Incoming Message Log", { message });
-          // handle media message
           this.handleMessage(message, dispatch);
         },
-        
-        onMessageDelivered: (messageReceipt) => {
-          console.log("MessageDeliverd", {messageReceipt});
+        onMessagesDelivered: (messageReceipt) => {
           this.handleMessageDelivered(messageReceipt, dispatch);
         },
-        
-        onMessageRead: (messageReceipt) => {
-          console.log("MessageRead", {messageReceipt});
+        onMessagesRead: (messageReceipt) => {
           this.handleMessageRead(messageReceipt, dispatch);
         },
-
         onTypingStarted: (typingIndicator) => {
-          console.log("Typing started :", typingIndicator);
           this.handleStartTyping(typingIndicator,dispatch);
         },
-        
         onTypingEnded: (typingIndicator) => {
-          console.log("Typing ended :", typingIndicator);
           this.handleEndTyping(typingIndicator,dispatch);
         },
-
         onMessageDeleted: (message) => {
-                   
           this.handleDeleteMessage(message,dispatch);
         },
-
         onMessageEdited: message => {
           this.handleEditedMessage(message,dispatch);
-                  
         }
-
-
       })      
     );
   }
@@ -134,13 +104,9 @@ export default class CCManager {
         this.LISTENER_KEY_USER,
         new CometChat.UserListener({
           onUserOnline: onlineUser => {
-            console.log("On User Online :=>", { onlineUser });
-            //User came online
             this.handleOnUserOnline(onlineUser,dispatch);
           },
           onUserOffline: offlineUser => {
-            console.log("On User Offline :=>", { offlineUser });
-            //User went offline
             this.handleOnUserOffline(offlineUser,dispatch);
           }
         })
@@ -154,9 +120,7 @@ export default class CCManager {
   }
 
   static handleEditedMessage = (message, dispatch) => {
-    console.log("Edited Message", message);    
     dispatch(actionCreator.editMessageReceived(message));
-
   }
 
   static handleOnUserOnline = (user,dispatch)=>{
@@ -185,39 +149,27 @@ export default class CCManager {
 
 
   static addCallListener(dispatch){
-      try {
-        CometChat.addCallListener(
-          this.LISTENER_KEY_CALL,
-          new CometChat.CallListener({
-            onIncomingCallReceived: call => {
-              
-              console.log("Incoming call:", JSON.stringify(call));
-              
-              this.handleIncomingCall(call,dispatch);
-            
-            },
-           onOutgoingCallAccepted : (call) => {
-            
-            console.log("Outgoing call accepted:", call);
-            // Outgoing Call Accepted
+    try{
+      CometChat.addCallListener(
+        this.LISTENER_KEY_CALL,
+        new CometChat.CallListener({
+          onIncomingCallReceived: call => {
+            this.handleIncomingCall(call,dispatch);
+          },
+          onOutgoingCallAccepted : (call) => {
             this.handleOutgoinCallAccepted(call,dispatch);
-            
-           },
-           onOutgoingCallRejected : (call)=> {
-            console.log("Outgoing call rejected:", call);
-            // Outgoing Call Rejected
+          },
+          onOutgoingCallRejected : (call)=> {
             this.handleOutgoinCallRejected(call,dispatch);
-
-           },
-           onIncomingCallCancelled :(call)=> {
-            console.log("Incoming call calcelled:", call);
+          },
+          onIncomingCallCancelled :(call)=> {
             this.handleIncomingCancelled(call,dispatch);
-           }
-          })
-         );
-      } catch (error) {
-        console.log("Call listener error ", { error });
-      }
+          }
+        })
+      );
+    }catch(error){
+      console.log("Call listener error ", { error });
+    }
   }
 
   static addGroupEventListener(dispatch) {
@@ -242,12 +194,7 @@ export default class CCManager {
             // Handle Event : kickedUser kicked from group by kickedBy
           },
           onUserUnbanned: (unbannedUser, unbannedBy, unbannedFrom) => {
-            console.log(
-              "user unbanned",
-              unbannedUser,
-              unbannedBy,
-              unbannedFrom
-            );
+            console.log("user unbanned",unbannedUser,unbannedBy,unbannedFrom);
             // Handle event : unbannedUser unbanned from group by unbannedBy
           }
         })
@@ -257,13 +204,7 @@ export default class CCManager {
     }
   }
 
-
-
-
-  
-
   static handleMessage(message, dispatch) {
-    //console.log("ccmangr msg: " + JSON.stringify(message));
     actionCreator.handleMessage(message, dispatch);
   }
 
@@ -283,23 +224,13 @@ export default class CCManager {
     actionCreator.handleEndTyping(typingIndicator,dispatch);
   }
 
-  static handleActionMessage(action, dispatch) {}
-
   static messageRequestBuilder(uType,uid, limit) {
-
-    
-    var messagesRequest  = "";  
-
+    var messagesRequest  = "";
     if(uType == "user"){
       messagesRequest = new CometChat.MessagesRequestBuilder().setUID(uid).setLimit(limit).build();
-      
-      
     }else{
       messagesRequest = new CometChat.MessagesRequestBuilder().setGUID(uid).setLimit(limit).build();
     }
-    
-    console.log("mesagerequestbuilder : " + {messagesRequest});
-
     return messagesRequest;
   }
 
@@ -308,7 +239,6 @@ export default class CCManager {
     CometChat.removeUserListener(this.LISTENER_KEY_USER);
     CometChat.removeGroupListener(this.LISTENER_KEY_GROUP);
     CometChat.removeCallListener(this.LISTENER_KEY_CALL);
-    
   }
 
   static getGroupMembersRequestBuilder(GUID,limit){

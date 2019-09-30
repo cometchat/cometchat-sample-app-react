@@ -2,18 +2,16 @@ import React, { Component } from "react";
 import { Row, Col, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import { connect } from 'react-redux';
 import * as actionCreator from './../../store/actions/cc_action';
-
 import translate from './../../lib/localization/translate';
-
 var captainAmerica = require("./../../../public/img/captainamerica.png");
 var ironMan = require("./../../../public/img/ironman.png");
 var spiderman = require("./../../../public/img/spiderman.png");
 var wolverine = require("./../../../public/img/wolverine.png");
 import './login.scss';
- class Login extends Component {
+ 
+class Login extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       email: "",
       password: "",
@@ -34,50 +32,31 @@ import './login.scss';
 
   handleSubmit = event => {
     event.preventDefault();
-
     if(!this.state.loginloader){
       var user = this.state.email;
-      this.setState({
-        loginbtn:translate.login_processing,
-        loginLoader:true
-      });
-
+      this.setState({loginbtn:translate.login_processing,loginLoader:true});
       var dom = document.getElementById('loginButton'); 
-     dom.classList.add('animation-loader');
-     dom.removeAttribute('disabled');
-
-     document.getElementById('email').setAttribute('disabled',true);
-      
+      dom.classList.add('animation-loader');
+      dom.removeAttribute('disabled');
+      document.getElementById('email').setAttribute('disabled',true);
       this.props.setUserSession(user);
-
     }
-    
   }
 
   handleUserListItemClick = (user) =>{
-
     if(!this.state.loginLoader){
-    console.log("user : " ,  user);
-    this.setState({
-        loginbtn:translate.login_processing,
-        loginLoader:true
-    });
-    
-     var dom = document.getElementById('loginButton'); 
-     dom.classList.add('animation-loader');
-     dom.removeAttribute('disabled');
-
-     document.getElementById('email').setAttribute('disabled',true);
-     //console.log(dom.getAttribute('class'));
+      this.setState({loginbtn:translate.login_processing,loginLoader:true});
+      var dom = document.getElementById('loginButton'); 
+      dom.classList.add('animation-loader');
+      dom.removeAttribute('disabled');
+      document.getElementById('email').setAttribute('disabled',true);
       this.props.setUserSession(user);
     }
-    
   }
 
   render() {
     return (
       <Row className="logincontainer border-radius-top">
-
         <Col md={4} class="login-form-container">
           <form onSubmit={this.handleSubmit}>
             <FormGroup controlId="email" >
@@ -100,19 +79,11 @@ import './login.scss';
               disabled={!this.validateForm()}
               type="submit"             
             >
-
               {this.state.loginbtn}
-
             </Button>
           </form>
-
           <div className="loginSampleContainer" >
-
-            
-
             <label>{translate.login_message}</label>
-            
-
             <div className="loginSampleUser" onClick={this.handleUserListItemClick.bind(this,"superhero1")} >
               <img className="loginSampleAvatar" src={ironMan} width={32} />
               <div className="loginSampleUserNameContainer"> 
@@ -120,8 +91,6 @@ import './login.scss';
                 <div className="loginSampleUserId"> superhero1</div>
               </div>
             </div>
-
-
             <div className="loginSampleUser" onClick={this.handleUserListItemClick.bind(this,"superhero2")}>
               <img className="loginSampleAvatar" src={captainAmerica} width={32} />
               <div className="loginSampleUserNameContainer"> 
@@ -129,8 +98,6 @@ import './login.scss';
                 <div className="loginSampleUserId"> superhero2</div>
               </div>
             </div>
-
-
             <div className="loginSampleUser" onClick={this.handleUserListItemClick.bind(this,"superhero3")} >
               <img className="loginSampleAvatar" src={spiderman} width={32} />
               <div className="loginSampleUserNameContainer"> 
@@ -138,8 +105,6 @@ import './login.scss';
                 <div className="loginSampleUserId"> superhero3</div>
               </div>
             </div>
-
-
             <div className="loginSampleUser"onClick={this.handleUserListItemClick.bind(this,"superhero4")} >
               <img className="loginSampleAvatar" src={wolverine} width={32} />
               <div className="loginSampleUserNameContainer"> 
@@ -147,13 +112,8 @@ import './login.scss';
                 <div className="loginSampleUserId"> superhero4</div>
               </div>
             </div>
-
-
-            
           </div>
         </Col>
-
-
       </Row>
     );
   }
@@ -163,7 +123,6 @@ import './login.scss';
 
 const mapStateToProps = state => {
   return {
-    
     loggedInUser : state.users.loggedInUser
   };
 };
@@ -174,7 +133,4 @@ return {
   };
 };
 
-export default connect(
-mapStateToProps,
-mapDispachToProps
-)(Login);
+export default connect(mapStateToProps,mapDispachToProps)(Login);
