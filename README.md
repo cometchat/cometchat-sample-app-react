@@ -11,6 +11,7 @@
 
 Javascript Reactjs Demo app (built using **CometChat Pro**) is a fully functional messaging app capable of **one-on-one** (private) and **group** messaging. The app enables users to send **text** and **multimedia messages like audio, video, images, documents.**
 
+***Note: Please create a v1 app. We are adding support for v2 apps shortly.***
 
 
   
