@@ -1,6 +1,3 @@
-
-
-
 <div style="width:100%">
 	<div style="width:50%; display:inline-block">
 		<p align="center">
@@ -8,43 +5,37 @@
 		</p>	
 	</div>	
 </div>
-
-Javascript Reactjs Demo app (built using **CometChat Pro**) is a fully functional messaging app capable of **one-on-one** (private) and **group** messaging. The app enables users to send **text** and **multimedia messages like audio, video, images, documents.**
-
-***Note: Please create a v1 app (in the CometChat Dashboard). We are adding support for v2 apps shortly.***
-
-
-  
+<p>CometChat React JS Demo app (built using <strong>CometChat Pro</strong>) is a fully functional messaging app capable of <strong>one-on-one</strong> (private) and <strong>group</strong> messaging along with recent conversations. The app enables users to send <strong>text</strong> , <strong>multimedia messages like audio, video, images, documents and custom messages (eg : location).</strong></p>
 
 
 ## Table of Contents
-
-
 1. [Screenshots](#Screenshots)
-
-1. [Config Development Environment](#Config-your-Development-Environment)
-
-2. [Config Chat App](#Config-Chat-App)
-
-3. [Run the Sample](#Run-the-Demo-App)
-
-4. [Contributing](#Contributing)
+2. [Config Development Environment](#Config-your-Development-Environment)
+3. [Config Chat App](#Config-Chat-App)
+4. [RUN App](#RUN-App)
+5. [Contributing](#Contribute)
 
 
-  
 ## Screenshots
+<p style="display:block;">
+	<a target="_blank" rel="noopener noreferrer" href="https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/blob/master/readme screenshots/login.gif"><img align="center" src="readme screenshots/login.gif" style="max-width:100%;"></a>
+</p>
+<p style="display:block;">
+	<a target="_blank" rel="noopener noreferrer" href="https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/blob/master/readme screenshots/search-and-one-on-one.gif"><img align="center" src="readme screenshots/search-and-one-on-one.gif" style="max-width:100%;"></a>
+</p>
+<p style="display:block;">
+	<a target="_blank" rel="noopener noreferrer" href="https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/blob/master/readme screenshots/groups.gif"><img align="center" src="readme screenshots/groups.gif" style="max-width:100%;"></a>
+</p>
 
-<img align="center" src="https://github.com/cometchat-pro/javascript-reactjs-chat-app/blob/master/screenshots/login.png" style="width:75%;"/>
-<p align ="center"> Fig : Login page embedded in Website </p>
-<br></br>
-<img align="center" src="https://github.com/cometchat-pro/javascript-reactjs-chat-app/blob/master/screenshots/chat.png" style="width:75%;"/>
-	<p align ="center"> Fig : Chat Application embedded in Website </p>
-<br></br>
 
+## Config-your-Development-Environment
+Clone or checkout the project using git or svn using the mentioned web URL
 
-## Config Development Environment
+```bash
 
-Setup your development environment for **Reactjs** Sample. 
+git clone <URL>
+
+```
 
 If you don't have node install, Please download appropriate version from official website: [Nodejs.org](https://nodejs.org/)
 
@@ -60,15 +51,8 @@ npm -v
 
 ```
 
-
 Now you are ready to sync application dependencies.  Please follow the following steps:
 
-
-
-1. Install packages 
-
-
-  
 
 ```bash
 
@@ -76,64 +60,68 @@ npm install
 
 ```
 
-Please Check **package.json** file for the dependency list. 
+## Config-Chat-App
 
-<br></br>
-  
+<h2> v2.0+ </h2>
+<h4>
+	Checkout master or v2 branch.
+</h4>
+<h4>Get your Application Keys</h4>
+<a href="https://app.cometchat.io/" target="_blank">Signup for CometChat</a> and then:
 
-## Config Chat App
+1. Create a new app - select version as v2 and region as Europe or USA.
+<p style="clear:both; display:block;">
+	<a target="_blank" rel="noopener noreferrer" href="https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/blob/master/readme screenshots/constants.png"><img align="center" src="readme screenshots/create-v2-app.gif" style="max-width:100%;"></a>
+</p>
+2. Head over to the API Keys section and click on the Create API Key button
+3. Enter a name and select the scope as Auth Only
+4. Now note the API Key and App ID
+5. Replace  `APP_ID`, &nbsp; `API_KEY` and &nbsp; `APP_REGION` in *src/constants.js* with your APP ID, &nbsp; API KEY &nbsp;and&nbsp; APP Region respectively.<br/>
 
-If you want to put some changes into the demo app, you should build it using `webpack`. 
-demo app uses Webpack version : 4+
+Note : APP Region values to "us" or "eu".
 
-> To know more about Webpack, visit Webpack official documentation : [HERE](https://webpack.js.org/concepts/)
+<p style="clear:both; display:block;">
+	<a target="_blank" rel="noopener noreferrer" href="https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/blob/master/readme screenshots/constants.png"><img align="center" src="readme screenshots/constants.png" style="max-width:100%;"></a>
+</p>
 
-***Note: Please create a v1 app (in the CometChat Dashboard). We are adding support for v2 apps shortly.***
-  
-Please change  `appId` and `apiKey` in *src/js/lib/cometchat/ccmanager.js* to the provided credentials.
+<h2> v1.0+ </h2>
+<h4>
+	Checkout v1 branch.
+</h4>
+<h4>Get your Application Keys</h4>
 
- ![Studio Guide](https://github.com/CometChat-Pulse/javascript-reactjs-chat-app/blob/master/screenshots/code.png)   
+<a href="https://app.cometchat.io/" target="_blank">Signup for CometChat</a> and then:
 
-<br></br>
+1. Create a new app - select version as v1
 
-## Run the Demo App
+<p style="clear:both; display:block;">
+	<a target="_blank" rel="noopener noreferrer" href="https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/blob/master/readme screenshots/constants.png"><img align="center" src="readme screenshots/create-v1-app.gif" style="max-width:100%;"></a>
+</p>
+
+2. Head over to the API Keys section and click on the Create API Key button<br/>
+
+3. Enter a name and select the scope as Auth Only<br/>
+
+4. Now note the API Key and App ID<br/>
+
+5. Replace  `APP_ID`, &nbsp; `API_KEY` in *src/constants.js* with your APP ID, &nbsp;and&nbsp; API KEY respectively.<br/>
+
+<p style="clear:both; display:block;">
+	<a target="_blank" rel="noopener noreferrer" href="https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/blob/master/readme screenshots/constants.png"><img align="center" src="readme screenshots/constants.png" style="max-width:100%;"></a>
+</p>
 
 
-1. Test the demo app 
+## Run-App
 
-You can test the demo app with local server by running the following command.
+And your are done! You can now run your app by running the following command.
 
 ```bash
 
-npm run dev
+npm start
 
 ```
 
-Navigate to **localhost:8080** to check sample app.  You can update host in **package.json** file.   
-  
 
-2. Build the sample app
-
-
-
-When the modification is complete, you'll need to bundle the file using `webpack`. 
-
-  
-```bash
-
-npm run build
-
-```
-
-The bundled file "cc-ui-min.js" are created in the `test` folder.
-
-Please check `webpack.config.js` for settings.
-  
-
-
-<br></br>
-
-# Contribute 
+## Contribute 
 
 Feel free to make a suggestion by creating a pull request.
-
