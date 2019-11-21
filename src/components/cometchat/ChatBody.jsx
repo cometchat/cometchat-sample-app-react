@@ -67,8 +67,10 @@ export default class ChatBody extends Component {
             const last_message = _.last(messages);
             if (last_message.sender.uid !== this.props.subjectUID) {
               var messageId = last_message.id;
-             
-              CometChat.markAsRead(messageId, last_message.sender.uid, receiverType);
+              if(last_message.receiverType === CometChat.RECEIVER_TYPE.GROUP)
+                CometChat.markAsRead(messageId, last_message.receiverId, receiverType);
+              else 
+                CometChat.markAsRead(messageId, last_message.sender.uid, receiverType);
             }
           }
           this.setState({ msghistory: messages });
@@ -123,8 +125,9 @@ export default class ChatBody extends Component {
           ) {
             if(textMessage.sender.uid !== this.props.subjectUID)
             {
+              
               // Handle text message
-              senderID = textMessage.sender.uid;
+              senderID = textMessage.receiverId;
               messageId = textMessage.id;
               receiverType = textMessage.receiverType;
              
@@ -139,6 +142,7 @@ export default class ChatBody extends Component {
           this.scrollToBottom();
         },
         onMediaMessageReceived: mediaMessage => {
+          console.log(mediaMessage)
           let messageId;
           let receiverType;
           let senderID;
@@ -160,15 +164,16 @@ export default class ChatBody extends Component {
               this.props.handleOnRecentMessageSent(messageId);
 
           } else if (
-            mediaMessage.sender.guid !== undefined &&
-            mediaMessage.sender.guid === this.props.activeConversation.guid
+            mediaMessage.receiverType === CometChat.RECEIVER_TYPE.GROUP &&
+            mediaMessage.sender.uid !== this.props.subjectUID &&
+            mediaMessage.receiverId === this.props.activeConversation.guid
           ) {
             this.setState({
               msghistory: [...this.state.msghistory, mediaMessage]
             });
             messageId = mediaMessage.id;
             receiverType = CometChat.RECEIVER_TYPE.GROUP;
-            senderID = mediaMessage.sender.uid;
+            senderID = mediaMessage.receiverId;
             if (senderID !== this.props.subjectUID)
               CometChat.markAsRead(messageId, senderID, receiverType);
 
