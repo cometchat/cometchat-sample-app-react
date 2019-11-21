@@ -97,12 +97,16 @@ Note : APP Region values to "us" or "eu".
 <p style="clear:both; display:block;">
 	<a target="_blank" rel="noopener noreferrer" href="https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/blob/master/readme screenshots/constants.png"><img align="center" src="readme screenshots/create-v1-app.gif" style="max-width:100%;"></a>
 </p>
+<br>
 
 2. Head over to the API Keys section and click on the Create API Key button<br/>
+<br>
 
 3. Enter a name and select the scope as Auth Only<br/>
+<br>
 
 4. Now note the API Key and App ID<br/>
+<br>
 
 5. Replace  `APP_ID`, &nbsp; `API_KEY` in *src/constants.js* with your APP ID, &nbsp;and&nbsp; API KEY respectively.<br/>
 
