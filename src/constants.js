@@ -2,9 +2,9 @@
 /* 
     APP CONSTANTS
 */
-export const CC_APP_ID = "APP_ID"; //Get your APP ID from dashboard and replace
-export const CC_API_KEY = "API_KEY"; //Get your APP ID from dashboard and replace
-export const CC_API_REGION = "APP_REGION";  //Get your APP REGION from dashboard and replace
+export const CC_APP_ID = "XXXXXXXXXXXX"; //Get your APP ID from dashboard and replace
+export const CC_API_KEY = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; //Get your APP ID from dashboard and replace
+export const CC_API_REGION = "eu";  //Get your APP REGION from dashboard and replace
 
 /* 
     LISTENER CONSTANTS
