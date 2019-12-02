@@ -100,7 +100,7 @@ Note : APP Region values to "us" or "eu".
 1. Create a new app - select version as v1
 
 <p style="clear:both; display:block;">
-	<a target="_blank" rel="noopener noreferrer" href="https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/blob/master/readme screenshots/constants.png"><img align="center" src="readme screenshots/create-v1-app.gif" style="max-width:100%;"></a>
+	<a target="_blank" rel="noopener noreferrer" href="https://github.com/cometchat-pro-samples/javascript-reactjs-chat-app/blob/master/readme screenshots/create-v1-app.gif"><img align="center" src="readme screenshots/create-v1-app.gif" style="max-width:100%;"></a>
 </p>
 
 2. Head over to the API Keys section and click on the Create API Key button<br/>
