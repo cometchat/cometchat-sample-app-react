@@ -22,7 +22,8 @@ export default class Base extends Component {
        if(this.state.username === "")
        {
             CometChat.getLoggedinUser().then(user=>{
-                    this.setState({username : user.uid, authToken : user.authToken});
+                    if(user!== null)
+                        this.setState({username : user.uid, authToken : user.authToken});
                 },
                 error => {
                     

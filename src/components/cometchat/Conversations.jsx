@@ -22,7 +22,7 @@ class Conversations extends Component {
         (this.props.lastMessageId !== prevProps.lastMessageId)
     ) {
       var conversationsRequest = new CometChat.ConversationsRequestBuilder()
-        .setLimit(100)
+        .setLimit(50)
         .build();
 
         conversationsRequest.fetchNext().then(
