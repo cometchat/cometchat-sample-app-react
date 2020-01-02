@@ -139,7 +139,7 @@ class Conversations extends Component {
                   c.conversationWith.icon !== undefined ? c.conversationWith.icon : 
                   c.conversationType === CometChat.RECEIVER_TYPE.GROUP ? defaultGroupIco : defaultUserIco
                 }
-                lastMessage={c.lastMessage.category === "message" && c.lastMessage.type === "text" ? c.lastMessage.data.text 
+                lastMessage={c.lastMessage === undefined ? '...' : c.lastMessage.category === "message" && c.lastMessage.type === "text" ? c.lastMessage.data.text 
                 : c.lastMessage.category === "message" ? c.lastMessage.type
                 : c.lastMessage.category === "action" && c.lastMessage.action !== "deleted" ? c.lastMessage.message
                 : c.lastMessage.category === "action" && c.lastMessage.action === "deleted" ? 'Message deleted' : false }
