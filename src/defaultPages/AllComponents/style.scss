@@ -1,0 +1,39 @@
+@import '../../lib/CometChat/resources/mixins';
+@import '../../lib/CometChat/resources/colors';
+
+.chips {
+  margin: auto;
+  background: #AAA;
+  color: #FFF;
+  padding: 3px;
+  border-radius: 5px;
+}
+
+.chips:hover {
+  cursor: pointer;
+  background: darken($color: #AAA, $amount: 20%);
+}
+
+a,
+a:visited,
+a:active,
+a:hover {
+  color: white;
+  text-decoration: none;
+
+}
+
+.launchButton,
+.launchButton:visited,
+.launchButton:active {
+  color: rgb(67, 171, 255);
+  font-weight: 600;
+
+
+}
+
+.launchButton:hover {
+  color: darken(rgb(67, 171, 255), 20%);
+  font-weight: 600;
+
+}

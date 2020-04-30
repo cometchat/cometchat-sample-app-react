@@ -1,0 +1,39 @@
+{
+  "files": {
+    "main.css": "/static/css/main.8f9042a8.chunk.css",
+    "main.js": "/static/js/main.4398bd54.chunk.js",
+    "main.js.map": "/static/js/main.4398bd54.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.53b31ca0.js",
+    "runtime-main.js.map": "/static/js/runtime-main.53b31ca0.js.map",
+    "static/css/2.833dd627.chunk.css": "/static/css/2.833dd627.chunk.css",
+    "static/js/2.5ecfd524.chunk.js": "/static/js/2.5ecfd524.chunk.js",
+    "static/js/2.5ecfd524.chunk.js.map": "/static/js/2.5ecfd524.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.80d5e6cff6c1ad4d6dcc5641aedb0246.js": "/precache-manifest.80d5e6cff6c1ad4d6dcc5641aedb0246.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.833dd627.chunk.css.map": "/static/css/2.833dd627.chunk.css.map",
+    "static/css/main.8f9042a8.chunk.css.map": "/static/css/main.8f9042a8.chunk.css.map",
+    "static/media/avatar.png": "/static/media/avatar.bc560060.png",
+    "static/media/call-blue-icon.svg": "/static/media/call-blue-icon.368958cc.svg",
+    "static/media/call-grey-icon.svg": "/static/media/call-grey-icon.dde8dddb.svg",
+    "static/media/chat-blue-icon.svg": "/static/media/chat-blue-icon.f2b6b911.svg",
+    "static/media/chat-grey-icon.svg": "/static/media/chat-grey-icon.44781a7d.svg",
+    "static/media/details-pane-blue-icon.svg": "/static/media/details-pane-blue-icon.64e3a549.svg",
+    "static/media/group-chat-blue-icon.svg": "/static/media/group-chat-blue-icon.41e7f079.svg",
+    "static/media/group-chat-grey-icon.svg": "/static/media/group-chat-grey-icon.79399539.svg",
+    "static/media/more-blue-icon.svg": "/static/media/more-blue-icon.ac4e5e40.svg",
+    "static/media/more-grey-icon.svg": "/static/media/more-grey-icon.a9bb9e7f.svg",
+    "static/media/people-blue-icon.svg": "/static/media/people-blue-icon.92d29b43.svg",
+    "static/media/people-grey-icon.svg": "/static/media/people-grey-icon.5b3e3d14.svg",
+    "static/media/rounded-plus-grey-icon.svg": "/static/media/rounded-plus-grey-icon.9e7719df.svg",
+    "static/media/send-blue-icon.svg": "/static/media/send-blue-icon.70c145e8.svg",
+    "static/media/video-call-blue-icon.svg": "/static/media/video-call-blue-icon.6935c8e5.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.53b31ca0.js",
+    "static/css/2.833dd627.chunk.css",
+    "static/js/2.5ecfd524.chunk.js",
+    "static/css/main.8f9042a8.chunk.css",
+    "static/js/main.4398bd54.chunk.js"
+  ]
+}
