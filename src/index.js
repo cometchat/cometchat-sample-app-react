@@ -8,12 +8,14 @@ import { CometChat } from "@cometchat-pro/chat"
 import { COMETCHAT_CONSTANTS } from './consts';
 
 
-
 var appID = COMETCHAT_CONSTANTS.APP_ID;
 var region = COMETCHAT_CONSTANTS.REGION;
 var appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(region).build();
-CometChat.init(appID, appSetting).then(
-  () => {
+CometChat.init(appID, appSetting).then(() => {
+
+    if(CometChat.setSource) {
+      CometChat.setSource("ui-kit", "web", "reactjs");
+    }
     console.log("Initialization completed successfully");
     ReactDOM.render(<BrowserRouter>
         <App />
@@ -24,8 +26,6 @@ CometChat.init(appID, appSetting).then(
     // Check the reason for error and take appropriate action.
   }
 );
-
-
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
