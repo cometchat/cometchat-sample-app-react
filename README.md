@@ -18,13 +18,13 @@ CometChat Kitchen Sink Sample App (built using **CometChat UI Kit**) is a fully 
 
 # Running the sample app
 
-To Run to sample app you have to do the following changes by Adding **APP_ID**, **API_KEY** and  **REGION_CODE**
+To Run to sample app you have to do the following changes by Adding **APP_ID**, **AUTH_KEY** and  **REGION_CODE**
 
    You can obtain your  *APP_ID*, *API_KEY* and *REGION_CODE* from [CometChat-Pro Dashboard](https://app.cometchat.io/)
 
    - Open the project.
 
-   - Modify `APP_ID` and `API_KEY` and `REGION` with your own (update the `src/consts.js` file) .
+   - Modify `APP_ID` and `AUTH_KEY` and `REGION` with your own (update the `src/consts.js` file) .
 
    -  Select demo users or enter the **UID** at the time of login once the app is launched.
 
