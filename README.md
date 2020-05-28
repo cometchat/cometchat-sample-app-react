@@ -1,51 +1,36 @@
-CometChat Kitchen Sink Sample App (built using **CometChat UI Kit**) is a fully functional messaging app capable of **one-on-one** (private) and **group** messaging along with recent conversations. This sample app enables users to send **text** and **multimedia messages like  images, documents.**
+# CometChat Kitchen Sink Sample App
 
-## Table of Contents
+CometChat Kitchen Sink Sample App is a real-time messaging app capable of **one-on-one** (private), **group** messaging, voice & video calling.
 
-1. [Installation](#installation)
+![alt text](login.png "Login")
 
-2. [Running the sample app](#running-the-sample-app)
+![alt text](home.png "Home")
 
-3. [Learn more about UI-Kit](#learn-more-about-ui-kit)
+## Features
+* Login
+* Private and Group conversations
+* Search by users and groups
+* Text, Media and Custom messages
+* Read receipts
+* Chat history
+* Voice & Video calling
 
-4. [Troubleshooting](#troubleshooting)
+## Prerequisite
+To run this app, you must create an account with CometChat and obtain your `App ID`, `Auth Key` and `Region`.  If you don't have an account, you can create one from <a href="https://app.cometchat.io/" target="_blank">CometChat Dashboard</a>.
 
 
-# Installation
+## Usage
 
-1. Simply clone the project. After cloning the repository:
+1. Clone this repository
+2. Navigate to the root directory and replace `APP_ID`, `REGION` and `AUTH_KEY` with your CometChat `App ID`, `Region` and `Auth Key` in `src/consts.js` file
+3. Install dependencies and run the app
 
-
-# Running the sample app
-
-To Run to sample app you have to do the following changes by Adding **APP_ID**, **AUTH_KEY** and  **REGION_CODE**
-
-   You can obtain your  *APP_ID*, *AUTH_KEY* and *REGION_CODE* from [CometChat-Pro Dashboard](https://app.cometchat.io/)
-
-   - Open the project.
-
-   - Modify `APP_ID` and `AUTH_KEY` and `REGION` with your own (update the `src/consts.js` file) .
-
-   -  Select demo users or enter the **UID** at the time of login once the app is launched.
-
-# Build and run the Sample App.
-   - Go to the project folder.
-   - Install node modules using 
-   ```shell
-   npm install
-   
-   ```
-   - Run the project using 
- ```shell    
- npm start
-   ``` 
+```javascript
+    npm install
+    npm start
+```
+---
   
+# Learn more
 
-# Learn more about UI-Kit
-
-Learn more about how to integrate [UI Kit](https://github.com/cometchat-pro/react-chat-ui-kit) inside your app.
-
-
-# Troubleshooting
-
-Facing any issues while integrating or installing the UI Kit please <a href="https://forum.cometchat.com/"> visit our forum</a>.
+[React Chat UI Kit](https://github.com/cometchat-pro/react-chat-ui-kit)
