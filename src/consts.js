@@ -3,4 +3,3 @@ export const COMETCHAT_CONSTANTS = {
     REGION: 'REGION',
     AUTH_KEY: 'AUTH_KEY'
 }
-

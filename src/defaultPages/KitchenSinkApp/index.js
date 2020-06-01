@@ -40,7 +40,7 @@ class KitchenSinkApp extends React.Component {
 
     this.uid = uid;
     
-    CometChat.login(this.uid, COMETCHAT_CONSTANTS.API_KEY).then((user) => {
+    CometChat.login(this.uid, COMETCHAT_CONSTANTS.AUTH_KEY).then((user) => {
 
       window.location.href = '/';
     }, error => {
