@@ -94,7 +94,7 @@ const conversationview = (props) => {
     }
     return avatar;
   }
-  
+
   let lastMessage = "";
   if(props.conversation.lastMessage) {
     lastMessage = (
@@ -103,6 +103,7 @@ const conversationview = (props) => {
       </div>
     );
   }
+    
   return (
     <div className="cp-conversationview">
       <div className="row">
