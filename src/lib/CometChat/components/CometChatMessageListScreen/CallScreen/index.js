@@ -243,7 +243,6 @@ class CallScreen extends React.PureComponent {
 
     if(this.state.showOutgoingScreen) {
 
-      console.log(this.state.callIProgress.receiver);
       if(this.props.type === "user" && !this.state.callIProgress.receiver.getAvatar()) {
 
         const uid = this.state.callIProgress.receiver.getUid();
