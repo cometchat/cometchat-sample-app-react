@@ -1,15 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import thunk from 'redux-thunk';
+
 import './index.scss';
 import App from './App';
-import { BrowserRouter } from 'react-router-dom'
+
 import * as serviceWorker from './serviceWorker';
 import { CometChat } from "@cometchat-pro/chat"
 import { COMETCHAT_CONSTANTS } from './consts';
 
+import reducer from './store/reducer';
+
+const store = createStore(reducer, compose(
+  applyMiddleware(thunk)
+));
 
 var appID = COMETCHAT_CONSTANTS.APP_ID;
 var region = COMETCHAT_CONSTANTS.REGION;
+
 var appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(region).build();
 CometChat.init(appID, appSetting).then(() => {
 
@@ -17,9 +29,13 @@ CometChat.init(appID, appSetting).then(() => {
       CometChat.setSource("ui-kit", "web", "reactjs");
     }
     console.log("Initialization completed successfully");
-    ReactDOM.render(<BrowserRouter>
-        <App />
-      </BrowserRouter>, document.getElementById('root'));
+    ReactDOM.render(
+      <Provider store={store}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </Provider>
+    , document.getElementById('root'));
   },
   error => {
     console.log("Initialization failed with error:", error);

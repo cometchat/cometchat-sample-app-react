@@ -1,37 +1,24 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import { CometChat } from '@cometchat-pro/chat';
-
-import 'bootstrap/dist/css/bootstrap.css';
-
-import {Avatar} from '../../lib/CometChat';
+import {Avatar} from 'uikit/CometChat';
 
 import { COMETCHAT_CONSTANTS } from '../../consts';
-import "./style.scss";
 
-class KitchenSinkApp extends React.Component {
+import "./style.scss";
+import "./loader.css";
+
+import * as actions from '../../store/action';
+
+class KitchenSinkApp extends React.PureComponent {
 
   constructor(props) {
     super(props);
+
     this.myRef = React.createRef();
   }
 
-  componentDidMount() {
-
-    CometChat.getLoggedinUser().then(user => {
-
-      if (user) {
-        window.location.href = '/';
-        this.uid = user.getUid();
-      }
-
-    }).catch(error => {
-      console.log( error);
-      
-    });
-
-  }
-  
   login = (uid) => {
     
     if(!uid) {
@@ -39,60 +26,75 @@ class KitchenSinkApp extends React.Component {
     }
 
     this.uid = uid;
-    
-    CometChat.login(this.uid, COMETCHAT_CONSTANTS.AUTH_KEY).then((user) => {
-
-      window.location.href = '/';
-    }, error => {
-      console.log('CometChatLogin Failed', error);
-    });
-
+    this.props.onLogin(this.uid, COMETCHAT_CONSTANTS.AUTH_KEY);
   }
   
   render() {
 
+    let loader = null;
+    if (this.props.loading) {
+      loader = (<div className="loading">Loading...</div>);
+    }
+
+    let errorMessage = null;
+    if (this.props.error) {
+      errorMessage = (<p class="error">{this.props.error.message}</p>);
+    }
+
     return (
       <div className="light">
-        <div style={{ "paddingTop": "50px", "textAlign": "center", "display": "flex" }} >
-          <div style={{ "margin": "auto" }}>
-            <div style={{ "width": "150px", "margin": "auto" }}>
-              <img 
-                style={{ "maxWidth": "100%", "maxHeight": "100%" }}
-                src="https://www.cometchat.com/wp-content/uploads/2018/03/Logo-C-White.png" alt="" />
+        <div className="wrapper">
+          {loader}
+          {errorMessage}
+          <p className="heading">Kitchen Sink App</p>
+          <p className="login-txt">Login with one of our sample users</p>
+          <div className="sample-users">
+            <div className="sample-user" onClick={()=>this.login('superhero1')}>
+              <Avatar image='https://data-us.cometchat.io/assets/images/avatars/ironman.png'></Avatar>
+              <p>superhero1</p>
             </div>
-            <p style={{ "margin": "auto", "fontSize": "42px", "color": "#2da7ff", " fontWeight": "500", "lineHeight": "54px" }}>Kitchen Sink App</p>
-            <p style={{ "margin": "auto", "padding": "10px" }}>Login with one of our sample users</p>
-            <div style={{ "display": "flex", "width": "100%", "flexWrap": "wrap", "margin": "auto" }}>
-              <div className="userSelector" onClick={()=>this.login('superhero1')}>
-                <Avatar image='https://data-us.cometchat.io/assets/images/avatars/ironman.png'></Avatar>
-                <p style={{ "margin": "auto" }}>superhero1</p>
-              </div>
-              <div className="userSelector" onClick={()=>this.login('superhero2')}>
-                <Avatar image='https://data-us.cometchat.io/assets/images/avatars/captainamerica.png'></Avatar>
-                <p style={{ "margin": "auto" }}>superhero2</p>
-              </div>
-              <div className="userSelector" onClick={()=>this.login('superhero3')}>
-                <Avatar image='https://data-us.cometchat.io/assets/images/avatars/spiderman.png'></Avatar>
-                <p style={{ "margin": "auto" }}>superhero3</p>
-              </div>
-              <div className="userSelector" onClick={()=>this.login('superhero4')}>
-                <Avatar image='https://data-us.cometchat.io/assets/images/avatars/wolverine.png'></Avatar>
-                <p style={{ "margin": "auto" }}>superhero4</p>
-              </div>
-              <div className="userSelector" onClick={()=>this.login('superhero5')}>
-                <Avatar image='https://data-us.cometchat.io/assets/images/avatars/cyclops.png'></Avatar>
-                <p style={{ "margin": "auto" }}>superhero5</p>
-              </div>
+            <div className="sample-user" onClick={()=>this.login('superhero2')}>
+              <Avatar image='https://data-us.cometchat.io/assets/images/avatars/captainamerica.png'></Avatar>
+              <p>superhero2</p>
             </div>
-            <p style={{"margin": "auto", "padding": "10px"}}> Login continue with UID</p>
-            <input ref={this.myRef} style={{"margin": "auto", "padding": "10px"}} type="text" placeholder="Enter your UID here"/>
-            <div className="loginButton" onClick={()=>this.login()}>Login</div>
+            <div className="sample-user" onClick={()=>this.login('superhero3')}>
+              <Avatar image='https://data-us.cometchat.io/assets/images/avatars/spiderman.png'></Avatar>
+              <p>superhero3</p>
+            </div>
+            <div className="sample-user" onClick={()=>this.login('superhero4')}>
+              <Avatar image='https://data-us.cometchat.io/assets/images/avatars/wolverine.png'></Avatar>
+              <p>superhero4</p>
+            </div>
+            <div className="sample-user" onClick={()=>this.login('superhero5')}>
+              <Avatar image='https://data-us.cometchat.io/assets/images/avatars/cyclops.png'></Avatar>
+              <p>superhero5</p>
+            </div>
           </div>
+          <p className="login-txt"> Login continue with UID</p>
+          <input className="uid" ref={this.myRef} type="text" placeholder="Enter your UID here"/>
+          <div className="btn-login" onClick={()=>this.login()}>Login</div>
         </div>
       </div>
     );
 
   }
 }
-    
-export default KitchenSinkApp;
+
+const mapStateToProps = state => {
+  return {
+      loading: state.loading,
+      error: state.error,
+      isLoggedin: state.isLoggedin,
+      authRedirectPath: state.authRedirectPath
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+      onLogin: ( uid, authKey ) => dispatch( actions.auth( uid, authKey ) ),
+      onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/'))
+      
+  };
+};
+
+export default connect( mapStateToProps, mapDispatchToProps )( KitchenSinkApp );
