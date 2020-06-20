@@ -1,38 +1,99 @@
-@import '../../lib/CometChat/resources/mixins';
-@import '../../lib/CometChat/resources/colors';
-.chips {
-  margin: auto;
-  background: #AAA;
-  color: #FFF;
-  padding: 3px;
-  border-radius: 5px;
-}
 
-.chips:hover {
-  cursor: pointer;
-  background: darken($color: #AAA, $amount: 20%);
-}
+.light {
 
-a,
-a:visited,
-a:active,
-a:hover {
-  color: white;
-  text-decoration: none;
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    padding: 50px 0;
 
-}
+    p {
+      font-size: 1.4rem;
+    }
 
-.launchButton,
-.launchButton:visited,
-.launchButton:active {
-  color: rgb(67, 171, 255);
-  font-weight: 600;
+    p.title {
+      color: rgb(67, 171, 255);
+      font-size: 24px;
+    }
 
+    p.subtitle {
+      color: #AAA;
+      font-size: 16px;
+    }
 
-}
+    p.helptext {
+      color: #333;
+    }
 
-.launchButton:hover {
-  color: darken(rgb(67, 171, 255), 20%);
-  font-weight: 600;
+    .components {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-around;
+      margin: 50px 100px;
 
+      .box {
+        margin: 10px 20px;
+        padding: 20px;
+        box-shadow: 0px 0px 5px 0px #3335;
+        border-radius: 5px;
+  
+        .avatar-box {
+          img {
+            width: 36px;
+            height: 36px;
+            float: left;
+          }
+          h2 {
+            padding: 10px 0 10px 50px;
+            margin: 0;
+          }
+        }
+
+        .link-box {
+          border-top: 0.3px solid #e8e8e8;
+          padding: 10px;
+          display: flex;
+          flex-direction: row;
+          margin: 0;
+          align-items: center;
+          justify-content: space-around;
+
+          li {
+            list-style-type: none;
+          }
+
+          .link {
+            color: rgb(67, 171, 255);
+            font-weight: 600;
+            font-size: 1.4rem;
+          }
+  
+          .link :hover {
+            color: darken(rgb(67, 171, 255), 20%);
+            font-weight: 600;
+            font-size: 1.4rem;
+          }
+        }
+
+        
+      }
+    }
+
+    .btn-logout {
+      border-radius: 10px;
+      margin: auto;
+      margin-top: 10px;
+      color: white;
+      padding: 10px 20px;
+      font-size: 1.4rem;
+      background-color: #333;
+
+      &:hover {
+        cursor: pointer;
+        color: darken($color: white, $amount: 5%);
+        background: darken($color: #333, $amount: 20%);
+      }
+    }
+  }
 }

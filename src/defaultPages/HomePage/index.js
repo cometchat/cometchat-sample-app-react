@@ -1,55 +1,42 @@
 import React from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import { CometChat } from '@cometchat-pro/chat';
-
-import 'bootstrap/dist/css/bootstrap.css';
-
-import {Avatar }from '../../lib/CometChat';
+import {Avatar }from 'uikit/CometChat';
 
 import "./style.scss";
 
+import * as actions from '../../store/action';
+
 class HomePage extends React.Component {
 
-  user;
-  
   componentDidMount() {
-    CometChat.getLoggedinUser().then(user => {
-      
-      if (!user) {
-        window.location.href = '/login';
-      }
-    }, error => {
-      console.log(error);
-      window.location.href = '/login';
-    });
-
+    if(!this.props.isLoggedin) {
+      this.props.onSetAuthRedirectPath();
+    }
   }
 
   logout = () => {
     CometChat.logout().then(() => {
-      window.location.href = '/login';
+      this.props.onSetAuthRedirectPath();
     });
   }
 
   render() {
 
     return (
-      <div className="light">
-        <div style={{"display": "flex", "flexDirection": "row", "flexWrap": "wrap"}}>
-          <p style={{"width": "90%", "fontSize": "24px","margin":"auto", "color": "rgb(67, 171, 255)", "paddingTop": "50px","textAlign": "center"}}>
-            The UI Kit has three different ways to make fully customizable UI required to build a chat application.
-          </p>
-          <p style={{"width": "90%","textAlign":"center","fontSize": "16px", "margin": "auto","color": "#AAA"}}>
-            The UI Kit has been developed to help developers of different levels of experience to build a chat application in a few minutes to a couple of hours.
-          </p>          
-          <p style={{"width": "90%","textAlign":"center","fontSize": "16px", "margin": "auto", "color":"#333", "paddingTop": "50px"}}>
-            The UI Kit has three different ways to make chat Applications.
-          </p>
 
-          <div style={{"width": "90%", "margin": "50px","marginLeft": "auto", "marginRight": "auto", "maxWidth":"500px"}}>
-            <div
-              style={{"backgroundColor": "white", "width": "100%", "height": "100%", "boxShadow":"0px 0px 5px 0px #3335", "borderRadius": "10px", "padding": "5px"}}>
-              <div style={{"textAlign": "center"}}>
+
+      <div className="light">
+        <div className="wrapper">
+          <p className="title">The UI Kit has three different ways to make fully customizable UI required to build a chat application.</p>
+          <p className="subtitle">The UI Kit has been developed to help developers of different levels of experience to build a chat application in a few minutes to a couple of hours.</p>          
+          <p className="helptext">The UI Kit has three different ways to make chat Applications.</p>
+
+          <div className="components">
+            <div className="box">
+              <div className="avatar-box">
                 <Avatar 
                 image='https://data-us.cometchat.io/assets/images/avatars/cyclops.png'></Avatar>
                 <h2>UI Unified</h2>
@@ -58,67 +45,62 @@ class HomePage extends React.Component {
                   integrating it within minutes.
                 </p>
               </div>
-              <a className="launchButton" href="/embeded-app">
-                <div style={{"width": "100%", "height": "50px", "textAlign": "center", "borderTop": "0.3px solid #e8e8e8","display": "flex"}}>
-                  <p style={{"margin": "auto"}}> Launch </p>
-                </div>
-              </a>
+              <ul className="link-box" >
+                <li><Link className="link" to="/embedded-app">Launch</Link></li>
+              </ul>
             </div>
-          </div>
 
-          <div style={{"width": "90%", "margin": "50px","marginLeft": "auto", "marginRight": "auto", "maxWidth":"500px"}}>
-            <div
-              style={{"backgroundColor": "white", "width": "100%", "height": "100%", "boxShadow":"0px 0px 5px 0px #3335", "borderRadius": "10px", "padding": "5px"}}>
-              <div style={{"textAlign": "center"}}>
+            <div className="box">
+              <div className="avatar-box">
                 <Avatar 
                 image='https://data-us.cometchat.io/assets/images/avatars/cyclops.png'></Avatar>
                 <h2>UI Screens</h2>
                 <p>It open's Screen Activity where user can use predefined screen present in library. User can create their own
                   layout using screen in few minutes.</p>
-                <div style={{"display": "flex"}}>
-                  <ul style={{"display":"flex", "width":"100%", "margin": "auto", "padding": "5px"}}>
-                    <li className="chips"><a href="/conversation-screen">Conversations</a></li>
-                    <li className="chips"><a href="/group-screen">Groups</a></li>
-                    <li className="chips"><a href="/contact-screen">Contacts</a></li>
-                  </ul>
-                </div>
               </div>
+              <ul className="link-box" >
+              <li><Link className="link" to="/conversation-screen">Conversations</Link></li>
+              <li><Link className="link" to="/group-screen">Groups</Link></li>
+              <li><Link className="link" to="/contact-screen">Contacts</Link></li>
+            </ul>
             </div>
-          </div>
 
-          <div style={{"width": "90%", "margin": "50px","marginLeft": "auto", "marginRight": "auto", "maxWidth":"500px"}}>
-            <div
-              style={{"backgroundColor": "white", "width": "100%", "height": "100%", "boxShadow":"0px 0px 5px 0px #3335", "borderRadius": "10px", "padding": "5px"}}>
-              <div style={{"textAlign": "center"}}>
+            <div className="box">
+              <div className="avatar-box">
                 <Avatar 
                 image='https://data-us.cometchat.io/assets/images/avatars/cyclops.png'></Avatar>
                 <h2>UI Components</h2>
                 <p>It open's Activity directly from UI Library. It is pre-defined UI helpful for user to build chat system by
                   integrating it within minutes.</p>
-                <div style={{"display": "flex"}}>
-                  <ul style={{"display":"flex","width": "100%", "margin": "auto", "padding": "5px"}}>
-                    <li className="chips"><a href="/contact-list">Contacts</a></li>
-                    <li className="chips"><a href="/group-list">Groups</a></li>
-                    <li className="chips"><a href="/conversations-list">Conversations</a></li>
-                    <li className="chips"><a href="/components">Demo Components</a></li>
-                  </ul>
-                </div>
               </div>
+              <ul className="link-box" >
+                <li><Link className="link" to="/contact-list">Contacts</Link></li>
+                <li><Link className="link" to="/group-list">Groups</Link></li>
+                <li><Link className="link" to="/conversations-list">Conversations</Link></li>
+              </ul>
             </div>
-          </div>
-        </div>
 
-        <div style={{"width": "90%", "margin": "50px","marginLeft": "auto", "marginRight": "auto", "maxWidth": "maxContent"}}>
-          <div 
-          onClick={this.logout}
-          style={{"width": "100%" ,"height": "100%","display":"flex"}}>
-            <div style={{"backgroundColor": "#333", "color": "white", "cursor": "pointer",  "padding":"10px", "boxShadow": "0px 0px 5px 0px #3335", "borderRadius": "10px","textAlign":"center", "width":"maxContent","margin":"auto"}}>
-            Logout</div>
+          </div>
+
+          <div className="btn-logout" onClick={this.props.onLogout}>Logout</div>
         </div>
-      </div>
       </div>
     );
   }
 }
 
-export default HomePage;
+const mapStateToProps = state => {
+  return {
+    isLoggedIn: state.isLoggedin,
+    authRedirectPath: state.authRedirectPath
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onLogout: () => dispatch(actions.logout()),
+    onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/login'))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

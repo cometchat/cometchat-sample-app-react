@@ -1,12 +1,12 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import 'bootstrap/dist/css/bootstrap.css';
-import './App.css';
-
-import KitchenSinkApp from './defaultPages/KitchenSinkApp'
+import KitchenSinkApp from './defaultPages/KitchenSinkApp';
 import HomePage from './defaultPages/HomePage';
 import AllComponents from './defaultPages/AllComponents';
+
+import * as actions from './store/action';
 
 import {
   CometChatConversationList,
@@ -16,51 +16,59 @@ import {
   CometChatUserListScreen,
   CometChatConversationListScreen,
   CometChatGroupListScreen 
-} from './lib/CometChat';
+} from 'uikit/CometChat';
 
 class App extends React.Component {
+  state = {
+    isLoggedin: false
+  }
+
+  componentDidMount() {
+    this.props.getLoggedinUser();
+  }
 
   render() {
 
-    return (
-      <div  style={{height:"100vh",overflowY:"auto", overflowX:"hidden"}}>
-        <Router>    
-          <Switch>
-            <Route exact path="/">
-              <HomePage></HomePage>
-            </Route>
-            <Route path="/login">
-              <KitchenSinkApp></KitchenSinkApp>
-            </Route>
-            <Route path="/embeded-app"> 
-              <CometChatUnified></CometChatUnified>           
-            </Route>
-            <Route path="/contact-list"> 
-              <CometChatUserList></CometChatUserList> 
-            </Route>
-            <Route path="/group-list"> 
-              <CometChatGroupList></CometChatGroupList> 
-            </Route>
-            <Route path="/conversations-list"> 
-              <CometChatConversationList></CometChatConversationList> 
-            </Route>
-            <Route path="/contact-screen"> 
-              <CometChatUserListScreen></CometChatUserListScreen>
-            </Route>
-            <Route path="/conversation-screen"> 
-              <CometChatConversationListScreen></CometChatConversationListScreen>
-            </Route>
-            <Route path="/group-screen"> 
-              <CometChatGroupListScreen></CometChatGroupListScreen>
-            </Route>
-            <Route path="/components"> 
-              <AllComponents></AllComponents>
-            </Route>
+    let routes = (
+      <Switch>
+        <Route path="/login" component={KitchenSinkApp} />
+        <Redirect to="/login" />
+      </Switch>  
+    );
+
+    if (this.props.isLoggedIn) {
+      routes = (
+        <Switch>
+          <Route path="/embedded-app" component={CometChatUnified} /> 
+          <Route path="/contact-list" component={CometChatUserList} /> 
+          <Route path="/group-list" component={CometChatGroupList} /> 
+          <Route path="/conversations-list" component={CometChatConversationList} /> 
+          <Route path="/contact-screen" component={CometChatUserListScreen} /> 
+          <Route path="/conversation-screen" component={CometChatConversationListScreen} /> 
+          <Route path="/group-screen" component={CometChatGroupListScreen} /> 
+          <Route path="/components" component={AllComponents} />
+          <Route exact path="/" component={HomePage} />
+          <Redirect to="/" />
         </Switch>  
-        </Router>
-      </div>
+      );
+    }
+    
+    return (
+      <div>{routes}</div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    isLoggedIn: state.isLoggedin
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getLoggedinUser: () => dispatch( actions.authCheckState() )
+  };
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
