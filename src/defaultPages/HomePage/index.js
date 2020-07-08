@@ -2,8 +2,7 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { CometChat } from '@cometchat-pro/chat';
-import {Avatar }from 'uikit/CometChat';
+import {Avatar }from '../../react-chat-ui-kit/CometChat';
 
 import "./style.scss";
 
@@ -11,25 +10,17 @@ import * as actions from '../../store/action';
 
 class HomePage extends React.Component {
 
-  componentDidMount() {
-    if(!this.props.isLoggedin) {
-      this.props.onSetAuthRedirectPath();
-    }
-  }
-
-  logout = () => {
-    CometChat.logout().then(() => {
-      this.props.onSetAuthRedirectPath();
-    });
-  }
-
   render() {
 
+    let authRedirect = null;
+    if (!this.props.isLoggedIn) {
+      authRedirect = <Redirect to="/login" />
+    }
+
     return (
-
-
       <div className="light">
         <div className="wrapper">
+          {authRedirect}
           <p className="title">The UI Kit has three different ways to make fully customizable UI required to build a chat application.</p>
           <p className="subtitle">The UI Kit has been developed to help developers of different levels of experience to build a chat application in a few minutes to a couple of hours.</p>          
           <p className="helptext">The UI Kit has three different ways to make chat Applications.</p>
@@ -91,16 +82,16 @@ class HomePage extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    isLoggedIn: state.isLoggedin,
-    authRedirectPath: state.authRedirectPath
+    loading: state.loading,
+    error: state.error,
+    isLoggedIn: state.isLoggedIn
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onLogout: () => dispatch(actions.logout()),
-    onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/login'))
+    onLogout: () => dispatch(actions.logout())
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
+export default connect( mapStateToProps, mapDispatchToProps )( HomePage );

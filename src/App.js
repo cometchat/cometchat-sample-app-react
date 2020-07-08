@@ -1,6 +1,9 @@
 import React from 'react';
-import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { createBrowserHistory } from 'history';
+
+import PrivateRoute from './PrivateRoute';
 
 import KitchenSinkApp from './defaultPages/KitchenSinkApp';
 import HomePage from './defaultPages/HomePage';
@@ -16,7 +19,9 @@ import {
   CometChatUserListScreen,
   CometChatConversationListScreen,
   CometChatGroupListScreen 
-} from 'uikit/CometChat';
+} from './react-chat-ui-kit/CometChat';
+
+const history = createBrowserHistory();
 
 class App extends React.Component {
   state = {
@@ -28,40 +33,32 @@ class App extends React.Component {
   }
 
   render() {
-
-    let routes = (
-      <Switch>
-        <Route path="/login" component={KitchenSinkApp} />
-        <Redirect to="/login" />
-      </Switch>  
-    );
-
-    if (this.props.isLoggedIn) {
-      routes = (
-        <Switch>
-          <Route path="/embedded-app" component={CometChatUnified} /> 
-          <Route path="/contact-list" component={CometChatUserList} /> 
-          <Route path="/group-list" component={CometChatGroupList} /> 
-          <Route path="/conversations-list" component={CometChatConversationList} /> 
-          <Route path="/contact-screen" component={CometChatUserListScreen} /> 
-          <Route path="/conversation-screen" component={CometChatConversationListScreen} /> 
-          <Route path="/group-screen" component={CometChatGroupListScreen} /> 
-          <Route path="/components" component={AllComponents} />
-          <Route exact path="/" component={HomePage} />
-          <Redirect to="/" />
-        </Switch>  
-      );
-    }
     
     return (
-      <div>{routes}</div>
+      <div>
+        <Router history={history}>
+          <div>
+          <Switch>
+            <PrivateRoute path="/embedded-app" component={CometChatUnified} />
+            <PrivateRoute path="/contact-list" component={CometChatUserList} /> 
+            <PrivateRoute path="/group-list" component={CometChatGroupList} /> 
+            <PrivateRoute path="/conversations-list" component={CometChatConversationList} />
+            <PrivateRoute path="/contact-screen" component={CometChatUserListScreen} />
+            <PrivateRoute path="/conversation-screen" component={CometChatConversationListScreen} />
+            <PrivateRoute path="/group-screen" component={CometChatGroupListScreen} /> 
+            <PrivateRoute exact path="/" component={HomePage} />
+            <Route path="/login" component={KitchenSinkApp} />
+          </Switch>  
+          </div>
+        </Router>
+      </div>
     );
   }
 }
 
 const mapStateToProps = state => {
   return {
-    isLoggedIn: state.isLoggedin
+    isLoggedIn: state.isLoggedIn
   };
 };
 
@@ -71,4 +68,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default connect(mapStateToProps, mapDispatchToProps)(App);

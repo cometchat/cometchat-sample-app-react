@@ -2,9 +2,7 @@ import React from 'react';
 
 import { CometChat } from '@cometchat-pro/chat';
 
-import {Avatar} from 'uikit/CometChat';
-
-import 'bootstrap/dist/css/bootstrap.css';
+import {Avatar} from '../../react-chat-ui-kit/CometChat';
 
 import "./style.scss";
 

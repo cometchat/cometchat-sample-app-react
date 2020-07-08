@@ -12,7 +12,7 @@ export const authSuccess = (user) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
         user: user,
-        isLoggedin: true
+        isLoggedIn: true
     };
 };
 
@@ -46,9 +46,9 @@ export const auth = (uid, authKey) => {
         CometChat.login(uid, authKey).then((user) => {
 
             if(user) {
-              dispatch(authSuccess(user));
+                dispatch(authSuccess(user));
             } else {
-                dispatch(authFail(error));
+                dispatch(authFail(user));
             }
             
         }).catch(error => {

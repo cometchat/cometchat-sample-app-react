@@ -2,7 +2,7 @@ import * as actionTypes from './actionTypes';
 
 const initialState = {
     user: {},
-    isLoggedin: false,
+    isLoggedIn: false,
     error: null,
     loading: false,
     authRedirectPath: "/"
@@ -21,7 +21,7 @@ const authSuccess = (state, action) => {
         ...state,
         user: action.user,
         error: null,
-        isLoggedin: action.isLoggedin,
+        isLoggedIn: action.isLoggedIn,
         loading: false 
     };
 };
@@ -37,9 +37,8 @@ const authFail = (state, action) => {
 const authLogout = (state, action) => {
     return {
         ...state,
-        isLoggedin: false,
-        user: null,
-        authRedirectPath: action.path
+        isLoggedIn: false,
+        user: null
     };
 };
 

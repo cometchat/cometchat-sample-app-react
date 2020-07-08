@@ -1,8 +1,9 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+
 import { connect } from 'react-redux';
 
-import {Avatar} from 'uikit/CometChat';
+import {Avatar} from '../../react-chat-ui-kit/CometChat';
 
 import { COMETCHAT_CONSTANTS } from '../../consts';
 
@@ -38,12 +39,18 @@ class KitchenSinkApp extends React.PureComponent {
 
     let errorMessage = null;
     if (this.props.error) {
-      errorMessage = (<p class="error">{this.props.error.message}</p>);
+      errorMessage = (<p className="error">{this.props.error.message}</p>);
+    }
+
+    let authRedirect = null;
+    if (this.props.isLoggedIn) {
+      authRedirect = <Redirect to="/" />
     }
 
     return (
       <div className="light">
         <div className="wrapper">
+          {authRedirect}
           {loader}
           {errorMessage}
           <p className="heading">Kitchen Sink App</p>
@@ -84,16 +91,13 @@ const mapStateToProps = state => {
   return {
       loading: state.loading,
       error: state.error,
-      isLoggedin: state.isLoggedin,
-      authRedirectPath: state.authRedirectPath
+      isLoggedIn: state.isLoggedIn
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-      onLogin: ( uid, authKey ) => dispatch( actions.auth( uid, authKey ) ),
-      onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/'))
-      
+    onLogin: ( uid, authKey ) => dispatch( actions.auth( uid, authKey ) )
   };
 };
 

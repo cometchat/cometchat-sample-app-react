@@ -1,0 +1,68 @@
+const fs = require('fs-extra');
+const request = require('request');
+const extract = require('extract-zip')
+const rimraf = require("rimraf");
+
+const fileName = "react-chat-ui-kit";
+const filePath = __dirname + "/src/" + fileName;
+
+const zipName = "react-chat-ui-kit.zip";
+const source =  __dirname + "/react-chat-ui-kit-master";
+const destination = __dirname + "/src/react-chat-ui-kit";
+
+const downloadUrl = "https://github.com/cometchat-pro/react-chat-ui-kit/archive/master.zip";
+
+
+const download = (uri, filename, callback) => {
+    request.head(uri, (err, res, body) => {
+        console.log('content-type:', res.headers['content-type']);
+        console.log('content-length:', res.headers['content-length']);
+
+        request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+    });
+};
+
+const checkIfFolderExists = (path) => {
+    if (fs.existsSync(path)) {
+
+        console.log("File exists", path);
+        return true;
+    }
+    return false;
+}
+
+const deleteFileFolder = (target) => {
+
+    console.log("deleting file", target);
+    rimraf.sync(target);
+}
+
+
+
+if(checkIfFolderExists(filePath)) {
+    deleteFileFolder(filePath);
+}
+
+download(downloadUrl, zipName, (props) => {
+
+    try {
+        extract(zipName, {dir: __dirname}).then(resonse => {
+
+            fs.move(source, destination, error => {
+
+                if(error) {
+                    return console.error('move file error!', error);
+                }
+                console.log('move file success!');
+            });
+
+            const zipFile = __dirname + "/" + zipName;
+            if(checkIfFolderExists(zipFile)) {
+                deleteFileFolder(zipFile);
+            }
+        });
+
+    } catch (error) {
+        console.log("File extraction error", zipName);
+    }
+});
