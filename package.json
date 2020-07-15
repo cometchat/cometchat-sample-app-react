@@ -3,7 +3,7 @@
   "version": "1.0.5",
   "private": true,
   "dependencies": {
-    "@cometchat-pro/chat": "^2.0.11-beta1",
+    "@cometchat-pro/chat": "^2.0.12",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -18,7 +18,8 @@
     "redux-thunk": "^2.3.0",
     "rimraf": "^3.0.2",
     "extract-zip": "^2.0.1",
-    "fs-extra": "^9.0.1"
+    "fs-extra": "^9.0.1",
+    "react-popper-tooltip": "3.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

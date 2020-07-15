@@ -79,3 +79,18 @@
     }
   }
 }
+
+
+@media (min-width : 320px) and (max-width : 767px) {
+
+  .light {
+
+    .wrapper {
+
+      div.sample-users {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  }
+}

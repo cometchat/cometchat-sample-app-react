@@ -6,11 +6,11 @@ const rimraf = require("rimraf");
 const fileName = "react-chat-ui-kit";
 const filePath = __dirname + "/src/" + fileName;
 
-const zipName = "react-chat-ui-kit.zip";
-const source =  __dirname + "/react-chat-ui-kit-master";
+const zipName = "javascript-react-chat-ui-kit-master.zip";
+const source =  __dirname + "/javascript-react-chat-ui-kit-master";
 const destination = __dirname + "/src/react-chat-ui-kit";
 
-const downloadUrl = "https://github.com/cometchat-pro/react-chat-ui-kit/archive/master.zip";
+const downloadUrl = "https://github.com/cometchat-pro/javascript-react-chat-ui-kit/archive/master.zip";
 
 
 const download = (uri, filename, callback) => {

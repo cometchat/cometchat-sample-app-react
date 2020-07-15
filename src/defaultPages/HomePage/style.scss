@@ -9,6 +9,7 @@
 
     p {
       font-size: 1.4rem;
+      text-align: center;
     }
 
     p.title {
@@ -93,6 +94,42 @@
         cursor: pointer;
         color: darken($color: white, $amount: 5%);
         background: darken($color: #333, $amount: 20%);
+      }
+    }
+  }
+}
+
+@media (min-width : 320px) and (max-width : 767px) {
+
+  .light {
+
+    .wrapper {
+
+      p.title {
+        font-size: 2rem;
+      }
+
+      p.subtitle {
+        font-size: 1.6rem;
+      }
+
+      .components {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        margin: 50px 100px;
+
+        .box {
+  
+          .link-box {
+            flex-direction: column;
+
+            li {
+              padding: 10px;
+            }
+          }
+        }
       }
     }
   }
