@@ -1,3 +1,4 @@
+export const loaderStyle = `
 .loading {
   position: fixed;
   z-index: 999;
@@ -71,3 +72,4 @@
     transform: rotate(360deg);
   }
 }
+`;
