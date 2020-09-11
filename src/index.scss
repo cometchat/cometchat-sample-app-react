@@ -1,17 +1,4 @@
-// @import "resources/core.scss";
-// body {
-//   margin: 0;
-//   font-family: "Inter", sans-serif;
-//   //   -webkit-font-smoothing: antialiased;
-//   //   -moz-osx-font-smoothing: grayscale;
-// }
-
-// code {
-//   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-// }
-
 $base_font_family: "Inter", sans-serif;
-$text-dark: #141414;
 
 
 * {
@@ -21,6 +8,8 @@ $text-dark: #141414;
 html {
   text-size-adjust:100%;
   font-size:10px;
+  height: 100%;
+  width: 100%;
 }
 
 body{
@@ -30,8 +19,10 @@ body{
   font-size: 1.4rem; 
   overflow-x: hidden;
   background-color: #fff;
-  color: $text-dark;
-  box-sizing:border-box
+  color: #141414;
+  box-sizing:border-box;
+  height: 100%;
+  width: 100%;
 }
 
 a { 
@@ -88,16 +79,11 @@ html [type="button"],
 h1,h2,h3,h4,h5,h6 {
   font-family: $base_font_family;
   font-stretch:normal;
-  font-weight:400;
 }
 
 h4 {
   font-size: 2.2rem;
   line-height:27px;
-}
-
-p {font-size: 1.4rem;
-  line-height:19px;
 }
 
 .clearfix::after,

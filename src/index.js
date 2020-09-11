@@ -6,14 +6,15 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
-import './index.scss';
-import App from './App';
+import App from './defaultPages/App';
 
 import * as serviceWorker from './serviceWorker';
 import { CometChat } from "@cometchat-pro/chat"
 import { COMETCHAT_CONSTANTS } from './consts';
 
 import reducer from './store/reducer';
+
+import './index.scss';
 
 const store = createStore(reducer, compose(
   applyMiddleware(thunk)

@@ -1,14 +1,29 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { Global } from "@emotion/core";
+
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import {Avatar} from '../../react-chat-ui-kit/CometChat';
-
 import { COMETCHAT_CONSTANTS } from '../../consts';
 
-import "./style.scss";
-import "./loader.css";
+import {
+  wrapperStyle,
+  errorStyle,
+  titleStyle,
+  subtitleStyle,
+  userContainerStyle,
+  userWrapperStyle,
+  thumbnailWrapperStyle,
+  uidWrapperStyle,
+  inputWrapperStyle,
+  loginBtn,
+} from "./style";
+
+import { loaderStyle } from "./loader";
 
 import * as actions from '../../store/action';
 
@@ -39,7 +54,7 @@ class KitchenSinkApp extends React.PureComponent {
 
     let errorMessage = null;
     if (this.props.error) {
-      errorMessage = (<p className="error">{this.props.error.message}</p>);
+      errorMessage = (<p css={errorStyle()}>{this.props.error.message}</p>);
     }
 
     let authRedirect = null;
@@ -48,50 +63,66 @@ class KitchenSinkApp extends React.PureComponent {
     }
 
     return (
-      <div className="light">
-        <div className="wrapper">
+      <React.Fragment>
+      <Global styles={loaderStyle} />
+      <div css={wrapperStyle()}>
           {authRedirect}
           {loader}
           {errorMessage}
-          <p className="heading">Kitchen Sink App</p>
-          <p className="login-txt">Login with one of our sample users</p>
-          <div className="sample-users">
-            <div className="sample-user" onClick={()=>this.login('superhero1')}>
-              <Avatar image='https://data-us.cometchat.io/assets/images/avatars/ironman.png'></Avatar>
+          <p css={titleStyle()}>Kitchen Sink App</p>
+          <p css={subtitleStyle()}>Login with one of our sample users</p>
+          <div css={userContainerStyle()}>
+            <div css={userWrapperStyle()} onClick={()=>this.login('superhero1')}>
+              <div css={thumbnailWrapperStyle()}>
+                <Avatar image='https://data-us.cometchat.io/assets/images/avatars/ironman.png' />
+              </div>
               <p>superhero1</p>
             </div>
-            <div className="sample-user" onClick={()=>this.login('superhero2')}>
-              <Avatar image='https://data-us.cometchat.io/assets/images/avatars/captainamerica.png'></Avatar>
+            <div css={userWrapperStyle()} onClick={()=>this.login('superhero2')}>
+              <div css={thumbnailWrapperStyle()}>
+                <Avatar image='https://data-us.cometchat.io/assets/images/avatars/captainamerica.png' />
+              </div>
               <p>superhero2</p>
             </div>
-            <div className="sample-user" onClick={()=>this.login('superhero3')}>
-              <Avatar image='https://data-us.cometchat.io/assets/images/avatars/spiderman.png'></Avatar>
+            <div css={userWrapperStyle()} onClick={()=>this.login('superhero3')}>
+              <div css={thumbnailWrapperStyle()}>
+                <Avatar image='https://data-us.cometchat.io/assets/images/avatars/spiderman.png' />
+              </div>
               <p>superhero3</p>
             </div>
-            <div className="sample-user" onClick={()=>this.login('superhero4')}>
-              <Avatar image='https://data-us.cometchat.io/assets/images/avatars/wolverine.png'></Avatar>
+            <div css={userWrapperStyle()} onClick={()=>this.login('superhero4')}>
+              <div css={thumbnailWrapperStyle()}>
+                <Avatar image='https://data-us.cometchat.io/assets/images/avatars/wolverine.png' />
+              </div>
               <p>superhero4</p>
             </div>
-            <div className="sample-user" onClick={()=>this.login('superhero5')}>
-              <Avatar image='https://data-us.cometchat.io/assets/images/avatars/cyclops.png'></Avatar>
+            <div css={userWrapperStyle()} onClick={()=>this.login('superhero5')}>
+              <div css={thumbnailWrapperStyle()}>
+                <Avatar image='https://data-us.cometchat.io/assets/images/avatars/cyclops.png' />
+              </div>
               <p>superhero5</p>
             </div>
           </div>
-          <p className="login-txt"> Login continue with UID</p>
-          <input className="uid" ref={this.myRef} type="text" placeholder="Enter your UID here"/>
-          <div className="btn-login" onClick={()=>this.login()}>Login</div>
+          <div css={uidWrapperStyle()}>
+            <div>
+              <p css={subtitleStyle()}> Login continue with UID</p>
+            </div>
+            <div css={inputWrapperStyle()}>
+              <input ref={this.myRef} type="text" placeholder="Enter your UID here" />
+            </div>
+            <div css={loginBtn()}><button onClick={() => this.login()}>Login</button></div>
+          </div>
         </div>
-      </div>
+      </React.Fragment>
     );
-
   }
 }
 
 const mapStateToProps = state => {
   return {
-      loading: state.loading,
-      error: state.error,
-      isLoggedIn: state.isLoggedIn
+    loading: state.loading,
+    error: state.error,
+    isLoggedIn: state.isLoggedIn
   };
 };
 
