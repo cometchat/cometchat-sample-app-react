@@ -16,7 +16,7 @@ CometChat Kitchen Sink Sample App is a real-time messaging app capable of **one-
 * Voice & Video calling
 
 ## Prerequisite
-To run this app, you must create an account with CometChat and obtain your `App ID`, `Auth Key` and `Region`.  If you don't have an account, you can create one from <a href="https://app.cometchat.io/" target="_blank">CometChat Dashboard</a>.
+To run this app, you must create an account with CometChat and obtain your `App ID`, `Auth Key` and `Region`.  If you don't have an account, you can create one from <a href="https://app.cometchat.com/" target="_blank">CometChat Dashboard</a>.
 
 
 ## Usage
