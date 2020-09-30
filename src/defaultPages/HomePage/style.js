@@ -18,6 +18,7 @@ export const titleStyle = () => {
         color: "rgb(67, 171, 255)",
         fontSize: "24px",
         width: "100%",
+        padding: "0 1em",
         [mq[0]]: {
             fontSize: "20px",
         }
@@ -33,6 +34,7 @@ export const subTitleStyle = () => {
         color: "#AAA",
         fontSize: "16px",
         width: "100%",
+        padding: "0 1em",
         [mq[0]]: {
             fontSize: "16px",
         }
@@ -46,26 +48,34 @@ export const helpTextStyle = () => {
         textAlign: "center",
         width: "100%",
         color: "#333",
+        padding: "0 1em",
     }
 }
 
 export const componentStyle = () => {
 
-    const mq = [`@media (min-width : 320px) and (max-width: 767px)`];
+    const mq = [`@media (min-width : 320px) and (max-width: 767px)`, `@media (min-width : 768px) and (max-width: 1024px)`];
 
     return {
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-around",
-        margin: "50px 100px",
+        justifyContent: "center",
+        padding: "25px 50px",
+        width: "100%",
         [mq[0]]: {
             flexDirection: "column",
-            margin: "20px 30px",
+            padding: "50px 100px",
+        },
+        [mq[1]]: {
+            flexDirection: "column",
+            padding: "50px 50px",
         }
     }
 }
 
 export const boxStyle = () => {
+
+    const mq = [`@media (min-width : 768px) and (max-width: 1024px)`];
 
     return {
         margin: "10px 20px",
@@ -76,6 +86,11 @@ export const boxStyle = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        flex: "1",
+        minWidth: "300px",
+        [mq[0]]: {
+            width: "400px",
+        }
     }
 }
 
