@@ -32,7 +32,7 @@ const history = createBrowserHistory();
 
 class App extends React.Component {
     state = {
-        isLoggedin: false
+        isLoggedIn: false
     }
 
     componentDidMount() {
