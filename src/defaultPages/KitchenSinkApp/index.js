@@ -105,7 +105,7 @@ class KitchenSinkApp extends React.PureComponent {
           </div>
           <div css={uidWrapperStyle()}>
             <div>
-              <p css={subtitleStyle()}> Login continue with UID</p>
+              <p css={subtitleStyle()}> Login with UID</p>
             </div>
             <div css={inputWrapperStyle()}>
               <input ref={this.myRef} type="text" placeholder="Enter your UID here" />
