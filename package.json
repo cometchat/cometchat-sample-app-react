@@ -3,7 +3,7 @@
   "version": "1.0.5",
   "private": true,
   "dependencies": {
-    "@cometchat-pro/chat": "2.1.5-beta1",
+    "@cometchat-pro/chat": "2.1.5",
     "@emotion/core": "^10.0.35",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -21,7 +21,8 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "rimraf": "^3.0.2",
-    "twemoji": "^13.0.1"
+    "twemoji": "^13.0.1",
+    "dateformat": "^4.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
