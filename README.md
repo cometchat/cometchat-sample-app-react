@@ -20,6 +20,9 @@
     <a href="https://img.shields.io/github/stars/cometchat-pro/javascript-react-chat-app?style=social">
     <img src="https://img.shields.io/github/stars/cometchat-pro/javascript-react-chat-app?style=social" />
     </a>
+    <a href="https://img.shields.io/twitter/follow/CometChat?label=CometChat&style=social">
+    <img src="https://img.shields.io/twitter/follow/CometChat?label=CometChat&style=social" />
+    </a>
 </p>
 
 ![alt text](./Screenshots/login.png "Login")
