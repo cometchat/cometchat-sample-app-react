@@ -79,8 +79,8 @@ Learn more about how to integrate [UI Kit](https://github.com/cometchat-pro/java
 Thanks to the following people who have contributed to this project:
 
 [@priyadarshininadar](https://github.com/priyadarshininadar) <br>
-[@ajaygajra](https://github.com/ajaygajra)
-[@prathamesh-majgaonkar](https://github.com/prathamesh-majgaonkar)
+[@ajaygajra](https://github.com/ajaygajra) <br>
+[@prathamesh-majgaonkar](https://github.com/prathamesh-majgaonkar) <br>
 [@mayur-bhandari](https://github.com/mayur-bhandari)
 
 
