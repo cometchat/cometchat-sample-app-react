@@ -12,16 +12,16 @@
 
 <p align="left">
     <a href="https://github.com/cometchat-pro/javascript-react-chat-app/releases/" alt="Releases">
-    <img src="https://img.shields.io/github/v/release/cometchat-pro/javascript-react-chat-app" />
+        <img src="https://img.shields.io/github/v/release/cometchat-pro/javascript-react-chat-app" />
     </a>
     <a href="https://img.shields.io/github/languages/top/cometchat-pro/javascript-react-chat-app">
-    <img src="https://img.shields.io/github/languages/top/cometchat-pro/javascript-react-chat-app" />
+        <img src="https://img.shields.io/github/languages/top/cometchat-pro/javascript-react-chat-app" />
     </a>
     <a href="https://github.com/cometchat-pro/javascript-react-chat-app/stargazers">
-    <img src="https://img.shields.io/github/stars/cometchat-pro/javascript-react-chat-app?style=social" />
+        <img src="https://img.shields.io/github/stars/cometchat-pro/javascript-react-chat-app?style=social" />
     </a>
     <a href="https://twitter.com/CometChat">
-    <img src="https://img.shields.io/twitter/follow/CometChat?label=CometChat&style=social" />
+        <img src="https://img.shields.io/twitter/follow/CometChat?label=CometChat&style=social" />
     </a>
 </p>
 
@@ -99,4 +99,4 @@ Contact us via real time support present in [CometChat Dashboard.](https://app.c
 
 ---
 
-This project uses the following [license](https://github.com/cometchat-pro/javascript-react-chat-app/blob/master/License.md).
+This project uses the following [license](https://github.com/cometchat-pro/javascript-react-chat-app/blob/master/LICENSE).
