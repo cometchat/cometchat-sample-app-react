@@ -17,10 +17,10 @@
     <a href="https://img.shields.io/github/languages/top/cometchat-pro/javascript-react-chat-app">
     <img src="https://img.shields.io/github/languages/top/cometchat-pro/javascript-react-chat-app" />
     </a>
-    <a href="https://img.shields.io/github/stars/cometchat-pro/javascript-react-chat-app?style=social">
+    <a href="https://github.com/cometchat-pro/javascript-react-chat-app/stargazers">
     <img src="https://img.shields.io/github/stars/cometchat-pro/javascript-react-chat-app?style=social" />
     </a>
-    <a href="https://img.shields.io/twitter/follow/CometChat?label=CometChat&style=social">
+    <a href="https://twitter.com/CometChat">
     <img src="https://img.shields.io/twitter/follow/CometChat?label=CometChat&style=social" />
     </a>
 </p>
