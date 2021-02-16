@@ -34,6 +34,7 @@ export const subtitleStyle = () => {
         width: "100%",
         fontSize: "14px",
         textAlign: "center",
+        margin: "0px",
     }
 }
 

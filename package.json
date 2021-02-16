@@ -1,6 +1,6 @@
 {
   "name": "test",
-  "version": "1.0.5",
+  "version": "1.2.8",
   "private": true,
   "dependencies": {
     "@cometchat-pro/chat": "2.1.7",

@@ -7,7 +7,7 @@ import { Global } from "@emotion/core";
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import {Avatar} from '../../react-chat-ui-kit/CometChat';
+import { CometChatAvatar } from '../../cometchat-pro-react-ui-kit/CometChatWorkspace/src';
 import { COMETCHAT_CONSTANTS } from '../../consts';
 
 import {
@@ -74,43 +74,43 @@ class KitchenSinkApp extends React.PureComponent {
           <div css={userContainerStyle()}>
             <div css={userWrapperStyle()} onClick={()=>this.login('superhero1')}>
               <div css={thumbnailWrapperStyle()}>
-                <Avatar image='https://data-us.cometchat.io/assets/images/avatars/ironman.png' />
+                <CometChatAvatar image='https://data-us.cometchat.io/assets/images/avatars/ironman.png' />
               </div>
               <p>superhero1</p>
             </div>
             <div css={userWrapperStyle()} onClick={()=>this.login('superhero2')}>
               <div css={thumbnailWrapperStyle()}>
-                <Avatar image='https://data-us.cometchat.io/assets/images/avatars/captainamerica.png' />
+                <CometChatAvatar image='https://data-us.cometchat.io/assets/images/avatars/captainamerica.png' />
               </div>
               <p>superhero2</p>
             </div>
             <div css={userWrapperStyle()} onClick={()=>this.login('superhero3')}>
               <div css={thumbnailWrapperStyle()}>
-                <Avatar image='https://data-us.cometchat.io/assets/images/avatars/spiderman.png' />
+                <CometChatAvatar image='https://data-us.cometchat.io/assets/images/avatars/spiderman.png' />
               </div>
               <p>superhero3</p>
             </div>
             <div css={userWrapperStyle()} onClick={()=>this.login('superhero4')}>
               <div css={thumbnailWrapperStyle()}>
-                <Avatar image='https://data-us.cometchat.io/assets/images/avatars/wolverine.png' />
+                <CometChatAvatar image='https://data-us.cometchat.io/assets/images/avatars/wolverine.png' />
               </div>
               <p>superhero4</p>
             </div>
             <div css={userWrapperStyle()} onClick={()=>this.login('superhero5')}>
               <div css={thumbnailWrapperStyle()}>
-                <Avatar image='https://data-us.cometchat.io/assets/images/avatars/cyclops.png' />
+                <CometChatAvatar image='https://data-us.cometchat.io/assets/images/avatars/cyclops.png' />
               </div>
               <p>superhero5</p>
             </div>
-          </div>
+          </div><br/>
           <div css={uidWrapperStyle()}>
             <div>
-              <p css={subtitleStyle()}> Login with UID</p>
+              <p css={subtitleStyle()}>Login with UID</p>
             </div>
             <div css={inputWrapperStyle()}>
               <input ref={this.myRef} type="text" placeholder="Enter your UID here" />
             </div>
-            <div css={loginBtn()}><button onClick={() => this.login()}>Login</button></div>
+            <div css={loginBtn()}><button type="button" onClick={() => this.login()}>Login</button></div>
           </div>
         </div>
       </React.Fragment>

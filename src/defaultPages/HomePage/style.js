@@ -19,6 +19,7 @@ export const titleStyle = () => {
         fontSize: "24px",
         width: "100%",
         padding: "0 1em",
+        margin: "1em 0 0 0",
         [mq[0]]: {
             fontSize: "20px",
         }
@@ -32,9 +33,10 @@ export const subTitleStyle = () => {
     return {
         textAlign: "center",
         color: "#AAA",
-        fontSize: "16px",
+        fontSize: "14px",
         width: "100%",
         padding: "0 1em",
+        margin: "1em 0 2em 0",
         [mq[0]]: {
             fontSize: "16px",
         }
@@ -60,11 +62,32 @@ export const componentStyle = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "25px 50px",
+        padding: "16px 120px",
         width: "100%",
         [mq[0]]: {
             flexDirection: "column",
             padding: "50px 100px",
+        },
+        [mq[1]]: {
+            flexDirection: "column",
+            padding: "50px 50px",
+        }
+    }
+}
+
+export const UIComponentStyle = () => {
+
+    const mq = [`@media (min-width : 320px) and (max-width: 767px)`, `@media (min-width : 768px) and (max-width: 1024px)`];
+
+    return {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "16px 35.5%",
+        width: "100%",
+        [mq[0]]: {
+            flexDirection: "column",
+            padding: "50px 150px",
         },
         [mq[1]]: {
             flexDirection: "column",
@@ -128,6 +151,12 @@ export const descWrapperStyle = () => {
         width: "100%",
         alignItems: "center",
         justifyContent: "center",
+        "code": {
+            padding: "2px",
+            color: "crimson",
+            borderRadius: "4px",
+            backgroundColor: "#f1f1f1",
+        }
     }
 }
 
@@ -172,13 +201,13 @@ export const linkStyle = () => {
 export const logoutBtn = () => {
 
     return {
-        margin: "auto",
+        margin: "16px ​auto 24px auto",
         "button": {
             outline: "none",
             backgroundColor: "#333",
             borderRadius: "10px",
             color: "white",
-            padding: "10px 25px",
+            padding: "8px 24px",
             "&:hover": {
                 cursor: "pointer",
             }
