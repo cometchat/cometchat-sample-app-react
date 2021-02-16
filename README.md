@@ -37,9 +37,9 @@ ___
 
 Before you begin, ensure you have met the following requirements:
 
-- React v16.14.0
+- React `npm install react@16.13.1` 
 
-- React DOM v16.14.0
+- React DOM `npm install react-dom@16.13.1` 
 
 ___
 
