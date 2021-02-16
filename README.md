@@ -8,17 +8,17 @@
 
 <br/><br/>
 
-# React Chat App
+# React Sample App
 
 <p align="left">
-    <a href="https://github.com/cometchat-pro/javascript-react-chat-app/releases/" alt="Releases">
-        <img src="https://img.shields.io/github/v/release/cometchat-pro/javascript-react-chat-app" />
+    <a href="https://github.com/cometchat-pro/cometchat-pro-react-sample-app/releases/" alt="Releases">
+        <img src="https://img.shields.io/github/v/release/cometchat-pro/cometchat-pro-react-sample-app" />
     </a>
-    <a href="https://img.shields.io/github/languages/top/cometchat-pro/javascript-react-chat-app">
-        <img src="https://img.shields.io/github/languages/top/cometchat-pro/javascript-react-chat-app" />
+    <a href="https://img.shields.io/github/languages/top/cometchat-pro/cometchat-pro-react-sample-app">
+        <img src="https://img.shields.io/github/languages/top/cometchat-pro/cometchat-pro-react-sample-app" />
     </a>
-    <a href="https://github.com/cometchat-pro/javascript-react-chat-app/stargazers">
-        <img src="https://img.shields.io/github/stars/cometchat-pro/javascript-react-chat-app?style=social" />
+    <a href="https://github.com/cometchat-pro/cometchat-pro-react-sample-app/stargazers">
+        <img src="https://img.shields.io/github/stars/cometchat-pro/cometchat-pro-react-sample-app?style=social" />
     </a>
     <a href="https://twitter.com/CometChat">
         <img src="https://img.shields.io/twitter/follow/CometChat?label=CometChat&style=social" />
@@ -29,7 +29,7 @@
 
 ![alt text](./Screenshots/home.png "Home")
 
-CometChat Kitchen Sink Sample App (built using **CometChat UI Kit**) is a fully functional messaging app capable of **one-on-one** (private) and **group** messaging as well as Calling. This sample app enables users to send **text** and **multimedia messages like  images, videos, documents**. Also, users can make  **Audio** and **Video** calls to other users or groups.
+CometChat Kitchen Sink Sample App (built using **CometChat UI Kit**) is a fully functional messaging app capable of **one-on-one** (private) and **group** messaging as well as calling. This sample app enables users to send **text** and **multimedia messages like  images, audios, videos, documents**. Also, users can make  **Audio** and **Video** calls to other users or groups.
 
 ___
 
@@ -37,13 +37,13 @@ ___
 
 Before you begin, ensure you have met the following requirements:
 
-- React v16.14.0
+- React `npm install react@16.13.1` 
 
-- React DOM v16.14.0
+- React DOM `npm install react-dom@16.13.1` 
 
 ___
 
-## Installing React Chat App
+## Installing React Sample App
 
 1. Clone this repository
 2. Navigate to the root directory and replace `APP_ID`, `REGION` and `AUTH_KEY` with your CometChat `App ID`, `Region` and `Auth Key` in src/consts.js file.
@@ -66,7 +66,7 @@ ___
 
 ## Add UI Kit to your project
 
-Learn more about how to integrate [UI Kit](https://github.com/cometchat-pro/javascript-react-chat-ui-kit) inside your app. 
+Learn more about how to integrate [UI Kit](https://github.com/cometchat-pro/cometchat-pro-react-ui-kit) inside your app. 
 
 ---
 
@@ -74,7 +74,7 @@ Learn more about how to integrate [UI Kit](https://github.com/cometchat-pro/java
 
 - To read the full dcoumentation on UI Kit integration visit our [Documentation](https://prodocs.cometchat.com/docs/react-ui-kit).
 
-- Facing any issues while integrating or installing the UI Kit please <a href="https://app.cometchat.com/"> connect with us via real time support present in CometChat Dashboard.</a>
+- Facing any issues while integrating or installing the UI Kit please connect with us via real time support present in <a href="https://app.cometchat.com/">CometChat Dashboard.</a>
 
 ---
 # Contributors
@@ -99,4 +99,4 @@ Contact us via real time support present in [CometChat Dashboard.](https://app.c
 
 ---
 
-This project uses the following [license](https://github.com/cometchat-pro/javascript-react-chat-app/blob/master/LICENSE).
+This project uses the following [license](https://github.com/cometchat-pro/cometchat-pro-react-sample-app/blob/master/LICENSE).
