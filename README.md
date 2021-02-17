@@ -25,13 +25,31 @@
     </a>
 </p>
 
-![alt text](./Screenshots/login.png "Login")
+![alt text](./Screenshots/main.png "Main")
 
-![alt text](./Screenshots/home.png "Home")
+CometChat Kitchen Sink Sample App (built using **CometChat UI Kit**) is a fully functional messaging app capable of private (one-on-one), group messaging, voice & video calling.
 
-CometChat Kitchen Sink Sample App (built using **CometChat UI Kit**) is a fully functional messaging app capable of **one-on-one** (private) and **group** messaging as well as calling. This sample app enables users to send **text** and **multimedia messages like  images, audios, videos, documents**. Also, users can make  **Audio** and **Video** calls to other users or groups.
+## Features
+- Login
+- Private(1-1) & Group Conversations
+- Voice & video calling & conferencing
+- Rich Media Attachments
+- Typing Indicators
+- Text, Media and Custom messages
+- Read receipts
+- Online Presence Indicators
+- Message History
+- Users & Friends List
+- Groups List
+- Search by users and groups
+- Conversations List
+- Threaded Conversations
+  
+ ## Extensions
 
-___
+ [Thumbnail Generation](https://prodocs.cometchat.com/docs/extensions-thumbnail-generation) | [Link Preview](https://prodocs.cometchat.com/docs/extensions-link-preview) | [Rich Media Preview](https://prodocs.cometchat.com/docs/extensions-rich-media-preview) | [Smart Reply](https://prodocs.cometchat.com/docs/extensions-smart-reply)| [Emojis](https://prodocs.cometchat.com/docs/extensions-emojis) | [Polls](https://prodocs.cometchat.com/docs/extensions-polls) | [Reactions](https://prodocs.cometchat.com/docs/extensions-reactions) | [Stickers](https://prodocs.cometchat.com/docs/extensions-stickers)
+
+<hr/> 
 
 ## Prerequisites
 
