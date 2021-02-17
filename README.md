@@ -29,7 +29,8 @@
 
 ![alt text](./Screenshots/home.png "Home")
 
-CometChat Kitchen Sink Sample App (built using **CometChat UI Kit**) is a fully functional messaging app capable of **one-on-one** (private) and **group** messaging as well as calling. This sample app enables users to send **text** and **multimedia messages like  images, audios, videos, documents**. Also, users can make  **Audio** and **Video** calls to other users or groups.
+CometChat Kitchen Sink Sample App (built using **CometChat UI Kit**) is a fully functional messaging app capable of private (one-on-one), group messaging, voice & video calling.
+
 ## Features
 - Login
 - Private(1-1) & Group Conversations
