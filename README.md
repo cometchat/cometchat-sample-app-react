@@ -25,9 +25,7 @@
     </a>
 </p>
 
-![alt text](./Screenshots/login.png "Login")
-
-![alt text](./Screenshots/home.png "Home")
+![alt text](./Screenshots/main.png "Main")
 
 CometChat Kitchen Sink Sample App (built using **CometChat UI Kit**) is a fully functional messaging app capable of private (one-on-one), group messaging, voice & video calling.
 
