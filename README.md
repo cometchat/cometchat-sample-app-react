@@ -8,7 +8,7 @@
 
 <br/><br/>
 
-# React Sample App
+# CometChat Kitchen Sink Sample App (React)
 
 <p align="left">
     <a href="https://github.com/cometchat-pro/cometchat-pro-react-sample-app/releases/" alt="Releases">
@@ -27,7 +27,7 @@
 
 ![alt text](./Screenshots/main.png "Main")
 
-CometChat Kitchen Sink Sample App (built using **CometChat UI Kit**) is a fully functional messaging app capable of private (one-on-one), group messaging, voice & video calling.
+CometChat Kitchen Sink Sample App (built using **CometChat UI Kit**) is a fully functional real-time messaging app capable of private (one-on-one), group messaging, voice & video calling.
 
 ## Features
 - Login
@@ -63,7 +63,7 @@ ___
 
 ## Installing React Sample App
 
-1. Clone this repository
+1. Clone this repository `git clone https://github.com/cometchat-pro/cometchat-pro-react-sample-app.git`
 2. Navigate to the root directory and replace `APP_ID`, `REGION` and `AUTH_KEY` with your CometChat `App ID`, `Region` and `Auth Key` in src/consts.js file.
 
 ![alt text](./Screenshots/constants.png "Constants")
