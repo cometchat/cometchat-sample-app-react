@@ -151,6 +151,11 @@ export const descWrapperStyle = () => {
         width: "100%",
         alignItems: "center",
         justifyContent: "center",
+        "p": {
+            textOverflow: "ellipsis",
+            whiteSpace: "pre-wrap",
+            wordBreak: "break-word"
+        },
         "code": {
             padding: "2px",
             color: "crimson",
