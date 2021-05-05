@@ -55,9 +55,9 @@ CometChat Kitchen Sink Sample App (built using **CometChat UI Kit**) is a fully 
 
 Before you begin, ensure you have met the following requirements:
 
-- React `npm install react@16.13.1` 
+- React `npm install react@17.0.2` 
 
-- React DOM `npm install react-dom@16.13.1` 
+- React DOM `npm install react-dom@17.0.2` 
 
 ___
 
