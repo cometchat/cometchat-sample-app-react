@@ -57,7 +57,9 @@ Before you begin, ensure you have met the following requirements:
 
 - React `npm install react@17.0.2` 
 
-- React DOM `npm install react-dom@17.0.2` 
+- React DOM `npm install react-dom@17.0.2`
+
+- React scripts `npm install react-scripts@4.0.3`
 
 ___
 
