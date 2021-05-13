@@ -55,15 +55,17 @@ CometChat Kitchen Sink Sample App (built using **CometChat UI Kit**) is a fully 
 
 Before you begin, ensure you have met the following requirements:
 
-- React `npm install react@16.13.1` 
+- React `npm install react@17.0.2` 
 
-- React DOM `npm install react-dom@16.13.1` 
+- React DOM `npm install react-dom@17.0.2`
+
+- React scripts `npm install react-scripts@4.0.3`
 
 ___
 
 ## Installing React Sample App
 
-1. Clone this repository `git clone https://github.com/cometchat-pro/cometchat-pro-react-sample-app.git`
+1. Clone this repository `git clone https://github.com/cometchat-pro/javascript-react-chat-app.git`
 2. Navigate to the root directory and replace `APP_ID`, `REGION` and `AUTH_KEY` with your CometChat `App ID`, `Region` and `Auth Key` in src/consts.js file.
 
 ![alt text](./Screenshots/constants.png "Constants")
