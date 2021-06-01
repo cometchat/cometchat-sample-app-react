@@ -1,53 +1,53 @@
 {
-  "name": "test",
-  "version": "3.0.0-beta1-1",
-  "private": true,
-  "dependencies": {
-    "@cometchat-pro/chat": "3.0.0-beta1",
-    "@emotion/core": "^10.0.35",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
-    "emoji-mart": "^3.0.0",
-    "extract-zip": "^2.0.1",
-    "fs-extra": "^9.0.1",
-    "history": "^4.6.3",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-html-parser": "^2.0.2",
-    "react-redux": "^7.2.0",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
-    "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0",
-    "rimraf": "^3.0.2",
-    "twemoji": "^13.0.1",
-    "dateformat": "^4.0.0"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "postinstall": "node ./postinstall.js"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "homepage": ".",
-  "devDependencies": {
-    "node-sass": "^4.12.1"
-  }
+	"name": "javascript-react-chat-app",
+	"version": "3.0.0-beta5-1",
+	"private": true,
+	"dependencies": {
+		"@cometchat-pro/chat": "3.0.0-beta5",
+		"@emotion/core": "^10.0.35",
+		"@testing-library/jest-dom": "^4.2.4",
+		"@testing-library/react": "^9.5.0",
+		"@testing-library/user-event": "^7.2.1",
+		"emoji-mart": "^3.0.0",
+		"extract-zip": "^2.0.1",
+		"fs-extra": "^9.0.1",
+		"history": "^4.6.3",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"react-scripts": "^4.0.3",
+		"react-html-parser": "^2.0.2",
+		"react-redux": "^7.2.0",
+		"react-router-dom": "^5.2.0",
+		"redux": "^4.0.5",
+		"redux-thunk": "^2.3.0",
+		"rimraf": "^3.0.2",
+		"twemoji": "^13.0.1",
+		"dateformat": "^4.0.0"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject",
+		"postinstall": "node ./postinstall.js"
+	},
+	"eslintConfig": {
+		"extends": "react-app"
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"homepage": ".",
+	"devDependencies": {
+		"node-sass": "^4.12.1"
+	}
 }
