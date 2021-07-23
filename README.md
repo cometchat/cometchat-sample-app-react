@@ -11,13 +11,13 @@
 # CometChat Kitchen Sink Sample App (React)
 
 <p align="left">
-    <a href="https://github.com/cometchat-pro/cometchat-pro-react-sample-app/releases/" alt="Releases">
+    <a href="https://github.com/cometchat-pro/javascript-react-chat-app/releases" alt="Releases">
         <img src="https://img.shields.io/github/v/release/cometchat-pro/cometchat-pro-react-sample-app" />
     </a>
     <a href="https://img.shields.io/github/languages/top/cometchat-pro/cometchat-pro-react-sample-app">
         <img src="https://img.shields.io/github/languages/top/cometchat-pro/cometchat-pro-react-sample-app" />
     </a>
-    <a href="https://github.com/cometchat-pro/cometchat-pro-react-sample-app/stargazers">
+    <a href="https://github.com/cometchat-pro/javascript-react-chat-app/stargazers">
         <img src="https://img.shields.io/github/stars/cometchat-pro/cometchat-pro-react-sample-app?style=social" />
     </a>
     <a href="https://twitter.com/CometChat">
@@ -63,7 +63,7 @@ Before you begin, ensure you have met the following requirements:
 
 ___
 
-## Installing React Sample App 
+## Installing React Sample App
 
 1. Clone this repository `git clone https://github.com/cometchat-pro/javascript-react-chat-app.git`
 2. Navigate to the root directory and replace `APP_ID`, `REGION` and `AUTH_KEY` with your CometChat `App ID`, `Region` and `Auth Key` in src/consts.js file.
@@ -119,4 +119,4 @@ Contact us via real time support present in [CometChat Dashboard.](https://app.c
 
 ---
 
-This project uses the following [license](https://github.com/cometchat-pro/cometchat-pro-react-sample-app/blob/master/LICENSE).
+This project uses the following [license](https://github.com/cometchat-pro/javascript-react-chat-app/blob/master/LICENSE).

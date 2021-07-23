@@ -1,6 +1,6 @@
 {
   "name": "javascript-react-chat-app",
-  "version": "2.3.6-1",
+  "version": "2.4.0-1",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -14,7 +14,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "^4.0.3",
-    "@cometchat-pro/chat": "2.3.6",
+    "@cometchat-pro/chat": "2.4.0",
     "@emotion/core": "^10.0.35",
     "dateformat": "^4.0.0",
     "emoji-mart": "^3.0.0",
