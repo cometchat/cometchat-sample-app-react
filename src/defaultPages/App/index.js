@@ -20,7 +20,8 @@ import {
     CometChatUserList,
     CometChatUserListWithMessages,
     CometChatGroupList,
-    CometChatGroupListWithMessages
+    CometChatGroupListWithMessages,
+    CometChatMessages
 } from '../../cometchat-pro-react-ui-kit/CometChatWorkspace/src';
 
 import {
@@ -51,6 +52,7 @@ class App extends React.Component {
                         <PrivateRoute path="/conversation-list" component={CometChatConversationList} />
                         <PrivateRoute path="/group-list" component={CometChatGroupList} />
                         <PrivateRoute path="/user-list" component={CometChatUserList} />
+                        <PrivateRoute path="/messages" component={CometChatMessages} chatWithGroup="supergroup" />
                         <PrivateRoute exact path="/" component={HomePage} />
                         <Route path="/login" component={KitchenSinkApp} />
                     </Switch>
