@@ -1,0 +1,14 @@
+store:
+  - src/store/**/*
+PrivateRoute:
+  - src/PrivateRoute/**/*
+defaultPages:
+  - src/defaultPages/**/*
+public:
+  - public/**/*
+screenshots:
+  - Screenshots/**/*
+package:
+  - package.json
+workflows:
+  - .github/workflows/**/*
