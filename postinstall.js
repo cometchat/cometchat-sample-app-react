@@ -6,7 +6,7 @@ const rimraf = require("rimraf");
 const fileName = "cometchat-pro-react-ui-kit";
 const filePath = __dirname + "/src/" + fileName;
 
-const zipFileName = "cometchat-pro-react-ui-kit";
+const zipFileName = "cometchat-pro-react-ui-kit-master";
 
 const zipName = zipFileName + ".zip";
 const source = __dirname + "/" + zipFileName;
