@@ -8,7 +8,7 @@ class PrivateRoute extends React.Component {
     render() {
 
         if(this.props.isLoggedIn) {
-            return (<Route path={this.props.path} {...this.props} component={this.props.component} />);
+            return <Route path={this.props.path} render={props => <this.props.component {...this.props} />} />;
         } else {
             return (<Redirect to={{ pathname: '/login', state: { from: this.props.location } }} />);
         }
