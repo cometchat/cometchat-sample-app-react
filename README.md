@@ -86,13 +86,13 @@ ___
 
 ## Add UI Kit to your project
 
-Learn more about how to integrate [UI Kit](https://github.com/cometchat-pro/cometchat-pro-react-ui-kit) inside your app. 
+Learn more about how to integrate [UI Kit](https://github.com/cometchat-pro/cometchat-pro-react-ui-kit/tree/v2) inside your app. 
 
 ---
 
 # Troubleshooting
 
-- To read the full dcoumentation on UI Kit integration visit our [Documentation](https://prodocs.cometchat.com/docs/react-ui-kit).
+- To read the full dcoumentation on UI Kit integration visit our [Documentation](https://prodocs.cometchat.com/v2.1/docs/react-ui-kit).
 
 - Facing any issues while integrating or installing the UI Kit please connect with us via real time support present in <a href="https://app.cometchat.com/">CometChat Dashboard.</a>
 
