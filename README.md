@@ -74,7 +74,7 @@ ___
 
     a. Add node-sass dependency in your project.
     ```javascript
-        npm install node-sass@version
+    npm install node-sass@version
     ```
     <b> Note</b>: Cross check for the compatible version of this dependency with your system's node version in the link given below <br />
         <a href="https://www.npmjs.com/package/node-sass">https://www.npmjs.com/package/node-sass</a>
