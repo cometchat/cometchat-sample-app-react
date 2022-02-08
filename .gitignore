@@ -1,1 +1,4 @@
 node_modules
+
+# Ignore the following as its an external package and autodownloaded on install
+src\cometchat-pro-react-ui-kit
