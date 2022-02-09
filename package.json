@@ -1,9 +1,9 @@
 {
 	"name": "javascript-react-chat-app",
-	"version": "3.0.5-1",
+	"version": "3.0.6-1",
 	"private": true,
 	"dependencies": {
-		"@cometchat-pro/chat": "3.0.5",
+		"@cometchat-pro/chat": "3.0.6",
 		"@emotion/core": "^10.0.35",
 		"@testing-library/jest-dom": "^4.2.4",
 		"@testing-library/react": "^9.5.0",
@@ -15,7 +15,7 @@
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
 		"react-scripts": "^4.0.3",
-		"react-html-parser": "^2.0.2",
+		"html-react-parser": "^1.4.5",
 		"react-redux": "^7.2.0",
 		"react-router-dom": "^5.2.0",
 		"redux": "^4.0.5",
@@ -24,13 +24,14 @@
 		"twemoji": "^13.0.1",
 		"dateformat": "^4.0.0"
 	},
+	"devDependencies": {
+		"request": "^2.88.2"
+	},
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
-		"eject": "react-scripts eject",
-		"postinstall": "node ./postinstall.js"
-	},
+		"eject": "react-scripts eject"	},
 	"eslintConfig": {
 		"extends": "react-app"
 	},
