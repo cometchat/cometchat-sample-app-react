@@ -7,7 +7,7 @@ const notificationBroadCast = new BroadcastChannel('notification_broadcaster');
 self.addEventListener('notificationclick', function (event) {
     console.log('SW notification click event', event.notification);
     event.notification.close();
-    const url = 'http://localhost:3000/embedded-app';
+    const url = 'https://javascript-react-chat-app.herokuapp.com/embedded-app';
     event.waitUntil(
         clients.matchAll({ includeUncontrolled: true }).then( windowClients => {
             // Check if there is already a window/tab open with the target URL
