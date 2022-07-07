@@ -21,7 +21,7 @@ export const errorStyle = () => {
 export const titleStyle = () => {
 
     return {
-        fontSize: "42px",
+        fontSize: "36px",
         color: "#2da7ff",
         width: "100%",
         textAlign: "center",

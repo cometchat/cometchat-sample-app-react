@@ -1,36 +1,38 @@
 import React from 'react';
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from "@emotion/core";
 import { Global } from "@emotion/core";
 
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { CometChatAvatar } from '../../cometchat-pro-react-ui-kit/CometChatWorkspace/src';
 import { COMETCHAT_CONSTANTS } from '../../consts';
+import { GoogleLogin } from '@react-oauth/google';
 
 import {
   wrapperStyle,
   errorStyle,
   titleStyle,
-  subtitleStyle,
-  userContainerStyle,
-  userWrapperStyle,
-  thumbnailWrapperStyle,
   uidWrapperStyle,
-  inputWrapperStyle,
   loginBtn,
 } from "./style";
 
 import { loaderStyle } from "./loader";
 
 import * as actions from '../../store/action';
+import jwt_decode from "jwt-decode";
+import { CometChat } from '@cometchat-pro/chat';
 
+const md5 = require('md5');
 class KitchenSinkApp extends React.PureComponent {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+			googleSignInFailed: false
+		}
 
     this.myRef = React.createRef();
   }
@@ -43,6 +45,33 @@ class KitchenSinkApp extends React.PureComponent {
 
     this.uid = uid;
     this.props.onLogin(this.uid, COMETCHAT_CONSTANTS.AUTH_KEY);
+  }
+
+  signInSuccess = (response) => {
+    var userDetails = jwt_decode(response.credential);
+
+    var uid = md5(userDetails.email);
+    var name = userDetails.name;
+    var avatar = userDetails.picture;
+
+    var user = new CometChat.User(uid, name);
+    user.setAvatar(avatar);
+
+    CometChat.createUser(user, COMETCHAT_CONSTANTS.AUTH_KEY).then(
+      user => {
+        console.log("user created successfully", user);
+        this.login(uid);
+      }, error => {
+        if(error.code === "ERR_UID_ALREADY_EXISTS"){
+          this.login(uid);
+        }
+      }
+    );
+  }
+
+  signInFailure = (response) => {
+    this.setState({googleSignInFailed: true})
+    console.log('failure', response);
   }
   
   render() {
@@ -57,9 +86,13 @@ class KitchenSinkApp extends React.PureComponent {
       errorMessage = (<p css={errorStyle()}>{this.props.error.message}</p>);
     }
 
+    if (this.state.googleSignInFailed) {
+      errorMessage = (<p css={errorStyle()}>Google Sign In Failed</p>);
+    }
+
     let authRedirect = null;
     if (this.props.isLoggedIn) {
-      authRedirect = <Redirect to="/" />
+      authRedirect = <Redirect to="/embedded-app" />
     }
 
     return (
@@ -69,48 +102,15 @@ class KitchenSinkApp extends React.PureComponent {
           {authRedirect}
           {loader}
           {errorMessage}
-          <p css={titleStyle()}>Kitchen Sink App</p>
-          <p css={subtitleStyle()}>Login with one of our sample users</p>
-          <div css={userContainerStyle()}>
-            <div css={userWrapperStyle()} onClick={()=>this.login('superhero1')}>
-              <div css={thumbnailWrapperStyle()}>
-                <CometChatAvatar image='https://data-us.cometchat.io/assets/images/avatars/ironman.png' />
-              </div>
-              <p>superhero1</p>
-            </div>
-            <div css={userWrapperStyle()} onClick={()=>this.login('superhero2')}>
-              <div css={thumbnailWrapperStyle()}>
-                <CometChatAvatar image='https://data-us.cometchat.io/assets/images/avatars/captainamerica.png' />
-              </div>
-              <p>superhero2</p>
-            </div>
-            <div css={userWrapperStyle()} onClick={()=>this.login('superhero3')}>
-              <div css={thumbnailWrapperStyle()}>
-                <CometChatAvatar image='https://data-us.cometchat.io/assets/images/avatars/spiderman.png' />
-              </div>
-              <p>superhero3</p>
-            </div>
-            <div css={userWrapperStyle()} onClick={()=>this.login('superhero4')}>
-              <div css={thumbnailWrapperStyle()}>
-                <CometChatAvatar image='https://data-us.cometchat.io/assets/images/avatars/wolverine.png' />
-              </div>
-              <p>superhero4</p>
-            </div>
-            <div css={userWrapperStyle()} onClick={()=>this.login('superhero5')}>
-              <div css={thumbnailWrapperStyle()}>
-                <CometChatAvatar image='https://data-us.cometchat.io/assets/images/avatars/cyclops.png' />
-              </div>
-              <p>superhero5</p>
-            </div>
-          </div><br/>
+          <p css={titleStyle()}>Login with your Google Account</p>
+          <br/>
           <div css={uidWrapperStyle()}>
-            <div>
-              <p css={subtitleStyle()}>Login with UID</p>
+            <div css={loginBtn()}>
+              <GoogleLogin
+                onSuccess={this.signInSuccess}
+                onError={this.signInFailure}
+              />
             </div>
-            <div css={inputWrapperStyle()}>
-              <input ref={this.myRef} type="text" placeholder="Enter your UID here" />
-            </div>
-            <div css={loginBtn()}><button type="button" onClick={() => this.login()}>Login</button></div>
           </div>
         </div>
       </React.Fragment>

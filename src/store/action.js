@@ -32,7 +32,10 @@ export const logoutSuccess = () => {
 
 export const logout = () => {
     return dispatch => {
-        CometChat.logout().then(dispatch(logoutSuccess()));
+        CometChat.logout().then( () => {
+            dispatch(logoutSuccess());
+            localStorage.removeItem('firebase_token');
+        });
     }
     
 };
@@ -47,6 +50,12 @@ export const auth = (uid, authKey) => {
 
             if(user) {
                 dispatch(authSuccess(user));
+                let token = window.localStorage.getItem('firebase_token');
+                CometChat.registerTokenForPushNotification(token).then(
+                    registered => {
+                        console.log(registered);
+                    }
+                )
             } else {
                 dispatch(authFail(user));
             }

@@ -16,6 +16,10 @@ import reducer from './store/reducer';
 
 import './index.scss';
 
+import { messaging } from './firebase';
+
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 const store = createStore(reducer, compose(
   applyMiddleware(thunk)
 ));
@@ -30,13 +34,31 @@ CometChat.init(appID, appSetting).then(() => {
       CometChat.setSource("ui-kit", "web", "reactjs");
     }
     console.log("Initialization completed successfully");
-    ReactDOM.render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </Provider>
-    , document.getElementById('root'));
+    messaging.getToken().then(
+      (token) => {
+        window.localStorage.setItem("firebase_token", token);
+        ReactDOM.render(
+          <GoogleOAuthProvider clientId="891111922927-2jlpkl8hgj1hh55n4olcf3kv3bv156l5.apps.googleusercontent.com">
+            <Provider store={store}>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </Provider>
+          </GoogleOAuthProvider>
+        , document.getElementById('root'));
+      }, error => {
+        ReactDOM.render(
+          <GoogleOAuthProvider clientId="891111922927-2jlpkl8hgj1hh55n4olcf3kv3bv156l5.apps.googleusercontent.com">
+            <Provider store={store}>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </Provider>
+          </GoogleOAuthProvider>
+        , document.getElementById('root'));
+      }
+    );
+    
   },
   error => {
     console.log("Initialization failed with error:", error);
@@ -47,4 +69,6 @@ CometChat.init(appID, appSetting).then(() => {
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+// serviceWorker.unregister();
+
+serviceWorker.register('/firebase-messaging-sw.js');
