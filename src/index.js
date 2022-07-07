@@ -71,4 +71,4 @@ CometChat.init(appID, appSetting).then(() => {
 // Learn more about service workers: https://bit.ly/CRA-PWA
 // serviceWorker.unregister();
 
-serviceWorker.register(`${process.env.PUBLIC_URL}/firebase-messaging-sw.js`);
+serviceWorker.register();
