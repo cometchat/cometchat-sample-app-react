@@ -5,7 +5,7 @@ const initialState = {
     isLoggedIn: false,
     error: null,
     loading: false,
-    authRedirectPath: "/login"
+    authRedirectPath: "/"
 };
 
 const authStart = ( state, action ) => {

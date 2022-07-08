@@ -2,35 +2,27 @@
 	"name": "javascript-react-chat-app",
 	"version": "3.0.6-1",
 	"private": true,
-	"engines": {
-		"node": "14.18.3"
-	},
 	"dependencies": {
 		"@cometchat-pro/chat": "3.0.6",
 		"@emotion/core": "^10.0.35",
-		"@react-oauth/google": "^0.2.6",
 		"@testing-library/jest-dom": "^4.2.4",
 		"@testing-library/react": "^9.5.0",
 		"@testing-library/user-event": "^7.2.1",
-		"dateformat": "^4.0.0",
 		"emoji-mart": "^3.0.0",
 		"extract-zip": "^2.0.1",
-		"firebase": "^8.1.1",
 		"fs-extra": "^9.0.1",
 		"history": "^4.6.3",
-		"html-react-parser": "^1.4.5",
-		"jwt-decode": "^3.1.2",
-		"md5": "^2.3.0",
-		"node-sass": "^4.14.1",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
+		"react-scripts": "^4.0.3",
+		"html-react-parser": "^1.4.5",
 		"react-redux": "^7.2.0",
 		"react-router-dom": "^5.2.0",
-		"react-scripts": "^4.0.3",
 		"redux": "^4.0.5",
 		"redux-thunk": "^2.3.0",
 		"rimraf": "^3.0.2",
-		"twemoji": "^13.0.1"
+		"twemoji": "^13.0.1",
+		"dateformat": "^4.0.0"
 	},
 	"devDependencies": {
 		"request": "^2.88.2"
@@ -39,7 +31,8 @@
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
-		"eject": "react-scripts eject"
+		"eject": "react-scripts eject",
+		"postinstall": "node ./postinstall.js"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
