@@ -1,28 +1,27 @@
 {
 	"name": "javascript-react-chat-app",
-	"version": "3.0.6-1",
+	"version": "3.0.10-1",
 	"private": true,
 	"dependencies": {
-		"@cometchat-pro/chat": "3.0.6",
+		"@cometchat-pro/chat": "3.0.10",
 		"@emotion/core": "^10.0.35",
 		"@testing-library/jest-dom": "^4.2.4",
 		"@testing-library/react": "^9.5.0",
 		"@testing-library/user-event": "^7.2.1",
-		"emoji-mart": "^3.0.0",
+		"dateformat": "^4.0.0",
 		"extract-zip": "^2.0.1",
 		"fs-extra": "^9.0.1",
 		"history": "^4.6.3",
+		"html-react-parser": "^1.4.5",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
-		"react-scripts": "^4.0.3",
-		"html-react-parser": "^1.4.5",
 		"react-redux": "^7.2.0",
 		"react-router-dom": "^5.2.0",
+		"react-scripts": "^4.0.3",
 		"redux": "^4.0.5",
 		"redux-thunk": "^2.3.0",
 		"rimraf": "^3.0.2",
-		"twemoji": "^13.0.1",
-		"dateformat": "^4.0.0"
+		"twemoji": "^13.0.1"
 	},
 	"devDependencies": {
 		"request": "^2.88.2"
