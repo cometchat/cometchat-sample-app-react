@@ -1,8 +1,8 @@
 import React from 'react';
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { Global } from "@emotion/core";
+import { jsx } from "@emotion/react";
+import { Global } from "@emotion/react";
 
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';

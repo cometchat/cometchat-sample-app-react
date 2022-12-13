@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createBrowserHistory } from 'history';
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx } from "@emotion/react";
 
 import PrivateRoute from '../../PrivateRoute';
 
