@@ -1,32 +1,35 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
 
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware, compose } from "redux";
+import thunk from "redux-thunk";
 
-import App from './defaultPages/App';
+import App from "./defaultPages/App";
 
-import * as serviceWorker from './serviceWorker';
-import { CometChat } from "@cometchat-pro/chat"
-import { COMETCHAT_CONSTANTS } from './consts';
+import * as serviceWorker from "./serviceWorker";
+import { CometChat } from "@cometchat-pro/chat";
+import { COMETCHAT_CONSTANTS } from "./consts";
 
-import reducer from './store/reducer';
+import reducer from "./store/reducer";
 
-import './index.scss';
+import "./index.scss";
 
-const store = createStore(reducer, compose(
-  applyMiddleware(thunk)
-));
+const store = createStore(reducer, compose(applyMiddleware(thunk)));
 
-var appID = COMETCHAT_CONSTANTS.APP_ID;
-var region = COMETCHAT_CONSTANTS.REGION;
+let appID = COMETCHAT_CONSTANTS.APP_ID;
+let region = COMETCHAT_CONSTANTS.REGION;
 
-var appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(region).build();
-CometChat.init(appID, appSetting).then(() => {
+console.log(appID, region);
 
-    if(CometChat.setSource) {
+let appSetting = new CometChat.AppSettingsBuilder()
+  .subscribePresenceForAllUsers()
+  .setRegion(region)
+  .build();
+CometChat.init(appID, appSetting).then(
+  () => {
+    if (CometChat.setSource) {
       CometChat.setSource("ui-kit", "web", "reactjs");
     }
     console.log("Initialization completed successfully");
@@ -35,10 +38,11 @@ CometChat.init(appID, appSetting).then(() => {
         <BrowserRouter>
           <App />
         </BrowserRouter>
-      </Provider>
-    , document.getElementById('root'));
+      </Provider>,
+      document.getElementById("root")
+    );
   },
-  error => {
+  (error) => {
     console.log("Initialization failed with error:", error);
     // Check the reason for error and take appropriate action.
   }
