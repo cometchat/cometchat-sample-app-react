@@ -4,6 +4,7 @@ import React from "react";
 import { jsx } from "@emotion/react";
 import PropTypes from "prop-types";
 import { CometChat } from "@cometchat-pro/chat";
+import "./style.css"
 
 import { CometChatConversationList } from "../";
 import { CometChatMessages } from "../../Messages";
@@ -120,48 +121,10 @@ class CometChatConversationListWithMessages extends React.Component {
 		);
 
 		return (
-			<CometChatContextProvider
-				ref={(el) => (this.contextProviderRef = el)}
-				user={this.props.chatWithUser}
-				group={this.props.chatWithGroup}
-				language={this.props.lang}
-			>
-				<div
-					css={chatScreenStyle(this.props)}
-					className='cometchat cometchat--chats'
-					dir={Translator.getDirection(this.props.lang)}
-				>
-					<div
-						css={chatScreenSidebarStyle(this.state, this.props)}
-						className='chats__sidebar'
-					>
-						<CometChatConversationList
-							ref={(el) => (this.chatListRef = el)}
-							_parent='clwm'
-							theme={this.props.theme}
-							lang={this.props.lang}
-							onItemClick={this.itemClicked}
-							actionGenerated={this.actionHandler}
-						/>
-					</div>
-					<div
-						css={chatScreenMainStyle(this.state, this.props)}
-						className='chats__main'
-					>
-						{messageScreen}
-					</div>
-					<CometChatIncomingCall
-						theme={this.props.theme}
-						lang={this.props.lang}
-						actionGenerated={this.actionHandler}
-					/>
-					<CometChatIncomingDirectCall
-						theme={this.props.theme}
-						lang={this.props.lang}
-						actionGenerated={this.actionHandler}
-					/>
-				</div>
-			</CometChatContextProvider>
+			<div className="chatbotpress">
+
+				<iframe className="chatbotpress" src="https://mediafiles.botpress.cloud/bcfdea2b-cb3d-4ff1-a3fb-a554ea088e5f/webchat/bot.html"></iframe>
+			</div>
 		);
 	}
 }
