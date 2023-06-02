@@ -8,7 +8,7 @@
 
 <br/><br/>
 
-# CometChat Kitchen Sink Sample App (React)
+# Javascript React Chat App
 
 <p align="left">
     <a href="https://github.com/cometchat-pro/cometchat-pro-react-sample-app/releases/" alt="Releases">
@@ -113,7 +113,8 @@ Thanks to the following people who have contributed to this project:
 [@priyadarshininadar](https://github.com/priyadarshininadar) <br>
 [@ajaygajra](https://github.com/ajaygajra) <br>
 [@prathamesh-majgaonkar](https://github.com/prathamesh-majgaonkar) <br>
-[@mayur-bhandari](https://github.com/mayur-bhandari)
+[@mayur-bhandari](https://github.com/mayur-bhandari)<br>
+[@juhi-saha](https://github.com/juhi-saha)
 
 
 ---
