@@ -47,7 +47,7 @@ CometChat Kitchen Sink Sample App (built using **CometChat UI Kit**) is a fully 
   
  ## Extensions
 
- [Thumbnail Generation](https://www.cometchat.com/docs/extensions/thumbnail-generation) | [Link Preview](https://www.cometchat.com/docs/extensions/link-preview) | [Rich Media Preview](https://www.cometchat.com/docs/extensions/rich-media-preview) | [Smart Replies](https://www.cometchat.com/docs/extensions/smart-replies)| [Emojis](https://www.cometchat.com/docs/extensions/emojis) | [Polls](https://www.cometchat.com/docs/extensions/polls) | [Reactions](https://www.cometchat.com/docs/extensions/reactions) | [Stickers](https://www.cometchat.com/docs/extensions/stickers)
+ [Thumbnail Generation](https://www.cometchat.com/docs/extensions/thumbnail-generation) | [Link Preview](https://www.cometchat.com/docs/extensions/link-preview) | [Message Translation](https://www.cometchat.com/docs/extensions/message-translation) | [Smart Replies](https://www.cometchat.com/docs/extensions/smart-replies) | [Polls](https://www.cometchat.com/docs/extensions/polls) | [Reactions](https://www.cometchat.com/docs/extensions/reactions) | [Stickers](https://www.cometchat.com/docs/extensions/stickers) | [Collaborative Document](https://www.cometchat.com/docs/extensions/collaborative-document) | [Collaborative Whiteboard](https://www.cometchat.com/docs/extensions/collaborative-whiteboard) | [Image Moderation](https://www.cometchat.com/docs/extensions/image-moderation) | [Data Masking Filter](https://www.cometchat.com/docs/extensions/data-masking-filter) | [Profanity Filter](https://www.cometchat.com/docs/extensions/profanity-filter) | [XSS Filter](https://www.cometchat.com/docs/extensions/xss-filter)
 
 <hr/> 
 
