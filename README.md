@@ -2,7 +2,7 @@
 <div>
     <img alt="CometChat" src="https://avatars2.githubusercontent.com/u/45484907?s=200&v=4" width="180" height="180" alt="CometChat" />
 </div>    
-<h2>CometChat React Sample</h3>
+<h2>CometChat React Sample App</h3>
 <p>
   CometChat Kitchen Sink Sample App (built using <b>CometChat UI Kits</b>) is a fully functional real-time messaging app capable of private (one-on-one), group messaging, voice & video calling.
   <br />
