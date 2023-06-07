@@ -1,7 +1,7 @@
 import { CometChat } from "@cometchat-pro/chat";
 import { useContext, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { CometChatContext } from "@cometchat-pro/react-ui-kit";
+import { CometChatContext } from "@cometchat/chat-uikit-react";
 import { CometChatConstants } from "../../constants";
 import { LoginSignup } from "../LoginSignup";
 import { TextInput } from "../TextInput";

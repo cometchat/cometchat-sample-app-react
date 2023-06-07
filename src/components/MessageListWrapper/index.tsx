@@ -1,6 +1,6 @@
 import { CometChat } from "@cometchat-pro/chat";
 import { useEffect, useState } from "react";
-import { CometChatMessageList } from "@cometchat-pro/react-ui-kit";
+import { CometChatMessageList } from "@cometchat/chat-uikit-react";
 
 type MessageListWrapperProps = { setSomeInterestingOpStarted : React.Dispatch<React.SetStateAction<boolean>> };
 

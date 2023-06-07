@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
-import { CometChatTheme } from "uikit-resources-lerna";
-import { CallButtonsStyle } from "uikit-utils-lerna";
+import { CometChatTheme } from "@cometchat/uikit-resources";
+import { CallButtonsStyle } from "@cometchat/uikit-shared";
 
 export function callButtonsWrapperStyle(theme : CometChatTheme) : CSSProperties {
     return {

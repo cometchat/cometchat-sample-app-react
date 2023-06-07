@@ -8,7 +8,7 @@ import { Effects } from "./effects";
 import { appStyle, loadingModalStyle } from "./style";
 import CometChatLogo from "../../assets/cometchat_logo.png";
 import LoadingIconGif from "../../assets/loading_icon.gif";
-import { CometChatPalette, CometChatTheme } from "uikit-resources-lerna";
+import { CometChatPalette, CometChatTheme } from "@cometchat/uikit-resources";
 import { ChatsCardList } from "../ChatsCardList";
 import { MessagesCardList } from "../MessagesCardList";
 import { UsersCardList } from "../UsersCardList";
@@ -36,7 +36,7 @@ import {
   CometChatGroupsWithMessages,
   CometChatUsersWithMessages,
   CometChatContext
-} from "@cometchat-pro/react-ui-kit";
+} from "@cometchat/chat-uikit-react";
 import { ConversationsWithMessagesWrapper } from "../ConversationsWithMessagesWrapper";
 
 export function App() {

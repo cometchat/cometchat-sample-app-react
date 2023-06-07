@@ -2,7 +2,7 @@
 
 import { useContext, useState } from "react";
 import CloseIcon from "../assets/close2x.png";
-import {CometChatContext} from "@cometchat-pro/react-ui-kit"
+import {CometChatContext} from "@cometchat/chat-uikit-react"
 import { loadingComponentModalStyle, componentDetailsModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
 import { statusIndicatorStyle, statusIndicatorWrapperStyle } from "./style";
 import Switch from "react-switch";

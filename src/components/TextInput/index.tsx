@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { CometChatContext } from "@cometchat-pro/react-ui-kit";
+import { CometChatContext } from "@cometchat/chat-uikit-react";
 import { inputStyle, labelContainerStyle, labelStyle, labelTextStyle, requiredSymbolStyle } from "./style";
 
 interface ITextInputProps {

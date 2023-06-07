@@ -1,6 +1,6 @@
 import { useContext, useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { CometChatContext, CometChatConversationsWithMessages, CometChatPalette, CometChatTheme } from "@cometchat-pro/react-ui-kit";
+import { CometChatContext, CometChatConversationsWithMessages, CometChatPalette, CometChatTheme } from "@cometchat/chat-uikit-react";
 
 export function ConversationsWithMessagesWrapper({ isMobileView } : {isMobileView : boolean}) {
     const { state } = useLocation();

@@ -1,7 +1,7 @@
 import { CometChat } from "@cometchat-pro/chat";
 import { useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { CometChatContext } from "@cometchat-pro/react-ui-kit";
+import { CometChatContext } from "@cometchat/chat-uikit-react";
 import { joinGroupStyle } from "./style";
 
 export function JoinGroupWrapper() {

@@ -3,7 +3,7 @@ import { useContext } from "react";
 import CloseIcon from "../assets/close2x.png";
 import { loadingComponentModalStyle, componentDetailsModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
 import SampleAudio from "./sample.mp3"
-import {CometChatContext} from "@cometchat-pro/react-ui-kit"
+import {CometChatContext} from "@cometchat/chat-uikit-react"
 const AudioBubble = (props:any) => {
     const {
         activeComponent,

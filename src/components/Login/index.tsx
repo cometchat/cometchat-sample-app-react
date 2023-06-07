@@ -7,7 +7,7 @@ import { CometChatConstants } from "../../constants";
 import { useContext, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { defaultUserBtnsContainerStyle, errorMessageStyle, goToSignupContainerStyle, goToSignupStyle, loginBtnStyle, loginSampleUsersContainerStyle, loginStyle, loginUidFormStyle, noAccountStyle, userAvatarStyle, userBtnStyle, userNameAndUidContainerStyle, userNameStyle, userUidStyle, usingSampleUsersTextStyle } from "./style";
-import { CometChatContext } from "@cometchat-pro/react-ui-kit";
+import { CometChatContext } from "@cometchat/chat-uikit-react";
 import { TextInput } from "../TextInput";
 import { LoginSignup } from "../LoginSignup";
 

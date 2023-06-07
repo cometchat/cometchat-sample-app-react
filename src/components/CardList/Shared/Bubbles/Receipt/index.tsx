@@ -1,7 +1,7 @@
 import {  useContext} from "react";
 import CloseIcon from "../assets/close2x.png";
 import { loadingComponentModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
-import {Receipts,CometChatContext} from "@cometchat-pro/react-ui-kit"
+import {Receipts,CometChatContext} from "@cometchat/chat-uikit-react"
 import {componentDetailsModalStyle} from "./style"
 
 export const Receipt = (props:any) => {

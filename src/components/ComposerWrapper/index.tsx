@@ -1,6 +1,6 @@
 import { CometChat } from "@cometchat-pro/chat";
 import { useContext, useEffect, useState } from "react";
-import { CometChatMessageComposer, CometChatContext } from "@cometchat-pro/react-ui-kit";
+import { CometChatMessageComposer, CometChatContext } from "@cometchat/chat-uikit-react";
 
 type ComposerWrapperProps = { setSomeInterestingAsyncOpStarted : React.Dispatch<React.SetStateAction<boolean>> };
 

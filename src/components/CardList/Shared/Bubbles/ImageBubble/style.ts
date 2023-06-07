@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import {CometChatContext,fontHelper} from "@cometchat-pro/react-ui-kit"
+import {CometChatContext,fontHelper} from "@cometchat/chat-uikit-react"
 export function senderBubbleStyle() {
     const { theme } = useContext(CometChatContext);
     return {

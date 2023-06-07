@@ -1,7 +1,7 @@
 import { CometChat } from "@cometchat-pro/chat";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CometChatDetails } from "@cometchat-pro/react-ui-kit";
+import { CometChatDetails } from "@cometchat/chat-uikit-react";
 
 type UserDetailsProps = { setInterestingAsyncOpStarted: React.Dispatch<React.SetStateAction<boolean>>}
 

@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { CometChatContext, CometChatList } from "@cometchat-pro/react-ui-kit";
-import { fontHelper, States } from "uikit-resources-lerna";
+import { CometChatContext, CometChatList } from "@cometchat/chat-uikit-react";
+import { fontHelper, States } from "@cometchat/uikit-resources";
 import { Card } from "../Card";
 import { Link, Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { listStyle } from "./style";

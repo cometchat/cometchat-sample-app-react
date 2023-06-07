@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { CometChatTheme } from "uikit-resources-lerna";
+import { CometChatTheme } from "@cometchat/uikit-resources";
 
 const LOGGED_IN_USER_INFO_CONTAINER_HEIGHT = "48px";
 const FOOTER_HEIGHT = "48px";

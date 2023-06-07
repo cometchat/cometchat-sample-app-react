@@ -1,9 +1,9 @@
 
 
 import { useContext } from "react";
-import {  fontHelper } from "uikit-resources-lerna";
+import {  fontHelper } from "@cometchat/uikit-resources";
 import CloseIcon from "../assets/close2x.png";
-import {CometChatContext} from "@cometchat-pro/react-ui-kit"
+import {CometChatContext} from "@cometchat/chat-uikit-react"
 import { loadingComponentModalStyle, componentDetailsModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
 import SamplePDF from "./sample.pdf"
 const FileBubble = (props:any) => {

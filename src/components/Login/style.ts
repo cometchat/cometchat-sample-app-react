@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { CometChatTheme, fontHelper } from "uikit-resources-lerna";
+import { CometChatTheme, fontHelper } from "@cometchat/uikit-resources";
 
 export function loginStyle() : CSSProperties {
     return {

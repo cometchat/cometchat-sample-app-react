@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { fontHelper } from "uikit-resources-lerna";
-import { CometChatContext } from "@cometchat-pro/react-ui-kit";
+import { fontHelper } from "@cometchat/uikit-resources";
+import { CometChatContext } from "@cometchat/chat-uikit-react";
 import { ResourcesCardList } from "../ResourcesCardList";
 import { ViewsCardList } from "../ViewsCardList";
 

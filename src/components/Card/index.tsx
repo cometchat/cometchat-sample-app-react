@@ -1,5 +1,5 @@
 import { CSSProperties, useContext } from "react";
-import { CometChatContext } from "@cometchat-pro/react-ui-kit";
+import { CometChatContext } from "@cometchat/chat-uikit-react";
 import { arrowImageStyle, descriptionStyle, textContentContainerStyle, titleStyle, cardStyle, iconStyle } from "./style";
 import RightArrow from "../../assets/right-arrow.png";
 

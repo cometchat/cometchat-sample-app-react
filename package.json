@@ -1,9 +1,9 @@
 {
   "name": "cometchat-chat-sample-app-react",
-  "version": "v4.0.0-beta.1",
+  "version": "4.0.0-beta.1",
   "private": true,
   "dependencies": {
-    "@cometchat/chat-uikit-react": "^4.0.0-beta.1.1",
+    "@cometchat/chat-uikit-react": "^4.0.0-beta.1.2",
     "@cometchat-pro/web-calls": "^3.0.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

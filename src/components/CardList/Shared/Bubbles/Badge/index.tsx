@@ -5,7 +5,7 @@ import CloseIcon from "../assets/close2x.png";
 import { loadingComponentModalStyle, componentDetailsModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
 import { inputStyle,badgeDemoStyle,colorButtonStyle } from "./style";
 
-import {CometChatContext,fontHelper} from "@cometchat-pro/react-ui-kit"
+import {CometChatContext,fontHelper} from "@cometchat/chat-uikit-react"
 
 const Badge = (props:any) => {
     const {

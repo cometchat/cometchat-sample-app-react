@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import {CometChatContext} from "@cometchat-pro/react-ui-kit"
+import {CometChatContext} from "@cometchat/chat-uikit-react"
 import CloseIcon from "../assets/close2x.png";
 import { loadingComponentModalStyle, componentDetailsModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
 

@@ -1,6 +1,6 @@
-import { CreateGroupStyle } from "my-cstom-package-lit";
+import { CreateGroupStyle } from "@cometchat/uikit-elements";
 import { CSSProperties } from "react";
-import { CometChatTheme, fontHelper } from "uikit-resources-lerna";
+import { CometChatTheme, fontHelper } from "@cometchat/uikit-resources";
 
 export function createGroupStyle(isMobileView : boolean, theme : CometChatTheme) : CreateGroupStyle {
     return {

@@ -1,7 +1,7 @@
 import { CometChat } from "@cometchat-pro/chat";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CometChatGroupMembers } from "@cometchat-pro/react-ui-kit";
+import { CometChatGroupMembers } from "@cometchat/chat-uikit-react";
 
 type GroupMembersWrapperProps = { setSomeInterestingAsyncOperation : React.Dispatch<React.SetStateAction<boolean>>};
 

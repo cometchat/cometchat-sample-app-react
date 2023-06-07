@@ -1,5 +1,5 @@
-import { JoinGroupStyle } from "my-cstom-package-lit";
-import { CometChatTheme, fontHelper } from "uikit-resources-lerna";
+import { JoinGroupStyle } from "@cometchat/uikit-elements";
+import { CometChatTheme, fontHelper } from "@cometchat/uikit-resources";
 
 export function joinGroupStyle(theme : CometChatTheme) : JoinGroupStyle {
     return {

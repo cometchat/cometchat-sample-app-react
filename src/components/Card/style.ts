@@ -1,6 +1,6 @@
-import { IconStyle } from "my-cstom-package-lit";
+import { IconStyle } from "@cometchat/uikit-elements";
 import { CSSProperties } from "react";
-import { CometChatTheme, fontHelper } from "uikit-resources-lerna";
+import { CometChatTheme, fontHelper } from "@cometchat/uikit-resources";
 
 export function cardStyle(cardContainerStyle : CSSProperties | undefined, theme : CometChatTheme) : CSSProperties {
     return {

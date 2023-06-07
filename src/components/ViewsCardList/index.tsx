@@ -10,9 +10,9 @@ import VideoBubble from "../../assets/video-bubble.svg";
 import AudioBubble from "../../assets/audio-bubble.svg";
 import FileBubble from "../../assets/file-bubble.svg";
 import { CardList } from "../CardList";
-import { fontHelper } from "uikit-resources-lerna";
+import { fontHelper } from "@cometchat/uikit-resources";
 import { useContext } from "react";
-import { CometChatContext } from "@cometchat-pro/react-ui-kit";
+import { CometChatContext } from "@cometchat/chat-uikit-react";
 
 const cardDataList : Omit<ICardProps, "onClick">[] = [
     {

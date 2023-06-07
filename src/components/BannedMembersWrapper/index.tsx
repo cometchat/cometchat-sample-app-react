@@ -1,7 +1,7 @@
 import { CometChat } from "@cometchat-pro/chat";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CometChatBannedMembers } from "@cometchat-pro/react-ui-kit";
+import { CometChatBannedMembers } from "@cometchat/chat-uikit-react";
 
 type BannedMembersWrapperProps = { setSomeInterestingAsyncOpStarted : React.Dispatch<React.SetStateAction<boolean>> };
 

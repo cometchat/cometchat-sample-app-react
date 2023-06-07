@@ -3,8 +3,7 @@
     <div align="center">
         <img alt="CometChat" src="https://avatars2.githubusercontent.com/u/45484907?s=200&v=4" width="180" height="180" alt="CometChat" />
     </div>    
-  <h2 align="center">React Sample Chat App by CometChat</h3>
-
+  <h2 align="center">React Sample App</h3>
   <p align="center">
     CometChat Kitchen Sink Sample App (built using <b>CometChat UI Kits</b>) is a fully functional real-time messaging app capable of private (one-on-one), group messaging, voice & video calling.
     <br />
@@ -50,8 +49,6 @@
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
-
-![Product screenshot](./Screenshots/main.png "Product screenshot")
 
 CometChat Kitchen Sink Sample App (built using **CometChat UI Kit**) is a fully functional real-time messaging app capable of private (one-on-one), group messaging, voice & video calling.
 
@@ -112,12 +109,11 @@ This app contains all features offered by CometChat through its UI Kit. [Read mo
 ```sh
 npm start
 ```
-
-For more on UI Kits, please refer to the [documentation](https://www.cometchat.com/docs/beta-uikits).
+To learn about React UI Kit Integration, please [click here](https://www.cometchat.com/docs/react-uikit-beta/integration).
 
 ## Help
 
-Read the full dcoumentation on our UI Kits by visiting our [documentation](https://www.cometchat.com/docs/react-uikit-beta/overview).
+To learn more about our UI kits, visit our [documentation](https://www.cometchat.com/docs/react-uikit-beta/overview).
 
 If you are still facing issues while running this project or integrating with our UI Kits, please connect with our real time support via the [CometChat Dashboard](https://app.cometchat.com/).
 

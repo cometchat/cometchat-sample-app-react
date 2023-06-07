@@ -3,8 +3,8 @@ import "./index.css";
 import { App } from "./components/App";
 import { CometChatConstants } from "./constants"; 
 import { CometChat } from "@cometchat-pro/chat";
-import "my-cstom-package-lit";
-import { ChatConfigurator } from "@cometchat-pro/react-ui-kit";
+import "@cometchat/uikit-elements";
+import { ChatConfigurator } from "@cometchat/chat-uikit-react";
 
 (async () => {
   const appSettings = new CometChat.AppSettingsBuilder()

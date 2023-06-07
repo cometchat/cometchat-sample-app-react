@@ -1,7 +1,7 @@
 import { cardStyle, chatHeaderTextStyle, contentContainerStyle, contentStyle, footerStyle, headerStyle, headerTitle, imageStyle, loginSignupStyle, mainContainerStyle, titleStyle, versionStyle } from "./style";
 import Image from "../../assets/Image-518@1x.png";
 import { useContext } from "react";
-import { CometChatContext } from "@cometchat-pro/react-ui-kit";
+import { CometChatContext } from "@cometchat/chat-uikit-react";
 import { IsMobileViewContext } from "../../IsMobileViewContext";
 
 interface ILoginSignupProps {

@@ -1,7 +1,7 @@
 import { CSSProperties, useContext, useState } from "react";
 import { useNavigate , useLocation} from "react-router-dom";
-import { fontHelper } from "uikit-resources-lerna";
-import { CometChatContext } from "@cometchat-pro/react-ui-kit";
+import { fontHelper } from "@cometchat/uikit-resources";
+import { CometChatContext } from "@cometchat/chat-uikit-react";
 import { Card, ICardProps } from "../Card";
 import { Shared } from "./Shared";
 

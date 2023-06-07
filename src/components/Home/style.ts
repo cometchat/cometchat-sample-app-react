@@ -1,5 +1,5 @@
-import { CometChatTheme, fontHelper } from "uikit-resources-lerna";
-import { ListStyle } from "uikit-utils-lerna";
+import { CometChatTheme, fontHelper } from "@cometchat/uikit-resources";
+import { ListStyle } from "@cometchat/uikit-shared";
 
 export function listStyle(theme : CometChatTheme) : ListStyle {
     return {

@@ -1,7 +1,7 @@
 import { CometChat } from "@cometchat-pro/chat";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CometChatCallButtons, CometChatContext } from "@cometchat-pro/react-ui-kit";
+import { CometChatCallButtons, CometChatContext } from "@cometchat/chat-uikit-react";
 import { callButtonsStyle, callButtonsWrapperStyle } from "./style";
 
 type CallButtonsWrapperProps = { setSomeInterestingAsyncOpStarted : React.Dispatch<React.SetStateAction<boolean>> };

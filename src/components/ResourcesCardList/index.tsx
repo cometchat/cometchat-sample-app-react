@@ -3,9 +3,9 @@ import SoundSmall from "../../assets/sound-small.png";
 import Theme from "../../assets/theme.png";
 import Localize from "../../assets/localize.png";
 import { CardList } from "../CardList";
-import { fontHelper } from "uikit-resources-lerna";
+import { fontHelper } from "@cometchat/uikit-resources";
 import { useContext } from "react";
-import { CometChatContext } from "@cometchat-pro/react-ui-kit";
+import { CometChatContext } from "@cometchat/chat-uikit-react";
 
 const cardDataList : Omit<ICardProps, "onClick">[] = [
     {
