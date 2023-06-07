@@ -11,19 +11,19 @@
     <a href="https://www.cometchat.com/docs/react-chat-ui-kit/overview"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/cometchat-pro/cometchat-pro-react-sample-app/issues">Report Bug</a>
+    <a href="https://github.com/cometchat-pro//javascript-react-chat-app/issues">Report Bug</a>
   </p>
 </p>
 
 <div align="center">
-    <a href="https://github.com/cometchat-pro/cometchat-pro-react-sample-app/releases/" alt="Releases">
-        <img src="https://img.shields.io/github/v/release/cometchat-pro/cometchat-pro-react-sample-app" />
+    <a href="https://github.com/cometchat-pro/javascript-react-chat-app/releases/" alt="Releases">
+        <img src="https://img.shields.io/github/v/release/cometchat-pro/javascript-react-chat-app" />
     </a>
-    <a href="https://img.shields.io/github/languages/top/cometchat-pro/cometchat-pro-react-sample-app">
-        <img src="https://img.shields.io/github/languages/top/cometchat-pro/cometchat-pro-react-sample-app" />
+    <a href="https://img.shields.io/github/languages/top/cometchat-pro/javascript-react-chat-app">
+        <img src="https://img.shields.io/github/languages/top/cometchat-pro/javascript-react-chat-app" />
     </a>
-    <a href="https://github.com/cometchat-pro/cometchat-pro-react-sample-app/stargazers">
-        <img src="https://img.shields.io/github/stars/cometchat-pro/cometchat-pro-react-sample-app?style=social" />
+    <a href="https://github.com/cometchat-pro/javascript-react-chat-app/stargazers">
+        <img src="https://img.shields.io/github/stars/cometchat-pro/javascript-react-chat-app?style=social" />
     </a>
     <a href="https://twitter.com/CometChat">
         <img src="https://img.shields.io/twitter/follow/CometChat?label=CometChat&style=social" />
@@ -82,7 +82,7 @@ Simply clone or fork this repo and run it using the instructions below to see al
 1. Clone the repo
 
    ```sh
-   git clone https://github.com/cometchat-pro/javascript-react-chat-app.git
+   git clone https://github.com/cometchat-pro/javascript-react-chat-app.git -b v4
    ```
 
 2. Change to the working directory
@@ -97,9 +97,9 @@ Simply clone or fork this repo and run it using the instructions below to see al
    npm install
    ```
 
-4. Replace `APP_ID`, `REGION` and `AUTH_KEY` with your CometChat `App ID`, `Region` and `Auth Key` in `src/consts.js` file.
+4. Replace `APP_ID`, `REGION` and `AUTH_KEY` with your CometChat `App ID`, `Region` and `Auth Key` in `src/constants.ts` file.
 
-   ![Replacing constants in src/consts.js](./Screenshots/constants.png "Replacing constants in src/consts.js")
+   ![Replacing constants in src/constants.ts](./Screenshots/constants.png "Replacing constants in src/constants.ts")
 
 <!-- USAGE EXAMPLES -->
 
@@ -125,7 +125,7 @@ If you are still facing issues while running this project or integrating with ou
 
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**. Sincere thanks to all our [contributors](https://github.com/cometchat-pro/cometchat-pro-react-sample-app/graphs/contributors)!
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**. Sincere thanks to all our [contributors](https://github.com/cometchat-pro/javascript-react-chat-app/graphs/contributors)!
 
 You are requested to follow the contribution guidelines specified in [CONTRIBUTING.md](./CONTRIBUTING.md) while contributing to the project :smile:.
 
