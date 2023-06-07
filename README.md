@@ -59,7 +59,7 @@ CometChat Kitchen Sink Sample App (built using **CometChat UI Kit**) is a fully 
 
 - [React](https://react.dev)
 - [CometChat](https://cometchat.com)
-  - [CometChat React UI Kit](https://github.com/cometchat-pro/cometchat-pro-react-ui-kit)
+  - [CometChat React UI Kit](https://www.npmjs.com/package/@cometchat/chat-uikit-react)
 
 <!-- GETTING STARTED -->
 
