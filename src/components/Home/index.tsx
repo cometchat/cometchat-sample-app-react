@@ -157,7 +157,7 @@ export function Home(props : IHomeProps) {
                             color: theme.palette.getAccent500()
                         }}
                     >
-                        3.0.12-pluto.beta.2
+                        4.0.0-beta.1
                     </div>
                 </div>
             );

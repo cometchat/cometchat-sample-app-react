@@ -36,7 +36,7 @@ export function LoginSignup(props : ILoginSignupProps) {
                 <div
                     style = {versionStyle(theme)}
                 >
-                    3.0.12-pluto.beta.2
+                    4.0.0-beta.1
                 </div>
             </div>
         );
