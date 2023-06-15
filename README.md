@@ -7,9 +7,12 @@
 </div>
 
 </br></br>
-> Version 4 CometChat UI Kits
 
-We’ve introduced a major update to CometChat UI kits. Version 4 features a modular architecture that give you enhanced flexibility to build and customize your web and mobile apps. Please switch to the branch [v4](https://github.com/cometchat-pro/cometchat-chat-sample-app-react/tree/v4) to check out the sample app based on this version. Read about this new and upgraded version [on our docs](https://www.cometchat.com/docs/react-uikit-beta/overview/overview).
+> **Note**
+
+Version 4 CometChat UI Kits 
+
+We’ve introduced a major update to CometChat UI kits. Version 4 features a modular architecture that give you enhanced flexibility to build and customize your web and mobile apps. Please switch to the branch [v4](https://github.com/cometchat-pro/cometchat-chat-sample-app-react/tree/v4) to check out the sample app based on this version. [Visit our documentation](https://www.cometchat.com/docs/react-uikit-beta/overview/overview) to read more about this.
 <br/><br/>
 
 # CometChat Kitchen Sink Sample App (React)
