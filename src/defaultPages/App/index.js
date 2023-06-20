@@ -22,7 +22,7 @@ import {
     CometChatGroupList,
     CometChatGroupListWithMessages,
     CometChatMessages
-} from '../../cometchat-pro-react-ui-kit/CometChatWorkspace/src';
+} from '../../cometchat-chat-uikit-react/CometChatWorkspace/src';
 
 import {
     wrapperStyle

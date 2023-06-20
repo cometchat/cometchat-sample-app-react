@@ -1,9 +1,9 @@
 <div style="width:100%">
     <div style="width:50%;">
         <div align="center">
-        <img align="center" width="180" height="180" alt="CometChat" src="./Screenshots/logo.png">    
-        </div>    
-    </div>    
+        <img align="center" width="180" height="180" alt="CometChat" src="./Screenshots/logo.png">
+        </div>
+    </div>
 </div>
 
 <br/><br/>
@@ -44,18 +44,18 @@ CometChat Kitchen Sink Sample App (built using **CometChat UI Kit**) is a fully 
 - Search by users and groups
 - Conversations List
 - Threaded Conversations
-  
+
  ## Extensions
 
  [Thumbnail Generation](https://www.cometchat.com/docs/extensions/thumbnail-generation) | [Link Preview](https://www.cometchat.com/docs/extensions/link-preview) | [Rich Media Preview](https://www.cometchat.com/docs/extensions/rich-media-preview) | [Smart Replies](https://www.cometchat.com/docs/extensions/smart-replies)| [Emojis](https://www.cometchat.com/docs/extensions/emojis) | [Polls](https://www.cometchat.com/docs/extensions/polls) | [Reactions](https://www.cometchat.com/docs/extensions/reactions) | [Stickers](https://www.cometchat.com/docs/extensions/stickers)
 
-<hr/> 
+<hr/>
 
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
 
-- React `npm install react@17.0.2` 
+- React `npm install react@17.0.2`
 
 - React DOM `npm install react-dom@17.0.2`
 
@@ -95,7 +95,7 @@ ___
 
 ## Add UI Kit to your project
 
-Learn more about how to integrate [UI Kit](https://github.com/cometchat-pro/cometchat-pro-react-ui-kit/) inside your app. 
+Learn more about how to integrate [UI Kit](https://github.com/cometchat-pro/cometchat-chat-uikit-react/) inside your app.
 
 ---
 
