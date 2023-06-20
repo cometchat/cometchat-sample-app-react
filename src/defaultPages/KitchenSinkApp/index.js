@@ -7,7 +7,7 @@ import { Global } from "@emotion/react";
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { CometChatAvatar } from '../../cometchat-pro-react-ui-kit/CometChatWorkspace/src';
+import { CometChatAvatar } from '../../cometchat-chat-uikit-react/CometChatWorkspace/src';
 import { COMETCHAT_CONSTANTS } from '../../consts';
 
 import {
@@ -36,7 +36,7 @@ class KitchenSinkApp extends React.PureComponent {
   }
 
   login = (uid) => {
-    
+
     if(!uid) {
       uid = this.myRef.current.value;
     }
@@ -44,7 +44,7 @@ class KitchenSinkApp extends React.PureComponent {
     this.uid = uid;
     this.props.onLogin(this.uid, COMETCHAT_CONSTANTS.AUTH_KEY);
   }
-  
+
   render() {
 
     let loader = null;
