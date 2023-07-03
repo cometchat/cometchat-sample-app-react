@@ -1,6 +1,6 @@
 import { useContext, useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { CometChatContext, CometChatConversationsWithMessages, CometChatPalette, CometChatTheme } from "@cometchat/chat-uikit-react";
+import { CometChatContext, CometChatConversationsWithMessages, CometChatPalette, CometChatTheme,CometChatIncomingCall } from "@cometchat/chat-uikit-react";
 
 export function ConversationsWithMessagesWrapper({ isMobileView } : {isMobileView : boolean}) {
     const { state } = useLocation();
@@ -40,6 +40,7 @@ export function ConversationsWithMessagesWrapper({ isMobileView } : {isMobileVie
             <CometChatConversationsWithMessages 
                 isMobileView = {isMobileView}
             />
+            <CometChatIncomingCall />
         </CometChatContext.Provider>
     );
 }

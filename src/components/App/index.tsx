@@ -35,7 +35,7 @@ import {
   CometChatGroups,
   CometChatGroupsWithMessages,
   CometChatUsersWithMessages,
-  CometChatContext
+  CometChatContext,
 } from "@cometchat/chat-uikit-react";
 import { ConversationsWithMessagesWrapper } from "../ConversationsWithMessagesWrapper";
 
@@ -97,7 +97,7 @@ export function App() {
       />
     );
   }
-
+ 
   function getSignup() {
     return (
       <Signup
@@ -284,7 +284,6 @@ export function App() {
     observableRef,
     setIsMobileView
   });
-
   return (
     <div
       style = {appStyle(theme)}

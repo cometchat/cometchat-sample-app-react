@@ -5,6 +5,7 @@ import { Card } from "../Card";
 import { Link, Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { listStyle } from "./style";
 import { CometChat } from "@cometchat-pro/chat";
+import { CometChatUIKit,CometChatIncomingCall } from "@cometchat/chat-uikit-react";
 import RightArrow from "../../assets/right-arrow.png";
 import SwitchMode from "../../assets/switch-mode.png";
 import PowerOff from "../../assets/power-off.png";
@@ -85,7 +86,7 @@ export function Home(props : IHomeProps) {
     async function handleLogout() {
         try {
             setInterestingAsyncOpStarted(true);
-            await CometChat.logout();
+            await CometChatUIKit.logout();
             setLoggedInUser(null);
         }
         catch(error) {
@@ -284,6 +285,8 @@ export function Home(props : IHomeProps) {
         >
             {getSidebar()}
             {getContent()}
+            <div className="incomingCallWrapper"> <CometChatIncomingCall /> </div>
+           
         </div>
     );
 }
