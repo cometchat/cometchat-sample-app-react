@@ -91,7 +91,7 @@ Simply clone or fork this repo and run it using the instructions below to see al
    npm install
    ```
 
-4. Replace `APP_ID`, `REGION` and `AUTH_KEY` with your CometChat `App ID`, `Region` and `Auth Key` in `src/constants.ts` file.
+4. Replace `APP_ID`, `REGION`, and `AUTH_KEY` with your CometChat `App ID`, `Region`, and `Auth Key` in `src/constants.ts` file.
 
    ![Replacing constants in src/constants.ts](./Screenshots/constants.png "Replacing constants in src/constants.ts")
 
@@ -112,19 +112,19 @@ To learn about React UI Kit Integration, please [click here](https://www.cometch
 
 To learn more about our UI kits, visit our [documentation](https://www.cometchat.com/docs/react-uikit-beta/overview).
 
-If you are still facing issues while running this project or integrating with our UI Kits, please connect with our real time support via the [CometChat Dashboard](https://app.cometchat.com/).
+If you are still facing issues while running this project or integrating with our UI Kits, please connect with our real-time support via the [CometChat Dashboard](https://app.cometchat.com/).
 
 <!-- CONTRIBUTING -->
 
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**. Sincere thanks to all our [contributors](https://github.com/cometchat-pro/cometchat-chat-sample-app-react/graphs/contributors)!
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**. Sincere thanks to all our [contributors](https://github.com/cometchat-pro/cometchat-chat-sample-app-react/graphs/contributors)!
 
 You are requested to follow the contribution guidelines specified in [CONTRIBUTING.md](./CONTRIBUTING.md) while contributing to the project :smile:.
 
 ## Support
 
-Please connect with our real time support via the [CometChat Dashboard](https://app.cometchat.com/).
+Please connect with our real-time support via the [CometChat Dashboard](https://app.cometchat.com/).
 
 <!-- LICENSE -->
 
@@ -134,8 +134,8 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 ## About Authors
 
-`javascript-react-chat-app` is created & maintained by CometChat.
+`cometchat-chat-sample-app-react` is created & maintained by CometChat.
 
 The names and logos for CometChat are trademarks of CometChat, Inc.
 
-We love open source software! See [our other projects](https://github.com/cometchat-pro) or [sign up with us](https://app.cometchat.com) to start using our product.
+We love open-source software! See [our other projects](https://github.com/cometchat-pro) or [sign up with us](https://app.cometchat.com) to start using our product.
