@@ -99,18 +99,18 @@ Simply clone or fork this repo and run it using the instructions below to see al
 
 ## Usage
 
-This app contains all features offered by CometChat through its UI Kit. [Read more about the React UI Kit here.](https://www.cometchat.com/docs/react-uikit-beta/overview)
+This app contains all features offered by CometChat through its UI Kit. [Read more about the React UI Kit here.](https://www.cometchat.com/docs/react-v4-uikit/overview)
 
 ### Run project locally
 
 ```sh
 npm start
 ```
-To learn about React UI Kit Integration, please [click here](https://www.cometchat.com/docs/react-uikit-beta/integration).
+To learn about React UI Kit Integration, please [click here](https://www.cometchat.com/docs/react-v4-uikit/integration).
 
 ## Help
 
-To learn more about our UI kits, visit our [documentation](https://www.cometchat.com/docs/react-uikit-beta/overview).
+To learn more about our UI kits, visit our [documentation](https://www.cometchat.com/docs/react-v4-uikit/overview).
 
 If you are still facing issues while running this project or integrating with our UI Kits, please connect with our real-time support via the [CometChat Dashboard](https://app.cometchat.com/).
 
