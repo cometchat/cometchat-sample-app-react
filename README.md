@@ -6,10 +6,10 @@
 <p>
   CometChat Kitchen Sink Sample App (built using <b>CometChat UI Kits</b>) is a fully functional real-time messaging app capable of private (one-on-one), group messaging, voice & video calling.
   <br />
-  <a href="https://www.cometchat.com/docs/react-chat-ui-kit/overview"><strong>Explore the docs »</strong></a>
+  <a href="https://www.cometchat.com/docs/react-uikit-beta/overview"><strong>Explore the docs »</strong></a>
   <br />
   <br />
-  <a href="https://github.com/cometchat-pro//javascript-react-chat-app/issues">Report Bug</a>
+  <a href="https://github.com/cometchat-pro/javascript-react-chat-app/issues">Report Bug</a>
 </p>
 
 <div align="center">
