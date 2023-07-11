@@ -76,13 +76,13 @@ Simply clone or fork this repo and run it using the instructions below to see al
 1. Clone the repo
 
    ```sh
-   git clone https://github.com/cometchat-pro/javascript-react-chat-app.git -b v4
+   git clone https://github.com/cometchat-pro/cometchat-chat-sample-app-react.git -b v4
    ```
 
 2. Change to the working directory
 
    ```sh
-   cd javascript-react-chat-app
+   cd cometchat-chat-sample-app-react
    ```
 
 3. Install dependencies via NPM
@@ -118,7 +118,7 @@ If you are still facing issues while running this project or integrating with ou
 
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**. Sincere thanks to all our [contributors](https://github.com/cometchat-pro/javascript-react-chat-app/graphs/contributors)!
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**. Sincere thanks to all our [contributors](https://github.com/cometchat-pro/cometchat-chat-sample-app-react/graphs/contributors)!
 
 You are requested to follow the contribution guidelines specified in [CONTRIBUTING.md](./CONTRIBUTING.md) while contributing to the project :smile:.
 
