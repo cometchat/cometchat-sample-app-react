@@ -110,7 +110,7 @@ To learn about React UI Kit Integration, please [click here](https://www.cometch
 
 ## Help
 
-To learn more about our UI kits, visit our [documentation](https://www.cometchat.com/docs/react-v4-uikit/overview).
+To learn more about our UI kits, visit our [documentation](https://www.cometchat.com/docs/v4-uikits).
 
 If you are still facing issues while running this project or integrating with our UI Kits, please connect with our real-time support via the [CometChat Dashboard](https://app.cometchat.com/).
 
