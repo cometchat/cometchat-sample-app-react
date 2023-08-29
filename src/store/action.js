@@ -52,7 +52,7 @@ export const auth = (uid, authKey) => {
             }
             
         }).catch(error => {
-            console.log('CometChatLogin Failed', error);
+            console.log('Connecto Login Failed', error);
             dispatch(authFail(error));
         });
     };
