@@ -1,11 +1,11 @@
+import { componentDetailModalCloseIconStyle, componentDetailsModalCloseIconWrapperStyle, componentDetailsModalDescriptionStyle, componentDetailsModalHeaderStyle, componentDetailsModalStyle, componentDetailsModalTitleStyle, loadingComponentModalStyle } from "../../style";
 
-
-import { useContext } from "react";
-import {  fontHelper } from "@cometchat/uikit-resources";
 import CloseIcon from "../assets/close2x.png";
-import {CometChatContext} from "@cometchat/chat-uikit-react"
-import { loadingComponentModalStyle, componentDetailsModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
+import {CometChatThemeContext} from "@cometchat/chat-uikit-react"
 import SamplePDF from "./sample.pdf"
+import { fontHelper } from "@cometchat/uikit-resources";
+import { useContext } from "react";
+
 const FileBubble = (props:any) => {
     const {
         activeComponent,
@@ -16,7 +16,7 @@ const FileBubble = (props:any) => {
     const bubbleSlug = "file-bubble"
     if(showComponentModal && activeComponent === bubbleSlug)
         showModal = true
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
     const fileStyle = {
         borderRadius:"8px",
         height:"fit-content",

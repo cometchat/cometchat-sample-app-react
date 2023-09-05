@@ -1,12 +1,13 @@
-import { CometChat } from "@cometchat-pro/chat";
+import { CometChatMessageComposer, CometChatThemeContext } from "@cometchat/chat-uikit-react";
 import { useContext, useEffect, useState } from "react";
-import { CometChatMessageComposer, CometChatContext } from "@cometchat/chat-uikit-react";
+
+import { CometChat } from "@cometchat/chat-sdk-javascript";
 
 type ComposerWrapperProps = { setSomeInterestingAsyncOpStarted : React.Dispatch<React.SetStateAction<boolean>> };
 
 export function ComposerWrapper(props : ComposerWrapperProps) {
     const [group, setGroup] = useState<CometChat.Group>();
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
     const { setSomeInterestingAsyncOpStarted, ...otherProps } = props;
 
     useEffect(() => {

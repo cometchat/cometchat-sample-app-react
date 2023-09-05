@@ -1,11 +1,9 @@
+import {CometChatThemeContext, fontHelper} from "@cometchat/chat-uikit-react"
+import { badgeDemoStyle, colorButtonStyle, inputStyle } from "./style";
+import { componentDetailModalCloseIconStyle, componentDetailsModalCloseIconWrapperStyle, componentDetailsModalDescriptionStyle, componentDetailsModalHeaderStyle, componentDetailsModalStyle, componentDetailsModalTitleStyle, loadingComponentModalStyle } from "../../style";
+import { useContext, useState } from "react";
 
-
-import { useState,useContext } from "react";
 import CloseIcon from "../assets/close2x.png";
-import { loadingComponentModalStyle, componentDetailsModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
-import { inputStyle,badgeDemoStyle,colorButtonStyle } from "./style";
-
-import {CometChatContext,fontHelper} from "@cometchat/chat-uikit-react"
 
 const Badge = (props:any) => {
     const {
@@ -23,7 +21,7 @@ const Badge = (props:any) => {
     if(showComponentModal && activeComponent === bubbleSlug)
         showModal = true
 
-        const { theme } = useContext(CometChatContext);
+        const { theme } = useContext(CometChatThemeContext);
     let badgeStyle = {
         textFont: fontHelper(theme.typography.subtitle2),
         textColor: theme.palette.getAccent("dark"),

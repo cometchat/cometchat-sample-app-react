@@ -1,6 +1,7 @@
-import { useContext } from "react";
-import { CometChatContext } from "@cometchat/chat-uikit-react";
 import { inputStyle, labelContainerStyle, labelStyle, labelTextStyle, requiredSymbolStyle } from "./style";
+
+import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
+import { useContext } from "react";
 
 interface ITextInputProps {
     labelText : string,
@@ -19,7 +20,7 @@ export function TextInput(props : ITextInputProps) {
         required = false
     } = props;
 
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
 
     function getLabel() {
         let labelJSX = (

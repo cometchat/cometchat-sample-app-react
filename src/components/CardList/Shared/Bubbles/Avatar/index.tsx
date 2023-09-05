@@ -1,11 +1,10 @@
+import {CometChatThemeContext, fontHelper} from "@cometchat/chat-uikit-react"
+import { avatarWrapperStyle, inputStyle } from "./style";
+import { componentDetailModalCloseIconStyle, componentDetailsModalCloseIconWrapperStyle, componentDetailsModalDescriptionStyle, componentDetailsModalHeaderStyle, componentDetailsModalStyle, componentDetailsModalTitleStyle, loadingComponentModalStyle } from "../../style";
+import { useContext, useState } from "react";
 
-
-import { useState,useContext } from "react";
 import CloseIcon from "../assets/close2x.png";
-import { loadingComponentModalStyle, componentDetailsModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
-import { avatarWrapperStyle,inputStyle } from "./style";
 import Switch from "react-switch";
-import {CometChatContext,fontHelper} from "@cometchat/chat-uikit-react"
 
 const Avatar = (props:any) => {
     const {
@@ -26,7 +25,7 @@ const Avatar = (props:any) => {
     const handleInputChange = (value:string) => {
       setAvatarBorderRadius(value)
     }
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
     const themeMode = theme.palette.mode
     let avatarStyle = {
         borderRadius: `${avatarBorderRadius}px`,

@@ -1,15 +1,16 @@
-import { CometChat } from "@cometchat-pro/chat";
-import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { CometChatCallButtons, CometChatContext } from "@cometchat/chat-uikit-react";
+import { CometChatCallButtons, CometChatThemeContext } from "@cometchat/chat-uikit-react";
 import { callButtonsStyle, callButtonsWrapperStyle } from "./style";
+import { useContext, useEffect, useState } from "react";
+
+import { CometChat } from "@cometchat/chat-sdk-javascript";
+import { useNavigate } from "react-router-dom";
 
 type CallButtonsWrapperProps = { setSomeInterestingAsyncOpStarted : React.Dispatch<React.SetStateAction<boolean>> };
 
 export function CallButtonsWrapper(props : CallButtonsWrapperProps) {
     const [loggedInUser, setLoggedInUser] = useState<CometChat.User | null>(null);
     const navigate = useNavigate();
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
     const { setSomeInterestingAsyncOpStarted, ...otherProps } = props;
     
     function handleClick(message : string) {

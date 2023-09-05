@@ -1,10 +1,14 @@
 {
   "name": "cometchat-chat-sample-app-react",
-  "version": "4.0.0-beta.1",
+  "version": "4.0.0",
   "private": true,
   "dependencies": {
-    "@cometchat-pro/web-calls": "^3.0.1",
-    "@cometchat/chat-uikit-react": "^4.0.0-beta.1.6",
+    "@cometchat/calls-sdk-javascript": "^4.0.1",
+    "@cometchat/chat-sdk-javascript": "^4.0.0",
+    "@cometchat/chat-uikit-react": "^4.0.0",
+    "@cometchat/uikit-elements": "^4.0.0",
+    "@cometchat/uikit-resources": "^4.0.0",
+    "@cometchat/uikit-shared": "^4.0.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

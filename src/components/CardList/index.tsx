@@ -1,9 +1,10 @@
 import { CSSProperties, useContext, useState } from "react";
-import { useNavigate , useLocation} from "react-router-dom";
-import { fontHelper } from "@cometchat/uikit-resources";
-import { CometChatContext } from "@cometchat/chat-uikit-react";
 import { Card, ICardProps } from "../Card";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
 import { Shared } from "./Shared";
+import { fontHelper } from "@cometchat/uikit-resources";
 
 interface ICardListProps {
     title : string,
@@ -16,7 +17,7 @@ type CardData = ICardListProps["cardDataList"][number];
 export function CardList({ title, cardDataList, titleStyle } : ICardListProps) {
     const navigate = useNavigate();
     const location = useLocation();
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
     const [showComponentModal, setShowComponentModal] = useState(false);
     const [activeComponent, setActiveComponent] = useState('');
 

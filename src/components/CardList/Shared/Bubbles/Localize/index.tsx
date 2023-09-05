@@ -1,10 +1,11 @@
-import { useState , useContext} from "react";
-import {CometChatContext} from "@cometchat/chat-uikit-react"
-import { useNavigate } from "react-router-dom";
+import { componentDetailModalCloseIconStyle, componentDetailsModalCloseIconWrapperStyle, componentDetailsModalDescriptionStyle, componentDetailsModalHeaderStyle, componentDetailsModalStyle, componentDetailsModalTitleStyle, loadingComponentModalStyle } from "../../style";
+import { useContext, useState } from "react";
+
 import CloseIcon from "../assets/close2x.png";
-import { loadingComponentModalStyle, componentDetailsModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
-import Switch from "react-switch";
 import { CometChatLocalize } from "@cometchat/uikit-resources";
+import {CometChatThemeContext} from "@cometchat/chat-uikit-react"
+import Switch from "react-switch";
+import { useNavigate } from "react-router-dom";
 
 const Localize = (props:any) => {
     const [languageChoice, setLanguageChoice] = useState("english")
@@ -25,7 +26,7 @@ const Localize = (props:any) => {
     const handleNavigateToConversations = () => {
         navigate("/home/chats-module/conversations-with-messages");
     }  
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
     const themeMode = theme.palette.mode
     return (
        

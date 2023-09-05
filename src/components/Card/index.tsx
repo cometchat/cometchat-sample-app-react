@@ -1,6 +1,7 @@
 import { CSSProperties, useContext } from "react";
-import { CometChatContext } from "@cometchat/chat-uikit-react";
-import { arrowImageStyle, descriptionStyle, textContentContainerStyle, titleStyle, cardStyle, iconStyle } from "./style";
+import { arrowImageStyle, cardStyle, descriptionStyle, iconStyle, textContentContainerStyle, titleStyle } from "./style";
+
+import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
 import RightArrow from "../../assets/right-arrow.png";
 
 export interface ICardProps {
@@ -20,7 +21,7 @@ export function Card(props : ICardProps) {
         cardContainerStyle
     } = props;
 
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
 
     function getImage() {
         if (!imageInfo) {

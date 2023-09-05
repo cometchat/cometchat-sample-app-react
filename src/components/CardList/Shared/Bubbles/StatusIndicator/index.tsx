@@ -1,10 +1,9 @@
-
-
-import { useContext, useState } from "react";
-import CloseIcon from "../assets/close2x.png";
-import {CometChatContext} from "@cometchat/chat-uikit-react"
-import { loadingComponentModalStyle, componentDetailsModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
+import { componentDetailModalCloseIconStyle, componentDetailsModalCloseIconWrapperStyle, componentDetailsModalDescriptionStyle, componentDetailsModalHeaderStyle, componentDetailsModalStyle, componentDetailsModalTitleStyle, loadingComponentModalStyle } from "../../style";
 import { statusIndicatorStyle, statusIndicatorWrapperStyle } from "./style";
+import { useContext, useState } from "react";
+
+import CloseIcon from "../assets/close2x.png";
+import {CometChatThemeContext} from "@cometchat/chat-uikit-react"
 import Switch from "react-switch";
 
 const StatusIndicator = (props:any) => {
@@ -17,7 +16,7 @@ const StatusIndicator = (props:any) => {
     const bubbleSlug = "status-indicator"
     if(showComponentModal && activeComponent === bubbleSlug)
         showModal = true
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
     const themeMode = theme.palette.mode
     const colorOnline = theme.palette.getSuccess()
     const colorOffline = theme.palette.getAccent600()

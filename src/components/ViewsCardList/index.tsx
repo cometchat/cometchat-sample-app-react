@@ -1,18 +1,18 @@
-import { ICardProps } from "../Card";
-import Conversation from "../../assets/conversation.png";
-import Avatar from "../../assets/avatar.png";
-import Status from "../../assets/status.png";
-import Badge from "../../assets/badge.png"; 
-import Receipt from "../../assets/receipt.png";
-import TextBubble from "../../assets/text-bubble.svg";
-import ImageBubble from "../../assets/image-bubble.svg";
-import VideoBubble from "../../assets/video-bubble.svg";
 import AudioBubble from "../../assets/audio-bubble.svg";
-import FileBubble from "../../assets/file-bubble.svg";
+import Avatar from "../../assets/avatar.png";
+import Badge from "../../assets/badge.png";
 import { CardList } from "../CardList";
+import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
+import Conversation from "../../assets/conversation.png";
+import FileBubble from "../../assets/file-bubble.svg";
+import { ICardProps } from "../Card";
+import ImageBubble from "../../assets/image-bubble.svg";
+import Receipt from "../../assets/receipt.png";
+import Status from "../../assets/status.png";
+import TextBubble from "../../assets/text-bubble.svg";
+import VideoBubble from "../../assets/video-bubble.svg";
 import { fontHelper } from "@cometchat/uikit-resources";
 import { useContext } from "react";
-import { CometChatContext } from "@cometchat/chat-uikit-react";
 
 const cardDataList : Omit<ICardProps, "onClick">[] = [
     {
@@ -98,7 +98,7 @@ const cardDataList : Omit<ICardProps, "onClick">[] = [
 ];
 
 export function ViewsCardList() {
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
 
     return (
         <CardList 

@@ -1,11 +1,12 @@
+import { CometChatConversationsWithMessages, CometChatIncomingCall, CometChatPalette, CometChatTheme, CometChatThemeContext } from "@cometchat/chat-uikit-react";
 import { useContext, useMemo } from "react";
+
 import { useLocation } from "react-router-dom";
-import { CometChatContext, CometChatConversationsWithMessages, CometChatPalette, CometChatTheme,CometChatIncomingCall } from "@cometchat/chat-uikit-react";
 
 export function ConversationsWithMessagesWrapper({ isMobileView } : {isMobileView : boolean}) {
     const { state } = useLocation();
     const changeThemeToCustom = state?.changeThemeToCustom;
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
 
     const themeContext = useMemo(() => {
         let res = theme;
@@ -36,11 +37,11 @@ export function ConversationsWithMessagesWrapper({ isMobileView } : {isMobileVie
     }, [theme, changeThemeToCustom]);
 
     return (
-        <CometChatContext.Provider value = {themeContext}>
+        <CometChatThemeContext.Provider value = {themeContext}>
             <CometChatConversationsWithMessages 
                 isMobileView = {isMobileView}
             />
             <CometChatIncomingCall />
-        </CometChatContext.Provider>
+        </CometChatThemeContext.Provider>
     );
 }

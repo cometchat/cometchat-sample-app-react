@@ -1,7 +1,8 @@
+import {CometChatThemeContext, fontHelper} from "@cometchat/chat-uikit-react"
+
 import { useContext } from "react";
-import {CometChatContext,fontHelper} from "@cometchat/chat-uikit-react"
 export function senderBubbleStyle() {
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
     return {
         borderRadius:"8px",
         background:theme.palette.getPrimary(),
@@ -11,7 +12,7 @@ export function senderBubbleStyle() {
 }
 
 export function receiverBubbleStyle() {
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
     return {
         borderRadius:"8px",
         background:theme.palette.getAccent200(),

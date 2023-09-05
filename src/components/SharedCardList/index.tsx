@@ -1,11 +1,11 @@
-import { useContext } from "react";
-import { fontHelper } from "@cometchat/uikit-resources";
-import { CometChatContext } from "@cometchat/chat-uikit-react";
+import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
 import { ResourcesCardList } from "../ResourcesCardList";
 import { ViewsCardList } from "../ViewsCardList";
+import { fontHelper } from "@cometchat/uikit-resources";
+import { useContext } from "react";
 
 export function SharedCardList() {
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
 
     return (
         <div

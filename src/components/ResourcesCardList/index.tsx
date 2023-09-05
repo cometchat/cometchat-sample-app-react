@@ -1,11 +1,11 @@
+import { CardList } from "../CardList";
+import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
 import { ICardProps } from "../Card";
+import Localize from "../../assets/localize.png";
 import SoundSmall from "../../assets/sound-small.png";
 import Theme from "../../assets/theme.png";
-import Localize from "../../assets/localize.png";
-import { CardList } from "../CardList";
 import { fontHelper } from "@cometchat/uikit-resources";
 import { useContext } from "react";
-import { CometChatContext } from "@cometchat/chat-uikit-react";
 
 const cardDataList : Omit<ICardProps, "onClick">[] = [
     {
@@ -35,7 +35,7 @@ const cardDataList : Omit<ICardProps, "onClick">[] = [
 ];
 
 export function ResourcesCardList() {
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
 
     return (
         <CardList 

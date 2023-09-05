@@ -3,6 +3,7 @@ import Sidebar from "../../assets/sidebar.png";
 import ListWrapper from "../../assets/listwrapper.png";
 import List from "../../assets/list.png";
 import Composer from "../../assets/composer.png";
+import InfoIcon from "../../assets/info.svg"
 import { CardList } from "../CardList";
 
 const cardDataList : Omit<ICardProps, "onClick">[] = [
@@ -36,6 +37,14 @@ const cardDataList : Omit<ICardProps, "onClick">[] = [
         imageInfo: {
             url: Composer,
             altText: "composer"
+        }
+    },
+    {
+        title: "message information",
+        description: "CometChatMessageInformation displays read receipts for the selected message for user and group chat.",
+        imageInfo: {
+            url: InfoIcon,
+            altText: "message information"
         }
     }
 ];

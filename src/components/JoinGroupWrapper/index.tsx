@@ -1,13 +1,14 @@
-import { CometChat } from "@cometchat-pro/chat";
 import { useContext, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { CometChatContext } from "@cometchat/chat-uikit-react";
+
+import { CometChat } from "@cometchat/chat-sdk-javascript";
+import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
 import { joinGroupStyle } from "./style";
+import { useNavigate } from "react-router-dom";
 
 export function JoinGroupWrapper() {
     const joinGroupRef = useRef<JSX.IntrinsicElements["cometchat-join-group"] | null>(null);
     const navigate = useNavigate();
-    const { theme } = useContext(CometChatContext); 
+    const { theme } = useContext(CometChatThemeContext); 
 
     useEffect(() => {
         const joinGroupElement = joinGroupRef.current;

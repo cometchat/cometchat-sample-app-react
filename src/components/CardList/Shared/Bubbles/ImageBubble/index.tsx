@@ -1,8 +1,9 @@
-import { useContext } from "react";
-import {CometChatContext} from "@cometchat/chat-uikit-react"
+import { componentDetailModalCloseIconStyle, componentDetailsModalCloseIconWrapperStyle, componentDetailsModalDescriptionStyle, componentDetailsModalHeaderStyle, componentDetailsModalStyle, componentDetailsModalTitleStyle, loadingComponentModalStyle } from "../../style";
+
 import CloseIcon from "../assets/close2x.png";
+import {CometChatThemeContext} from "@cometchat/chat-uikit-react"
 import SampleImg from "./astro.png"
-import { loadingComponentModalStyle, componentDetailsModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
+import { useContext } from "react";
 
 const ImageBubble = (props:any) => {
     const {
@@ -16,7 +17,7 @@ const ImageBubble = (props:any) => {
         showModal = true
 
         const imageStyle = {height:"auto",maxHeight:"300px", width:"100%",borderRadius:"8px",margin: "auto", display: "block"}
-        const { theme } = useContext(CometChatContext);
+        const { theme } = useContext(CometChatThemeContext);
         const themeMode = theme.palette.mode
         return (
        

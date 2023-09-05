@@ -1,11 +1,12 @@
-import { CometChat } from "@cometchat-pro/chat";
-import { useContext, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { CometChatContext } from "@cometchat/chat-uikit-react";
+import { checkboxTextStyle, errorMessageStyle, formStyle, generateUidCheckboxStyle, generateUidStyle, submitBtnStyle } from "./style";
+import { useContext, useState } from "react";
+
+import { CometChat } from "@cometchat/chat-sdk-javascript";
 import { CometChatConstants } from "../../constants";
+import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
 import { LoginSignup } from "../LoginSignup";
 import { TextInput } from "../TextInput";
-import { checkboxTextStyle, errorMessageStyle, formStyle, generateUidCheckboxStyle, generateUidStyle, submitBtnStyle } from "./style";
 
 interface ISignUp {
     loggedInUser : CometChat.User | null | undefined,
@@ -19,7 +20,7 @@ export function Signup({ loggedInUser, setLoggedInUser, setInterestingAsyncOpSta
     const [generateUid, setGenerateUid] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
 
     async function handleSubmit(e : React.FormEvent<HTMLFormElement>) {
         e.preventDefault();

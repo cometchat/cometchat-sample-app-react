@@ -1,9 +1,10 @@
+import { componentDetailModalCloseIconStyle, componentDetailsModalCloseIconWrapperStyle, componentDetailsModalDescriptionStyle, componentDetailsModalHeaderStyle, componentDetailsModalStyle, componentDetailsModalTitleStyle, loadingComponentModalStyle } from "../../style";
 
-import { useContext } from "react";
 import CloseIcon from "../assets/close2x.png";
-import { loadingComponentModalStyle, componentDetailsModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
+import {CometChatThemeContext} from "@cometchat/chat-uikit-react"
 import SampleAudio from "./sample.mp3"
-import {CometChatContext} from "@cometchat/chat-uikit-react"
+import { useContext } from "react";
+
 const AudioBubble = (props:any) => {
     const {
         activeComponent,
@@ -14,7 +15,7 @@ const AudioBubble = (props:any) => {
     const bubbleSlug = "audio-bubble"
     if(showComponentModal && activeComponent === bubbleSlug)
         showModal = true
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
     const themeMode = theme.palette.mode
     return (
        

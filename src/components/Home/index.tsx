@@ -1,16 +1,17 @@
-import { useContext } from "react";
-import { CometChatContext, CometChatList } from "@cometchat/chat-uikit-react";
-import { fontHelper, States } from "@cometchat/uikit-resources";
-import { Card } from "../Card";
+import { CometChatIncomingCall, CometChatUIKit } from "@cometchat/chat-uikit-react";
+import { CometChatList, CometChatThemeContext } from "@cometchat/chat-uikit-react";
 import { Link, Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { listStyle } from "./style";
-import { CometChat } from "@cometchat-pro/chat";
-import { CometChatUIKit,CometChatIncomingCall } from "@cometchat/chat-uikit-react";
+import { States, fontHelper } from "@cometchat/uikit-resources";
+
+import { Button } from "../Button";
+import { Card } from "../Card";
+import { CometChat } from "@cometchat/chat-sdk-javascript";
+import { IsMobileViewContext } from "../../IsMobileViewContext";
+import PowerOff from "../../assets/power-off.png";
 import RightArrow from "../../assets/right-arrow.png";
 import SwitchMode from "../../assets/switch-mode.png";
-import PowerOff from "../../assets/power-off.png";
-import { Button } from "../Button";
-import { IsMobileViewContext } from "../../IsMobileViewContext";
+import { listStyle } from "./style";
+import { useContext } from "react";
 
 type CardData = {
     id : string,
@@ -77,7 +78,7 @@ export function Home(props : IHomeProps) {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
     const isMobileView = useContext(IsMobileViewContext);
     const currentPageName = processUrl(location.pathname); 
     const showSidebar = !isMobileView || (isMobileView && currentPageName === "home");
@@ -158,7 +159,7 @@ export function Home(props : IHomeProps) {
                             color: theme.palette.getAccent500()
                         }}
                     >
-                        4.0.0-beta.1
+                        v4.0.0
                     </div>
                 </div>
             );
@@ -267,7 +268,7 @@ export function Home(props : IHomeProps) {
     }
 
     if (loggedInUser === undefined) {
-        return null;
+        return <Navigate to = "/login" />;
     }
 
     if (loggedInUser === null) {

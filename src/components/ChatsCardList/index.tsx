@@ -1,6 +1,7 @@
 import { ICardProps } from "../Card";
 import Sidebar from "../../assets/sidebar.png";
 import ListWrapper from "../../assets/listwrapper.png";
+import ContactIcon from "../../assets/contacts.svg"
 import { CardList } from "../CardList";
 
 const cardDataList : Omit<ICardProps, "onClick">[] = [
@@ -18,6 +19,14 @@ const cardDataList : Omit<ICardProps, "onClick">[] = [
         imageInfo: {
             url: ListWrapper,
             altText: "list wrapper"
+        }
+    },
+    {
+        title: "contacts",
+        description: "CometChatContacts is an independent component used to set up a screen that shows the users and groups list.",
+        imageInfo: {
+            url: ContactIcon,
+            altText: "Contacts"
         }
     }
 ];

@@ -1,8 +1,9 @@
-import {  useContext} from "react";
+import {CometChatThemeContext, Receipts} from "@cometchat/chat-uikit-react"
+import { componentDetailModalCloseIconStyle, componentDetailsModalCloseIconWrapperStyle, componentDetailsModalDescriptionStyle, componentDetailsModalHeaderStyle, componentDetailsModalTitleStyle, loadingComponentModalStyle } from "../../style";
+
 import CloseIcon from "../assets/close2x.png";
-import { loadingComponentModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
-import {Receipts,CometChatContext} from "@cometchat/chat-uikit-react"
 import {componentDetailsModalStyle} from "./style"
+import { useContext } from "react";
 
 export const Receipt = (props:any) => {
     const {
@@ -15,7 +16,7 @@ export const Receipt = (props:any) => {
     if(showComponentModal && activeComponent === bubbleSlug)
         showModal = true
     const  receipt:typeof Receipts = Receipts
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
     const themeMode = theme.palette.mode
     const boxColor = themeMode === "dark" ? "#ccc" :"#464545"
     return (

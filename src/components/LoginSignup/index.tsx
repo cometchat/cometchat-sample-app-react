@@ -1,8 +1,9 @@
 import { cardStyle, chatHeaderTextStyle, contentContainerStyle, contentStyle, footerStyle, headerStyle, headerTitle, imageStyle, loginSignupStyle, mainContainerStyle, titleStyle, versionStyle } from "./style";
+
+import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
 import Image from "../../assets/Image-518@1x.png";
-import { useContext } from "react";
-import { CometChatContext } from "@cometchat/chat-uikit-react";
 import { IsMobileViewContext } from "../../IsMobileViewContext";
+import { useContext } from "react";
 
 interface ILoginSignupProps {
     title : string,
@@ -15,7 +16,7 @@ export function LoginSignup(props : ILoginSignupProps) {
         children
     } = props;
 
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
     const isMobileView = useContext(IsMobileViewContext);
 
     function getHeader() {
@@ -36,7 +37,7 @@ export function LoginSignup(props : ILoginSignupProps) {
                 <div
                     style = {versionStyle(theme)}
                 >
-                    4.0.0-beta.1
+                    v4.0.0
                 </div>
             </div>
         );

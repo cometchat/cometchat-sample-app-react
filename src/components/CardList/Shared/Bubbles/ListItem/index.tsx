@@ -1,7 +1,8 @@
-import { useContext } from "react";
-import {CometChatContext} from "@cometchat/chat-uikit-react"
+import { componentDetailModalCloseIconStyle, componentDetailsModalCloseIconWrapperStyle, componentDetailsModalDescriptionStyle, componentDetailsModalHeaderStyle, componentDetailsModalStyle, componentDetailsModalTitleStyle, loadingComponentModalStyle } from "../../style";
+
 import CloseIcon from "../assets/close2x.png";
-import { loadingComponentModalStyle, componentDetailsModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
+import {CometChatThemeContext} from "@cometchat/chat-uikit-react"
+import { useContext } from "react";
 
 type CardData = {
   id : string,
@@ -101,7 +102,7 @@ const ListItem = (props:any) => {
         "height": "100%",
         "width": "100%",
     }
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
     const themeMode = theme.palette.mode
     return (
        

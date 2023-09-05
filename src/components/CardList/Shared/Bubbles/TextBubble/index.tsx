@@ -1,8 +1,10 @@
-import { useContext } from "react";
-import {  fontHelper } from "@cometchat/uikit-resources";
+import { componentDetailModalCloseIconStyle, componentDetailsModalCloseIconWrapperStyle, componentDetailsModalDescriptionStyle, componentDetailsModalHeaderStyle, componentDetailsModalStyle, componentDetailsModalTitleStyle, loadingComponentModalStyle } from "../../style";
+
 import CloseIcon from "../assets/close2x.png";
-import {CometChatContext} from "@cometchat/chat-uikit-react"
-import { loadingComponentModalStyle, componentDetailsModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
+import {CometChatThemeContext} from "@cometchat/chat-uikit-react"
+import { fontHelper } from "@cometchat/uikit-resources";
+import { useContext } from "react";
+
 const TextBubble = (props:any) => {
     const {
         activeComponent,
@@ -13,7 +15,7 @@ const TextBubble = (props:any) => {
     const bubbleSlug = "text-bubble"
     if(showComponentModal && activeComponent === bubbleSlug)
         showModal = true
-        const { theme } = useContext(CometChatContext);
+        const { theme } = useContext(CometChatThemeContext);
         const themeMode = theme.palette.mode
         const receiverBubbleStyle = {
             borderRadius:"8px",

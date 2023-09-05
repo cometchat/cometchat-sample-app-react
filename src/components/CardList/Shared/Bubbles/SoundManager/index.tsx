@@ -1,8 +1,9 @@
-import { useContext } from "react";
-import {CometChatContext} from "@cometchat/chat-uikit-react"
+import { componentDetailModalCloseIconStyle, componentDetailsModalCloseIconWrapperStyle, componentDetailsModalDescriptionStyle, componentDetailsModalHeaderStyle, componentDetailsModalStyle, componentDetailsModalTitleStyle, loadingComponentModalStyle } from "../../style";
+
 import CloseIcon from "../assets/close2x.png";
-import { loadingComponentModalStyle, componentDetailsModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
 import { CometChatSoundManager } from '@cometchat/uikit-shared';
+import {CometChatThemeContext} from "@cometchat/chat-uikit-react"
+import { useContext } from "react";
 
 const SoundManager = (props:any) => {
     const {
@@ -21,7 +22,7 @@ const SoundManager = (props:any) => {
     const playOutgoing = ()=>{
         CometChatSoundManager.play(CometChatSoundManager.Sound.outgoingMessage)
     }
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
     const themeMode = theme.palette.mode
     return (
        

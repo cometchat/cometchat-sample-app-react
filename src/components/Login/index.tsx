@@ -1,15 +1,16 @@
-import IronManAvatar from "../../assets/ironman_avatar.png";
-import CaptainAmericaAvatar from "../../assets/captainamerica_avatar.png";
-import SpidermanAvatar from "../../assets/spiderman_avatar.png";
-import CyclopsAvatar from "../../assets/cyclops_avatar.png";
-import { CometChat } from "@cometchat-pro/chat";
-import { CometChatConstants } from "../../constants";
-import { useContext, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { defaultUserBtnsContainerStyle, errorMessageStyle, goToSignupContainerStyle, goToSignupStyle, loginBtnStyle, loginSampleUsersContainerStyle, loginStyle, loginUidFormStyle, noAccountStyle, userAvatarStyle, userBtnStyle, userNameAndUidContainerStyle, userNameStyle, userUidStyle, usingSampleUsersTextStyle } from "./style";
-import { CometChatContext } from "@cometchat/chat-uikit-react";
-import { TextInput } from "../TextInput";
+import { useContext, useState } from "react";
+
+import CaptainAmericaAvatar from "../../assets/captainamerica_avatar.png";
+import { CometChat } from "@cometchat/chat-sdk-javascript";
+import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
+import { CometChatUIKit } from "@cometchat/chat-uikit-react"
+import CyclopsAvatar from "../../assets/cyclops_avatar.png";
+import IronManAvatar from "../../assets/ironman_avatar.png";
 import { LoginSignup } from "../LoginSignup";
+import SpidermanAvatar from "../../assets/spiderman_avatar.png";
+import { TextInput } from "../TextInput";
 
 interface ILoginProps {
     loggedInUser : CometChat.User | null | undefined,
@@ -56,15 +57,18 @@ export function Login(props : ILoginProps) {
     const [uid, setUid] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
-    const { theme } = useContext(CometChatContext);
+    const { theme } = useContext(CometChatThemeContext);
 
     async function login(uid : string) {
         try {
             setInterestingAsyncOpStarted(true);
-            const loggedInUser = await CometChat.login(uid, CometChatConstants.authKey);
-            console.log("Login successful, loggedInUser:", loggedInUser);
-            setLoggedInUser(loggedInUser);
-            navigate("/home");
+            CometChatUIKit.login(uid)?.then(loggedInUser => {
+
+                console.log("Login successful, loggedInUser:", loggedInUser);
+                setLoggedInUser(loggedInUser);
+                navigate("/home");
+            
+            })
         }
         catch(error) {
             console.log("login failed", error);
@@ -131,14 +135,13 @@ export function Login(props : ILoginProps) {
         );
     }
 
-    if (loggedInUser === undefined) {
-        return null;
-    }
+    // if (loggedInUser === undefined) {
+    //     return null;
+    // }
 
     if (loggedInUser) {
         return <Navigate to = "/home" />;
     }
-
     return (
         <LoginSignup
             title = "Login to your account"

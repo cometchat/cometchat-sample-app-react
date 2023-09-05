@@ -1,14 +1,15 @@
-import { useContext, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { CometChatContext } from "@cometchat/chat-uikit-react";
 import { createGroupStyle, createGroupWrapperStyle } from "./style";
+import { useContext, useEffect, useRef } from "react";
+
+import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
+import { useNavigate } from "react-router-dom";
 
 type CreateGroupWrapperProps = { isMobileView : boolean };
 
 export function CreateGroupWrapper({ isMobileView } : CreateGroupWrapperProps) {
     const createGroupRef = useRef<JSX.IntrinsicElements["cometchat-create-group"] | null>(null);
     const navigate = useNavigate();
-    const { theme } = useContext(CometChatContext);    
+    const { theme } = useContext(CometChatThemeContext);    
 
     useEffect(() => {
         const createGroupElement = createGroupRef.current;

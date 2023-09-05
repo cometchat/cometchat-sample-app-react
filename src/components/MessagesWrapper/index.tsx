@@ -1,4 +1,4 @@
-import { CometChat } from "@cometchat-pro/chat";
+import { CometChat } from "@cometchat/chat-sdk-javascript";
 import { useEffect, useState } from "react";
 import { CometChatMessages } from "@cometchat/chat-uikit-react";
 

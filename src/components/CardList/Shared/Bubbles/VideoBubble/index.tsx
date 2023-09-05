@@ -1,8 +1,10 @@
-import { useContext } from "react";
-import {CometChatContext} from "@cometchat/chat-uikit-react"
+import { componentDetailModalCloseIconStyle, componentDetailsModalCloseIconWrapperStyle, componentDetailsModalDescriptionStyle, componentDetailsModalHeaderStyle, componentDetailsModalStyle, componentDetailsModalTitleStyle, loadingComponentModalStyle } from "../../style";
+
 import CloseIcon from "../assets/close2x.png";
-import { loadingComponentModalStyle, componentDetailsModalStyle,componentDetailsModalHeaderStyle,componentDetailsModalDescriptionStyle,componentDetailModalCloseIconStyle,componentDetailsModalTitleStyle,componentDetailsModalCloseIconWrapperStyle } from "../../style";
+import {CometChatThemeContext} from "@cometchat/chat-uikit-react"
 import SampleVideo from "./aurora.mp4"
+import { useContext } from "react";
+
 const VideoBubble = (props:any) => {
     const {
         activeComponent,
@@ -14,7 +16,7 @@ const VideoBubble = (props:any) => {
     if(showComponentModal && activeComponent === bubbleSlug)
         showModal = true
         const videoStyle = {background: "#e4e1e1",borderRadius:"8px",margin: "auto", display: "block"}
-        const { theme } = useContext(CometChatContext);
+        const { theme } = useContext(CometChatThemeContext);
         const themeMode = theme.palette.mode
     return (
        
