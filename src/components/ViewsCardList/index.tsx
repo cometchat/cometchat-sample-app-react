@@ -1,10 +1,12 @@
 import AudioBubble from "../../assets/audio-bubble.svg";
 import Avatar from "../../assets/avatar.png";
 import Badge from "../../assets/badge.png";
+import CardBubble from "../../assets/card-bubble.svg";
 import { CardList } from "../CardList";
 import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
 import Conversation from "../../assets/conversation.png";
 import FileBubble from "../../assets/file-bubble.svg";
+import FormBubble from "../../assets/form-bubble.svg";
 import { ICardProps } from "../Card";
 import ImageBubble from "../../assets/image-bubble.svg";
 import Receipt from "../../assets/receipt.png";
@@ -93,6 +95,22 @@ const cardDataList : Omit<ICardProps, "onClick">[] = [
         imageInfo: {
             url: FileBubble,
             altText: "file"
+        }
+    },
+    {
+        title: "form bubble",
+        description: "CometChatFormBubble displays a media message containing a form.",
+        imageInfo: {
+            url: FormBubble,
+            altText: "form"
+        }
+    },
+    {
+        title: "card bubble",
+        description: "CometChatCardBubble displays a media message containing a card.",
+        imageInfo: {
+            url: CardBubble,
+            altText: "card"
         }
     }
 ];
