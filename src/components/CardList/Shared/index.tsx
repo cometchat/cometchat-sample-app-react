@@ -1,16 +1,18 @@
-import { SoundManager } from "./Bubbles/SoundManager";
-import { Theme } from "./Bubbles/Theme";
 import { AudioBubble } from "./Bubbles/AudioBubble";
-import { FileBubble } from "./Bubbles/FileBubble";
-import { VideoBubble } from "./Bubbles/VideoBubble";
-import { TextBubble } from "./Bubbles/TextBubble";
-import { ImageBubble } from "./Bubbles/ImageBubble";
-import { Receipt } from "./Bubbles/Receipt";
-import { Badge } from "./Bubbles/Badge";
-import { StatusIndicator } from "./Bubbles/StatusIndicator";
 import { Avatar } from "./Bubbles/Avatar";
+import { Badge } from "./Bubbles/Badge";
+import { CardBubble } from "./Bubbles/CardBubble";
+import { FileBubble } from "./Bubbles/FileBubble";
+import { FormBubble } from "./Bubbles/FormBubble"
+import { ImageBubble } from "./Bubbles/ImageBubble";
 import { ListItem } from "./Bubbles/ListItem";
 import { Localize } from "./Bubbles/Localize";
+import { Receipt } from "./Bubbles/Receipt";
+import { SoundManager } from "./Bubbles/SoundManager";
+import { StatusIndicator } from "./Bubbles/StatusIndicator";
+import { TextBubble } from "./Bubbles/TextBubble";
+import { Theme } from "./Bubbles/Theme";
+import { VideoBubble } from "./Bubbles/VideoBubble";
 
 const Shared = (props:any) => {
     const {
@@ -33,6 +35,8 @@ const Shared = (props:any) => {
         <Avatar activeComponent={activeComponent} handleCloseComponentModal={handleCloseComponentModal} showComponentModal={showComponentModal} />
         <Localize activeComponent={activeComponent} handleCloseComponentModal={handleCloseComponentModal} showComponentModal={showComponentModal} />
         <ListItem activeComponent={activeComponent} handleCloseComponentModal={handleCloseComponentModal} showComponentModal={showComponentModal} />
+        <FormBubble activeComponent={activeComponent} handleCloseComponentModal={handleCloseComponentModal} showComponentModal={showComponentModal} />
+        <CardBubble activeComponent={activeComponent} handleCloseComponentModal={handleCloseComponentModal} showComponentModal={showComponentModal} />
       </>
       )
 }
