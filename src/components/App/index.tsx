@@ -14,6 +14,12 @@ import { useMemo, useState } from "react";
 import { AddMembersWrapper } from "../AddMembersWrapper";
 import { BannedMembersWrapper } from "../BannedMembersWrapper";
 import { CallButtonsWrapper } from "../CallButtonsWrapper";
+import { CallLogDetailsWrapper } from "../CallLogDetailsWrapper";
+import { CallLogHistoryWrapper } from "../CallLogHistoryWrapper";
+import { CallLogParticipantsWrapper } from "../CallLogParticipantsWrapper";
+import { CallLogRecordingsWrapper } from "../CallLogRecordingsWrapper";
+import { CallLogsWithDetailsWrapper } from "../CallLogsWithDetailsWrapper";
+import { CallLogsWrapper } from "../CallLogsWrapper";
 import { CallsCardList } from "../CallsCardList";
 import { ChatsCardList } from "../ChatsCardList";
 import { CometChat } from "@cometchat/chat-sdk-javascript";
@@ -265,6 +271,53 @@ export function App() {
     );
   }
 
+  function getCallLogsWrapper() {
+    return (
+      <CallLogsWrapper isMobileView={false} />
+    );
+  }
+
+  function getCallLogsWithDetailsWrapper() {
+    return (
+      <CallLogsWithDetailsWrapper
+      isMobileView={false}
+      />
+    );
+  }
+
+  function getCallLogDetails(){
+    return (
+      <CallLogDetailsWrapper
+      isMobileView={false}
+      />
+    );
+  }
+
+  function getCallLogHistory(){
+    return (
+      <CallLogHistoryWrapper
+      isMobileView={false}
+      />
+    );
+  }
+
+  function getCallLogRecordings(){
+    return (
+      <CallLogRecordingsWrapper
+      isMobileView={false}
+      />
+    );
+  }
+
+  function getCallLogParticipants(){
+    return (
+      <CallLogParticipantsWrapper
+      isMobileView={false}
+      />
+    );
+  }
+
+
   function getContacts() {
     return <ContactsWrapper />;
   }
@@ -404,6 +457,30 @@ export function App() {
                 <Route
                   path="home/messages-module/message-information"
                   element={getMessageInformation()}
+                />
+                <Route 
+                  path="home/calls-module/call-logs" 
+                  element={ getCallLogsWrapper()} 
+                />
+                <Route 
+                  path="home/calls-module/call-logs-with-details" 
+                  element={ getCallLogsWithDetailsWrapper()}
+                />
+                <Route 
+                  path="home/calls-module/call-log-details" 
+                  element={ getCallLogDetails()}
+                />
+                <Route 
+                  path="home/calls-module/call-log-history" 
+                  element={ getCallLogHistory()}
+                />
+                <Route 
+                  path="home/calls-module/call-log-recordings" 
+                  element={ getCallLogRecordings()}
+                />
+                <Route 
+                  path="home/calls-module/call-log-participants" 
+                  element={ getCallLogParticipants()}
                 />
                 <Route path="*" element={<Navigate to="/home" />} />
               </Routes>
