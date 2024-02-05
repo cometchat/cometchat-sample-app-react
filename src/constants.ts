@@ -2,6 +2,6 @@
 
 export const CometChatConstants = {
   appId: "APP_ID",
-  region: "REGION",
+  region: "APP_REGION",
   authKey: "AUTH_KEY",
 };

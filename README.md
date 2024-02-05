@@ -1,9 +1,9 @@
 <!-- PROJECT LOGO -->
-<div>
+<div align ="center">
     <img alt="CometChat" src="https://avatars2.githubusercontent.com/u/45484907?s=200&v=4" width="180" height="180" alt="CometChat" />
 </div>    
-<h2>CometChat React Sample App</h3>
-<p>
+<h2 align ="center">CometChat React Sample App</h3>
+<p align ="center">
   CometChat Kitchen Sink Sample App (built using <b>CometChat UI Kits</b>) is a fully functional real-time messaging app capable of private (one-on-one), group messaging, voice & video calling.
   <br />
   <a href="https://www.cometchat.com/docs/v4/react-uikit/overview"><strong>Explore the docs »</strong></a>
@@ -92,7 +92,13 @@ Simply clone or fork this repo and run it using the instructions below to see al
 
 4. Replace `APP_ID`, `REGION` and `AUTH_KEY` with your CometChat `App ID`, `Region` and `Auth Key` in `src/constants.ts` file.
 
-   ![Replacing constants in src/constants.ts](./Screenshots/constants.png "Replacing constants in src/constants.ts")
+```sh
+export const COMETCHAT_CONSTANTS = {
+		APP_ID: "APP_ID",
+		REGION: "REGION",
+		AUTH_KEY: "AUTH_KEY",
+};
+
 
 <!-- USAGE EXAMPLES -->
 
