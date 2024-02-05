@@ -4,6 +4,7 @@ import { Badge } from "./Bubbles/Badge";
 import { CardBubble } from "./Bubbles/CardBubble";
 import { FileBubble } from "./Bubbles/FileBubble";
 import { FormBubble } from "./Bubbles/FormBubble"
+import { SchedulerBubble } from "./Bubbles/SchedulerBubble";
 import { ImageBubble } from "./Bubbles/ImageBubble";
 import { ListItem } from "./Bubbles/ListItem";
 import { Localize } from "./Bubbles/Localize";
@@ -36,6 +37,7 @@ const Shared = (props:any) => {
         <Localize activeComponent={activeComponent} handleCloseComponentModal={handleCloseComponentModal} showComponentModal={showComponentModal} />
         <ListItem activeComponent={activeComponent} handleCloseComponentModal={handleCloseComponentModal} showComponentModal={showComponentModal} />
         <FormBubble activeComponent={activeComponent} handleCloseComponentModal={handleCloseComponentModal} showComponentModal={showComponentModal} />
+        <SchedulerBubble activeComponent={activeComponent} handleCloseComponentModal={handleCloseComponentModal} showComponentModal={showComponentModal} />
         <CardBubble activeComponent={activeComponent} handleCloseComponentModal={handleCloseComponentModal} showComponentModal={showComponentModal} />
       </>
       )

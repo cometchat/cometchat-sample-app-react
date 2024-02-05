@@ -19,7 +19,7 @@ import {
 } from "../../style";
 
 import CloseIcon from "../assets/close2x.png";
-import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
+import { CometChatThemeContext, SingleSelectStyle, QuickViewStyle } from "@cometchat/chat-uikit-react";
 import { createComponent } from "@lit-labs/react";
 
 const FormMessageBubble = createComponent({
@@ -45,7 +45,7 @@ const FormBubble = (props: any) => {
       width: "100%",
       height: "30px",
       border: `1px solid ${theme.palette.getAccent100()}`,
-      borderRadius: "3px",
+      borderRadius: "6px",
       padding: "0px 0px 0px 5px",
       placeholderTextColor: theme.palette.getAccent400(),
       placeholderTextFont: fontHelper(theme.typography.subtitle2),
@@ -81,7 +81,7 @@ const FormBubble = (props: any) => {
       width: "100%",
       background: theme.palette.getBackground(),
       border: `1px solid ${theme.palette.getAccent100()}`,
-      borderRadius: "12px",
+      borderRadius: "6px",
       activeTextFont: fontHelper(theme.typography.subtitle2),
       activeTextColor: theme.palette.getAccent(),
       arrowIconTint: theme.palette.getAccent700(),
@@ -99,12 +99,12 @@ const FormBubble = (props: any) => {
       width: "100%",
       background: theme.palette.getPrimary(),
       border: `none`,
-      borderRadius: "12px",
+      borderRadius: "6px",
       buttonTextFont: fontHelper(theme.typography.subtitle2),
       buttonTextColor: theme.palette.getBackground(),
       justifyContent: "center",
     };
-    const singleSelectStyle = {
+    const singleSelectStyle = new SingleSelectStyle({
       height: "100%",
       width: "100%",
       background: theme.palette.getBackground()!,
@@ -117,12 +117,12 @@ const FormBubble = (props: any) => {
       textColor: theme.palette.getAccent()!,
       optionBackground: theme.palette.getBackground()!,
       optionBorder: `1px solid ${theme.palette.getAccent100()}`,
-      optionBorderRadius: "2px",
+      optionBorderRadius: "3px",
       hoverTextFont: fontHelper(theme.typography.subtitle2),
       hoverTextColor: theme.palette.getAccent()!,
       hoverTextBackground: theme.palette.getAccent100()!,
-    };
-    const quickViewStyle = {
+    });
+    const quickViewStyle = new QuickViewStyle({
       background: "transparent",
       height: "fit-content",
       width: "100%",
@@ -134,12 +134,12 @@ const FormBubble = (props: any) => {
       leadingBarWidth: "4px",
       borderRadius: "8px",
       closeIconTint: "",
-    };
+    });
     return new FormBubbleStyle({
       width: "300px",
       height: "fit-content",
-      border: "1px solid #e0e0e0",
-      background: "transparent",
+      border: "none",
+      background: theme.palette.getSecondary(),
       wrapperBackground: theme.palette.getBackground(),
       borderRadius: "8px",
       wrapperBorderRadius: "8px",
@@ -156,69 +156,58 @@ const FormBubble = (props: any) => {
       goalCompletionTextColor: theme.palette.getAccent(),
       goalCompletionTextFont: fontHelper(theme.typography.subtitle1),
       wrapperPadding: "2px",
+      datePickerBorder: `1px solid ${theme.palette.getAccent100()}`,
+      datePickerBorderRadius: "6px",
+      datePickerFont: fontHelper(theme.typography.subtitle2),
+      datePickerFontColor: theme.palette.getAccent(),
     });
   }
 
   function getFormMessage() {
     const json = {
-      id: "2862",
-      muid: "1698667506320",
-      conversationId: "group_group_1696408979857",
-      sender: "nakul",
+      id: "757",
+      conversationId: "group_group_1706078382528",
+      sender: "superhero2",
       receiverType: "group",
-      receiver: "group_1696408979857",
+      receiver: "group_1706078382528",
       category: "interactive",
       type: "form",
       data: {
         entities: {
           sender: {
             entity: {
-              uid: "nakul",
-              name: "Nakul",
+              uid: "superhero2",
+              name: "Captain America",
               role: "default",
+              avatar:
+                "https://data-us.cometchat-staging.com/assets/images/avatars/captainamerica.png",
               status: "available",
-              lastActiveAt: 1698830332,
+              createdAt: 1683717043,
+              lastActiveAt: 1704738138,
             },
             entityType: "user",
           },
           receiver: {
             entity: {
-              guid: "group_1696408979857",
-              name: "chutiyaGang",
+              guid: "group_1706078382528",
+              name: "Scheduler TimeDate",
               type: "public",
-              owner: "vivek",
-              createdAt: 1696408980,
-              updatedAt: 1698667314,
-              membersCount: 7,
-              conversationId: "group_group_1696408979857",
-              onlineMembersCount: 14,
+              owner: "superhero2",
+              createdAt: 1706078391,
+              updatedAt: 1706078425,
+              membersCount: 12,
+              conversationId: "group_group_1706078382528",
+              onlineMembersCount: 8,
             },
             entityType: "group",
           },
         },
-        metadata: {
-          data: {
-            text: "Thanks For filling the Form!",
-          },
-          type: "text",
-          category: "message",
-          receiver: "{$s}",
-          receiverType: "{$t}",
-        },
-        resource:
-          "WEB-4_0_1-a9b124b3-e092-43a7-9f78-cf507c93d153-1698830285347",
-        interactions: [
-          {
-            elementId: "element8",
-            interactedAt: 1699874632,
-          },
-        ],
         interactionGoal: {
           type: "none",
-          elementIds: [],
+          elementIds: ["element8"],
         },
         interactiveData: {
-          title: "Society Survey",
+          title: "Form Title",
           formFields: [
             {
               label: "Name",
@@ -226,7 +215,9 @@ const FormBubble = (props: any) => {
               optional: false,
               elementId: "element1",
               elementType: "textInput",
-              defaultValue: "vivek",
+              placeholder: {
+                text: "write your name here",
+              },
             },
             {
               label: "Last Name",
@@ -243,21 +234,40 @@ const FormBubble = (props: any) => {
               elementType: "textInput",
             },
             {
-              label: "Country",
-              options: [
-                {
-                  label: "INDIA",
-                  value: "option1",
-                },
-                {
-                  label: "AUSTRALIA",
-                  value: "option2",
-                },
-              ],
+              to: "2024-02-09T23:59",
+              from: "2024-02-08T12:00",
+              mode: "dateTime",
+              label: "Select Date & Time",
               optional: false,
-              elementId: "element4",
-              elementType: "dropdown",
-              defaultValue: "option1",
+              elementId: "67",
+              elementType: "dateTime",
+              defaultValue: "2024-01-01T12:00",
+              timezoneCode: "Asia/Kolkata",
+              dateTimeFormat: "yyyy-MM-dd HH:mm",
+            },
+            {
+              to: "2024-02-09",
+              from: "2024-01-09",
+              mode: "date",
+              label: "Select Date",
+              optional: false,
+              elementId: "68",
+              elementType: "dateTime",
+              defaultValue: "2024-01-11",
+              timezoneCode: "Asia/Kolkata",
+              dateTimeFormat: "yyyy-MM-dd",
+            },
+            {
+              to: "15:30",
+              from: "14:30",
+              mode: "time",
+              label: "Select Time",
+              optional: false,
+              elementId: "69",
+              elementType: "dateTime",
+              defaultValue: "14:55",
+              timezoneCode: "Asia/Kolkata",
+              dateTimeFormat: "HH:mm",
             },
             {
               label: "Services",
@@ -275,7 +285,7 @@ const FormBubble = (props: any) => {
                   value: "option3",
                 },
               ],
-              optional: false,
+              optional: true,
               elementId: "element5",
               elementType: "checkbox",
               defaultValue: ["option1", "option2"],
@@ -284,11 +294,28 @@ const FormBubble = (props: any) => {
               label: "Wing",
               options: [
                 {
-                  label: "A",
+                  label: "A Wing",
                   value: "option1",
                 },
                 {
-                  label: "B",
+                  label: "B Wing",
+                  value: "option2",
+                },
+              ],
+              optional: false,
+              elementId: "element10",
+              elementType: "dropdown",
+              defaultValue: "option1",
+            },
+            {
+              label: "Wing",
+              options: [
+                {
+                  label: "A Wing",
+                  value: "option1",
+                },
+                {
+                  label: "B Wing",
                   value: "option2",
                 },
               ],
@@ -299,7 +326,7 @@ const FormBubble = (props: any) => {
             },
             {
               action: {
-                url: "https://www.cometchat.com/",
+                url: "https://www.cometchat.com",
                 actionType: "urlNavigation",
               },
               elementId: "element9",
@@ -310,8 +337,9 @@ const FormBubble = (props: any) => {
           ],
           submitElement: {
             action: {
-              url: "",
-              actionType: "urlNavigation",
+              url: "https://www.cometchat.com",
+              method: "POST",
+              actionType: "apiAction",
             },
             elementId: "element8",
             buttonText: "Submit",
@@ -320,11 +348,17 @@ const FormBubble = (props: any) => {
           },
         },
         allowSenderInteraction: true,
+        interactions: [
+          {
+            elementId: "element8",
+            interactedAt: 1706677823,
+          },
+        ],
       },
-      sentAt: 1698830332,
-      updatedAt: 1698830332,
+      sentAt: 1706092684,
+      updatedAt: 1706092684,
+      replyCount: 2,
     };
-
     const formMessage = FormMessage.fromJSON(json);
 
     return formMessage;

@@ -31,7 +31,10 @@ export function componentDetailsModalStyle(themeMode: string) : CSSProperties {
         justifyContent: "space-between",
         backgroundColor: themeMode === "dark" ? "black" : "white",
         color: themeMode === "dark" ? "white" : "black",
-        boxShadow: "rgba(20, 20, 20, 0.33) 0px 0px 3px"
+        boxShadow: "rgba(20, 20, 20, 0.33) 0px 0px 3px",
+        maxHeight:"70%", 
+        overflow:"auto",
+        WebkitScrollSnapType:"none"
         }
 };
 

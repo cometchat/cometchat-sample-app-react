@@ -7,6 +7,7 @@ import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
 import Conversation from "../../assets/conversation.png";
 import FileBubble from "../../assets/file-bubble.svg";
 import FormBubble from "../../assets/form-bubble.svg";
+import SchedulerBubble from "../../assets/Schedule.svg"
 import { ICardProps } from "../Card";
 import ImageBubble from "../../assets/image-bubble.svg";
 import Receipt from "../../assets/receipt.png";
@@ -103,6 +104,14 @@ const cardDataList : Omit<ICardProps, "onClick">[] = [
         imageInfo: {
             url: FormBubble,
             altText: "form"
+        }
+    },
+    {
+        title: "scheduler bubble",
+        description: "CometChatSchedulerBubble displays a media message containing a Scheduler.",
+        imageInfo: {
+            url: SchedulerBubble,
+            altText: "scheduler"
         }
     },
     {
