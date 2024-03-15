@@ -10,7 +10,7 @@ This is a reference application showcasing the integration of [**CometChat's Rea
       npm install npm@latest -g
     ```
 
-- Sign up for a [CometChat](https://app.cometchat.com/) account to get your app creadentials: _`App ID`_, _`Region`_, and _`Auth Key`_
+- Sign up for a [CometChat](https://app.cometchat.com/) account to get your app credentials: _`App ID`_, _`Region`_, and _`Auth Key`_
 
 
 ## Installation
