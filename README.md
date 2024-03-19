@@ -26,7 +26,7 @@ This is a reference application showcasing the integration of [**CometChat's Rea
     ```sh
       npm install
     ```
-4. Enter your CometChat _`App ID`_, _`Region`_, and _`Auth Key`_ in the [src/CONSTS.ts](https://github.com/cometchat/cometchat-sample-app-react/blob/v4/src/constants.ts) file:
+4. Enter your CometChat _`App ID`_, _`Region`_, and _`Auth Key`_ in the [src/constants.ts](https://github.com/cometchat/cometchat-sample-app-react/blob/v4/src/constants.ts) file:
     ```typescript
 	export const CometChatConstants = {
 	  appId: "APP_ID",
