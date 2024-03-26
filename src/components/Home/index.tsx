@@ -11,6 +11,7 @@ import PowerOff from "../../assets/power-off.png";
 import RightArrow from "../../assets/right-arrow.png";
 import SwitchMode from "../../assets/switch-mode.png";
 import { listStyle } from "./style";
+import { metaInfo } from "../../metaInfo";
 import { useContext } from "react";
 
 type CardData = {
@@ -80,9 +81,9 @@ export function Home(props : IHomeProps) {
     const location = useLocation();
     const { theme } = useContext(CometChatThemeContext);
     const isMobileView = useContext(IsMobileViewContext);
-    const currentPageName = processUrl(location.pathname); 
+    const currentPageName = processUrl(location.pathname);
     const showSidebar = !isMobileView || (isMobileView && currentPageName === "home");
-    const showContent = !isMobileView || (isMobileView && currentPageName !== "home"); 
+    const showContent = !isMobileView || (isMobileView && currentPageName !== "home");
 
     async function handleLogout() {
         try {
@@ -113,7 +114,7 @@ export function Home(props : IHomeProps) {
                         paddingTop: cardNum ? "0" : "16px"
                     }}
                 >
-                    <Card 
+                    <Card
                         onClick = {() => navigate(`${id}-module`)}
                         title = {title}
                         description = {description}
@@ -136,10 +137,10 @@ export function Home(props : IHomeProps) {
                         flexDirection: "column",
                         rowGap: "8px",
                         border: `1px solid ${theme.palette.getAccent200()}`,
-                        backgroundColor: theme.palette.getBackground() 
+                        backgroundColor: theme.palette.getBackground()
                     }}
                 >
-                    <CometChatList 
+                    <CometChatList
                         list = {cardDataList}
                         listItemKey = "id"
                         state = {States.loaded}
@@ -148,7 +149,7 @@ export function Home(props : IHomeProps) {
                         hideSearch = {true}
                         title = "UI Components"
                         listStyle = {listStyle(theme)}
-                    />   
+                    />
                     <div
                         style = {{
                             height: "48px",
@@ -159,7 +160,7 @@ export function Home(props : IHomeProps) {
                             color: theme.palette.getAccent500()
                         }}
                     >
-                        v4.0.0
+                        v{metaInfo.version}
                     </div>
                 </div>
             );
@@ -204,7 +205,7 @@ export function Home(props : IHomeProps) {
                             >
                                 UI Components
                             </Link>
-                            <img 
+                            <img
                                 src = {RightArrow}
                                 alt = "right arrow"
                                 style = {{
@@ -227,7 +228,7 @@ export function Home(props : IHomeProps) {
                                 columnGap: "8px"
                             }}
                         >
-                            <Button 
+                            <Button
                                 iconURL = {SwitchMode}
                                 hoverText = "Switch theme"
                                 onClick = {toggleTheme}
@@ -238,7 +239,7 @@ export function Home(props : IHomeProps) {
                                     border: "none"
                                 }}
                             />
-                            <Button 
+                            <Button
                                 iconURL = {PowerOff}
                                 hoverText = "Logout"
                                 onClick = {handleLogout}
@@ -287,7 +288,7 @@ export function Home(props : IHomeProps) {
             {getSidebar()}
             {getContent()}
             <div className="incomingCallWrapper"> <CometChatIncomingCall /> </div>
-           
+
         </div>
     );
 }

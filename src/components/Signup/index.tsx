@@ -2,8 +2,8 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { checkboxTextStyle, errorMessageStyle, formStyle, generateUidCheckboxStyle, generateUidStyle, submitBtnStyle } from "./style";
 import { useContext, useState } from "react";
 
+import { AppConstants } from "../../AppConstants";
 import { CometChat } from "@cometchat/chat-sdk-javascript";
-import { CometChatConstants } from "../../constants";
 import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
 import { LoginSignup } from "../LoginSignup";
 import { TextInput } from "../TextInput";
@@ -33,7 +33,7 @@ export function Signup({ loggedInUser, setLoggedInUser, setInterestingAsyncOpSta
         newUser.setName(name);
         try {
             setInterestingAsyncOpStarted(true);
-            const createdUser = await CometChat.createUser(newUser, CometChatConstants.authKey);
+            const createdUser = await CometChat.createUser(newUser, AppConstants.AUTH_KEY);
             console.log("User created:", createdUser);
             console.log(`User having uid: ${createdUser.getUid()} created successfully.`);
             setLoggedInUser(createdUser);

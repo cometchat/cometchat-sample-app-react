@@ -3,6 +3,7 @@ import { cardStyle, chatHeaderTextStyle, contentContainerStyle, contentStyle, fo
 import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
 import Image from "../../assets/Image-518@1x.png";
 import { IsMobileViewContext } from "../../IsMobileViewContext";
+import { metaInfo } from "../../metaInfo";
 import { useContext } from "react";
 
 interface ILoginSignupProps {
@@ -37,7 +38,7 @@ export function LoginSignup(props : ILoginSignupProps) {
                 <div
                     style = {versionStyle(theme)}
                 >
-                    v4.0.0
+                    v{metaInfo.version}
                 </div>
             </div>
         );
@@ -76,7 +77,7 @@ export function LoginSignup(props : ILoginSignupProps) {
             <div
                 style = {footerStyle(theme)}
             >
-                2023 ⓒ CometChat
+                <></>
             </div>
         );
     }

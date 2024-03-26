@@ -1,17 +1,19 @@
-import ReactDOM from "react-dom/client";
 import "./index.css";
-import { App } from "./components/App";
-import { CometChatConstants } from "./constants"; 
 import "@cometchat/uikit-elements";
-import { CometChatUIKit } from "@cometchat/chat-uikit-react";
-import { UIKitSettingsBuilder } from '@cometchat/uikit-shared';
+
+import { App } from "./components/App";
+import { AppConstants } from "./AppConstants";
 import {CometChat} from '@cometchat/chat-sdk-javascript'
+import { CometChatUIKit } from "@cometchat/chat-uikit-react";
+import ReactDOM from "react-dom/client";
+import { UIKitSettingsBuilder } from '@cometchat/uikit-shared';
 import { metaInfo } from "./metaInfo";
+
 (async () => {
   const uiKitSettings = new UIKitSettingsBuilder()
-  .setAppId(CometChatConstants.appId)
-  .setRegion(CometChatConstants.region)
-  .setAuthKey(CometChatConstants.authKey)
+  .setAppId(AppConstants.APP_ID)
+  .setRegion(AppConstants.REGION)
+  .setAuthKey(AppConstants.AUTH_KEY)
   .subscribePresenceForFriends()
   .build();
   try {

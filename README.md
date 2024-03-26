@@ -5,7 +5,7 @@ This is a reference application showcasing the integration of [**CometChat's Rea
 ## Prerequisites
 
 - Ensure that you have Node.js and npm installed:
-  
+
     ```sh
       npm install npm@latest -g
     ```
@@ -26,19 +26,19 @@ This is a reference application showcasing the integration of [**CometChat's Rea
     ```sh
       npm install
     ```
-4. Enter your CometChat _`App ID`_, _`Region`_, and _`Auth Key`_ in the [src/constants.ts](https://github.com/cometchat/cometchat-sample-app-react/blob/v4/src/constants.ts) file:
+4. Enter your CometChat _`App ID`_, _`Region`_, and _`Auth Key`_ in the [src/AppConstants.ts](https://github.com/cometchat/cometchat-sample-app-react/blob/v4/src/AppConstants.ts) file:
     ```typescript
-	export const CometChatConstants = {
-	  appId: "APP_ID",
-	  region: "APP_REGION",
-	  authKey: "AUTH_KEY",
-	};
+    export const AppConstants = {
+    APP_ID: "APP_ID",
+    REGION: "REGION",
+    AUTH_KEY: "AUTH_KEY",
+    };
     ```
 5. Run the project locally to see all CometChat features in action:
-    ```sh
+    ```
       npm run start
     ```
-![image (1)](https://github.com/cometchat/cometchat-sample-app-react/assets/2210730/a2cb7d80-c97e-4cb9-90d2-48a78e86de69)
+![HomePage](./Screenshots//HomePage.png)
 
 
 
