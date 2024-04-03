@@ -14,7 +14,7 @@ import { metaInfo } from "./metaInfo";
   .setAppId(AppConstants.APP_ID)
   .setRegion(AppConstants.REGION)
   .setAuthKey(AppConstants.AUTH_KEY)
-  .subscribePresenceForFriends()
+  .subscribePresenceForAllUsers()
   .build();
   try {
     await CometChatUIKit.init(uiKitSettings);

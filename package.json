@@ -1,14 +1,15 @@
 {
   "name": "cometchat-chat-sample-app-react",
-  "version": "4.3.2",
+  "version": "4.3.3",
   "private": true,
   "dependencies": {
     "@cometchat/calls-sdk-javascript": "^4.0.6",
     "@cometchat/chat-sdk-javascript": "^4.0.4",
-    "@cometchat/chat-uikit-react": "^4.3.2",
-    "@cometchat/uikit-elements": "^4.3.2",
-    "@cometchat/uikit-resources": "^4.3.1",
-    "@cometchat/uikit-shared": "^4.3.2",
+    "@cometchat/chat-uikit-react": "^4.3.3",
+    "@cometchat/uikit-elements": "^4.3.3",
+    "@cometchat/uikit-resources": "^4.3.2",
+    "@cometchat/uikit-shared": "^4.3.3",
+    "@lit-labs/react": "^1.1.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -22,8 +23,7 @@
     "react-scripts": "5.0.1",
     "react-switch": "^7.0.0",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4",
-    "@lit-labs/react": "^1.1.1"
+    "web-vitals": "^2.1.4"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
