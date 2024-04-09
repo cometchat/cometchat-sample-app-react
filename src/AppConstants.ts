@@ -2,6 +2,6 @@
 
 export const AppConstants = {
   APP_ID: "APP_ID",
-  REGION: "APP_REGION",
+  REGION: "REGION",
   AUTH_KEY: "AUTH_KEY",
 };
