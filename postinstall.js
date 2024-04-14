@@ -3,16 +3,16 @@ const request = require('request');
 const extract = require('extract-zip')
 const rimraf = require("rimraf");
 
-const fileName = "cometchat-chat-uikit-react";
+const fileName = "cometchat-uikit-react";
 const filePath = __dirname + "/src/" + fileName;
 
-const zipFileName = "cometchat-chat-uikit-react-master";
+const zipFileName = "cometchat-uikit-react-3";
 
 const zipName = zipFileName + ".zip";
 const source = __dirname + "/" + zipFileName;
 const destination = filePath;
 
-const downloadUrl = "https://github.com/cometchat-pro/cometchat-chat-uikit-react/archive/master.zip";
+const downloadUrl = "https://github.com/cometchat/cometchat-uikit-react/archive/v3.zip";
 
 
 const download = (uri, filename, callback) => {
@@ -41,25 +41,34 @@ const deleteFileFolder = (target) => {
 
 
 
-if(checkIfFolderExists(filePath)) {
+if (checkIfFolderExists(filePath)) {
     deleteFileFolder(filePath);
 }
 
 download(downloadUrl, zipName, (props) => {
 
     try {
-        extract(zipName, {dir: __dirname}).then(response => {
+        extract(zipName, { dir: __dirname }).then(response => {
 
             fs.move(source, destination, error => {
-
-                if(error) {
+                if (error) {
                     return console.error('move file error!', error);
                 }
+                const oldFilePath = __dirname + "/src/cometchat-uikit-react";
+                const newFilePath = __dirname + "/src/cometchat-chat-uikit-react";
+
+                fs.rename(oldFilePath, newFilePath, function (err) {
+                    if (err) {
+                        console.log('ERROR: ' + err);
+                        return;
+                    }
+                    console.log("Renamed file successfully!");
+                });
                 console.log('move file success!');
             });
 
             const zipFile = __dirname + "/" + zipName;
-            if(checkIfFolderExists(zipFile)) {
+            if (checkIfFolderExists(zipFile)) {
                 deleteFileFolder(zipFile);
             }
         });
