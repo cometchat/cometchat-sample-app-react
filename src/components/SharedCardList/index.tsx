@@ -36,18 +36,10 @@ export function SharedCardList() {
                     rowGap: "16px"
                 }}
             >
-                <div
-                    style = {{
-                        height: "30%"
-                    }}
-                >
+                <div>
                     <ResourcesCardList />
                 </div>
-                <div
-                    style = {{
-                        height: "70%"
-                    }}
-                >
+                <div>
                     <ViewsCardList />
                 </div>
             </div>

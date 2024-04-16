@@ -24,7 +24,7 @@ const users = {
     superhero2:{
         uid: "superhero2",
         name: "Captain America",
-        avatar: "https://data-us.cometchat.io/assets/images/avatars/captainamerica.png", 
+        avatar: "https://data-us.cometchat.io/assets/images/avatars/captainamerica.png",
         status:"online",
         unreadCount: 30
     }
@@ -105,7 +105,7 @@ const ListItem = (props:any) => {
     const { theme } = useContext(CometChatThemeContext);
     const themeMode = theme.palette.mode
     return (
-       
+
           <div style = {loadingComponentModalStyle(showModal)}>
               <div
               style={componentDetailsModalStyle(themeMode)}
@@ -118,12 +118,13 @@ const ListItem = (props:any) => {
                 List Item displays data on a tile and that tile may contain leading, trailing, title and subtitle widgets.
                 </div>
                 <div className="details__container" style={{marginTop: "11px",marginBottom: "8px"}} >
-                   
+
                     <div>
                         {
                             cardDataList.map(cardData =>  {
-                                return (        
+                                return (
                                     <cometchat-list-item
+                                    key={cardData.id}
                                     avatarStyle={JSON.stringify(avatarStyle)}
                                     id = {cardData.id}
                                     avatarURL = {cardData.avatarURL}
@@ -132,21 +133,21 @@ const ListItem = (props:any) => {
                                     statusIndicatorColor={cardData.statusIndicatorColor}
                                     listItemStyle = {JSON.stringify(listItemStyle)}
                                     hideShowTail={true}
-                                ><div 
+                                ><div
                                 style={{color: themeMode === "dark"? "rgba(255, 255, 255, 0.58)" : "rgba(20, 20, 20, 0.58)"}}
                                 slot = "subtitleView"
                             >
                                {cardData.subtitleView}
                             </div>
-                                <div 
+                                <div
                                     slot = "tailView"
                                     style={{color: themeMode === "dark"? "rgba(255, 255, 255, 0.58)" : "rgba(20, 20, 20, 0.58)"}}
                                 >
                                 {cardData.tailView}
                                 </div>
-                            </cometchat-list-item>   
+                            </cometchat-list-item>
                                 )
-                                } 
+                                }
                             )}
                     </div>
                     </div>

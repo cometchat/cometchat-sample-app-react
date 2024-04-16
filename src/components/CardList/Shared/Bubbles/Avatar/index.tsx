@@ -19,7 +19,7 @@ const Avatar = (props:any) => {
     const [avatarChoice, setAvatarChoice] = useState("image")
     const [avatarBorderRadius, setAvatarBorderRadius] = useState("28")
     const handleChange = (checked:boolean) => {
-     
+
       setAvatarChoice(checked ? "image" : "name")
     }
     const handleInputChange = (value:string) => {
@@ -44,7 +44,7 @@ const Avatar = (props:any) => {
       avatarStyle.backgroundColor = "#6929ca"
     }
     return (
-       
+
         <div
               style = {loadingComponentModalStyle(showModal)}
             >
@@ -68,7 +68,7 @@ const Avatar = (props:any) => {
                     Avatar type
                     </div>
                     <div className="switch__btn">
-                        <Switch onChange={handleChange}  width={100} offColor="#777777" onColor="#bbbbb" uncheckedIcon={<div style={{color:"white",position: "absolute", top: "4px", left: "-21px",}}>Name</div>} checked={avatarChoice === "image" ? true : false} checkedIcon={<div style={{color:"white",position: "absolute", top: "4px",
+                        <Switch onChange={handleChange}  width={100} offColor="#777777" onColor="#bbb" uncheckedIcon={<div style={{color:"white",position: "absolute", top: "4px", left: "-21px",}}>Name</div>} checked={avatarChoice === "image" ? true : false} checkedIcon={<div style={{color:"white",position: "absolute", top: "4px",
                         left: "17px",}}>Image</div>}  />
                     </div>
                 </div>

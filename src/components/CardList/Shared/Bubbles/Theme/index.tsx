@@ -7,7 +7,7 @@ import Switch from "react-switch";
 import { useNavigate } from "react-router-dom";
 
 const Theme = (props:any) => {
-    
+
     const [themeChoice, setThemeChoice] = useState("default")
     const {
         activeComponent,
@@ -31,11 +31,11 @@ const Theme = (props:any) => {
         {
             navigate("/home/chats-module/conversations-with-messages", {state: {changeThemeToCustom: false}});
         }
-    }    
+    }
     const { theme } = useContext(CometChatThemeContext);
     const themeMode = theme.palette.mode
 return (
-       
+
         <div
               style = {loadingComponentModalStyle(showModal)}
             >

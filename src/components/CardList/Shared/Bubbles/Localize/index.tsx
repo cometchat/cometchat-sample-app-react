@@ -25,11 +25,11 @@ const Localize = (props:any) => {
     const navigate = useNavigate();
     const handleNavigateToConversations = () => {
         navigate("/home/chats-module/conversations-with-messages");
-    }  
+    }
     const { theme } = useContext(CometChatThemeContext);
     const themeMode = theme.palette.mode
     return (
-       
+
         <div
               style = {loadingComponentModalStyle(showModal)}
             >
@@ -48,7 +48,7 @@ const Localize = (props:any) => {
                     Language
                     </div>
                     <div className="switch__btn">
-                        <Switch onChange={handleChange}  width={100} offColor="#777777" onColor="#bbbbb" uncheckedIcon={<div style={{color:"white",position: "absolute", top: "4px", left: "-21px",}}>हिन्दी</div>} checked={languageChoice === "english" ? true : false} checkedIcon={<div style={{color:"white",position: "absolute", top: "4px",
+                        <Switch onChange={handleChange}  width={100} offColor="#777777" onColor="#bbb" uncheckedIcon={<div style={{color:"white",position: "absolute", top: "4px", left: "-21px",}}>हिन्दी</div>} checked={languageChoice === "english" ? true : false} checkedIcon={<div style={{color:"white",position: "absolute", top: "4px",
                         left: "17px",}}>English</div>}  />
                     </div>
                 </div>
