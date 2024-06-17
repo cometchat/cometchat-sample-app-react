@@ -1,6 +1,6 @@
 {
 	"name": "javascript-react-chat-app",
-	"version": "3.0.11-1",
+	"version": "3.0.11-2",
 	"private": true,
 	"dependencies": {
 		"@cometchat-pro/chat": "3.0.11",
