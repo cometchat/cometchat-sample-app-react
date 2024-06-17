@@ -1,16 +1,13 @@
 import { Navigate, useNavigate } from "react-router-dom";
 import { defaultUserBtnsContainerStyle, errorMessageStyle, goToSignupContainerStyle, goToSignupStyle, loginBtnStyle, loginSampleUsersContainerStyle, loginStyle, loginUidFormStyle, noAccountStyle, userAvatarStyle, userBtnStyle, userNameAndUidContainerStyle, userNameStyle, userUidStyle, usingSampleUsersTextStyle } from "./style";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
-import CaptainAmericaAvatar from "../../assets/captainamerica_avatar.png";
 import { CometChat } from "@cometchat/chat-sdk-javascript";
 import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
 import { CometChatUIKit } from "@cometchat/chat-uikit-react"
-import CyclopsAvatar from "../../assets/cyclops_avatar.png";
-import IronManAvatar from "../../assets/ironman_avatar.png";
 import { LoginSignup } from "../LoginSignup";
-import SpidermanAvatar from "../../assets/spiderman_avatar.png";
 import { TextInput } from "../TextInput";
+import { users } from "../../sampleApp/sampledata";
 
 interface ILoginProps {
     loggedInUser : CometChat.User | null | undefined,
@@ -24,28 +21,9 @@ type User = {
     avatar : string
 };
 
-const defaultUsers : User[] = [
-    {
-        name: "Iron Man",
-        uid: "superhero1",
-        avatar: IronManAvatar
-    },
-    {
-        name: "Captain America",
-        uid: "superhero2",
-        avatar: CaptainAmericaAvatar
-    },
-    {
-        name: "Spiderman",
-        uid: "superhero3",
-        avatar: SpidermanAvatar
-    },
-    {
-        name: "Cyclops",
-        uid: "superhero5",
-        avatar: CyclopsAvatar
-    }
-];
+type UserJson = {
+    users : User[]
+}
 
 export function Login(props : ILoginProps) {
     const {
@@ -58,6 +36,20 @@ export function Login(props : ILoginProps) {
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
     const { theme } = useContext(CometChatThemeContext);
+    const [defaultUsers, setDefaultUsers ] = useState<User[]>([]);
+
+
+    async function fetchDefaultUsers() {
+        try {
+            const response = await fetch("https://assets.cometchat.io/sampleapp/sampledata.json");
+            const data : UserJson = await response.json();
+            setDefaultUsers(data.users);
+        }
+        catch(error) {
+            console.log("fetching default users failed, using fallback data", error);
+            setDefaultUsers(users.users);
+        }
+    }
 
     async function login(uid : string) {
         try {
@@ -67,7 +59,7 @@ export function Login(props : ILoginProps) {
                 console.log("Login successful, loggedInUser:", loggedInUser);
                 setLoggedInUser(loggedInUser);
                 navigate("/home");
-            
+
             })
         }
         catch(error) {
@@ -91,7 +83,7 @@ export function Login(props : ILoginProps) {
             console.log(error);
         }
     }
-    
+
     function getUserBtnWithKeyAdded({ name, uid, avatar } : User) {
         return (
             <button
@@ -99,7 +91,7 @@ export function Login(props : ILoginProps) {
                 onClick = {() => login(uid)}
                 style = {userBtnStyle(theme)}
             >
-                <img 
+                <img
                     src = {avatar}
                     alt = {`${name}'s avatar`}
                     style = {userAvatarStyle()}
@@ -120,7 +112,7 @@ export function Login(props : ILoginProps) {
                 </span>
             </button>
         );
-    } 
+    }
 
     function getErrorMessage() {
         if (!errorMessage) {
@@ -134,6 +126,13 @@ export function Login(props : ILoginProps) {
             </div>
         );
     }
+
+    useEffect(()=>{
+        fetchDefaultUsers();
+     return () =>{
+        setDefaultUsers([]);
+     }
+    },[])
 
     // if (loggedInUser === undefined) {
     //     return null;
@@ -169,7 +168,7 @@ export function Login(props : ILoginProps) {
                     onSubmit = {handleLoginWithUidFormSubmit}
                     style = {loginUidFormStyle()}
                 >
-                    <TextInput 
+                    <TextInput
                         labelText = "Or else continue with login using UID"
                         placeholderText = "Enter UID here"
                         value = {uid}

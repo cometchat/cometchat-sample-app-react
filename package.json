@@ -1,6 +1,6 @@
 {
   "name": "cometchat-chat-sample-app-react",
-  "version": "4.3.7",
+  "version": "4.3.8",
   "private": true,
   "dependencies": {
     "@cometchat/calls-sdk-javascript": "^4.0.7",
