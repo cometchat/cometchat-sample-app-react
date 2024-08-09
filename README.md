@@ -39,8 +39,9 @@ This is a reference application showcasing the integration of [CometChat's React
       npm install
     ```
 4. Enter your CometChat _`App ID`_, _`Region`_, and _`Auth Key`_ in the [src/AppConstants.ts](https://github.com/cometchat/cometchat-sample-app-react/blob/v4/src/AppConstants.ts) file:
-    https://github.com/cometchat/cometchat-sample-app-react/blob/ce2a0d3460cabd9f0500f499c008ca930111f842/src/AppConstants.ts#L1-L7
-5. Run the project locally to see all CometChat features in action:
+    https://github.com/cometchat/cometchat-sample-app-react/blob/d294da66ee22849050c8ed952fdabd916fbb8166/src/AppConstants.ts#L1-L7
+5. If your app is created before August 12th, 2024 then change the sample data URL to `https://assets.cometchat.io/sampleapp/v1/sampledata.json` in the [src/components/Login/index.tsx](https://github.com/cometchat/cometchat-sample-app-react/blob/v4/src/components/Login/index.tsx) file: https://github.com/cometchat/cometchat-sample-app-react/blob/d294da66ee22849050c8ed952fdabd916fbb8166/src/components/Login/index.tsx#L43-L45
+6. Run the project locally to see all CometChat features in action:
     ```
       npm run start
     ```
