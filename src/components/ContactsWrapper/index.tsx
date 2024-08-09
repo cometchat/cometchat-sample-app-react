@@ -43,7 +43,7 @@ export function ContactsWrapper() {
 
   return (
     <CometChatThemeContext.Provider value={themeContext}>
-      <CometChatContacts title="" closeIconURL="" />
+      <CometChatContacts contactsStyle={{}} title="" closeIconURL="" />
     </CometChatThemeContext.Provider>
   );
 }

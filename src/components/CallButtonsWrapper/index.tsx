@@ -5,15 +5,15 @@ import { useContext, useEffect, useState } from "react";
 import { CometChat } from "@cometchat/chat-sdk-javascript";
 import { useNavigate } from "react-router-dom";
 
-type CallButtonsWrapperProps = { setSomeInterestingAsyncOpStarted : React.Dispatch<React.SetStateAction<boolean>> };
+type CallButtonsWrapperProps = { setSomeInterestingAsyncOpStarted: React.Dispatch<React.SetStateAction<boolean>> };
 
-export function CallButtonsWrapper(props : CallButtonsWrapperProps) {
+export function CallButtonsWrapper(props: CallButtonsWrapperProps) {
     const [loggedInUser, setLoggedInUser] = useState<CometChat.User | null>(null);
     const navigate = useNavigate();
     const { theme } = useContext(CometChatThemeContext);
     const { setSomeInterestingAsyncOpStarted, ...otherProps } = props;
-    
-    function handleClick(message : string) {
+
+    function handleClick(message: string) {
         console.log(message);
         navigate("/home/calls-module");
     }
@@ -24,7 +24,7 @@ export function CallButtonsWrapper(props : CallButtonsWrapperProps) {
                 setSomeInterestingAsyncOpStarted(true);
                 setLoggedInUser(await CometChat.getLoggedinUser());
             }
-            catch(error) {
+            catch (error) {
                 console.log(error);
             }
             finally {
@@ -35,13 +35,13 @@ export function CallButtonsWrapper(props : CallButtonsWrapperProps) {
 
     return (
         <div
-            style = {callButtonsWrapperStyle(theme)}
+            style={callButtonsWrapperStyle(theme)}
         >
             <CometChatCallButtons
-                user = {loggedInUser ?? undefined} 
-                onVoiceCallClick = {() => handleClick("Voice call button clicked")}
-                onVideoCallClick = {() => handleClick("Video call button clicked")}
-                callButtonsStyle = {callButtonsStyle()}
+                user={loggedInUser!}
+                onVoiceCallClick={() => handleClick("Voice call button clicked")}
+                onVideoCallClick={() => handleClick("Video call button clicked")}
+                callButtonsStyle={callButtonsStyle()}
                 {...otherProps}
             />
         </div>
