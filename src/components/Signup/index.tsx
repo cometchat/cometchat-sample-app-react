@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 
 import { AppConstants } from "../../AppConstants";
 import { CometChat } from "@cometchat/chat-sdk-javascript";
-import { CometChatThemeContext } from "@cometchat/chat-uikit-react";
+import { CometChatThemeContext, CometChatUIKit } from "@cometchat/chat-uikit-react";
 import { LoginSignup } from "../LoginSignup";
 import { TextInput } from "../TextInput";
 
@@ -27,7 +27,7 @@ export function Signup({ loggedInUser, setLoggedInUser, setInterestingAsyncOpSta
         console.log("Form submitted");
         let newUserUid  = uid;
         if (generateUid) {
-            newUserUid = `${name.replaceAll(" ", "")}_${Date.now()}`; 
+            newUserUid = `${name.replace(/[^a-zA-Z0-9]/g, "")}_${Date.now()}`;
         }
         const newUser = new CometChat.User(newUserUid);
         newUser.setName(name);
@@ -36,6 +36,8 @@ export function Signup({ loggedInUser, setLoggedInUser, setInterestingAsyncOpSta
             const createdUser = await CometChat.createUser(newUser, AppConstants.AUTH_KEY);
             console.log("User created:", createdUser);
             console.log(`User having uid: ${createdUser.getUid()} created successfully.`);
+            const loggedInUser = await CometChatUIKit.login(newUserUid);
+            console.log("Login Successful:", { loggedInUser });
             setLoggedInUser(createdUser);
             // Don't think resetting states makes a difference since I am navigating to a different page
             setName("");

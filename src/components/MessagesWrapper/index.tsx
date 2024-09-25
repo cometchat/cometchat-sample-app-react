@@ -10,7 +10,7 @@ export function MessagesWrapper(props : MessagesWrapperProps) {
     
     useEffect(() => {
         (async () => {
-            const groupsRequest = new CometChat.GroupsRequestBuilder().setLimit(1).build();
+            const groupsRequest = new CometChat.GroupsRequestBuilder().setLimit(1).joinedOnly(true).build();
             try {
                 setSomeInterestingAsyncOpStarted(true);
                 const [fetchGroup] = await groupsRequest.fetchNext();
