@@ -1,0 +1,58 @@
+/*
+   Main container for the edit preview area.
+*/
+.cometchat-edit-preview {
+    padding: var(--cometchat-padding-2, 8px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 0;
+    min-height: 30px;
+    height: 100%;
+    width: 100%;
+    border: none;
+    background: var(--cometchat-background-color-03);
+    border-radius: var(--cometchat-radius-1, 4px);
+    box-sizing: border-box;
+    gap: var(--cometchat-padding-1, 4px);
+    position: relative;
+}
+
+/*
+   Close button for the edit preview.
+*/
+.cometchat-edit-preview__close {
+    mask: url("../../assets/close.svg") center center no-repeat;
+    -webkit-mask: url("../../assets/close.svg") center center no-repeat;
+    height: 20px;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cometchat-icon-color-primary);
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    position: absolute;
+    top: var(--cometchat-padding-2, 8px);
+    right: var(--cometchat-padding-2, 8px);
+    cursor: pointer;
+}
+
+/*
+   Title text inside the edit preview.
+*/
+.cometchat-edit-preview__title {
+    font: var(--cometchat-font-body-regular);
+    color: var(--cometchat-text-color-primary);
+    font-style: normal;
+}
+
+/*
+   Subtitle text inside the edit preview, containing the actual text being edited.
+*/
+.cometchat-edit-preview__subtitle {
+    font-style: normal;
+    color: var(--cometchat-text-color-secondary);
+    font: var(--cometchat-font-caption1-regular);
+}

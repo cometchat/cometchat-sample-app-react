@@ -1,0 +1,282 @@
+import { MessageStatus } from '../../Enums/Enums';
+import React, { JSX, useEffect } from "react";
+
+import { Action } from "./CometChatConversations";
+import { CometChat, Conversation } from "@cometchat/chat-sdk-javascript";
+import { ConversationsManager } from "./controller";
+import { CometChatUIKitUtility } from '../../CometChatUIKit/CometChatUIKitUtility';
+import { CometChatUIKitLoginListener } from '../../CometChatUIKit/CometChatUIKitLoginListener';
+import { CometChatConversationEvents } from '../../events/CometChatConversationEvents';
+import { CometChatGroupEvents } from '../../events/CometChatGroupEvents';
+import { CometChatUserEvents } from '../../events/CometChatUserEvents';
+import { CometChatMessageEvents } from '../../events/CometChatMessageEvents';
+import { CometChatCallEvents } from '../../events/CometChatCallEvents';
+
+type Args = {
+  conversationsRequestBuilder: CometChat.ConversationsRequestBuilder | null,
+  conversationsManagerRef: React.MutableRefObject<ConversationsManager | null>,
+  fetchNextAndAppendConversations: (fetchId: string) => Promise<void>,
+  fetchNextIdRef: React.MutableRefObject<string>,
+  dispatch: React.Dispatch<Action>,
+  conversationToBeDeleted: CometChat.Conversation | null,
+  errorHandler: (error: unknown) => void,
+  refreshSingleConversation: (message: CometChat.BaseMessage, remove?: boolean) => Promise<void>,
+  onMessageReceived: (message: CometChat.BaseMessage) => Promise<void>,
+  setReceipts: (messageReceipt: CometChat.MessageReceipt, updateReadAt: boolean) => void,
+  setTypingIndicator: (typingIndicator: CometChat.TypingIndicator, typingStarted: boolean) => void,
+  disableTyping: boolean,
+  loggedInUser: CometChat.User | null,
+  isFirstReload: boolean,
+  disableUsersPresence?: boolean,
+  activeConversation: Conversation | null,
+  setActiveConversationState: React.Dispatch<React.SetStateAction<Conversation | null>>
+};
+
+export function useCometChatConversations(args: Args) {
+  const {
+    conversationsRequestBuilder,
+    conversationsManagerRef,
+    fetchNextAndAppendConversations,
+    fetchNextIdRef,
+    dispatch,
+    conversationToBeDeleted,
+    errorHandler,
+    refreshSingleConversation,
+    onMessageReceived,
+    setReceipts,
+    setTypingIndicator,
+    disableTyping,
+    loggedInUser,
+    isFirstReload,
+    disableUsersPresence,
+    activeConversation,
+    setActiveConversationState
+  } = args;
+
+  useEffect(
+    /**
+     * Creates a new request builder -> empties the `conversationList` state -> initiates a new fetch
+     */
+    () => {
+      dispatch({ type: "setIsFirstReload", isFirstReload: true });
+      conversationsManagerRef.current = new ConversationsManager({ conversationsRequestBuilder });
+      dispatch({ type: "setConversationList", conversationList: [] });
+      fetchNextAndAppendConversations(fetchNextIdRef.current = "initialFetchNext_" + String(Date.now()));
+
+
+
+    }, [conversationsRequestBuilder, fetchNextAndAppendConversations, dispatch, conversationsManagerRef, fetchNextIdRef]);
+
+  useEffect(
+    /**
+     * Sets `loggedInUserRef` to the currently logged-in user
+     */
+    () => {
+      (async () => {
+        try {
+          dispatch({ type: "setLoggedInUser", loggedInUser: CometChatUIKitLoginListener.getLoggedInUser() });
+        }
+        catch (error) {
+          errorHandler(error);
+        }
+      })();
+    }, [errorHandler, dispatch]);
+
+
+
+  useEffect(
+    /**
+     * Attaches an SDK user listener
+     *
+     * @returns - Function to remove the added SDK user listener
+     */
+    () => {
+      if (!disableUsersPresence) {
+        return ConversationsManager.attachUserListener((user: CometChat.User) => dispatch({ type: "updateConversationWithUser", user }));
+      }
+    }, [dispatch]);
+
+  useEffect(
+    /**
+     * Attaches an SDK group listener
+     *
+     * @returns - Function to remove the added SDK group listener
+     */
+    () => {
+      return ConversationsManager.attachGroupListener(refreshSingleConversation, loggedInUser);
+    }, [refreshSingleConversation, loggedInUser]);
+
+  useEffect(
+    /**
+     * Attaches an SDK message received listener
+     *
+     * @returns - Function to remove the added SDK message received listener
+     */
+    () => {
+      return ConversationsManager.attachMessageReceivedListener(onMessageReceived);
+    }, [onMessageReceived]);
+
+  useEffect(
+    /**
+     * Attaches an SDK message modified listener
+     *
+     * @returns - Function to remove the added SDK message modified listener
+     */
+    () => {
+      return ConversationsManager.attachMessageModifiedListener((message: CometChat.BaseMessage) => {
+        dispatch({ type: "updateConversationLastMessage", message });
+      })
+    }, [dispatch]);
+
+  useEffect(
+    /**
+     * Attaches an SDK message receipt listener
+     *
+     * @returns - Function to remove the added SDK message receipt listener
+     */
+    () => {
+      return ConversationsManager.attachMessageReceiptListener(setReceipts);
+    }, [setReceipts]);
+
+  useEffect(
+    /**
+     * Attaches an SDK message typing listener
+     *
+     * @returns - Function to remove the added SDK message typing listener
+     */
+    () => {
+      if (disableTyping) {
+        return;
+      }
+      return ConversationsManager.attachMessageTypingListener(setTypingIndicator);
+    }, [disableTyping, setTypingIndicator]);
+
+  useEffect(
+    /**
+     * Attaches an SDK call listener
+     *
+     * @returns - Function to remove the added SDK call listener
+     */
+    () => {
+      return ConversationsManager.attachCallListener(refreshSingleConversation);
+    }, [refreshSingleConversation]);
+
+
+  useEffect(() => {
+    /**
+     * Subscribes to Conversations UI events
+     */
+    const ccConversationDeleted =
+      CometChatConversationEvents.ccConversationDeleted.subscribe(
+        (conversation: CometChat.Conversation) => {
+          if (conversation) {
+            dispatch({ type: "removeConversation", conversation });
+            dispatch({ type: "setConversationToBeDeleted", conversation: null });
+          }
+        }
+      );
+    return () => {
+      ccConversationDeleted.unsubscribe();
+    }
+  }, [dispatch])
+
+
+  useEffect(
+    /**
+     * Subscribes to User, Group, Message & Call UI events
+     */
+    () => {
+      const groupMemberScopeChangedSub = CometChatGroupEvents.ccGroupMemberScopeChanged.subscribe(item => {
+        dispatch({ type: "updateConversationLastMessageAndPlaceAtTheTop", message: item.message });
+      });
+      const groupMemberAddedSub = CometChatGroupEvents.ccGroupMemberAdded.subscribe(item => {
+        const message = item.messages[item.messages.length - 1];
+        if (message) {
+          dispatch({ type: "updateConversationLastMessageAndGroupAndPlaceAtTheTop", group: item.userAddedIn, message });
+        }
+      });
+      const groupMemberKickedSub = CometChatGroupEvents.ccGroupMemberKicked.subscribe(item => {
+        dispatch({ type: "updateConversationLastMessageAndGroupAndPlaceAtTheTop", group: item.kickedFrom, message: item.message });
+      });
+      const groupMemberBannedSub = CometChatGroupEvents.ccGroupMemberBanned.subscribe(item => {
+        dispatch({ type: "updateConversationLastMessageAndGroupAndPlaceAtTheTop", group: item.kickedFrom, message: item.message });
+      });
+      const groupDeletedSub = CometChatGroupEvents.ccGroupDeleted.subscribe(group => {
+        dispatch({ type: "removeConversationOfTheGroup", group });
+      });
+      const groupLeftSub = CometChatGroupEvents.ccGroupLeft.subscribe(item => {
+        if (!ConversationsManager.shouldLastMessageAndUnreadCountBeUpdated(item.message)) {
+          return;
+        }
+        dispatch({ type: "removeConversationOfTheGroup", group: item.leftGroup });
+      });
+      const userBlockedSub = CometChatUserEvents.ccUserBlocked.subscribe(user => {
+        if (!conversationsRequestBuilder?.includeBlockedUsers) {
+          dispatch({ type: "removeConversationOfTheUser", user });
+        } else {
+          dispatch({ type: "updateConversationWithUser", user });
+        }
+      });
+      const userUnBlockedSub = CometChatUserEvents.ccUserUnblocked.subscribe(user => {
+        if (conversationsRequestBuilder?.includeBlockedUsers) {
+          dispatch({ type: "updateConversationWithUser", user });
+        }
+      });
+      const messageEditedSub = CometChatMessageEvents.ccMessageEdited.subscribe(item => {
+        if (item.status === MessageStatus.success) {
+          dispatch({ type: "updateConversationLastMessage", message: item.message });
+        }
+      });
+      const messageSentSub = CometChatMessageEvents.ccMessageSent.subscribe(item => {
+        if (item.status === MessageStatus.success) {
+          if (conversationsRequestBuilder && conversationsRequestBuilder.build().getConversationType() && item.message.getReceiverType() !== conversationsRequestBuilder.build().getConversationType()) {
+            return;
+          }
+          CometChat.CometChatHelper.getConversationFromMessage(item.message).then(conversation => {
+            setActiveConversationState(conversation);
+            dispatch({ type: "updateConversationLastMessageResetUnreadCountAndPlaceAtTheTop", message: item.message, conversation: conversation });
+          });
+        }
+      });
+      const messageDeletedSub = CometChatMessageEvents.ccMessageDeleted.subscribe(message => {
+        dispatch({ type: "updateConversationLastMessage", message: CometChatUIKitUtility.clone(message) }); // Cloning message since I don't know if the developer is passing a cloned copy
+      });
+      const messageReadSub = CometChatMessageEvents.ccMessageRead.subscribe(message => {
+        dispatch({ type: "resetUnreadCountAndSetReadAtIfLastMessage", message });
+      });
+      const callAcceptedSub = CometChatCallEvents.ccCallAccepted.subscribe(message => {
+        dispatch({ type: "updateConversationLastMessageAndPlaceAtTheTop", message });
+      });
+      const outgoingCallSub = CometChatCallEvents.ccOutgoingCall.subscribe(message => {
+        dispatch({ type: "updateConversationLastMessageAndPlaceAtTheTop", message });
+      });
+      const callRejectedSub = CometChatCallEvents.ccCallRejected.subscribe(message => {
+        dispatch({ type: "updateConversationLastMessageAndPlaceAtTheTop", message });
+      });
+      const callEndedSub = CometChatCallEvents.ccCallEnded.subscribe(message => {
+        dispatch({ type: "updateConversationLastMessageAndPlaceAtTheTop", message });
+      });
+      return () => {
+        groupMemberScopeChangedSub.unsubscribe();
+        groupMemberAddedSub.unsubscribe();
+        groupMemberKickedSub.unsubscribe();
+        groupMemberBannedSub.unsubscribe();
+        groupDeletedSub.unsubscribe();
+        groupLeftSub.unsubscribe();
+        userBlockedSub.unsubscribe();
+        userUnBlockedSub.unsubscribe();
+        messageEditedSub.unsubscribe();
+        messageSentSub.unsubscribe();
+        messageDeletedSub.unsubscribe();
+        messageReadSub.unsubscribe();
+        callAcceptedSub.unsubscribe();
+        outgoingCallSub.unsubscribe();
+        callRejectedSub.unsubscribe();
+        callEndedSub.unsubscribe();
+      };
+    }, [dispatch]);
+
+  useEffect(() => {
+    setActiveConversationState(activeConversation);
+  }, [activeConversation]);
+}

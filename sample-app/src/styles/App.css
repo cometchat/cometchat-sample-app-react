@@ -1,0 +1,95 @@
+.cometchat-root {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+}
+
+.conversations-wrapper {
+    display: flex;
+    width: 30vw;
+    max-width: 420px;
+    height: 100vh;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0px;
+    flex: 3;
+    background: var(--cometchat-background-color-01, #FFF);
+}
+
+.selector-wrapper {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    overflow: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0px;
+    background: var(--cometchat-background-color-01, #FFF);
+}
+
+.selector-wrapper .cometchat-list__body {
+    flex: 1;
+    border-right: 1px solid var(--cometchat-border-color-light);
+}
+
+.selector-wrapper::-webkit-scrollbar,
+.selector-wrapper::-webkit-scrollbar-thumb {
+    display: none;
+}
+
+.conversations-wrapper .selector-wrapper .cometchat-list {
+    position: relative;
+}
+
+.conversations-wrapper .selector-wrapper .cometchat-list .cometchat-list__header .cometchat-button {
+    height: fit-content;
+    width: fit-content;
+    padding: 0;
+    background: transparent;
+}
+
+.conversations-wrapper .selector-wrapper .cometchat-list .cometchat-list__header-menu {
+    top: 20px;
+}
+
+.selector-wrapper .cometchat-list .cometchat-list__header .cometchat-button .cometchat-button__icon {
+    height: 24px;
+    width: 24px;
+}
+
+.cometchat-incoming-call {
+    top: 17px;
+    left: 30px;
+}
+
+.selector-wrapper .cc-conversations {
+    border: none !important;
+}
+
+.messages-wrapper {
+    width: 40vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 5;
+    background: var(--cometchat-background-color-03, #F5F5F5);
+    overflow: hidden;
+}
+
+.conversations-wrapper .cometchat-list__header-title {
+    border-right: none;
+}
+
+
+@media (max-width: 768px) {
+    .conversations-wrapper {
+        width: 100vw;
+        max-width: 100%;
+        min-width: 100%;
+        z-index: 1;
+    }
+}

@@ -1,0 +1,157 @@
+/* Container for the message header, aligning items horizontally */
+
+.cometchat-message-header {
+    display: flex;
+    padding: var(--cometchat-padding-2, 8px) var(--cometchat-padding-4, 16px);
+    align-items: center;
+    gap: var(--cometchat-padding-3, 12px);
+    flex: 1 0 0;
+    align-self: stretch;
+    justify-content: space-between;
+    height: 64px;
+    background: var(--cometchat-background-color-01);
+}
+
+/* Subtitle styling within the message header */
+
+.cometchat-message-header .cometchat-message-header__subtitle {
+    overflow: hidden;
+    color: var(--cometchat-icon-color-secondary);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font: var(--cometchat-font-caption1-regular);
+    width: 100%;
+    text-align: left;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 17px;
+}
+
+/* Subtitle styling for typing state in the message header */
+
+.cometchat-message-header .cometchat-message-header__subtitle.cometchat-message-header__subtitle-typing {
+    color: var(--cometchat-text-color-highlight);
+}
+
+/* Container for the title of the list item within the message header */
+
+.cometchat-message-header .cometchat-list-item__title-container {
+    gap: 0;
+    height: fit-content;
+}
+
+/* Flex container for direct children of the message header that have no class */
+
+.cometchat-message-header>div:not([class]) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--cometchat-padding-2, 8px);
+    flex: 1 0 0;
+}
+
+/* Styling for the back button in the message header */
+
+.cometchat-message-header__back-button {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-mask: url('../../assets//arrow_back.svg');
+    -webkit-mask-size: contain;
+    background: var(--cometchat-icon-color-primary);
+    cursor: pointer;
+}
+
+
+/* List item container within the message header */
+
+.cometchat-message-header__listitem {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Menu container within the message header, aligned to the right */
+
+.cometchat-message-header__menu {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* Removes padding for list items within the message header */
+
+.cometchat-message-header .cometchat-list-item {
+    padding: 0;
+
+}
+.cometchat-message-header .cometchat-list-item:hover{
+    background: transparent;
+    cursor: default;
+}
+/* Removes padding for the body of the list item within the message header */
+
+.cometchat-message-header .cometchat-list-item__body {
+    padding: 0;
+}
+
+/* Title styling within the body of the list item in the message header */
+
+.cometchat-message-header .cometchat-list-item .cometchat-list-item__body-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Avatar styling in the message header and shared avatar styling */
+
+.cometchat-message-header .cometchat-list-item .cometchat-avatar {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: var(--cometchat-radius-max);
+}
+
+.cometchat-message-header .cometchat-list-item .cometchat-list-item__leading-view {
+    height: 40px;
+    width: 40px;
+    padding: 0;
+}
+
+.cometchat-message-header__listitem>.cometchat {
+    height: 100%;
+    width: 100%;
+}
+
+.cometchat-message-header .cometchat-button__icon:hover{
+    background: var(--cometchat-primary-color);
+}
+
+
+/* Media query for larger screens to hide the back button */
+
+@media (max-width: 768px) {
+    .cometchat-message-header__back-button {
+        display: block;
+    }
+}
+
+@media (min-width: 769px) {
+    .cometchat-message-header__back-button {
+        display: none;
+    }
+}

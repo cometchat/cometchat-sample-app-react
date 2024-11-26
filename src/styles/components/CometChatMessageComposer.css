@@ -1,0 +1,297 @@
+/* Message Composer container - main wrapper */
+.cometchat-message-composer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    align-self: stretch;
+    border-radius: var(--cometchat-radius-2, 8px);
+    border: 1px solid var(--cometchat-border-color-light);
+    background: var(--cometchat-background-color-01);
+    width: 100%;
+    height: 100%;
+}
+
+/* Send button styling */
+.cometchat-message-composer__send-button {
+    display: flex;
+    width: 32px;
+    height: 32px;
+    padding: var(--cometchat-padding-1, 4px);
+    justify-content: center;
+    align-items: center;
+    gap: var(--cometchat-padding-1, 4px);
+    border-radius: 60px;
+    background: var(--cometchat-background-color-04);
+}
+
+/* Default state for the send button */
+.cometchat-message-composer__send-button .cometchat-button {
+    cursor: default;
+}
+
+/* Active state for the send button */
+.cometchat-message-composer__send-button-active {
+    cursor: pointer;
+    background: var(--cometchat-primary-color);
+}
+
+
+/* Sticker button popover content */
+.cometchat-message-composer__auxilary-button-view-sticker-button .cometchat-popover__content {
+    height: 300px;
+    overflow: hidden;
+    width: 272px;
+}
+
+/* Emoji keyboard button popover content */
+.cometchat-message-composer__emoji-keyboard-button .cometchat-popover__content {
+    height: 300px;
+    width: 300px;
+    overflow: hidden;
+}
+
+/* Action sheet button popover content */
+.cometchat-message-composer__secondary-button-view-attachment-button .cometchat-popover__content {
+    height: 332px;
+    border: none;
+}
+
+/* Voice recording button popover content */
+.cometchat-message-composer__voice-recording-button .cometchat-popover__content {
+    width: fit-content;
+}
+
+/* AI button popover content */
+.cometchat-message-composer__auxilary-button-view-ai-button .cometchat-popover__content {
+    min-height: 110px;
+    width: fit-content;
+    min-width: 280px;
+    max-height: 240px;
+    max-width: 280px;
+}
+
+.cometchat-message-composer__auxilary-button-view-ai-button .cometchat-popover__content>.cometchat {
+    border-radius: inherit;
+}
+
+.cometchat-message-composer__auxilary-button-view-ai-button .cometchat-popover__content .cometchat-ai-smart-replies {
+    height: 200px;
+}
+
+.cometchat-message-composer__auxilary-button-view-ai-button .cometchat-action-sheet__item {
+    padding: var(--cometchat-padding-3, 12px);
+}
+
+.cometchat-message-composer__auxilary-button-view-ai-button .cometchat-action-sheet__item-body {
+    font: var(--cometchat-font-body-regular);
+
+}
+
+.cometchat-message-composer__auxilary-button-view-ai-button .cometchat-action-sheet {
+    justify-content: center;
+    border: none;
+    border-radius: inherit;
+    background: inherit;
+    box-shadow: none;
+    width: 100%;
+    height: 100%;
+}
+
+.cometchat-message-composer__input .cometchat-mentions>span {
+    color: var(--cometchat-text-color-highlight, #6852D6);
+    font: var(--cometchat-font-body-regular);
+}
+
+.cometchat-message-composer__input .cometchat-mentions-you>span {
+    color: var(--cometchat-warning-color, #FFAB00);
+    font: var(--cometchat-font-body-regular);
+}
+
+/* Styling for buttons with no specific class */
+.cometchat-message-composer div:not([class]) .cometchat-button {
+    width: fit-content;
+    background: transparent;
+    padding: 0;
+    gap: 0;
+    height: 24px;
+}
+
+.cometchat-message-composer__unblock-button {
+    color: var(--cometchat-neutral-color-900);
+    font: var(--cometchat-font-body-regular);
+    cursor: pointer;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border-radius: var(--cometchat-radius-2, 8px);
+    border: 1px solid var(--cometchat-border-color-dark);
+    padding: var(--cometchat-padding-2, 8px) var(--cometchat-padding-5, 20px);
+}
+
+/* Composer header wrapper */
+.cometchat-message-composer__header {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    padding: var(--cometchat-padding-1, 4px);
+    justify-content: space-between;
+    align-items: flex-start;
+    align-self: stretch;
+}
+
+.cometchat-message-composer__header-error-state {
+    display: flex;
+    padding: var(--cometchat-padding-2, 8px);
+    align-items: center;
+    gap: var(--cometchat-padding-1);
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: var(--cometchat-radius-1, 4px);
+    background: var(--cometchat-background-color-02);
+}
+
+.cometchat-message-composer__header-error-state-icon-wrapper {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--cometchat-error-color);
+    border-radius: var(--cometchat-radius-max);
+}
+
+.cometchat-message-composer__header-error-state-icon {
+    -webkit-mask: url("../../assets/error_info.svg");
+    width: 20px;
+    height: 20px;
+    -webkit-mask-size: contain;
+    background: var(--cometchat-static-white);
+}
+
+.cometchat-message-composer__header-error-state-text {
+    overflow: hidden;
+    color: var(--cometchat-error-color);
+    text-overflow: ellipsis;
+    font: var(--cometchat-font-caption1-regular);
+}
+
+/* Mentions wrapper styling */
+.cometchat-mention-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    z-index: 2;
+    height: fit-content;
+    min-height: 45px;
+    padding: 0 0 1px 0;
+    width: fit-content;
+    align-self: flex-start;
+    min-width: 320px;
+    bottom: 100%;
+    left: 0;
+    position: absolute;
+    max-height: 336px;
+    border-radius: var(--cometchat-radius-4, 16px);
+    border: 1px solid var(--cometchat-background-color-01);
+    background: var(--cometchat-background-color-01);
+    box-shadow: 0 12px 16px 4px rgba(16, 24, 40, 0.08), 0 4px 6px 4px rgba(16, 24, 40, 0.03);
+}
+
+.cometchat-mention-list .cometchat-list {
+    max-height: 336px;
+}
+
+.cometchat-mention-list>.cometchat {
+    overflow: hidden;
+    border-radius: inherit;
+}
+
+/* Message input area */
+.cometchat-message-composer__input {
+    width: 100%;
+    outline: none;
+    background: transparent;
+    overflow-y: auto;
+    min-height: 30px;
+    user-select: text;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    text-align: left;
+    box-sizing: border-box;
+    border-bottom: 1px solid var(--cometchat-border-color-light);
+    padding: var(--cometchat-padding-3, 12px);
+    color: var(--cometchat-text-color-primary);
+    text-overflow: ellipsis;
+    font: var(--cometchat-font-body-regular);
+    max-height: 150px;
+    scrollbar-width: none;
+    cursor: text;
+}
+
+/* Auxiliary button container */
+.cometchat-message-composer__auxilary-button-view {
+    display: flex;
+    justify-content: flex-start;
+    gap: 12px;
+    width: 100%;
+    align-items: center;
+}
+
+/* Placeholder styling when input is empty */
+.cometchat-message-composer__input:empty:before {
+    content: attr(data-placeholder);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    color: var(--cometchat-text-color-tertiary);
+    text-overflow: ellipsis;
+    font: var(--cometchat-font-body-regular);
+}
+
+/* Send button icon default styling */
+.cometchat-message-composer div:not([class]) .cometchat-message-composer__send-button .cometchat-button .cometchat-button__icon {
+    background: var(--cometchat-static-white);
+}
+
+/* Icon styling for buttons with no specific class */
+.cometchat-message-composer div:not([class]) .cometchat-button .cometchat-button__icon {
+    background: var(--cometchat-icon-color-secondary);
+}
+
+.cometchat-message-composer div:not([class]) .cometchat-button .cometchat-button__icon:hover {
+    background: var(--cometchat-primary-color, #6852D6);
+}
+
+.cometchat-message-composer div:not([class]) .cometchat-message-composer__send-button .cometchat-button .cometchat-button__icon:hover {
+    background: var(--cometchat-static-white);
+}
+
+/* Active emoji keyboard button icon */
+.cometchat-message-composer div:not([class]) .cometchat-message-composer__emoji-keyboard-button-active .cometchat-button__icon {
+    background: var(--cometchat-primary-color);
+}
+
+/* Active action sheet button icon */
+.cometchat-message-composer div:not([class]) .cometchat-message-composer__secondary-button-view-attachment-button-active .cometchat-button__icon {
+    background: var(--cometchat-primary-color);
+}
+
+/* Active voice recording button icon */
+.cometchat-message-composer div:not([class]) .cometchat-message-composer__voice-recording-button-active .cometchat-button__icon {
+    background: var(--cometchat-primary-color);
+}
+
+/* Active AI button icon */
+.cometchat-message-composer div:not([class]) .cometchat-message-composer__auxilary-button-view-ai-button-active .cometchat-button__icon {
+    background: var(--cometchat-primary-color);
+}
+
+/* Active stickerkeyboard button icon */
+.cometchat-message-composer div:not([class]) .cometchat-message-composer__auxilary-button-view-sticker-button-active .cometchat-button__icon {
+    background: var(--cometchat-primary-color);
+}

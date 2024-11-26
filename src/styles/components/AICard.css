@@ -1,0 +1,30 @@
+.cometchat-ai-card__container {
+  height:fit-content;
+  max-height: 30px;
+  width: 100%;
+  border:none;
+  border-radius: 0;
+  background: none;
+}
+
+.cometchat-ai-card__loading-state,
+.cometchat-ai-card__empty-state,
+.cometchat-ai-card__error-state
+  {
+  height:fit-content;
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.cometchat-ai-card__loading-icon-url,
+.cometchat-ai-card__error-icon-url,
+.cometchat-ai-card__empty-icon-url
+{
+  width: 24px;
+  height: 24px;
+}
