@@ -12,7 +12,7 @@ The CometChat React UI Kit provides a pre-built user interface kit that develope
 
 ## 🚀 Explore the Sample App!
 
-Dive straight into our [Sample App](./sample-app) to see CometChat UI Kit in action! Whether you're building a messaging app or enhancing your existing project, this sample app showcases the full potential of our React UI components.  
+Dive straight into our [Sample App](./sample-app/README.md#installation) to see CometChat UI Kit in action! Whether you're building a messaging app or enhancing your existing project, this sample app showcases the full potential of our React UI components.  
 
 ## Prerequisites
 
