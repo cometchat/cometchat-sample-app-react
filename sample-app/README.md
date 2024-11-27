@@ -10,7 +10,7 @@ This is a reference application showcasing the integration of [CometChat's React
     display: flex;
     align-items: center;
     justify-content: center;">
-   <img src="./Screenshots/sample_app_overview.png" />
+   <img src="./screenshots/sample_app_overview.png" />
 </div>
 
 ## Prerequisites
@@ -29,17 +29,23 @@ This is a reference application showcasing the integration of [CometChat's React
    ```sh
      git clone https://github.com/cometchat/cometchat-uikit-react.git
    ```
-2. Navigate to the cloned directory:
+
+2. Checkout v5 branch:
+   ```sh
+     git checkout v5
+   ```
+
+3. Navigate to the cloned directory:
    ```sh
      cd cometchat-uikit-react/sample-app
    ```
-3. Install dependencies:
+4. Install dependencies:
    ```sh
      npm install
    ```
-4. `[Optional]` Enter your CometChat _`App ID`_, _`Region`_, and _`Auth Key`_ in the [sample-app/src/AppConstants.ts](https://github.com/cometchat/cometchat-sample-app-react/blob/v5/sample-app/src/AppConstants.ts) file:https://github.com/cometchat/cometchat-uikit-react/blob/2dba5e2e781db6d2f20c59803ff7f8cef4e7c187/sample-app/src/AppConstants.ts#L1-L5
+5. `[Optional]` Enter your CometChat _`App ID`_, _`Region`_, and _`Auth Key`_ in the [sample-app/src/AppConstants.ts](https://github.com/cometchat/cometchat-sample-app-react/blob/v5/sample-app/src/AppConstants.ts) file:https://github.com/cometchat/cometchat-uikit-react/blob/2dba5e2e781db6d2f20c59803ff7f8cef4e7c187/sample-app/src/AppConstants.ts#L1-L5
 
-5. Run the project locally to see all CometChat features in action:
+6. Run the project locally to see all CometChat features in action:
    ```
      npm start
    ```
