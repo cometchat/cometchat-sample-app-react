@@ -2,7 +2,6 @@
   <img alt="CometChat" src="https://assets.cometchat.io/website/images/logos/banner.png">
 </p>
 
-
 # React Sample App by CometChat
 
 This is a reference application showcasing the integration of [CometChat's React UI Kit](https://www.cometchat.com/docs/v4/react-uikit/overview) within a React framework. It provides developers with examples of implementing real-time messaging and voice and video calling features in their own React-based applications.
@@ -13,6 +12,11 @@ This is a reference application showcasing the integration of [CometChat's React
     justify-content: center;">
    <img src="./Screenshots/overview_cometchat_screens.png" />
 </div>
+
+
+## 🚀 Try the New v5 UI Kit!
+Discover the all-new [v5 UI Kit](https://github.com/cometchat/cometchat-uikit-react/tree/v5), featuring a completely revamped design for enhanced usability and visual appeal. With restructured components, advanced styling options, and a streamlined integration process, v5 offers a seamless, customizable experience tailored to your needs. Try it now and elevate your development workflow!
+
 
 ## Prerequisites
 
