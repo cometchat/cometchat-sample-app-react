@@ -1,5 +1,6 @@
 import { Subject } from "rxjs";
 import { MouseEventSource, PanelAlignment } from "../Enums/Enums";
+import { ComposerId } from "../utils/MessagesDataSource";
 /**
  * UI event subjects for handling various UI-related actions (e.g., showing panels, modals, dialogs, etc.)
 
@@ -44,6 +45,7 @@ export interface IPanel {
 }
 export interface IModal {
   child?: any;
+  composerId?:ComposerId
 }
 export interface IActiveChatChanged {
   user?: CometChat.User;

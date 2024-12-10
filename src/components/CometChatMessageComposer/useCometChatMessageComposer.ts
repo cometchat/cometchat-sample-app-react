@@ -12,6 +12,7 @@ import { CometChatTextFormatter } from "../../formatters/CometChatFormatters/Com
 import { MentionsTargetElement, MessageStatus, UserMemberListType } from "../../Enums/Enums";
 import { CometChatMessageEvents, IMessages } from "../../events/CometChatMessageEvents";
 import { CometChatUIEvents, IMentionsCountWarning, IModal } from "../../events/CometChatUIEvents";
+import { isMobileDevice } from "../../utils/util";
 
 type Args = {
   dispatch: React.Dispatch<Action>;
@@ -91,6 +92,7 @@ export function useCometChatMessageComposer(args: Args) {
     isPartOfCurrentChatForUIEvent,
     parentMessageIdPropRef, getCurrentInput } = args;
   const isPreviewVisible = useRef<boolean>(false);
+  
   /**
     * Subscribes to message edited UI event and handles cases 
     * when a text message is being edited, updating the input field accordingly.
@@ -226,8 +228,10 @@ export function useCometChatMessageComposer(args: Args) {
     () => {
       const subShowModal = CometChatUIEvents.ccShowModal.subscribe(
         (data: IModal) => {
+         if((parentMessageIdPropRef?.current && data.composerId && data.composerId.parentMessageId && data.composerId.parentMessageId == parentMessageIdPropRef?.current) || !parentMessageIdPropRef?.current){
           dispatch({ type: "setShowPoll", showPoll: true });
           createPollViewRef.current = data.child;
+         }
         }
       );
 
@@ -269,7 +273,9 @@ export function useCometChatMessageComposer(args: Args) {
     }
     contentEditable.addEventListener("paste", preventPaste);
     document?.addEventListener("selectionchange", triggerSelection);
-    contentEditable?.focus();
+    if(!isMobileDevice()){
+      contentEditable?.focus();
+    }
     setSelection(window?.getSelection())
     if (!disableMentions) {
       if (textFormatterArray.length) {
@@ -396,7 +402,13 @@ export function useCometChatMessageComposer(args: Args) {
         if (textInputRef.current ) {
           dispatch({ type: "setTextMessageToEdit", textMessageToEdit: null });
           dispatch({ type: "setText", text: "" });
-          emptyInputField();
+          if(!isMobileDevice()){
+            emptyInputField();
+          }
+          else{
+            let contentEditable: any = getCurrentInput();
+            contentEditable.textContent = "";
+          }
           mySetAddToMsgInputText("");
           isPreviewVisible.current = false;
         }

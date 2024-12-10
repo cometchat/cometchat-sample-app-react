@@ -5,6 +5,7 @@ import cometChatLogo from "../../assets/cometchat_logo.svg"
 import cometChatLogoDark from "../../assets/cometchat_logo_dark.svg";
 import { CometChatUIKit, CometChatUIKitLoginListener } from "@cometchat/chat-uikit-react";
 import { COMETCHAT_CONSTANTS } from "../../AppConstants";
+import { sampleUsers } from "./sampledata";
 
 type User = {
   name: string;
@@ -16,10 +17,6 @@ type UserJson = {
   users: User[];
 };
 
-const appID: string = localStorage.getItem('appId') || COMETCHAT_CONSTANTS.APP_ID; // Use the latest appId if available
-const region: string = localStorage.getItem('region') || COMETCHAT_CONSTANTS.REGION; // Default to 'us' if region is not found
-const authKey: string = localStorage.getItem('authKey') || COMETCHAT_CONSTANTS.AUTH_KEY; // Default authKey if not found
-
 const CometChatLogin = () => {
   const [defaultUsers, setDefaultUsers] = useState<User[]>([]);
   const [uid, setUid] = useState("");
@@ -28,6 +25,10 @@ const CometChatLogin = () => {
   const isDarkMode = document.querySelector('[data-theme="dark"]') ? true : false;
 
   function hasCredentials() {
+    const appID: string = localStorage.getItem('appId') || COMETCHAT_CONSTANTS.APP_ID; // Use the latest appId if available
+    const region: string = localStorage.getItem('region') || COMETCHAT_CONSTANTS.REGION; // Default to 'us' if region is not found
+    const authKey: string = localStorage.getItem('authKey') || COMETCHAT_CONSTANTS.AUTH_KEY; // Default authKey if not found
+    
     if (appID === '' || region === '' || authKey === '') return false;
     return true;
   }
@@ -52,11 +53,12 @@ const CometChatLogin = () => {
   async function fetchDefaultUsers() {
     try {
       const response = await fetch(
-        "https://assets.cometchat.io/sampleapp/sampledata.json"
+       "https://assets.cometchat.io/sampleapp/v2/sampledata.json"
       );
       const data: UserJson = await response.json();
       setDefaultUsers(data.users);
     } catch (error) {
+      setDefaultUsers(sampleUsers.users);
       console.log("fetching default users failed, using fallback data", error);
     }
   }

@@ -37,6 +37,7 @@ const CometChatContextMenu = (props: ContextMenuProps) => {
         closePopover: () => void;
     }>();
     const moreButtonRef = useRef<HTMLDivElement>(null);
+    const subMenuRef = useRef<HTMLDivElement>(null);
     const [positionStyleState, setPositionStyleState] = useState<CSSProperties>({});
 
     /**
@@ -64,8 +65,10 @@ const CometChatContextMenu = (props: ContextMenuProps) => {
 
     /* This function is used to show and hide the sub-menu. */
     const handleMenuClick = useCallback(() => {
-        getPositionStyle()
         setShowSubMenu((showSubMenu: boolean) => !showSubMenu)
+        setTimeout(() => {
+            getPositionStyle()
+        }, 0);
     }, [setPositionStyleState]);
 
 
@@ -170,10 +173,10 @@ const CometChatContextMenu = (props: ContextMenuProps) => {
         return getMenu(data.slice(topMenuSize > 0 ? topMenuSize - 1 : 0), true);
     }, [getMenu, topMenuSize, data])
 
-    const getPositionStyle = () => {
+    const getPositionStyle = useCallback(() => {
+        const height = subMenuRef.current?.scrollHeight!;
+        const width = subMenuRef.current?.scrollWidth!;
         const rect = moreButtonRef.current?.getBoundingClientRect();
-        const height = document.getElementById("subMenuContext")?.clientHeight || 264;
-        const width = document.getElementById("subMenuContext")?.clientWidth || 160;
         const x_left = rect?.left!,
             x_right = rect?.right!,
             y_bot = rect?.bottom!,
@@ -181,8 +184,6 @@ const CometChatContextMenu = (props: ContextMenuProps) => {
 
         const positionStyle = { top: "", right: "", bottom: "", left: "", };
         const viewportHeight = window.innerHeight, viewportWidth = window.innerWidth;
-        const isNearBottom = rect && (rect.bottom + height > viewportHeight);
-        const topPosition = isNearBottom ? `${rect.top - height / 2}px` : `${rect!.bottom + 10}px`;
         if (Object.keys(positionStyleState).length == 0) {
             if (placement === Placement.top || placement === Placement.bottom) {
                 if (placement === Placement.top) {
@@ -192,7 +193,7 @@ const CometChatContextMenu = (props: ContextMenuProps) => {
                         positionStyle["bottom"] = `${viewportHeight - y_top}px`;
                     }
                 } else if (placement === Placement.bottom) {
-                    if ((y_bot + height + 5) > viewportHeight) {
+                    if ((y_bot + height + 10) > viewportHeight) {
                         positionStyle["top"] = `${y_top - height - 10}px`;
                     } else {
                         positionStyle["top"] = `${y_bot + 10}px`;
@@ -219,25 +220,15 @@ const CometChatContextMenu = (props: ContextMenuProps) => {
                     }
                 }
 
-                if (((y_top + height) - 10) > viewportHeight && placement === Placement.left) {
-                    positionStyle["top"] = `${viewportHeight - height + 50}px`;
-                } else if (((y_top + height) - 10) > viewportHeight && placement === Placement.right) {
-                    positionStyle["top"] = `${viewportHeight - height + 50}px`;
+                if (((y_top + height) - 10) > viewportHeight) {
+                    positionStyle["top"] = `${viewportHeight - height - 10}px`;
                 } else {
-                    positionStyle["top"] = `${y_top + 10}px`;
+                    positionStyle["top"] = `${y_top - 10}px`;
                 }
             }
-            if (isNearBottom && placement != Placement.top && (placement == Placement.left || placement == Placement.bottom)) {
-                setPositionStyleState({
-                    ...positionStyle, top: topPosition
-                });
-            }
-            else {
-                setPositionStyleState(positionStyle)
-            }
-
+            setPositionStyleState(positionStyle);
         }
-    }
+    }, [showSubMenu, positionStyleState]);
 
     return (
         <div className="cometchat">
@@ -245,7 +236,13 @@ const CometChatContextMenu = (props: ContextMenuProps) => {
                 <div className="cometchat-menu-list__main-menu">
                     {getTopMenu()}
                 </div>
-                {showSubMenu  && <div className="cometchat-menu-list__sub-menu-list" id="subMenuContext" style={positionStyleState}>
+                {showSubMenu &&
+                    <div
+                        ref={subMenuRef}
+                        className="cometchat-menu-list__sub-menu-list"
+                        id="subMenuContext"
+                        style={positionStyleState}
+                    >
                     {getSubMenu()}
                 </div>}
             </div>

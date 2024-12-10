@@ -1190,7 +1190,8 @@ export function CometChatConversations(props: ConversationsProps) {
         >
           {isGroupSubtitle &&
             lastMessage.getCategory() != CometChatUIKitConstants.MessageCategory.action &&
-            (lastMessage.getCategory() == CometChatUIKitConstants.MessageCategory.custom && lastMessage.getType() !== CometChatUIKitConstants.calls.meeting) && <span className={`cometchat-conversations__subtitle-text-sender`}>{getLastMessageSenderName}:</span>}
+            (lastMessage.getCategory() != CometChatUIKitConstants.MessageCategory.custom || (lastMessage.getCategory() == CometChatUIKitConstants.MessageCategory.custom && 
+            lastMessage.getType() !== CometChatUIKitConstants.calls.meeting))  && <span className={`cometchat-conversations__subtitle-text-sender`}>{getLastMessageSenderName}:</span>}
           <div
             className={`cometchat-conversations__subtitle-icon ${iconName ? `cometchat-conversations__subtitle-icon-${iconName}` : "cometchat-conversations__subtitle-icon-none"}`}
           />

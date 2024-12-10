@@ -43,6 +43,7 @@ import { ComposerId } from '../../utils/MessagesDataSource';
 import { getThemeVariable, isMobileDevice, processFileForAudio } from '../../utils/util';
 import { CometChatMessageEvents } from '../../events/CometChatMessageEvents';
 import { CometChatUIEvents } from '../../events/CometChatUIEvents';
+import { CometChatUtilityConstants } from "../../constants/CometChatUtilityConstants";
 
 export type ContentToDisplay =
   | "attachments"
@@ -743,6 +744,7 @@ return () => {
         }
         const sentTextMessage = await CometChat.sendMessage(textMessage);
         mentionsTextFormatterInstanceRef.current.resetCometChatUserGroupMembers();
+        mentionsTextFormatterInstanceRef.current.reset();
         return sentTextMessage as T;
       } catch (error) {
         console.log(error);
@@ -1533,7 +1535,7 @@ return () => {
       <div
         className='cometchat-message-composer__header'
       >
-        {state.showMentionsCountWarning || state.showValidationError && (
+        {state.showMentionsCountWarning || state.showValidationError ? (
           <div className='cometchat-message-composer__header-error-state'
           >
             <div className='cometchat-message-composer__header-error-state-icon-wrapper'>
@@ -1544,7 +1546,7 @@ return () => {
          '>{errorText}</span>
 
           </div>
-        )}
+        ) : null}
         {headerView ?? getTextMessageEditPreview()}
       </div>
     );
@@ -2059,7 +2061,7 @@ aiBtnRef.current?.closePopover()
           contentEditable={checkPlainTextAvailability(false)}
           onMouseDown={handleMouseDown}
           onInput={onTextInputChange}
-          className={`cometchat-message-composer__input ${parentMessageIdPropRef.current ? "cometchat-message-composer__input-thread" : ""}`}
+          className={`cometchat-message-composer__input ${parentMessageIdPropRef.current ? "cometchat-message-composer__input-thread" : ""} ${isMobileDevice() ? "cometchat-message-composer__input-mobile" : ""}`}
           data-placeholder={placeHolderText}
           ref={textInputRef}
         ></div>

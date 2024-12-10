@@ -140,6 +140,7 @@
     border: none;
     font: var(--cometchat-font-button-medium);
     font-style: normal;
+    cursor: pointer;
 }
 
 

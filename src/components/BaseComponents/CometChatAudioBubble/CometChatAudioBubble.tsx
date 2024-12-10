@@ -7,6 +7,13 @@ interface AudioBubbleProps {
     /* flag for toggle styling for audio bubble */
     isSentByMe?: boolean;
 }
+/*
+global instance of waveSurfer.
+*/
+let currentPlayingWaveSurfer: {
+    instance: WaveSurfer | null;
+    setIsPlaying: ((isPlaying: boolean) => void) | null;
+  } = { instance: null, setIsPlaying: null };
 
 /*
     CometChatAudioBubble is a generic component used to play audio. It is generally used for audio messages in chat.
@@ -66,7 +73,6 @@ const CometChatAudioBubble = (props: AudioBubbleProps) => {
 
             wave.load(src);
             setWaveSurfer(wave);
-
             // Set duration when audio is ready
             wave.on('ready', () => {
                 setDuration(wave.getDuration());
@@ -92,8 +98,9 @@ const CometChatAudioBubble = (props: AudioBubbleProps) => {
     }, [src, isSentByMe]);
 
     useEffect(() => {
-        initializeWaveSurfer();
-    }, [initializeWaveSurfer]);
+        const cleanup = initializeWaveSurfer();
+        return cleanup;
+      }, [initializeWaveSurfer]);
 
     // Format time to mm:ss
     const formatTime = (timeInSeconds: number) => {
@@ -105,10 +112,29 @@ const CometChatAudioBubble = (props: AudioBubbleProps) => {
     // Handle play/pause functionality
     const handlePlayPause = () => {
         if (waveSurfer) {
-            waveSurfer.playPause();
-            setIsPlaying(!isPlaying);
+          // Pause the currently playing instance
+          if (
+            currentPlayingWaveSurfer.instance &&
+            currentPlayingWaveSurfer.instance !== waveSurfer
+          ) {
+            currentPlayingWaveSurfer.instance.pause();
+            if (currentPlayingWaveSurfer.setIsPlaying) {
+              currentPlayingWaveSurfer.setIsPlaying(false);
+            }
+          }
+    
+          // Play or pause the current instance
+          waveSurfer.playPause();
+          const currentlyPlaying = waveSurfer.isPlaying();
+          setIsPlaying(currentlyPlaying);
+    
+          // Update the global reference
+          currentPlayingWaveSurfer = {
+            instance: currentlyPlaying ? waveSurfer : null,
+            setIsPlaying: currentlyPlaying ? setIsPlaying : null,
+          };
         }
-    };
+      };
 
     // Function to download the audio and show download progress
     const downloadAudio = async () => {

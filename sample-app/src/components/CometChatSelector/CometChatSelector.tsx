@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import chatIcon from '../../assets/start_chat.svg';
 import createGroupIcon from '../../assets/create-group.svg';
 import logoutIcon from '../../assets/logout.svg';
@@ -10,6 +10,7 @@ import CometChatCreateGroup from "../CometChatCreateGroup/CometChatCreateGroup";
 import { CometChatButton, CometChatCallLogs, CometChatConversations, CometChatGroups, CometChatOption, CometChatUIKit, CometChatUIKitLoginListener, CometChatUsers, localize } from "@cometchat/chat-uikit-react";
 import { CometChatContextMenu, Placement } from "@cometchat/chat-uikit-react";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../../context/AppContext";
 
 interface SelectorProps {
     group?: Group;
@@ -42,6 +43,7 @@ export const CometChatSelector = (props: SelectorProps) => {
 
     const [loggedInUser, setLoggedInUser] = useState<CometChat.User | null>();
     const navigate = useNavigate();
+    const { setAppState } = useContext(AppContext);
 
 
     useEffect(() => {
@@ -79,6 +81,7 @@ export const CometChatSelector = (props: SelectorProps) => {
         CometChatUIKit.logout().then(() => {
             setLoggedInUser(null)
             navigate('/login', { replace: true });
+            setAppState({ type: "resetAppState" });
         }).catch((error) => {
             console.log("error", error)
         })
@@ -100,17 +103,17 @@ export const CometChatSelector = (props: SelectorProps) => {
                         menu={
                             <div className="chat-menu">
                                 <CometChatContextMenu
-                                 key="delete-button"
-                                 closeOnOutsideClick={true}
-                                 placement={Placement.left}
-                                 data={getOptions() as CometChatOption[]}
-                                 topMenuSize={1}
-                                 onOptionClicked={(e: CometChatOption) => {
-                                    const { id, onClick } = e;
-                                    if (onClick) {
-                                        onClick();
-                                    }
-                                }}
+                                    key="delete-button"
+                                    closeOnOutsideClick={true}
+                                    placement={Placement.left}
+                                    data={getOptions() as CometChatOption[]}
+                                    topMenuSize={1}
+                                    onOptionClicked={(e: CometChatOption) => {
+                                        const { id, onClick } = e;
+                                        if (onClick) {
+                                            onClick();
+                                        }
+                                    }}
                                 />
                             </div>
                         }

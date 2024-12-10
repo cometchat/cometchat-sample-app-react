@@ -180,7 +180,10 @@ export const CometChatMessageHeader = (props: MessageHeaderProps) => {
                 const date = new Date(user.getLastActiveAt() * 1000);
                 const timeDifferenceInMinutes = (new Date().getTime() - date.getTime()) / 1000 / 60
                 if (timeDifferenceInMinutes < 60) {
-                    setSubtitleText("Last seen " + Math.ceil(timeDifferenceInMinutes) + " minutes ago");
+                    const roundedMinutes = Math.ceil(timeDifferenceInMinutes);
+                    setSubtitleText(
+                        `Last seen ${roundedMinutes} ${roundedMinutes === 1 ? "minute" : "minutes"} ago`
+                    );
                 } else if (timeDifferenceInMinutes == 60) {
                     setSubtitleText("Last seen 1 hour ago")
                 } else {

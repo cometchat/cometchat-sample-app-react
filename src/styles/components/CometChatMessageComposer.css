@@ -141,6 +141,7 @@
     justify-content: space-between;
     align-items: flex-start;
     align-self: stretch;
+    flex-direction: column;
 }
 
 .cometchat-message-composer__header-error-state {
@@ -294,4 +295,8 @@
 /* Active stickerkeyboard button icon */
 .cometchat-message-composer div:not([class]) .cometchat-message-composer__auxilary-button-view-sticker-button-active .cometchat-button__icon {
     background: var(--cometchat-primary-color);
+}
+
+.cometchat-message-composer__input-mobile{
+    font: var( --cometchat-font-heading4-regular);
 }

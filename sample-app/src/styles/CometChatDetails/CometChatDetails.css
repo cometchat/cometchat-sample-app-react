@@ -280,7 +280,7 @@
 
 @media (max-width: 768px) {
     .side-component-wrapper {
-        width: 100vw;
+        min-width: 100vw;
         height: 100vh;
         position: fixed;
         z-index: 4;

@@ -10,6 +10,8 @@
     justify-content: space-between;
     height: 64px;
     background: var(--cometchat-background-color-01);
+    width: 100%;
+    overflow: hidden;
 }
 
 /* Subtitle styling within the message header */
@@ -50,6 +52,11 @@
     justify-content: flex-start;
     gap: var(--cometchat-padding-2, 8px);
     flex: 1 0 0;
+    width: 100%;
+    overflow: hidden;
+}
+.cometchat-message-header  .cometchat-list-item__tail-view{
+    display: none;
 }
 
 /* Styling for the back button in the message header */
@@ -75,6 +82,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    overflow: hidden;
 }
 
 /* Menu container within the message header, aligned to the right */
@@ -147,6 +155,9 @@
 @media (max-width: 768px) {
     .cometchat-message-header__back-button {
         display: block;
+    }
+    .cometchat-message-header .cometchat-list-item .cometchat-list-item__body-title {
+      display: initial;
     }
 }
 

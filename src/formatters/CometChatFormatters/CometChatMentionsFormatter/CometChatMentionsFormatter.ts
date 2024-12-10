@@ -114,10 +114,11 @@ export class CometChatMentionsFormatter extends CometChatTextFormatter {
           mutation.removedNodes.forEach((node) => {
             // Check if the node is an element node
             if (node.nodeType === Node.ELEMENT_NODE) {
+
               let element = node as Element; // Typecast to Element
               if (
                 element.tagName.toLowerCase() === "span" &&
-                element.classList.contains("mentions")
+                element.classList.contains("cometchat-mentions")
               ) {
                 let mentionClass = Array.from(element.classList).find((cls) =>
                   cls.startsWith("mentions-")
@@ -344,6 +345,7 @@ export class CometChatMentionsFormatter extends CometChatTextFormatter {
       ) {
         if (this.messageObject && this.messageObject.getMentionedUsers()) {
           let mentionedUsers = this.messageObject.getMentionedUsers();
+
           if (mentionedUsers && mentionedUsers.length) {
             this.setCometChatUserGroupMembers(mentionedUsers);
           }

@@ -61,3 +61,11 @@ font:var(--cometchat-font-body-regular);
 .cometchat-threaded-message-list .cometchat-list__header {
     border-bottom: none;
 }
+
+.cometchat-threaded-message .cometchat-action-sheet {
+    height: fit-content;
+}
+
+.cometchat-threaded-message .cometchat-message-composer__secondary-button-view-attachment-button .cometchat-popover__content {
+    height: 226px;
+}

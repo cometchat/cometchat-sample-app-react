@@ -53,6 +53,7 @@
 */
 .cometchat-edit-preview__subtitle {
     font-style: normal;
+    text-align: left;
     color: var(--cometchat-text-color-secondary);
     font: var(--cometchat-font-caption1-regular);
 }

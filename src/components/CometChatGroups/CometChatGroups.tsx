@@ -439,19 +439,20 @@ export function CometChatGroups(props: GroupsProps) {
         return function (group: CometChat.Group) {
             const groupType = group.getType()
             const isActive = activeGroup?.getGuid() === group.getGuid();
+            let newGroup = isActive ? activeGroup : group
             return (
                 <div className={`cometchat-groups__list-item cometchat-groups__list-item-${groupType}
                 ${isActive ? `cometchat-groups__list-item-active` : ""}
                 `}>
                     <CometChatListItem
-                        id={group.getGuid()}
-                        avatarURL={group.getIcon()}
-                        avatarName={group.getName()}
-                        title={group.getName()}
-                        subtitleView={getSubtitleView(group)}
-                        menuView={getMenuView(group)}
-                        tailView={getTailView(group)}
-                        onListItemClicked={e => onItemClick?.(group)}
+                        id={newGroup.getGuid()}
+                        avatarURL={newGroup.getIcon()}
+                        avatarName={newGroup.getName()}
+                        title={newGroup.getName()}
+                        subtitleView={getSubtitleView(newGroup)}
+                        menuView={getMenuView(newGroup)}
+                        tailView={getTailView(newGroup)}
+                        onListItemClicked={e => onItemClick?.(newGroup)}
                     />
                 </div>
             );

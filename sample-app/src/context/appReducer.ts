@@ -58,6 +58,9 @@ export const appReducer = (state = defaultAppState, action: any) => {
         case "updateShowJoinGroup": {
             return { ...state, ["showJoinGroup"]: action.payload };
         }
+        case "resetAppState": {
+            return defaultAppState;
+        }
 
         default: {
             return state;

@@ -38,6 +38,7 @@
 .cometchat-transfer-ownership__buttons-wrapper {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .cometchat-transfer-ownership__cancel-button .cometchat-button {
@@ -94,7 +95,7 @@
 
 .cometchat-transfer-ownership__buttons {
     display: flex;
-    width: 420px;
+    justify-content: center;
     padding: var(--cometchat-padding-5, 20px) var(--cometchat-padding-4, 16px);
     align-items: center;
     gap: var(--cometchat-padding-2, 8px);

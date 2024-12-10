@@ -17,7 +17,7 @@ const CometChatAppCredentials = () => {
   const [appId, setAppId] = useState("");
   const [authKey, setAuthKey] = useState("");
 
-  function handleSubmit(e: any) {
+  async function handleSubmit(e: any) {
     e.preventDefault();
     localStorage.setItem("region", region);
     localStorage.setItem("appId", appId);
@@ -29,10 +29,8 @@ const CometChatAppCredentials = () => {
         .setAuthKey(authKey)
         .subscribePresenceForAllUsers()
         .build();
-      CometChatUIKit.init(uiKitSettings)?.then((response) => {
-        console.log('CometChat UI Kit initialized successfully in credentials.tsx.');
-        navigate("/login", { replace: true });
-      });
+        await CometChatUIKit.init(uiKitSettings)
+        navigate("/login",{replace: true});
     }
   }
 

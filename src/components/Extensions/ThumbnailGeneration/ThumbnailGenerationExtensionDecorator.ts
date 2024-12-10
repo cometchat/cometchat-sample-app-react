@@ -38,8 +38,8 @@ export class ThumbnailGenerationExtensionDecorator extends DataSourceDecorator {
         } else {
             let imageUrl = message.getAttachments()[0].getUrl();
             let metadata: any = message.getMetadata();
-            if (metadata && metadata.hasOwnProperty("@injected") && metadata["@injected"].hasOwnProperty("extensions") && metadata["@injected"]["extensions"].hasOwnProperty("thumbnail-generation") && metadata["@injected"]["extensions"]["thumbnail-generation"]["url_small"]) {
-                imageUrl = metadata["@injected"]["extensions"]["thumbnail-generation"]["url_small"];
+            if (metadata && metadata.hasOwnProperty("@injected") && metadata["@injected"].hasOwnProperty("extensions") && metadata["@injected"]["extensions"].hasOwnProperty("thumbnail-generation") && metadata["@injected"]["extensions"]["thumbnail-generation"]["url_medium"]) {
+                imageUrl = metadata["@injected"]["extensions"]["thumbnail-generation"]["url_medium"];
             }
             return super.getImageMessageBubble(imageUrl, PlaceholderImage, message);
         }

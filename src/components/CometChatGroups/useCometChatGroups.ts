@@ -85,7 +85,8 @@ export function useCometChatGroups(args: Args) {
                     dispatch({ type: "removeGroup", guid: item.leftGroup.getGuid() });
                 }
                 else {
-                    dispatch({ type: "updateGroup", group: item.leftGroup });
+                    item.leftGroup.setMembersCount(item.leftGroup.getMembersCount() - 1);
+                    dispatch({ type: "updateGroup", group:  item.leftGroup });
                 }
             });
             const groupMemberBannedSub = CometChatGroupEvents.ccGroupMemberBanned.subscribe((item) => {

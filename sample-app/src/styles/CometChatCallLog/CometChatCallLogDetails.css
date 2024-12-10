@@ -131,6 +131,7 @@
     -webkit-mask: url('../../assets/arrow_back.svg');
     -webkit-mask-size: contain;
     background: var(--cometchat-icon-color-primary);
+    cursor: pointer;
 }
 
 @media (max-width: 768px) {

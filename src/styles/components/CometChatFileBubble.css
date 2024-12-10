@@ -21,6 +21,8 @@
     justify-content: flex-start;
     gap: var(--cometchat-padding-2, 8px);
     flex: 1 0 0;
+    width: inherit;
+    overflow: hidden;
 }
 /* Body section of the file bubble with text alignment and overflow settings */
 .cometchat-file-bubble__body {

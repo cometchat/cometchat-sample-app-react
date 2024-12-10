@@ -72,6 +72,7 @@ font:var(--cometchat-font-body-regular);
     padding: 0px var(--cometchat-padding, 2px);
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 .cometchat-mentions-outgoing.cometchat-mentions-you{
     background: rgba(255, 171, 0, 0.20);

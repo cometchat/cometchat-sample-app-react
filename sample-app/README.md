@@ -7,7 +7,7 @@
 This is a reference application showcasing the integration of [CometChat's React UI Kit](https://www.cometchat.com/docs/ui-kit/react/overview) within a React framework. It provides developers with examples of implementing real-time messaging and voice and video calling features in their own React-based applications.
 
 <div style="display: flex; align-items: center; justify-content: center">
-   <img src="./screenshots/sample_app_overview.png" />
+   <img src="../screenshots/sample_app_overview.png" />
 </div>
 
 ## Prerequisites

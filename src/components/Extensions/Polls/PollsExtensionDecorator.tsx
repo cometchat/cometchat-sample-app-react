@@ -13,6 +13,7 @@ import { MessageBubbleAlignment } from "../../../Enums/Enums";
 import { CometChatMessageComposerAction, CometChatMessageTemplate } from "../../../modals";
 import { localize } from "../../../resources/CometChatLocalize/cometchat-localize";
 import { CometChatUIEvents } from "../../../events/CometChatUIEvents";
+import { ComposerId } from "../../../utils/MessagesDataSource";
 
 /**
  * The PollsExtensionDecorator class extends the DataSourceDecorator to
@@ -234,8 +235,12 @@ export class PollsExtensionDecorator extends DataSourceDecorator {
     const [data] = args;
     let user = data[0];
     let group = data[1];
+    let uid = user ? user.getUid() : null;
+    let guid = group ? group.getGuid() : null;
+    let composerId:ComposerId = {parentMessageId:null,user: uid,group:guid}; 
     CometChatUIEvents.ccShowModal.next({
       child: this.getPollView(user, group),
+      composerId
     });
   }
 
