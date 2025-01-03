@@ -12,16 +12,25 @@ import { localize } from "../../resources/CometChatLocalize/cometchat-localize";
 import { DatePatterns, MessageBubbleAlignment, States } from "../../Enums/Enums";
 import closeIcon from "../../assets/close.svg";
 import { CometChatDate } from "../BaseComponents/CometChatDate/CometChatDate";
+import { useCometChatErrorHandler } from "../../CometChatCustomHooks";
 
 interface MessageInformationProps {
   message: CometChat.BaseMessage;
   onClose?: () => void;
+  /**
+   * Callback triggered when an error occurs during the message receipt fetching process.
+   * @param error - CometChatException object representing the error.
+   */
+  onError?: ((error: CometChat.CometChatException) => void) | null;
 }
 
 const CometChatMessageInformation = (props: MessageInformationProps) => {
   const {
     onClose,
     message,
+    onError = (error: CometChat.CometChatException) => {
+      console.log(error);
+    },
   } = props;
 
   const [state, setState] = useState<States>(States.loading);
@@ -29,6 +38,7 @@ const CometChatMessageInformation = (props: MessageInformationProps) => {
     CometChat.MessageReceipt[]
   >([]);
   const loggedInUser = useRef<CometChat.User | null>(null);
+  const onErrorCallback = useCometChatErrorHandler(onError);
 
   /* The purpose of this function is to fetch the message information receipts data and update the states. */
   async function getMessageReceipt(message?: CometChat.BaseMessage) {
@@ -48,55 +58,68 @@ const CometChatMessageInformation = (props: MessageInformationProps) => {
       }
     } catch (error) {
       console.log(error);
+      onErrorCallback(error, 'getMessageReceipt');
       setState(States.error);
     }
   }
 
   useEffect(() => {
-    if (message?.getReceiverType() === CometChatUIKitConstants.MessageReceiverType.user) {
-      setState(States.loaded);
-    }
-    if (message?.getReceiverType() === CometChatUIKitConstants.MessageReceiverType.group) {
-      getMessageReceipt(message);
+    try {
+      if (message?.getReceiverType() === CometChatUIKitConstants.MessageReceiverType.user) {
+        setState(States.loaded);
+      }
+      if (message?.getReceiverType() === CometChatUIKitConstants.MessageReceiverType.group) {
+        getMessageReceipt(message);
+      }
+    } catch (error) {
+      onErrorCallback(error, 'useEffect');
     }
   }, [message]);
 
   /* This function returns close button view. */
   function getCloseBtnView() {
-    return (
-      <CometChatButton
-        iconURL={closeIcon}
-        hoverText={localize("CLOSE")}
-        onClick={onClose}
-      />
-    );
+    try {
+      return (
+        <CometChatButton
+          iconURL={closeIcon}
+          hoverText={localize("CLOSE")}
+          onClick={onClose}
+        />
+      );
+    } catch (error) {
+      onErrorCallback(error, 'getCloseBtnView');
+    }
   }
 
   /* This function returns Message bubble view of which information is getting viewed. */
   const getBubbleView = useCallback(() => {
-    let alignment = MessageBubbleAlignment.right;
-    if (CometChatUIKitLoginListener.getLoggedInUser()) {
-      loggedInUser.current = CometChatUIKitLoginListener.getLoggedInUser();
-    }
-    if (message) {
-      const templatesArray = CometChatUIKit.getDataSource()?.getAllMessageTemplates();
-      const template = templatesArray?.find((template: CometChatMessageTemplate) => template.type === message.getType() && template.category === message.getCategory());
-      if (!template) {
-        return <></>
+    try {
+      let alignment = MessageBubbleAlignment.right;
+      if (CometChatUIKitLoginListener.getLoggedInUser()) {
+        loggedInUser.current = CometChatUIKitLoginListener.getLoggedInUser();
       }
-      if (message.getSender()?.getUid() !== loggedInUser.current?.getUid()) {
-        alignment = MessageBubbleAlignment.left;
-      } else {
-        alignment = MessageBubbleAlignment.right;
+      if (message) {
+        const templatesArray = CometChatUIKit.getDataSource()?.getAllMessageTemplates();
+        const template = templatesArray?.find((template: CometChatMessageTemplate) => template.type === message.getType() && template.category === message.getCategory());
+        if (!template) {
+          return <></>
+        }
+        if (message.getSender()?.getUid() !== loggedInUser.current?.getUid()) {
+          alignment = MessageBubbleAlignment.left;
+        } else {
+          alignment = MessageBubbleAlignment.right;
+        }
+        const view = new MessageUtils().getMessageBubble(
+          message,
+          template,
+          alignment
+        );
+        return view;
       }
-      const view = new MessageUtils().getMessageBubble(
-        message,
-        template,
-        alignment
-      );
-      return view;
+      return null;
+    } catch (error) {
+      onErrorCallback(error, 'getBubbleView');
     }
-    return null;
   }, [message]);
 
   /**
@@ -106,43 +129,53 @@ const CometChatMessageInformation = (props: MessageInformationProps) => {
     deliveredAt: number,
     readAt?: number
   ): JSX.Element | null {
-    return (
-      <div className="cometchat-message-information__receipts-subtitle">
-        {readAt && <div className="cometchat-message-information__receipts-subtitle-text">
-          {localize("READ")}
-          <CometChatDate
-            timestamp={readAt}
-            pattern={DatePatterns.DateTime}
-          />
-        </div>}
+    try {
+      return (
+        <div className="cometchat-message-information__receipts-subtitle">
+          {readAt && <div className="cometchat-message-information__receipts-subtitle-text">
+            {localize("READ")}
+            <CometChatDate
+              timestamp={readAt}
+              pattern={DatePatterns.DateTime}
+            />
+          </div>}
 
-        <div className="cometchat-message-information__receipts-subtitle-text">
-          {localize("DELIVERED")}
-          <CometChatDate
-            timestamp={deliveredAt}
-            pattern={DatePatterns.DateTime}
-          />
+          <div className="cometchat-message-information__receipts-subtitle-text">
+            {localize("DELIVERED")}
+            <CometChatDate
+              timestamp={deliveredAt}
+              pattern={DatePatterns.DateTime}
+            />
+          </div>
         </div>
-      </div>
-    )
+      )
+    } catch (error) {
+      onErrorCallback(error, 'getSubtitleView');
+      return null;
+    }
   }
 
   /**
    * Creates default list item view
    */
   function getListItem(messageReceipt: CometChat.MessageReceipt) {
-    return (
-      <CometChatListItem
-        id={messageReceipt.getMessageId()}
-        title={messageReceipt.getSender()?.getName()}
-        avatarURL={messageReceipt.getSender()?.getAvatar()}
-        avatarName={messageReceipt.getSender()?.getName()}
-        subtitleView={getSubtitleView(
-          messageReceipt.getDeliveredAt(),
-          messageReceipt.getReadAt()
-        )}
-      />
-    );
+    try {
+      return (
+        <CometChatListItem
+          id={messageReceipt.getMessageId()}
+          title={messageReceipt.getSender()?.getName()}
+          avatarURL={messageReceipt.getSender()?.getAvatar()}
+          avatarName={messageReceipt.getSender()?.getName()}
+          subtitleView={getSubtitleView(
+            messageReceipt.getDeliveredAt(),
+            messageReceipt.getReadAt()
+          )}
+        />
+      );
+    } catch (error) {
+      onErrorCallback(error, 'getListItem');
+      return <></>;
+    }
   }
 
   return (
@@ -231,7 +264,7 @@ const CometChatMessageInformation = (props: MessageInformationProps) => {
                   {messageReceipts.length > 0 && (
                     <CometChatList
                       list={messageReceipts}
-                      listItem={getListItem}
+                      itemView={getListItem}
                       state={
                         messageReceipts.length === 0
                           ? States.loading

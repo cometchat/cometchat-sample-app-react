@@ -27,159 +27,181 @@ import { getThemeMode } from "../../utils/util";
 
 export interface UsersProps {
   /**
-   * Title of the component
-   *
-   * @defaultValue `localize("USERS")`
-   */
-  title?: string;
-  /**
-   * Hide the search bar
+   * Hides the default search bar.
    *
    * @defaultValue `false`
    */
   hideSearch?: boolean;
 
   /**
-   * Text to be displayed when the search input has no value
-   *
-   * @defaultValue `localize("SEARCH")`
-   */
-  searchPlaceholderText?: string;
-  /**
-   * Custom list item view to be rendered for each user in the fetched list
-   */
-  listItemView?: (user: CometChat.User) => JSX.Element;
-  /**
-   * Show alphabetical header
+   * Displays an alphabetical section header for the user list.
    *
    * @defaultValue `true`
    */
   showSectionHeader?: boolean;
+
   /**
-   * Property on the user object
-   *
-   * @remarks
-   * This property will be used to extract the section header character from the user object
-   *
-   * @defaultValue `getName`
-   */
-  sectionHeaderKey?: keyof CometChat.User;
-  /**
-   * Custom view for the loading state of the component
-   */
-  loadingStateView?: JSX.Element;
-  /**
-   * Hide error view
-   *
-   * @remarks
-   * If set to true, hides the default and the custom error view
+   * Hides both the default and custom error view passed in `errorView` prop.
    *
    * @defaultValue `false`
    */
   hideError?: boolean;
+
   /**
-   * Custom view for the error state of the component
-   */
-  errorStateView?: JSX.Element;
-  /**
-   * Custom view for the empty state of the component
-   */
-  emptyStateView?: JSX.Element;
-  /**
-   * Custom subtitle view to be rendered for each user in the fetched list
-   *
-   * @remarks
-   * This prop is used if `listItemView` prop is not provided
-   */
-  subtitleView?: (user: CometChat.User) => JSX.Element;
-  /**
-   * Hide user presence
-   *
-   * @remarks
-   * If set to true, the status indicator of the default list item view is not displayed
+   * Disables the loading state while fetching users.
    *
    * @defaultValue `false`
    */
-  disableUsersPresence?: boolean;
+  disableLoadingState?: boolean;
+
   /**
-   * Custom view to render on the top-right of the component
-   */
-  menu?: JSX.Element;
-  /**
-   * List of actions available on mouse over on the default list item component
-   */
-  options?: (user: CometChat.User) => CometChatOption[];
-  /**
-   * Selection mode to use for the default tail view
+   * Hides the user's online/offline status indicator.
    *
-   * @remarks
-   * This prop is used if `listItemView` prop is not provided.
-   *
-   * @defaultValue `SelectionMode.none`
+   * @remarks If set to `true`, the status indicator of the default list item view is not displayed.
+   * @defaultValue `false`
    */
-  selectionMode?: SelectionMode;
+  hideUserStatus?: boolean;
+
   /**
-   * Function to call when a user from the fetched list is selected
+   * User to highlight.
    *
-   * @remarks
-   * This prop is used if `selectionMode` prop is not `SelectionMode.none`
-   */
-  onSelect?: (users: CometChat.User, selected: boolean) => void;
-  /**
-   * Request builder to fetch users
-   *
-   * @remarks
-   * If the search input is not empty and the `searchRequestBuilder` prop is not provided,
-   * the search keyword of this request builder is set to the text in the search input
-   *
-   * @defaultValue Default request builder having the limit set to 30
-   */
-  usersRequestBuilder?: CometChat.UsersRequestBuilder;
-  /**
-   * Request builder with search parameters to fetch users
-   *
-   * @remarks
-   * If the search input is not empty,
-   * the search keyword of this request builder is set to the text in the search input
-   */
-  searchRequestBuilder?: CometChat.UsersRequestBuilder;
-  /**
-   * Function to call on click of the default list item view of a user
-   */
-  onItemClick?: (user: CometChat.User) => void;
-  /**
-   * Function to call whenever the component encounters an error
-   */
-  onError?: ((error: CometChat.CometChatException) => void) | null;
-  /**
-   * User to highlight
-   *
-   * @remarks
-   * This prop is used if `listItemView` prop is not provided
+   * @remarks This prop is used if `activeUser` prop is not provided.
    */
   activeUser?: CometChat.User;
+
   /**
-   * Search keyword to filter the list of users.
+   * Request builder to fetch users.
+   *
+   * @defaultValue Default request builder having the limit set to `30`.
+   */
+  usersRequestBuilder?: CometChat.UsersRequestBuilder;
+
+  /**
+   * Request builder with search parameters to fetch users.
+   *
+   * @remarks If the search input is not empty, the search keyword of this request builder is set to the text in the search input.
+   */
+  searchRequestBuilder?: CometChat.UsersRequestBuilder;
+
+  /**
+   * The search keyword used to filter the user list.
    *
    * @defaultValue `""`
    */
   searchKeyword?: string;
+
+  /**
+   * The property on the user object used to extract the section header character.
+   *
+   * @remarks This property will be used to extract the section header character from the user object.
+   * @defaultValue `getName`
+   */
+  sectionHeaderKey?: keyof CometChat.User;
+
+  /**
+   * A function that returns a list of actions available when hovering over a user item.
+   * @param user - An instance of `CometChat.User` representing the selected user.
+   * @returns An array of `CometChatOption` objects.
+   */
+  options?: (user: CometChat.User) => CometChatOption[];
+
+  /**
+   * Selection mode to use for the default trailing view.
+   *
+   * @defaultValue `SelectionMode.none`
+   */
+  selectionMode?: SelectionMode;
+
+  /**
+   * Callback function invoked when a user is selected.
+   *
+   * @remarks This prop works only if `selectionMode` is not set to `SelectionMode.none`.
+   * @param user - An instance of `CometChat.User` representing the selected user.
+   * @param selected - A boolean indicating whether the user is selected.
+   * @returns void
+   */
+  onSelect?: (user: CometChat.User, selected: boolean) => void;
+
+  /**
+   * Callback function invoked when a user item is clicked.
+   *
+   * @param user - An instance of `CometChat.User` representing the clicked user.
+   * @returns void
+   */
+  onItemClick?: (user: CometChat.User) => void;
+
+  /**
+   * Callback function invoked when an error occurs in the component.
+   * @param error - An instance of `CometChat.CometChatException` representing the error.
+   * @returns void
+   */
+  onError?: ((error: CometChat.CometChatException) => void) | null;
+
   /**
    * Callback function to be executed when the user list is empty.
+   * @returns void
    */
   onEmpty?: () => void;
 
   /**
-   * Flag to indicate whether users are currently being fetched.
-   *
-   * @defaultValue `false`
+   * A custom component to render in the top-right corner of the user list.
    */
-  fetchingUsers?: boolean;
+  headerView?: JSX.Element;
+
   /**
-   * Flag to indicate whether to disable loading state while fetching users.
-   * @defaultValue `false`
+   * A custom view to display during the loading state.
    */
-  disableLoadingState?: boolean;
+  loadingView?: JSX.Element;
+
+  /**
+   * A custom view to display when an error occurs.
+   */
+  errorView?: JSX.Element;
+
+  /**
+   * A custom view to display when no users are available in the list.
+   */
+  emptyView?: JSX.Element;
+
+  /**
+   * A custom view to render for each user in the fetched list.
+   *
+   * @param user - An instance of `CometChat.User` representing the user.
+   * @returns A JSX element to be rendered as the user item.
+   */
+  itemView?: (user: CometChat.User) => JSX.Element;
+
+  /**
+   * A function that renders a JSX element to display the leading view.
+   *
+   * @param user - An instance of `CometChat.User` representing the user.
+   * @returns A JSX element to be rendered as the leading view.
+   */
+  leadingView?: (user: CometChat.User) => JSX.Element;
+
+  /**
+   * A custom function to render the title view of a user.
+   *
+   * @param user - An instance of `CometChat.User` representing the user.
+   * @returns A JSX element to be rendered as the title view.
+   */
+  titleView?: (user: CometChat.User) => JSX.Element;
+
+  /**
+   * A custom view to render the subtitle for each user.
+   *
+   * @param user - An instance of `CometChat.User` representing the user.
+   * @returns A JSX element to be rendered as the subtitle view.
+   */
+  subtitleView?: (user: CometChat.User) => JSX.Element;
+
+  /**
+   * A function that renders a JSX element to display the trailing view.
+   *
+   * @param user - An instance of `CometChat.User` representing the user.
+   * @returns A JSX element to be rendered as the trailing view.
+   */
+  trailingView?: (user: CometChat.User) => JSX.Element;
 }
 
 type State = {
@@ -187,7 +209,6 @@ type State = {
   userList: CometChat.User[];
   fetchState: States;
   isFirstReload: boolean;
-  fetchingUsers: boolean;
   disableLoadingState: boolean;
 };
 
@@ -287,19 +308,17 @@ function stateReducer(state: State, action: Action): State {
  */
 export function CometChatUsers(props: UsersProps) {
   const {
-    title = localize("USERS"),
     hideSearch = false,
-    searchPlaceholderText = localize("SEARCH"),
-    listItemView = null,
+    itemView = null,
     showSectionHeader = true,
     sectionHeaderKey = "getName",
-    loadingStateView, // Will use the default provided by CometChatList if undefined
+    loadingView, // Will use the default provided by CometChatList if undefined
     hideError = false,
-    errorStateView, // Will use the default provided by CometChatList if undefined
-    emptyStateView, // Will use the default provided by CometChatList if undefined
+    errorView, // Will use the default provided by CometChatList if undefined
+    emptyView, // Will use the default provided by CometChatList if undefined
     subtitleView = null,
-    disableUsersPresence = false,
-    menu,
+    hideUserStatus = false,
+    headerView,
     options = null,
     selectionMode = SelectionMode.none,
     onSelect, // Won't use if undefined
@@ -310,8 +329,10 @@ export function CometChatUsers(props: UsersProps) {
     activeUser = null,
     searchKeyword = "",
     onEmpty,
-    fetchingUsers = false,
     disableLoadingState = false,
+    leadingView,
+    titleView,
+    trailingView
   } = props;
 
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
@@ -320,9 +341,10 @@ export function CometChatUsers(props: UsersProps) {
     userList: [],
     fetchState: States.loading,
     isFirstReload: false,
-    fetchingUsers,
     disableLoadingState: disableLoadingState,
   });
+  const titleRef = useRef<string>(localize("USERS"));
+  const searchPlaceholderTextRef = useRef<string>(localize("SEARCH"));
   const errorHandler = useCometChatErrorHandler(onError);
   const usersManagerRef = useRef<UsersManager | null>(null);
   const fetchNextIdRef = useRef("");
@@ -398,7 +420,7 @@ export function CometChatUsers(props: UsersProps) {
         if (fetchId === fetchNextIdRef.current && state.userList?.length <= 0) {
           dispatch({ type: "setFetchState", fetchState: States.error });
         }
-        errorHandler(error);
+        errorHandler(error, 'fetchNextAndAppendUsers');
       }
       isJustMounted.current = false;
     },
@@ -410,15 +432,19 @@ export function CometChatUsers(props: UsersProps) {
    */
   const onSearch = useCallback(
     (newSearchText: string): void => {
-      const trimmedText = newSearchText.trim();
-      if (
-        newSearchText.length === 0 ||
-        (trimmedText.length === newSearchText.length && trimmedText.length > 0)
-      ) {
-        usersSearchText.current = "";
-        dispatch({ type: "setSearchText", searchText: newSearchText });
+      try {
+        const trimmedText = newSearchText.trim();
+        if (
+          newSearchText.length === 0 ||
+          (trimmedText.length === newSearchText.length && trimmedText.length > 0)
+        ) {
+          usersSearchText.current = "";
+          dispatch({ type: "setSearchText", searchText: newSearchText });
+        }
+        // dispatch({type: "setSearchText", searchText: newSearchText});
+      } catch (error) {
+        errorHandler(error, 'onSearch');
       }
-      // dispatch({type: "setSearchText", searchText: newSearchText});
     },
     [dispatch]
   );
@@ -439,43 +465,51 @@ export function CometChatUsers(props: UsersProps) {
   function getDefaultListItemTailView(
     user: CometChat.User
   ): JSX.Element | null {
-    if (
-      selectionMode !== SelectionMode.single &&
-      selectionMode !== SelectionMode.multiple
-    ) {
+    try {
+      if (trailingView) {
+        return trailingView(user)
+      }
+      if (
+        selectionMode !== SelectionMode.single &&
+        selectionMode !== SelectionMode.multiple
+      ) {
+        return null;
+      }
+      let tailViewContent: JSX.Element;
+      if (selectionMode === SelectionMode.single) {
+        tailViewContent = (
+          <CometChatRadioButton
+            onRadioButtonChanged={(e) => onSelect?.(user, e.checked)}
+          />
+        );
+      } else {
+        tailViewContent = (
+          <CometChatCheckbox
+            key={user.getUid()}
+            checked={selectedUsers.includes(user.getUid()) ? true : false}
+            onCheckBoxValueChanged={(e) => {
+              onSelect?.(user, e.checked);
+              setSelectedUsers((prevState) => {
+                if (e.checked) {
+                  return [...prevState, user.getUid()];
+                } else {
+                  const filteredUsers = prevState.filter((userItr) => {
+                    return userItr !== user.getUid();
+                  })
+                  return [...filteredUsers];
+                }
+              })
+            }}
+          />
+        );
+      }
+      return (
+        <>{tailViewContent}</>
+      );
+    } catch (error) {
+      errorHandler(error, 'getDefaultListItemTailView')
       return null;
     }
-    let tailViewContent: JSX.Element;
-    if (selectionMode === SelectionMode.single) {
-      tailViewContent = (
-        <CometChatRadioButton
-          onRadioButtonChanged={(e) => onSelect?.(user, e.checked)}
-        />
-      );
-    } else {
-      tailViewContent = (
-        <CometChatCheckbox
-          key={user.getUid()}
-          checked={selectedUsers.includes(user.getUid()) ? true : false}
-          onCheckBoxValueChanged={(e) => {
-            onSelect?.(user, e.checked);
-            setSelectedUsers((prevState) => {
-              if (e.checked) {
-                return [...prevState, user.getUid()];
-              } else {
-                const filteredUsers = prevState.filter((userItr) => {
-                  return userItr !== user.getUid();
-                })
-                return [...filteredUsers];
-              }
-            })
-          }}
-        />
-      );
-    }
-    return (
-      <>{tailViewContent}</>
-    );
   }
 
   /**
@@ -488,62 +522,72 @@ export function CometChatUsers(props: UsersProps) {
   function getDefaultListItemMenuView(
     user: CometChat.User
   ): JSX.Element | null {
-    let curOptions: CometChatOption[] | undefined;
-    if (!(curOptions = options?.(user))?.length) {
+    try {
+      let curOptions: CometChatOption[] | undefined;
+      if (!(curOptions = options?.(user))?.length) {
+        return null;
+      }
+      return (
+        <CometChatContextMenu
+          data={curOptions as unknown as (CometChatActionsIcon | CometChatActionsView)[]}
+          onOptionClicked={(data: CometChatOption) => data.onClick?.()}
+        />
+      );
+    } catch (error) {
+      errorHandler(error, 'getDefaultListItemMenuView');
       return null;
     }
-    return (
-      <CometChatContextMenu
-        data={curOptions as unknown as (CometChatActionsIcon | CometChatActionsView)[]}
-        onOptionClicked={(data: CometChatOption) => data.onClick?.()}
-      />
-    );
   }
 
   /**
    * Creates `listItem` prop of the `CometChatList` component
    */
   function getListItem(): (user: CometChat.User) => JSX.Element {
-    if (listItemView) {
-      return listItemView;
+    if (itemView) {
+      return itemView;
     }
     return function (user: CometChat.User): JSX.Element {
-      const status = user.getStatus();
-      const isActive = activeUser?.getUid() === user.getUid();
-      return (
-        <div
-          className={`cometchat-users__list-item cometchat-users__list-item-${status}
-                     ${isActive ? `cometchat-users__list-item-active` : ""}
-          `}
-        >
-          <CometChatListItem
-            id={user.getUid()}
-            avatarURL={user.getAvatar()}
-            avatarName={user.getName()}
-            title={user.getName()}
-            subtitleView={subtitleView?.(user)}
-            tailView={getDefaultListItemTailView(user)}
-            menuView={getDefaultListItemMenuView(user)}
-            onListItemClicked={(e) => {
-              onItemClick?.(user);
-              setSelectedUsers((prevState) => {
-                let userFound = false;
-                const filteredUsers = prevState.filter((userItr) => {
-                  if (userItr === user.getUid()) {
-                    userFound = true;
+      try {
+        const status = user.getStatus();
+        const isActive = activeUser?.getUid() === user.getUid();
+        return (
+          <div
+            className={`cometchat-users__list-item ${hideUserStatus ? "" : `cometchat-users__list-item-${status}`} ${isActive ? `cometchat-users__list-item-active` : ""}`}
+          >
+            <CometChatListItem
+              id={user.getUid()}
+              avatarURL={user.getAvatar()}
+              avatarName={user.getName()}
+              title={user.getName()}
+              titleView={titleView?.(user)}
+              leadingView={leadingView?.(user)}
+              subtitleView={subtitleView?.(user)}
+              trailingView={getDefaultListItemTailView(user)}
+              menuView={getDefaultListItemMenuView(user)}
+              onListItemClicked={(e) => {
+                onItemClick?.(user);
+                setSelectedUsers((prevState) => {
+                  let userFound = false;
+                  const filteredUsers = prevState.filter((userItr) => {
+                    if (userItr === user.getUid()) {
+                      userFound = true;
+                    }
+                    return userItr !== user.getUid();
+                  })
+                  if (userFound) {
+                    return [...filteredUsers];
+                  } else {
+                    return [...prevState, user.getUid()];
                   }
-                  return userItr !== user.getUid();
                 })
-                if (userFound) {
-                  return [...filteredUsers];
-                } else {
-                  return [...prevState, user.getUid()];
-                }
-              })
-            }}
-          />
-        </div>
-      );
+              }}
+            />
+          </div>
+        );
+      } catch (error) {
+        errorHandler(error, 'getListItem');
+        return (<></>);
+      }
     };
   }
 
@@ -552,78 +596,89 @@ export function CometChatUsers(props: UsersProps) {
    * Renders the loading state view with shimmer effect
    *
    * @remarks
-   * If a custom `loadingStateView` is provided, it will be used. Otherwise, the default shimmer effect is displayed.
+   * If a custom `loadingView` is provided, it will be used. Otherwise, the default shimmer effect is displayed.
    *
    * @returns A JSX element representing the loading state
    */
   const getLoadingView = () => {
-    if (loadingStateView) {
-      return loadingStateView
+    try {
+      if (loadingView) {
+        return loadingView
+      }
+      return <div className="cometchat-users__shimmer">
+        {[...Array(15)].map((_, index) => (
+          <div key={index} className="cometchat-users__shimmer-item">
+            <div className="cometchat-users__shimmer-item-avatar"></div>
+            <div className="cometchat-users__shimmer-item-title"></div>
+          </div>
+        ))}
+      </div>
+    } catch (error) {
+      errorHandler(error, 'getLoadingView');
     }
-    return <div className="cometchat-users__shimmer">
-      {[...Array(15)].map((_, index) => (
-        <div key={index} className="cometchat-users__shimmer-item">
-          <div className="cometchat-users__shimmer-item-avatar"></div>
-          <div className="cometchat-users__shimmer-item-title"></div>
-        </div>
-      ))}
-    </div>
   }
 
   /**
    * Renders the empty state view when there are no groups to display
    *
    * @remarks
-   * If a custom `emptyStateView` is provided, it will be used. Otherwise, a default empty state view with a message is displayed.
+   * If a custom `emptyView` is provided, it will be used. Otherwise, a default empty state view with a message is displayed.
    *
    * @returns A JSX element representing the empty state
    */
-  const getEmptyStateView = () => {
-    const isDarkMode = getThemeMode() == "dark" ? true : false;
-    if (emptyStateView) {
-      return emptyStateView
+  const getEmptyView = () => {
+    try {
+      const isDarkMode = getThemeMode() == "dark" ? true : false;
+      if (emptyView) {
+        return emptyView
+      }
+      return (
+        <div className="cometchat-users__empty-state-view">
+          <div className="cometchat-users__empty-state-view-icon">
+            <img src={isDarkMode ? emptyIconDark : emptyIcon} alt="" />
+          </div>
+          <div className="cometchat-users__empty-state-view-body">
+            <div className="cometchat-users__empty-state-view-body-title">{localize("NO_USERS_FOUND")}</div>
+            <div className="cometchat-users__empty-state-view-body-description">{localize("USERS_EMPTY_STATE_MESSAGE")}</div>
+          </div>
+        </div>
+      )
+    } catch (error) {
+      errorHandler(error, 'getEmptyView');
     }
-    return (
-      <div className="cometchat-users__empty-state-view">
-        <div className="cometchat-users__empty-state-view-icon">
-          <img src={isDarkMode ? emptyIconDark : emptyIcon} alt="" />
-        </div>
-        <div className="cometchat-users__empty-state-view-body">
-          <div className="cometchat-users__empty-state-view-body-title">{localize("NO_USERS_FOUND")}</div>
-          <div className="cometchat-users__empty-state-view-body-description">{localize("USERS_EMPTY_STATE_MESSAGE")}</div>
-        </div>
-      </div>
-    )
   }
 
   /**
    * Renders the error state view when an error occurs
    *
    * @remarks
-   * If a custom `errorStateView` is provided, it will be used. Otherwise, a default error message is displayed.
+   * If a custom `errorView` is provided, it will be used. Otherwise, a default error message is displayed.
    *
    * @returns A JSX element representing the error state
    */
-  const getErrorStateView = () => {
+  const getErrorView = () => {
+    try {
+      const isDarkMode = getThemeMode() == "dark" ? true : false;
 
-    const isDarkMode = getThemeMode() == "dark" ? true : false;
+      if (errorView) {
+        return errorView
+      }
 
-    if (errorStateView) {
-      return errorStateView
-    }
-
-    return (
-      <div className="cometchat-users__error-state-view">
-        <div className="cometchat-users__error-state-view-icon">
-          <img src={isDarkMode ? errorIconDark : errorIcon} alt="" />
-        </div>
-        <div className="cometchat-users__error-state-view-body">
-          <div className="cometchat-users__error-state-view-body-title">{localize("OOPS!")}</div>
-          <div className="cometchat-users__error-state-view-body-description">{localize("LOOKS_LIKE_SOMETHING_WENT_WRONG")}
+      return (
+        <div className="cometchat-users__error-state-view">
+          <div className="cometchat-users__error-state-view-icon">
+            <img src={isDarkMode ? errorIconDark : errorIcon} alt="" />
+          </div>
+          <div className="cometchat-users__error-state-view-body">
+            <div className="cometchat-users__error-state-view-body-title">{localize("OOPS!")}</div>
+            <div className="cometchat-users__error-state-view-body-description">{localize("LOOKS_LIKE_SOMETHING_WENT_WRONG")}
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    } catch (error) {
+      errorHandler(error, 'getErrorView');
+    }
   }
 
   useCometChatUsers({
@@ -638,7 +693,8 @@ export function CometChatUsers(props: UsersProps) {
     searchKeyword,
     disableLoadingState,
     usersSearchText,
-    disableUsersPresence,
+    hideUserStatus,
+    errorHandler,
   });
   return (
     <div className="cometchat" style={{ width: "100%", height: "100%", overflow: "hidden" }}>
@@ -646,13 +702,13 @@ export function CometChatUsers(props: UsersProps) {
         className='cometchat-users'
       >
         <CometChatList
-          title={title}
+          title={titleRef.current}
           hideSearch={state.fetchState === States.error || hideSearch}
-          searchPlaceholderText={searchPlaceholderText}
+          searchPlaceholderText={searchPlaceholderTextRef.current}
           searchText={state.searchText}
           onSearch={onSearch}
           list={state.userList}
-          listItem={getListItem()}
+          itemView={getListItem()}
           onScrolledToBottom={() =>
             fetchNextAndAppendUsers(
               (fetchNextIdRef.current =
@@ -671,9 +727,9 @@ export function CometChatUsers(props: UsersProps) {
           }
           loadingView={getLoadingView()}
           hideError={hideError}
-          emptyStateView={getEmptyStateView()}
-          errorStateView={getErrorStateView()}
-          menu={menu}
+          emptyView={getEmptyView()}
+          errorView={getErrorView()}
+          headerView={headerView}
         />
       </div>
     </div>

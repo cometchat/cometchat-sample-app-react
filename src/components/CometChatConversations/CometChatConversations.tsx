@@ -9,6 +9,7 @@ import {
 
 import {
   useCometChatErrorHandler,
+  useRefSync,
   useStateRef,
 } from "../../CometChatCustomHooks";
 import { ChatConfigurator } from "../../utils/ChatConfigurator";
@@ -37,12 +38,13 @@ import emptyIcon from "../../assets/conversations_empty_state.svg";
 import emptyIconDark from "../../assets/conversations_empty_state_dark.svg";
 import errorIcon from "../../assets/list_error_state_icon.svg"
 import errorIconDark from "../../assets/list_error_state_icon_dark.svg"
-
+import { CometChatSoundManager } from "../../resources/CometChatSoundManager/CometChatSoundManager";
 import { CometChatConfirmDialog } from "../BaseComponents/CometChatConfirmDialog/CometChatConfirmDialog";
 import { CometChatContextMenu } from "../BaseComponents/CometChatContextMenu/CometChatContextMenu";
 import { getThemeMode, isURL } from "../../utils/util";
 import { CometChatConversationEvents } from "../../events/CometChatConversationEvents";
 import CometChatToast from "../BaseComponents/CometChatToast/CometChatToast";
+import { throwError } from "rxjs";
 type Message =
   | CometChat.TextMessage
   | CometChat.MediaMessage
@@ -52,158 +54,177 @@ type Message =
 
 interface ConversationsProps {
   /**
-   * Custom view to render on the top-right of the component
-   */
-  menu?: JSX.Element;
-  /**
-   * Title of the component
+   * Disables the display of message read receipts.
    *
-   * @defaultValue `localize("CHATS")`
-   */
-  title?: string;
-  /**
-   * Request builder to fetch conversations
-   * @defaultValue Default request builder having the limit set to 30
-   */
-  conversationsRequestBuilder?: CometChat.ConversationsRequestBuilder;
-  /**
-   * Function to call whenever the component encounters an error
-   */
-  onError?: (error: CometChat.CometChatException) => void;
-  /**
-   * Custom list item view to be rendered for each conversation in the fetched list
-   */
-  listItemView?: (conversation: CometChat.Conversation) => JSX.Element;
-  /**
-   * Custom subtitle view to be rendered for each conversation in the fetched list
-   *
-   * @remarks
-   * This prop is used if `listItemView` prop is not provided
-   */
-  subtitleView?: (conversation: CometChat.Conversation) => JSX.Element;
-  /**
-   * Custom tail view to be rendered for each conversation in the fetched list
-   *
-   * @remarks
-   * This prop is used if `listItemView` prop is not provided
-   */
-  tailView?: (conversation: CometChat.Conversation) => JSX.Element;
-  /**
-   * Hide user presence
-   *
-   * @remarks
-   * If set to true, the status indicator of the default list item view is not displayed for conversation objects related to users
-   *
+   * @remarks If set to `true`, the receipt status of the sent message won't be displayed.
    * @defaultValue `false`
    */
-  disableUsersPresence?: boolean;
+  hideReceipts?: boolean;
+
   /**
-   * Conversation to highlight
-   *
-   * @remarks
-   * This prop is used if `listItemView` prop is not provided
-   */
-  activeConversation?: CometChat.Conversation;
-  /**
-   * Selection mode to use for the default tail view
-   *
-   * @remarks
-   * This prop is used if `listItemView` prop is not provided.
-   *
-   * @defaultValue `SelectionMode.none`
-   */
-  selectionMode?: SelectionMode;
-  /**
-   * Disable receipt status
-   *
-   * @remarks
-   * If set to true, the receipt status of the sent message won't be displayed, and received messages won't be marked as delivered
-   *
-   * @defaultValue `false`
-   */
-  hideReceipt?: boolean;
-  /**
-   * List of actions available on mouse over on the default list item component
-   */
-  options?:
-  | ((conversation: CometChat.Conversation) => CometChatOption[])
-  | null;
-  /**
-   * Date format for the date component
-   *
-   * @remarks
-   * The date component is inside the tail view of the default list item view when `selectionMode` prop is set to `SelectionMode.none`
-   */
-  datePattern?: DatePatterns;
-  /**
-   * Custom view for the loading state of the component
-   */
-  loadingStateView?: JSX.Element;
-  /**
-   * Custom view for the empty state of the component
-   */
-  emptyStateView?: JSX.Element;
-  /**
-   * Custom view for the error state of the component
-   */
-  errorStateView?: JSX.Element;
-  /**
-   * Hide error view
-   *
-   * @remarks
-   * If set to true, hides the default and the custom error view
+   * Hides the default and the custom error view passed in the `errorView` prop.
    *
    * @defaultValue `false`
    */
   hideError?: boolean;
+
   /**
-   * Function to call on click of the default list item view of a conversation
-   */
-  onItemClick?: (conversation: CometChat.Conversation) => void;
-  /**
-   * Function to call when a conversation from the fetched list is selected
-   *
-   * @remarks
-   * This prop is used if `selectionMode` prop is not `SelectionMode.none`
-   */
-  onSelect?: (conversation: CometChat.Conversation, selected: boolean) => void;
-  /**
-   * Disable typing indicator display
+   * Hides the delete conversation option in the default context menu.
    *
    * @defaultValue `false`
    */
-  disableTyping?: boolean;
+  hideDeleteConversation?: boolean;
+
   /**
-   * Title of the confirmation dialog.
-   * 
+   * Hides the user's online/offline status indicator.
+   *
+   * @defaultValue `false`
    */
-  confirmDialogTitle?: string;
+  hideUserStatus?: boolean;
 
   /**
-   * Message displayed in the confirmation dialog.
-   * 
+   * Hides the group type icon.
+   *
+   * @defaultValue `false`
    */
-  confirmDialogMessage?: string;
+  hideGroupType?: boolean;
 
   /**
-  * Text for the cancel button in the confirmation dialog.
-  */
-  cancelButtonText?: string;
-
-  /**
-   * Text for the confirm button in the confirmation dialog.
+   * A request builder to fetch conversations.
+   *
+   * @defaultValue Default request builder with the limit set to 30.
    */
-  confirmButtonText?: string;
+  conversationsRequestBuilder?: CometChat.ConversationsRequestBuilder;
 
   /**
-   * Disable mentions in conversation. Default value is set to false
+   * Specifies the conversation to highlight in the list.
    */
-  disableMentions?: boolean;
+  activeConversation?: CometChat.Conversation;
 
   /**
-   * Allows user to pass custom formatters
+   * Allows the user to pass custom formatters for text.
+   *
+   * These formatters should be an array of `CometChatTextFormatter` instances, enabling customized text rendering and processing.
    */
   textFormatters?: CometChatTextFormatter[];
+
+  /**
+   * Determines the selection mode for the component.
+   *
+   * @defaultValue `SelectionMode.none`
+   */
+  selectionMode?: SelectionMode;
+
+  /**
+   * A function that returns a list of actions available when hovering over a conversation item.
+   * @param conversation - An instance of `CometChat.Conversation` representing the conversation.
+   * @returns An array of `CometChatOption` objects.
+   */
+  options?: ((conversation: CometChat.Conversation) => CometChatOption[]) | null;
+
+  /**
+   * Specifies the format for displaying dates within the component.
+   */
+  datePattern?: DatePatterns;
+
+  /**
+   * Disables sound for incoming messages.
+   *
+   * @defaultValue `false`
+   */
+  disableSoundForMessages?: boolean;
+
+  /**
+   * Custom audio sound for incoming messages.
+   */
+  customSoundForMessages?: string;
+
+  /**
+   * Callback function triggered when the component encounters an error.
+   *
+   * @param error - An instance of `CometChat.CometChatException` representing the error.
+   * @returns void
+   */
+  onError?: ((error: CometChat.CometChatException) => void) | null;
+
+  /**
+   * Callback function invoked when a conversation item is clicked.
+   *
+   * @param conversation - An instance of `CometChat.Conversation` representing the clicked conversation.
+   * @returns void
+   */
+  onItemClick?: (conversation: CometChat.Conversation) => void;
+
+  /**
+   * Callback function invoked when a conversation item is selected.
+   *
+   * @param conversation - An instance of `CometChat.Conversation` representing the selected conversation.
+   * @param selected - A boolean indicating whether the item is selected.
+   * @returns void
+   * @remarks This prop works only if `selectionMode` is not set to `SelectionMode.none`.
+   */
+  onSelect?: (conversation: CometChat.Conversation, selected: boolean) => void;
+
+  /**
+   * A custom component to render in the top-right corner of the Conversations UI.
+   */
+  headerView?: JSX.Element;
+
+  /**
+   * A custom component to display during the loading state.
+   */
+  loadingView?: JSX.Element;
+
+  /**
+   * A custom component to display when there are no conversations available.
+   */
+  emptyView?: JSX.Element;
+
+  /**
+   * A custom component to display when an error occurs.
+   */
+  errorView?: JSX.Element;
+
+  /**
+   * A custom view to render each conversation in the list.
+   *
+   * @param conversation - An instance of `CometChat.Conversation` representing the conversation.
+   * @returns A JSX element to be rendered as the conversation item.
+   */
+  itemView?: (conversation: CometChat.Conversation) => JSX.Element;
+
+  /**
+   * A function that renders a JSX element to display the leading view.
+   *
+   * @param conversation - An instance of `CometChat.Conversation` representing the conversation.
+   * @returns A JSX element to be rendered as the leading view.
+   */
+  leadingView?: (conversation: CometChat.Conversation) => JSX.Element;
+
+  /**
+   * A function that renders a JSX element to display the title view.
+   *
+   * @param conversation - An instance of `CometChat.Conversation` representing the conversation.
+   * @returns A JSX element to be rendered as the title view.
+   */
+  titleView?: (conversation: CometChat.Conversation) => JSX.Element;
+
+  /**
+   * A custom view to render the subtitle for each conversation.
+   *
+   * @param conversation - An instance of `CometChat.Conversation` representing the conversation.
+   * @returns A JSX element to be rendered as the subtitle view.
+   */
+  subtitleView?: (conversation: CometChat.Conversation) => JSX.Element;
+
+  /**
+   * A custom view to render at the end of each conversation item.
+   *
+   * @param conversation - An instance of `CometChat.Conversation` representing the conversation.
+   * @returns A JSX element to be rendered as the trailing view.
+   */
+  trailingView?: (conversation: CometChat.Conversation) => JSX.Element;
+
 }
 
 type State = {
@@ -743,34 +764,31 @@ function stateReducer(state: State, action: Action): State {
  */
 export function CometChatConversations(props: ConversationsProps) {
   const {
-    menu,
-    title = localize("CHATS"),
+    headerView,
     conversationsRequestBuilder = null,
     onError,
-    listItemView = null,
+    itemView = null,
     subtitleView = null,
-    tailView,
-    disableUsersPresence = false,
+    trailingView,
     activeConversation = null,
     selectionMode = SelectionMode.none,
-    hideReceipt = false,
+    hideReceipts = false,
     options = null,
     datePattern = DatePatterns.DayDateTime,
-    loadingStateView,
-    emptyStateView,
-    errorStateView,
+    loadingView,
+    emptyView,
+    errorView,
     hideError = false,
     onItemClick = null,
     onSelect = null,
-    disableTyping = false,
-    confirmDialogTitle = localize("DELETE_CONVERSATION"),
-    confirmDialogMessage = localize(
-      "WOULD__YOU_LIKE_TO_DELETE_THIS_CONVERSATION"
-    ),
-    cancelButtonText = localize("CANCEL"),
-    confirmButtonText = localize("DELETE"),
-    disableMentions = false,
     textFormatters = [],
+    leadingView,
+    titleView,
+    hideDeleteConversation = false,
+    hideUserStatus = false,
+    hideGroupType = false,
+    disableSoundForMessages = false,
+    customSoundForMessages = null,
   } = props;
 
   const [state, dispatch] = useReducer(stateReducer, {
@@ -783,6 +801,11 @@ export function CometChatConversations(props: ConversationsProps) {
     unreadMentions: false,
   });
   const [showToast, setShowToast] = useState<boolean>(false);
+    const confirmDialogTitleRef = useRef<string>(localize("DELETE_CONVERSATION"));
+    const confirmDialogMessageRef = useRef<string>(localize("WOULD__YOU_LIKE_TO_DELETE_THIS_CONVERSATION"));
+    const cancelButtonTextRef = useRef<string>(localize("CANCEL"));
+    const confirmButtonTextRef = useRef<string>(localize("DELETE"));
+    const titleRef = useRef<string>(localize("CHATS"));
 
   const conversationsManagerRef = useRef<ConversationsManager | null>(null);
   const fetchNextIdRef = useRef("");
@@ -790,6 +813,7 @@ export function CometChatConversations(props: ConversationsProps) {
   const attachListenerOnFetch = useRef<boolean>(false);
   const isConnectionReestablished = useRef<boolean>(false);
   const [activeConversationState, setActiveConversationState] = useState(activeConversation);
+  const customSoundForMessagesRef = useRefSync(customSoundForMessages);
 
   (() => {
     if (state.isFirstReload) {
@@ -808,6 +832,7 @@ export function CometChatConversations(props: ConversationsProps) {
    */
   const fetchNextAndAppendConversations = useCallback(
     async (fetchId: string): Promise<void> => {
+      try {
       const conversationManager = conversationsManagerRef.current;
       if (!conversationManager) {
         return;
@@ -816,7 +841,7 @@ export function CometChatConversations(props: ConversationsProps) {
         ? States.loaded
         : States.loading;
       dispatch({ type: "setFetchState", fetchState: initialState });
-      try {
+     
         const conversations = await conversationManager.fetchNext();
 
         if (conversations.length !== 0 && fetchNextIdRef.current === fetchId) {
@@ -833,6 +858,7 @@ export function CometChatConversations(props: ConversationsProps) {
           ConversationsManager.attachConnestionListener(() => {
             conversationsManagerRef.current = new ConversationsManager({
               conversationsRequestBuilder,
+              errorHandler
 
             });
             isConnectionReestablished.current = true;
@@ -852,26 +878,29 @@ export function CometChatConversations(props: ConversationsProps) {
         if (state.conversationList.length <= 0) {
           dispatch({ type: "setFetchState", fetchState: States.error });
         }
-        errorHandler(error);
+        errorHandler(error,"fetchNextAndAppendConversations");
       }
     },
-    [errorHandler, dispatch]
+    [ dispatch]
   );
 
   const getIncrementUnreadCountBoolFromMetaData = useCallback(
     (message: CometChat.BaseMessage) => {
-      const metaDataGetterName = "getMetadata";
-      const willUpdateConversation = message instanceof CometChat.CustomMessage && message.willUpdateConversation();
-      const incrementUnreadCountFieldName = "incrementUnreadCount";
-      let metaData: Object;
-      return (
-        metaDataGetterName in message &&
-        typeof message![metaDataGetterName] === "function" &&
-        (metaData = message![metaDataGetterName]!()) &&
-        typeof metaData === "object" &&
-        incrementUnreadCountFieldName in metaData &&
-        Boolean(metaData["incrementUnreadCount"])
-      ) || (message instanceof CometChat.CustomMessage && message.willUpdateConversation());
+try {
+  const metaDataGetterName = "getMetadata";
+  const incrementUnreadCountFieldName = "incrementUnreadCount";
+  let metaData: Object;
+  return (
+    metaDataGetterName in message &&
+    typeof message![metaDataGetterName] === "function" &&
+    (metaData = message![metaDataGetterName]!()) &&
+    typeof metaData === "object" &&
+    incrementUnreadCountFieldName in metaData &&
+    Boolean(metaData["incrementUnreadCount"])
+  ) || (message instanceof CometChat.CustomMessage && message.willUpdateConversation());
+} catch (error) {
+  errorHandler(error,"getIncrementUnreadCountBoolFromMetaData")
+}
     },
     []
   );
@@ -884,36 +913,41 @@ export function CometChatConversations(props: ConversationsProps) {
       conversation: CometChat.Conversation,
       newMessage: CometChat.BaseMessage
     ): void => {
-      const message = newMessage || conversation.getLastMessage();
-      // Exit if conversation type passed in ConversationsRequestBuilder doesn't match the message receiver type.
-      if (conversationsRequestBuilder && conversationsRequestBuilder.build().getConversationType() && message.getReceiverType() !== conversationsRequestBuilder.build().getConversationType()) {
-        return;
-      }
-
-      if (!isAMessage(message)) {
-        return;
-      }
-      if (!ConversationsManager.shouldLastMessageAndUnreadCountBeUpdated(message)) {
-        return;
-      }
-      if(message.getSender().getUid() != state.loggedInUser?.getUid()){
-        conversation.setUnreadMessageCount(
-          (conversation.getUnreadMessageCount() ?? 0) + 1);
-      }
-
-      if (message instanceof CometChat.Action &&
-        message.getReceiverType() === CometChatUIKitConstants.MessageReceiverType.group &&
-        conversation.getConversationType() === CometChatUIKitConstants.MessageReceiverType.group) {
-        const isSameGroup = (message.getReceiver() as CometChat.Group).getGuid() ===
-          (message.getActionFor() as CometChat.Group).getGuid();
-        if (isSameGroup) {
-          let updatedGroup = conversation.getConversationWith() as CometChat.Group;
-          updatedGroup.setMembersCount((message.getActionFor() as CometChat.Group).getMembersCount());
-          conversation.setConversationWith(updatedGroup);
+      try {
+      
+        const message = newMessage || conversation.getLastMessage();
+        // Exit if conversation type passed in ConversationsRequestBuilder doesn't match the message receiver type.
+        if (conversationsRequestBuilder && conversationsRequestBuilder.build().getConversationType() && message.getReceiverType() !== conversationsRequestBuilder.build().getConversationType()) {
+          return;
         }
-      }
-      conversation.setLastMessage(message);
-      dispatch({ type: "fromUpdateConversationListFn", conversation });
+  
+        if (!isAMessage(message)) {
+          return;
+        }
+        if (!ConversationsManager.shouldLastMessageAndUnreadCountBeUpdated(message)) {
+          return;
+        }
+        if(message.getSender().getUid() != state.loggedInUser?.getUid()){
+          conversation.setUnreadMessageCount(
+            (conversation.getUnreadMessageCount() ?? 0) + 1);
+        }
+  
+        if (message instanceof CometChat.Action &&
+          message.getReceiverType() === CometChatUIKitConstants.MessageReceiverType.group &&
+          conversation.getConversationType() === CometChatUIKitConstants.MessageReceiverType.group) {
+          const isSameGroup = (message.getReceiver() as CometChat.Group).getGuid() ===
+            (message.getActionFor() as CometChat.Group).getGuid();
+          if (isSameGroup) {
+            let updatedGroup = conversation.getConversationWith() as CometChat.Group;
+            updatedGroup.setMembersCount((message.getActionFor() as CometChat.Group).getMembersCount());
+            conversation.setConversationWith(updatedGroup);
+          }
+        }
+        conversation.setLastMessage(message);
+        dispatch({ type: "fromUpdateConversationListFn", conversation });
+    } catch (error) {
+      errorHandler(error,"updateConversationList")
+    }
     },
     [dispatch, state.loggedInUser, getIncrementUnreadCountBoolFromMetaData]
   );
@@ -951,7 +985,7 @@ export function CometChatConversations(props: ConversationsProps) {
 
         }
       } catch (error) {
-        errorHandler(error);
+        errorHandler(error,"refreshSingleConversation");
       }
     },
     [errorHandler, updateConversationList, state.conversationList]
@@ -962,26 +996,49 @@ export function CometChatConversations(props: ConversationsProps) {
    */
   const onMessageReceived = useCallback(
     async (message: CometChat.BaseMessage): Promise<void> => {
+      try {
       if (
         message.getSender().getUid() !== state.loggedInUser?.getUid() &&
-        !hideReceipt &&
+        !hideReceipts &&
         !message.getDeliveredAt()
       ) {
-        try {
           CometChat.markAsDelivered(message);
-        } catch (error) {
-          errorHandler(error);
+        } 
+        if (
+          !disableSoundForMessages &&
+          !(
+            (message.getCategory() ===
+              CometChatUIKitConstants.MessageCategory.custom &&
+              !getIncrementUnreadCountBoolFromMetaData(message)) ||
+            (activeConversation &&
+              activeConversation.getConversationId() ===
+              message.getConversationId())
+          )
+        ) {
+          refreshSingleConversation(message);
+          CometChatSoundManager.play(
+            CometChatSoundManager.Sound.incomingMessageFromOther!,
+            customSoundForMessagesRef.current
+          );
+  
         }
+
+      
       }
-      refreshSingleConversation(message);
+      catch (error) {
+        errorHandler(error);
+      }
+ 
     },
     [
-      hideReceipt,
+      hideReceipts,
       refreshSingleConversation,
       errorHandler,
       state.loggedInUser,
       activeConversationState,
       getIncrementUnreadCountBoolFromMetaData,
+      disableSoundForMessages,
+      customSoundForMessagesRef,
     ]
   );
 
@@ -1007,6 +1064,8 @@ export function CometChatConversations(props: ConversationsProps) {
       typingIndicator: CometChat.TypingIndicator,
       typingStarted: boolean
     ): void => {
+      try {
+        
       if (
         state.loggedInUser?.getUid() === typingIndicator.getSender()?.getUid()
       ) {
@@ -1017,6 +1076,9 @@ export function CometChatConversations(props: ConversationsProps) {
       } else {
         dispatch({ type: "removeTypingIndicator", typingIndicator });
       }
+      } catch (error) {
+        errorHandler(error,"setTypingIndicator")
+      }
     },
     [state.loggedInUser]
   );
@@ -1026,10 +1088,15 @@ export function CometChatConversations(props: ConversationsProps) {
    * Get avatar URL for the default list item view
    */
   function getListItemAvatarURL(conversation: CometChat.Conversation): string {
-    const convWith = conversation.getConversationWith();
+    try {
+      const convWith = conversation.getConversationWith();
     return convWith instanceof CometChat.User
       ? convWith.getAvatar()
       : convWith.getIcon();
+    } catch (error) {
+      errorHandler(error,"getListItemAvatarURL");
+      throw error;
+    }
   }
 
   /**
@@ -1038,14 +1105,19 @@ export function CometChatConversations(props: ConversationsProps) {
   function getSubtitleThreadView(
     conversation: CometChat.Conversation
   ): JSX.Element | null {
-    const lastMessage = conversation.getLastMessage();
-    if (!isAMessage(lastMessage) || !lastMessage.getParentMessageId()) {
-      // parentMessageId is falsy, it is not a valid parent message id
-      return null;
-    }
-    return (
-      <div className='cometchat-conversations__subtitle-icon cometchat-conversations__subtitle-icon-thread' />
-    );
+try {
+  const lastMessage = conversation.getLastMessage();
+  if (!isAMessage(lastMessage) || !lastMessage.getParentMessageId()) {
+    // parentMessageId is falsy, it is not a valid parent message id
+    return null;
+  }
+  return (
+    <div className='cometchat-conversations__subtitle-icon cometchat-conversations__subtitle-icon-thread' />
+  );
+} catch (error) {
+  errorHandler(error,"getSubtitleThreadView");
+  throw error;
+}
   }
 
   /**
@@ -1057,23 +1129,28 @@ export function CometChatConversations(props: ConversationsProps) {
   function shouldDisplaySubtitleReceipt(
     conversation: CometChat.Conversation
   ): boolean {
-    const lastMessage = conversation.getLastMessage();
-    const convWith = conversation.getConversationWith();
-    const id =
-      convWith instanceof CometChat.User
-        ? convWith?.getUid()
-        : convWith.getGuid();
-    return (
-      !hideReceipt &&
-      isAMessage(lastMessage) &&
-      !lastMessage.getDeletedAt() &&
-      lastMessage.getCategory() !==
-      CometChatUIKitConstants.MessageCategory.action &&
-      lastMessage.getSender()?.getUid() === state.loggedInUser?.getUid() &&
-      (lastMessage.getCategory() != CometChatUIKitConstants.MessageCategory.custom || (lastMessage.getCategory() == CometChatUIKitConstants.MessageCategory.custom && 
-      lastMessage.getType() !== CometChatUIKitConstants.calls.meeting)) &&
-      state.typingIndicatorMap.get(id) === undefined
-    );
+ try {
+  const lastMessage = conversation.getLastMessage();
+  const convWith = conversation.getConversationWith();
+  const id =
+    convWith instanceof CometChat.User
+      ? convWith?.getUid()
+      : convWith.getGuid();
+  return (
+    !hideReceipts &&
+    isAMessage(lastMessage) &&
+    !lastMessage.getDeletedAt() &&
+    lastMessage.getCategory() !==
+    CometChatUIKitConstants.MessageCategory.action &&
+    lastMessage.getSender()?.getUid() === state.loggedInUser?.getUid() &&
+    (lastMessage.getCategory() != CometChatUIKitConstants.MessageCategory.custom || (lastMessage.getCategory() == CometChatUIKitConstants.MessageCategory.custom && 
+    lastMessage.getType() !== CometChatUIKitConstants.calls.meeting)) &&
+    state.typingIndicatorMap.get(id) === undefined
+  );
+ } catch (error) {
+  errorHandler(error,"shouldDisplaySubtitleReceipt");
+  return false;
+ }
   }
 
   /**
@@ -1082,32 +1159,35 @@ export function CometChatConversations(props: ConversationsProps) {
   function getSubtitleReadReceiptView(
     conversation: CometChat.Conversation
   ): JSX.Element | null {
-    const lastMessageCategory = (conversation.getLastMessage() as CometChat.BaseMessage)?.getCategory()
-
-    if (!shouldDisplaySubtitleReceipt(conversation)) {
-      return null;
+    try {
+      if (!shouldDisplaySubtitleReceipt(conversation)) {
+        return null;
+      }
+  
+      const receipt = MessageReceiptUtils.getReceiptStatus(conversation.getLastMessage())
+      let messageStatus = "";
+  
+      if (receipt === receipts.sent) {
+        messageStatus = "sent";
+      } else if (receipt === receipts.delivered) {
+        messageStatus = "delivered";
+      } else if (receipt === receipts.read) {
+        messageStatus = "read";
+      }
+  
+  
+  
+  
+      return (
+        <div className={`
+        cometchat-receipts cometchat-conversations__subtitle-receipts cometchat-conversations__subtitle-receipts-${messageStatus} cometchat-receipts-${messageStatus}`}
+        >
+        </div>
+      );
+    } catch (error) {
+      errorHandler(error,"getSubtitleReadReceiptView");
+      throw error;
     }
-
-    const receipt = MessageReceiptUtils.getReceiptStatus(conversation.getLastMessage())
-    let messageStatus = "";
-
-    if (receipt === receipts.sent) {
-      messageStatus = "sent";
-    } else if (receipt === receipts.delivered) {
-      messageStatus = "delivered";
-    } else if (receipt === receipts.read) {
-      messageStatus = "read";
-    }
-
-
-
-
-    return (
-      <div className={`
-      cometchat-receipts cometchat-conversations__subtitle-receipts cometchat-conversations__subtitle-receipts-${messageStatus} cometchat-receipts-${messageStatus}`}
-      >
-      </div>
-    );
   }
 
   /**
@@ -1115,7 +1195,8 @@ export function CometChatConversations(props: ConversationsProps) {
    */
   function getSubtitleText(
     conversation: CometChat.Conversation
-  ): string | JSX.Element {
+  ): string | JSX.Element {try {
+    
     const convWith = conversation.getConversationWith();
     const id =
       convWith instanceof CometChat.Group
@@ -1153,7 +1234,6 @@ export function CometChatConversations(props: ConversationsProps) {
           conversation,
           state.loggedInUser!,
           {
-            disableMentions,
             mentionsTargetElement: MentionsTargetElement.conversation,
             textFormattersList: textFormatters
           }
@@ -1205,6 +1285,10 @@ export function CometChatConversations(props: ConversationsProps) {
       );
     }
     return "";
+  } catch (error) {
+    errorHandler(error,"getSubtitleText");
+    return "";
+  }
   }
 
   /**
@@ -1215,25 +1299,30 @@ export function CometChatConversations(props: ConversationsProps) {
    * @returns {string} The name of the icon to be used based on the call type.
    */
   function getIconNameByCallType(message: CometChat.Call): string {
+try {
+  
+  let iconName = ""
+  let isMissedCallMessage = isMissedCall(message as CometChat.Call, state.loggedInUser!);
 
-    let iconName = ""
-    let isMissedCallMessage = isMissedCall(message as CometChat.Call, state.loggedInUser!);
-
-    if (isMissedCallMessage) {
-      if (message.getType() === CometChatUIKitConstants.MessageTypes.audio) {
-        iconName = "incoming-audio-call"
-      } else {
-        iconName = "incoming-video-call"
-      }
+  if (isMissedCallMessage) {
+    if (message.getType() === CometChatUIKitConstants.MessageTypes.audio) {
+      iconName = "incoming-audio-call"
     } else {
-      if (message.getType() === CometChatUIKitConstants.MessageTypes.audio) {
-        iconName = "outgoing-audio-call"
-      } else {
-        iconName = "outgoing-video-call"
-      }
+      iconName = "incoming-video-call"
     }
+  } else {
+    if (message.getType() === CometChatUIKitConstants.MessageTypes.audio) {
+      iconName = "outgoing-audio-call"
+    } else {
+      iconName = "outgoing-video-call"
+    }
+  }
 
-    return iconName
+  return iconName
+} catch (error) {
+  errorHandler(error,"getIconNameByCallType");
+  return "";
+}
   }
 
 
@@ -1246,6 +1335,8 @@ export function CometChatConversations(props: ConversationsProps) {
    * @returns {string} The name of the icon to be used based on the message type.
    */
   function getIconNameByMessageType(message: CometChat.BaseMessage): string {
+    try {
+      
     let iconName = "";
     switch (message.getType()) {
 
@@ -1287,6 +1378,10 @@ export function CometChatConversations(props: ConversationsProps) {
       iconName = "deleted";
     }
     return iconName
+    } catch (error) {
+      errorHandler(error,"getIconNameByMessageType");
+      return "";
+    }
   }
 
   /**
@@ -1347,12 +1442,13 @@ export function CometChatConversations(props: ConversationsProps) {
   function getListItemMenuView(
     conversation: CometChat.Conversation,
   ) {
+   try {
     if (selectionMode !== SelectionMode.none) {
       return null;
     }
     let curOptions: CometChatOption[] | null;
     if (!options) {
-      const defaultOptions = ConversationUtils.getDefaultOptions();
+      const defaultOptions = hideDeleteConversation ? [] :  ConversationUtils.getDefaultOptions();
       for (let i = 0; i < defaultOptions.length; i++) {
         if (
           defaultOptions[i].id ===
@@ -1369,7 +1465,7 @@ export function CometChatConversations(props: ConversationsProps) {
       return null;
     }
     return (
-      <div className="cometchat-conversations__tail-view-options">
+      <div className="cometchat-conversations__trailing-view-options">
         <CometChatContextMenu
           data={curOptions as unknown as CometChatActionsIcon[]}
           topMenuSize={2}
@@ -1386,6 +1482,9 @@ export function CometChatConversations(props: ConversationsProps) {
         />
       </div>
     );
+   } catch (error) {
+    errorHandler(error,"getListItemMenuView")
+   }
   }
 
   /**
@@ -1394,10 +1493,9 @@ export function CometChatConversations(props: ConversationsProps) {
   function getListItemTailContentView(
     conversation: CometChat.Conversation
   ): JSX.Element | null {
-
-
-    if (tailView) {
-      return <>{tailView(conversation)}</>
+   try {
+    if (trailingView) {
+      return <>{trailingView(conversation)}</>
     }
 
     switch (selectionMode) {
@@ -1408,15 +1506,15 @@ export function CometChatConversations(props: ConversationsProps) {
         }
         return (
           <div
-            className='cometchat-conversations__tail-view'
+            className='cometchat-conversations__trailing-view'
           >
-            <div className="cometchat-conversations__tail-view-date">
+            <div className="cometchat-conversations__trailing-view-date">
               <CometChatDate timestamp={lastMessage.getSentAt()} pattern={datePattern} />
             </div>
             <div
-              className="cometchat-conversations__tail-view-badge"
+              className="cometchat-conversations__trailing-view-badge"
             >
-              {conversation.getUnreadMessageCount() > 0 && <div className="cometchat-badge cometchat-conversations__tail-view-badge-count">
+              {conversation.getUnreadMessageCount() > 0 && <div className="cometchat-badge cometchat-conversations__trailing-view-badge-count">
                 {conversation.getUnreadMessageCount() <= 999 ? conversation.getUnreadMessageCount() : `999+`}
               </div>
               }
@@ -1443,6 +1541,10 @@ export function CometChatConversations(props: ConversationsProps) {
       default:
         return null;
     }
+   } catch (error) {
+    errorHandler(error,"getListItemTailContentView");
+    return null;
+   }
   }
 
   /**
@@ -1451,12 +1553,13 @@ export function CometChatConversations(props: ConversationsProps) {
   function getListItem(): (
     conversation: CometChat.Conversation
   ) => JSX.Element {
-    if (listItemView !== null) {
-      return listItemView;
+    if (itemView !== null) {
+      return itemView;
     }
     return function (conversation: CometChat.Conversation) {
 
 
+     try {
       const isActive = conversation.getConversationId() === activeConversationState?.getConversationId();
       let conversationType = conversation.getConversationType();
       let groupType;
@@ -1472,8 +1575,8 @@ export function CometChatConversations(props: ConversationsProps) {
 
       return (
         <div className={`cometchat-conversations__list-item
-          ${groupType ? `cometchat-conversations__list-item-${groupType}` : ""}
-           ${status && !disableUsersPresence ? `cometchat-conversations__list-item-${status}` : ""}
+          ${groupType && !hideGroupType ? `cometchat-conversations__list-item-${groupType}` : ""}
+           ${status && !hideUserStatus ? `cometchat-conversations__list-item-${status}` : ""}
            ${isActive ? `cometchat-conversations__list-item-active` : ""}
         
         ` }>
@@ -1482,22 +1585,29 @@ export function CometChatConversations(props: ConversationsProps) {
             avatarURL={getListItemAvatarURL(conversation)}
             avatarName={conversation.getConversationWith().getName()}
             title={conversation.getConversationWith().getName()}
+            titleView={titleView  ? titleView(conversation) : undefined}
+            leadingView={leadingView  ? leadingView(conversation) : undefined}
             onListItemClicked={(e) => onItemClick?.(conversation)}
             subtitleView={getListItemSubtitleView(conversation)}
             menuView={getListItemMenuView(conversation)}
-            tailView={getListItemTailContentView(conversation)}
+            trailingView={getListItemTailContentView(conversation)}
           />
         </div>
       );
+     } catch (error) {
+      errorHandler(error,"getListItem");
+      throw error;
+     }
     };
   }
 
   function handleConfirmClick(): Promise<void> {
     return new Promise(async (resolve, reject) => {
+      try {
       if (state.conversationToBeDeleted) {
         const convWith = state.conversationToBeDeleted.getConversationWith();
         const id = convWith instanceof CometChat.Group ? convWith.getGuid() : convWith.getUid();
-        try {
+     
           await CometChat.deleteConversation(id, state.conversationToBeDeleted.getConversationType());
           setShowToast(true)
           CometChatConversationEvents.ccConversationDeleted.next(CometChatUIKitUtility.clone(state.conversationToBeDeleted));
@@ -1505,12 +1615,14 @@ export function CometChatConversations(props: ConversationsProps) {
           dispatch({ type: "setConversationToBeDeleted", conversation: null });
           return resolve();
 
-        }
-        catch (error) {
-          errorHandler(error);
-          return reject();
-        }
+        
+      
       }
+    }
+    catch (error) {
+      errorHandler(error);
+      return reject();
+    }
     })
   }
   function handleCancelClick() {
@@ -1526,13 +1638,13 @@ export function CometChatConversations(props: ConversationsProps) {
     }
     return (
       <div
-        className="cometchat-backdrop cometchat-conversations__tail-view-options-delete-backdrop"
+        className="cometchat-backdrop cometchat-conversations__trailing-view-options-delete-backdrop"
       >
         <CometChatConfirmDialog
-          title={confirmDialogTitle}
-          messageText={confirmDialogMessage}
-          cancelButtonText={cancelButtonText}
-          confirmButtonText={confirmButtonText}
+          title={confirmDialogTitleRef.current}
+          messageText={confirmDialogMessageRef.current}
+          cancelButtonText={cancelButtonTextRef.current}
+          confirmButtonText={confirmButtonTextRef.current}
           onSubmitClick={handleConfirmClick}
           onCancelClick={handleCancelClick}
         />
@@ -1545,13 +1657,13 @@ export function CometChatConversations(props: ConversationsProps) {
    * Renders the loading state view with shimmer effect
    *
    * @remarks
-   * If a custom `loadingStateView` is provided, it will be used. Otherwise, the default shimmer effect is displayed.
+   * If a custom `loadingView` is provided, it will be used. Otherwise, the default shimmer effect is displayed.
    *
    * @returns A JSX element representing the loading state
    */
   const getLoadingView = () => {
-    if (loadingStateView) {
-      return loadingStateView;
+    if (loadingView) {
+      return loadingView;
     }
     return (
       <div className='cometchat-conversations__shimmer'>
@@ -1577,14 +1689,14 @@ export function CometChatConversations(props: ConversationsProps) {
    * Renders the empty state view when there are no call-logs to display
    *
    * @remarks
-   * If a custom `emptyStateView` is provided, it will be used. Otherwise, a default empty state view with a message is displayed.
+   * If a custom `emptyView` is provided, it will be used. Otherwise, a default empty state view with a message is displayed.
    *
    * @returns A JSX element representing the empty state
    */
-  const getEmptyStateView = () => {
+  const getEmptyView = () => {
     const isDarkMode = getThemeMode() == "dark" ? true : false;
-    if (emptyStateView) {
-      return emptyStateView;
+    if (emptyView) {
+      return emptyView;
     }
     return (
       <div className='cometchat-conversations__empty-state-view'>
@@ -1609,15 +1721,15 @@ export function CometChatConversations(props: ConversationsProps) {
    * Renders the error state view when an error occurs
    *
    * @remarks
-   * If a custom `errorStateView` is provided, it will be used. Otherwise, a default error message is displayed.
+   * If a custom `errorView` is provided, it will be used. Otherwise, a default error message is displayed.
    *
    * @returns A JSX element representing the error state
    */
-  const getErrorStateView = () => {
+  const getErrorView = () => {
     const isDarkMode = getThemeMode() == "dark" ? true : false;
 
-    if (errorStateView) {
-      return errorStateView;
+    if (errorView) {
+      return errorView;
     }
 
     return (
@@ -1644,18 +1756,15 @@ export function CometChatConversations(props: ConversationsProps) {
     fetchNextAndAppendConversations,
     fetchNextIdRef,
     dispatch,
-    conversationToBeDeleted: state.conversationToBeDeleted,
     errorHandler,
     refreshSingleConversation,
     onMessageReceived,
     setReceipts,
     setTypingIndicator,
-    disableTyping,
     loggedInUser: state.loggedInUser,
-    isFirstReload: false,
-    disableUsersPresence,
     activeConversation,
-    setActiveConversationState
+    setActiveConversationState,
+    hideUserStatus
   });
 
   return (
@@ -1664,11 +1773,11 @@ export function CometChatConversations(props: ConversationsProps) {
         className='cometchat-conversations'
       >
         <CometChatList
-          title={title}
+        title={titleRef.current}
           hideSearch={true}
           list={state.conversationList}
           listItemKey='getConversationId'
-          listItem={getListItem()}
+          itemView={getListItem()}
           onScrolledToBottom={() =>
             fetchNextAndAppendConversations(
               (fetchNextIdRef.current =
@@ -1683,10 +1792,10 @@ export function CometChatConversations(props: ConversationsProps) {
               : state.fetchState
           }
           loadingView={getLoadingView()}
-          emptyStateView={getEmptyStateView()}
-          errorStateView={getErrorStateView()}
+          emptyView={getEmptyView()}
+          errorView={getErrorView()}
           hideError={hideError}
-          menu={menu}
+          headerView={headerView}
         />
         {getConversationDeleteView()}
         {showToast ? <CometChatToast text={localize("CONVERSATION_DELETED")} onClose={closeToast} /> : null}

@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import CometChatReactionList from "../CometChatReactionList/CometChatReactionList";
+import {CometChatReactionList} from "../CometChatReactionList/CometChatReactionList";
 import { CometChatPopover } from "../../BaseComponents/CometChatPopover/CometChatPopover";
-import CometChatReactionInfo from "../CometChatReactionInfo/CometChatReactionInfo";
+import {CometChatReactionInfo} from "../CometChatReactionInfo/CometChatReactionInfo";
 import { MessageBubbleAlignment, Placement } from "../../../Enums/Enums";
+import { useCometChatErrorHandler } from "../../../CometChatCustomHooks";
 
 interface ReactionsProps {
     messageObject: CometChat.BaseMessage;
@@ -12,16 +13,20 @@ interface ReactionsProps {
         message: CometChat.BaseMessage) => void;
     hoverDebounceTime?: number;
     onReactionClick?: (reaction: CometChat.ReactionCount, message: CometChat.BaseMessage) => void;
+    /* Optional callback function to handle error logs. */
+    onError?: ((error: CometChat.CometChatException) => void) | null;
 }
 
-const CometChatReactions: React.FC<ReactionsProps> = ({
+export const CometChatReactions: React.FC<ReactionsProps> = ({
     messageObject,
     alignment = MessageBubbleAlignment.left,
     onReactionListItemClick,
     reactionsRequestBuilder,
     hoverDebounceTime = 500,
-    onReactionClick,
+    onReactionClick,onError
 }) => {
+    const errorHandler = useCometChatErrorHandler(onError);
+
     const [messageReactions, setMessageReactions] = useState<CometChat.ReactionCount[]>([]);
     const [maxVisibleEmojis, setMaxVisibleEmojis] = useState(0);
     const [popoverVisibility, setPopoverVisibility] = useState<Record<string, boolean>>({});
@@ -35,21 +40,26 @@ const CometChatReactions: React.FC<ReactionsProps> = ({
         try {
             setMessageReactions(messageObject.getReactions() || []);
         } catch (error) {
-            console.error(error);
+            errorHandler(error, "checkReaction")
         }
     };
 
     /* This function updates the number of allowed maximum visible emojis as per message bubble. */
     const updateMaxVisibleEmojis = useCallback(
         (availableWidth = 0) => {
-            const maxVisibleEmojis = getMaxVisibleEmojis(availableWidth);
-            setMaxVisibleEmojis(!isNaN(maxVisibleEmojis) ? maxVisibleEmojis : 0);
+            try {
+                const maxVisibleEmojis = getMaxVisibleEmojis(availableWidth);
+                setMaxVisibleEmojis(!isNaN(maxVisibleEmojis) ? maxVisibleEmojis : 0);
+            } catch (error) {
+                errorHandler(error, "updateMaxVisibleEmojis");
+            }
         }, [maxVisibleEmojis]
     );
 
     /* This function is used to check and update the width and maximum visible emojis. */
     const attachObserver = useCallback(
         () => {
+         try {
             const parentNode = parentRef.current?.parentNode?.parentNode;
             let child = null;
             if (parentNode) {
@@ -69,59 +79,89 @@ const CometChatReactions: React.FC<ReactionsProps> = ({
                 });
                 resizeObserver.current.observe(child);
             }
+         } catch (error) {
+            errorHandler(error, "attachObserver");
+
+         }
         }, []
     )
 
     /* This function calculates and returns the number of maximum possible emojis. */
     const getMaxVisibleEmojis = (availableWidth: number) => {
-        const emojiWidth = 36;
-        const effectiveWidth = availableWidth ;
-        const maxFitEmojis = Math.floor(effectiveWidth / emojiWidth);
-        const adjustedMaxEmojis = Math.max(0, maxFitEmojis - 2);
-        const num = Math.min(100, adjustedMaxEmojis);
-        return num === 0 ? 1 : num;
+        try {
+            const emojiWidth = 36;
+            const effectiveWidth = availableWidth;
+            const maxFitEmojis = Math.floor(effectiveWidth / emojiWidth);
+            const adjustedMaxEmojis = Math.max(0, maxFitEmojis - 2);
+            const num = Math.min(100, adjustedMaxEmojis);
+            return num === 0 ? 1 : num;
+        } catch (error) {
+            errorHandler(error, "getMaxVisibleEmojis");
+            return 1; // Default fallback
+        }
     };
 
     /* This function returns the count of extra reaction items. */
     const moreCount = useCallback(
         () => {
-            return messageReactions.length > maxVisibleEmojis ? messageReactions.length - maxVisibleEmojis : 0;
-        }, [messageReactions, maxVisibleEmojis]
+            try {
+                return messageReactions.length > maxVisibleEmojis
+                    ? messageReactions.length - maxVisibleEmojis
+                    : 0;
+            } catch (error) {
+                errorHandler(error, "moreCount");
+                return 0;
+            }        }, [messageReactions, maxVisibleEmojis]
     );
 
     /* This function returns the position of the message bubble. */
     const checkBubblePosition = () => {
-        const bubble = parentRef.current?.parentNode;
-        if (bubble) {
-            const rect = bubble.getBoundingClientRect();
-            const isAtTop = rect.top < window.innerHeight / 2;
-            const isAtBottom = rect.bottom > window.innerHeight / 2;
-            return isAtTop ? Placement.bottom : isAtBottom ? Placement.top : Placement.bottom;
-        } else {
-            return Placement.bottom;
+        try {
+            const bubble = parentRef.current?.parentNode;
+            if (bubble) {
+                const rect = bubble.getBoundingClientRect();
+                const isAtTop = rect.top < window.innerHeight / 2;
+                const isAtBottom = rect.bottom > window.innerHeight / 2;
+                return isAtTop ? Placement.bottom : isAtBottom ? Placement.top : Placement.bottom;
+            } else {
+                return Placement.bottom;
+            }
+        } catch (error) {
+            errorHandler(error, "checkBubblePosition");
+            return Placement.bottom; // Default fallback
         }
     };
 
     /* Purpose of this function is to check and set the alignment of more reactions list. */
     const getPlacementAlignment = (callback: Function) => {
-        if (window.innerWidth <= 768) {
-            setMoreListAlignment(checkBubblePosition());
-        } else {
-            setMoreListAlignment(alignment === MessageBubbleAlignment.left ? Placement.right : Placement.left);
+        try {
+            if (window.innerWidth <= 768) {
+                setMoreListAlignment(checkBubblePosition());
+            } else {
+                setMoreListAlignment(
+                    alignment === MessageBubbleAlignment.left ? Placement.right : Placement.left
+                );
+            }
+            callback();
+        } catch (error) {
+            errorHandler(error, "getPlacementAlignment");
         }
-        callback();
     };
 
     useEffect(() => {
-    if(messageObject){
-        attachObserver();
-        checkReaction();
-    }
-        return () => {
-            if (resizeObserver.current) {
-                resizeObserver.current.disconnect();
+        try {
+            if (messageObject) {
+                attachObserver();
+                checkReaction();
             }
-        };
+            return () => {
+                if (resizeObserver.current) {
+                    resizeObserver.current.disconnect();
+                }
+            };
+        } catch (error) {
+            errorHandler(error, "useEffect");
+        }
     }, [messageObject, alignment]);
 
 
@@ -232,5 +272,3 @@ const CometChatReactions: React.FC<ReactionsProps> = ({
         </div>
     );
 };
-
-export default CometChatReactions;

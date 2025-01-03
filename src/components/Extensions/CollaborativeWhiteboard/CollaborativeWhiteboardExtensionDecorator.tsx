@@ -81,8 +81,8 @@ export class CollaborativeWhiteBoardExtensionDecorator extends DataSourceDecorat
    * Gets the unique identifier for the collaborative whiteboard extension.
    * @returns {string} The extension ID.
    */
-  override getAllMessageCategories(): string[] {
-    const categories = super.getAllMessageCategories();
+  override getAllMessageCategories(additionalConfigurations?: Object | undefined): string[] {
+    const categories = super.getAllMessageCategories(additionalConfigurations);
     if (!categories.includes(CometChatUIKitConstants.MessageCategory.custom)) {
       categories.push(CometChatUIKitConstants.MessageCategory.custom);
     }
@@ -140,19 +140,21 @@ export class CollaborativeWhiteBoardExtensionDecorator extends DataSourceDecorat
         let whiteboardMessage: CometChat.CustomMessage =
           message as CometChat.CustomMessage;
         if (whiteboardMessage.getDeletedAt()) {
-          return super.getDeleteMessageBubble(whiteboardMessage);
+          return super.getDeleteMessageBubble(whiteboardMessage,undefined,_alignment);
         }
-        return this.getWhiteboardContentView(whiteboardMessage);
+        return this.getWhiteboardContentView(whiteboardMessage,_alignment);
       },
       options: (
         loggedInUser: CometChat.User,
         messageObject: CometChat.BaseMessage,
-        group?: CometChat.Group
+        group?: CometChat.Group,
+        additionalParams?: Object | undefined
       ) => {
         return super.getCommonOptions(
           loggedInUser,
           messageObject,
-          group
+          group,
+          additionalParams
         );
       },
       bottomView: (
@@ -170,7 +172,7 @@ export class CollaborativeWhiteBoardExtensionDecorator extends DataSourceDecorat
    * @returns {JSX.Element} The content view for the whiteboard message.
    */
   getWhiteboardContentView(
-    whiteboardMessage: CometChat.CustomMessage) {
+    whiteboardMessage: CometChat.CustomMessage,alignment?: MessageBubbleAlignment) {
     let documentBubbleAlignment: DocumentIconAlignment =
       DocumentIconAlignment.right;
     const whiteboardURL = this.getWhiteboardDocument(whiteboardMessage);
@@ -191,7 +193,8 @@ export class CollaborativeWhiteBoardExtensionDecorator extends DataSourceDecorat
         buttonText={whiteboardButtonText}
         onClicked={this.launchCollaborativeWhiteboardDocument}
         bannerImage={bannerImage}
-        isSentByMe={isSentByMe}
+        isSentByMe={alignment == MessageBubbleAlignment.right}
+
       />
       </div>
           );
@@ -245,15 +248,15 @@ export class CollaborativeWhiteBoardExtensionDecorator extends DataSourceDecorat
    * @param {any} id - The ID object containing user or group information.
    * @returns {CometChatMessageComposerAction[]} An array of message composer actions.
    */
-  override getAttachmentOptions(id: any) {
-    if (!id?.parentMessageId) {
+  override getAttachmentOptions(id: any,additionalConfigurations?:any) {
+    if (!id?.parentMessageId && !additionalConfigurations?.hideCollaborativeWhiteboardOption) {
       let isUser = id?.user ? true : false;
       let receiverType: string = isUser
         ? CometChatUIKitConstants.MessageReceiverType.user
         : CometChatUIKitConstants.MessageReceiverType.group;
       let receiverId: string | undefined = isUser ? id.user : id.group;
       const messageComposerActions: CometChatMessageComposerAction[] =
-        super.getAttachmentOptions(id);
+        super.getAttachmentOptions(id,additionalConfigurations);
       let newAction: CometChatMessageComposerAction =
         new CometChatMessageComposerAction({
           id: CollaborativeWhiteboardConstants.whiteboard,
@@ -278,7 +281,7 @@ export class CollaborativeWhiteBoardExtensionDecorator extends DataSourceDecorat
       messageComposerActions.push(newAction);
       return messageComposerActions;
     } else {
-      return super.getAttachmentOptions(id);
+      return super.getAttachmentOptions(id,additionalConfigurations);
     }
   }
 

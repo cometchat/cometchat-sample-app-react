@@ -145,7 +145,7 @@
     align-items: flex-start;
 }
 
-.cometchat-message-information__receipts .cometchat-list-item__tail-view {
+.cometchat-message-information__receipts .cometchat-list-item__trailing-view {
     display: none;
 }
 
@@ -204,7 +204,8 @@
     }
 }
 
-.cometchat-message-information .cometchat-date,
+.cometchat-message-information__receipts-subtite-text,
+.cometchat-message-information__receipts-subtitle .cometchat-date,
 .cometchat-message-information__receipts-subtite-text .cometchat-date {
     padding: 0px;
     overflow: hidden;

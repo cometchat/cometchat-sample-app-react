@@ -12,7 +12,7 @@ function useCometChatCallLogs(
   attachListeners: Function,
   subscribeToEvents: Function,
   detachListeners: Function,
-  onErrorCallback: Function
+  onErrorCallback: (error: unknown, source?: string | undefined) => void,
 ) {
   useEffect(() => {
     /**
@@ -26,16 +26,20 @@ function useCometChatCallLogs(
      * Initializes the call builder, fetches the call list, attaches listeners, and subscribes to events when the user logs in.
      *
      * @returns {Function} - Cleanup function to detach listeners when the component unmounts or when the user changes.
-     */
-    if (loggedInUser) {
-      requestBuilder.current = setCallBuilder();
-      getCallList?.();
-      attachListeners?.();
-      subscribeToEvents?.();
+    */
+    try {
+      if (loggedInUser) {
+        requestBuilder.current = setCallBuilder();
+        getCallList?.();
+        attachListeners?.();
+        subscribeToEvents?.();
+      }
+      return () => {
+        detachListeners?.();
+      };
+    } catch (e) {
+      onErrorCallback(e, 'useEffect');
     }
-    return () => {
-      detachListeners?.();
-    };
   }, [loggedInUser]);
 }
 

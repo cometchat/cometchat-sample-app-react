@@ -181,6 +181,14 @@
     width: 100%;
     flex: 1;
     overflow: auto;
+    min-height: calc(100% + 20px);
+}
+
+.side-component-group-members-with-tabs {
+    width: 100%;
+    flex: 1;
+    overflow: auto;
+    min-height: calc(100% - 30px);
 }
 
 .side-component-group-members .cometchat-list__header-title {
@@ -200,7 +208,7 @@
     height: 40px;
 }
 
-.side-component-group-members .cometchat-list-item__tail-view {
+.side-component-group-members .cometchat-list-item__trailing-view {
     width: fit-content;
 }
 
@@ -313,10 +321,6 @@
 }
 
 @media (max-height: 700px) {
-    .side-component-group-members {
-        min-height: calc(100% - 30px);
-    }
-
     .side-component-content::-webkit-scrollbar,
     .side-component-content::-webkit-scrollbar-thumb {
         display: none;

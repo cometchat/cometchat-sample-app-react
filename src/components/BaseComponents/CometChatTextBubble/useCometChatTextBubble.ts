@@ -29,6 +29,8 @@ export const useCometChatTextBubble = (props: { textFormatters: Array<CometChatT
                 }
                 lastNode = frag.appendChild(node);
             }
+            textElement!.textContent = "";
+
             textElement.appendChild(frag);
         } catch (error) {
             console.log(error);

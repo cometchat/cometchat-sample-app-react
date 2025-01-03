@@ -27,7 +27,7 @@
    background-color: var(--cometchat-white-pressed, #E8E8E8);
  }
 
-.cometchat-call-logs__list-item-tail {
+.cometchat-call-logs__list-item-trailing-view {
   height: 24px;
   width: 24px;
   display: flex;
@@ -40,12 +40,12 @@
   background:var(--cometchat-icon-color-primary,#FFF)
 }
 
-.cometchat-call-logs__list-item-tail-video {
+.cometchat-call-logs__list-item-trailing-view-video {
   -webkit-mask: url("../../assets/call-log_video.svg") center center no-repeat;
   mask: url("../../assets/call-log_video.svg") center center no-repeat;
 }
 
-.cometchat-call-logs__list-item-tail-audio {
+.cometchat-call-logs__list-item-trailing-view-audio {
   -webkit-mask: url("../../assets/call-log-audio.svg") center center no-repeat;
   mask: url("../../assets/call-log-audio.svg") center center no-repeat;
 }

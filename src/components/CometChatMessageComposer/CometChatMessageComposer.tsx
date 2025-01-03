@@ -11,8 +11,6 @@ import {
   useCometChatErrorHandler,
   useRefSync,
 } from "../../CometChatCustomHooks";
-import AIIcon from '../../assets/ai.svg';
-import AIIconFill from '../../assets/ai_fill.svg';
 import { ChatConfigurator } from "../../utils/ChatConfigurator";
 import { CometChat } from "@cometchat/chat-sdk-javascript";
 import {CometChatUserMemberWrapper} from "../CometChatUserMemberWrapper/CometChatUserMemberWrapper";
@@ -31,7 +29,7 @@ import { CometChatTextFormatter } from "../../formatters/CometChatFormatters/Com
 import { CometChatMentionsFormatter } from "../../formatters/CometChatFormatters/CometChatMentionsFormatter/CometChatMentionsFormatter";
 import { CometChatActionsView, CometChatMessageComposerAction } from "../../modals";
 import { CometChatUIKitConstants } from "../../constants/CometChatUIKitConstants";
-import { MentionsTargetElement, MessageStatus, Placement, PreviewMessageMode, UserMemberListType } from "../../Enums/Enums";
+import { EnterKeyBehavior, MentionsTargetElement, MessageStatus, Placement, PreviewMessageMode, UserMemberListType } from "../../Enums/Enums";
 import { localize } from "../../resources/CometChatLocalize/cometchat-localize";
 import { CometChatButton } from "../BaseComponents/CometChatButton/CometChatButton";
 import { CometChatPopover } from "../BaseComponents/CometChatPopover/CometChatPopover";
@@ -40,10 +38,10 @@ import { CometChatEditPreview } from "../BaseComponents/CometChatEditPreview/Com
 import { CometChatActionSheet } from "../BaseComponents/CometChatActionSheet/CometChatActionSheet";
 import { CometChatEmojiKeyboard } from "../BaseComponents/CometChatEmojiKeyboard/CometChatEmojiKeyboard";
 import { ComposerId } from '../../utils/MessagesDataSource';
-import { getThemeVariable, isMobileDevice, processFileForAudio } from '../../utils/util';
+import { getThemeVariable, isMobileDevice, isSafari, processFileForAudio } from '../../utils/util';
 import { CometChatMessageEvents } from '../../events/CometChatMessageEvents';
 import { CometChatUIEvents } from '../../events/CometChatUIEvents';
-import { CometChatUtilityConstants } from "../../constants/CometChatUtilityConstants";
+import { CometChatSoundManager } from "../../resources/CometChatSoundManager/CometChatSoundManager";
 
 export type ContentToDisplay =
   | "attachments"
@@ -60,93 +58,182 @@ export type ActionOnClickType = (() => void) | null;
 
 interface MessageComposerProps {
   /**
-   * User to send messages to
+   * The initial text pre-filled in the message input when the component mounts.
+   * @defaultValue ""
+   */
+  initialComposerText?: string;
+
+  /**
+   * Disables the typing indicator for the current message composer.
+   * @defaultValue `false`
+   */
+  disableTypingEvents?: boolean;
+
+  /**
+   * Disables the mentions functionality in the message composer.
+   * @defaultValue `false`
+   */
+  disableMentions?: boolean;
+
+  /**
+   * Hides the image attachment option in the message composer.
+   * @defaultValue `false`
+   */
+  hideImageAttachmentOption?: boolean;
+
+  /**
+   * Hides the video attachment option in the message composer.
+   * @defaultValue `false`
+   */
+  hideVideoAttachmentOption?: boolean;
+
+  /**
+   * Hides the audio attachment option in the message composer.
+   * @defaultValue `false`
+   */
+  hideAudioAttachmentOption?: boolean;
+
+  /**
+   * Hides the file attachment option in the message composer.
+   * @defaultValue `false`
+   */
+  hideFileAttachmentOption?: boolean;
+
+  /**
+   * Hides the polls option in the message composer.
+   * @defaultValue `false`
+   */
+  hidePollsOption?: boolean;
+
+  /**
+   * Hides the collaborative document option in the message composer.
+   * @defaultValue `false`
+   */
+  hideCollaborativeDocumentOption?: boolean;
+
+  /**
+   * Hides the collaborative whiteboard option in the message composer.
+   * @defaultValue `false`
+   */
+  hideCollaborativeWhiteboardOption?: boolean;
+
+  /**
+   * Hides the attachment button in the message composer.
+   * @defaultValue `false`
+   */
+  hideAttachmentButton?: boolean;
+
+  /**
+   * Hides the voice recording button in the message composer.
+   * @defaultValue `false`
+   */
+  hideVoiceRecordingButton?: boolean;
+
+  /**
+   * Hides the emoji keyboard button in the message composer.
+   * @defaultValue `false`
+   */
+  hideEmojiKeyboardButton?: boolean;
+
+  /**
+   * Hides the stickers button in the message composer.
+   * @defaultValue `false`
+   */
+  hideStickersButton?: boolean;
+
+  /**
+   * Hides the send button in the message composer.
+   * @defaultValue `false`
+   */
+  hideSendButton?: boolean;
+
+  /**
+   * The user to send messages to. This prop specifies the recipient of the message.
    */
   user?: CometChat.User;
+
   /**
-   * Group to send messages to
-   *
-   * @remarks
-   * This prop is used if `user` prop is not provided
+   * The group to send messages to.
+   * @remarks This prop is used if the `user` prop is not provided.
    */
   group?: CometChat.Group;
+
   /**
-   * Text to fill the message input with
-   *
-   * @remarks
-   * This prop is used only when this component mounts
-   *
-   * @defaultValue `""`
-   */
-  text?: string;
-  /**
-   * Function to call when the message input's text value changes
-   */
-  onTextChange?: (text: string) => void;
-  /**
-   * Text shown in the message input when it is empty
-   */
-  placeHolderText?: string;
-  /**
-   * Custom send button view
-   */
-  sendButtonView?: JSX.Element;
-  /**
-   * Function to call whenever a new text message is sent
-   */
-  onSendButtonClick?: (message: CometChat.BaseMessage, previewMessageMode?: PreviewMessageMode) => void;
-  /**
-   * Custom secondary button view
-   */
-  secondaryButtonView?: JSX.Element;
-  /**
-   * Custom auxiliary button view
-   */
-  auxiliaryButtonView?: JSX.Element;
-  /**
-   * Options for the default secondary view
-   */
-  attachmentOptions?: CometChatMessageComposerAction[];
-  /**
-   * Id of the parent message
+   * The ID of the parent message. This is used for threading or replying to a specific message.
    */
   parentMessageId?: number;
 
   /**
-   * Preview section at the top of the message input
+   * Options for default attachments, including various attachment types available in the composer.
    */
-  headerView?: JSX.Element;
+  attachmentOptions?: CometChatMessageComposerAction[];
+
   /**
-   * Function to call whenever the component encounters an error
+   * Array of text formatters to apply to the message text for customization and styling.
    */
-  onError?: ((error: CometChat.CometChatException) => void) | null;
+  textFormatters?: Array<CometChatTextFormatter>;
+
   /**
-   * Disable sending typing events
+   * Determines the behavior of the Enter key in the composer (e.g., send message or add a new line).
+   * @default EnterKeyBehavior.SendMessage
+   */
+  enterKeyBehavior?: EnterKeyBehavior;
+
+  /**
+   * Disables sound for incoming messages.
    *
    * @defaultValue `false`
    */
-  disableTypingEvents?: boolean;
+  disableSoundForMessage?: boolean;
+
   /**
-   * Hide voice recording button
+   * Custom audio sound for incoming messages.
    */
-  hideVoiceRecording?: boolean;
+  customSoundForMessage?: string;
+
   /**
-   * Hide emoji  keyboard button
+   * Callback function triggered when the message input text changes.
+   *
+   * @param text - The current text value of the message input.
+   * @returns void
    */
-  hideEmojiKeyboard?: boolean;
+  onTextChange?: (text: string) => void;
+
   /**
- * fotmatters for composer text
- */
-  textFormatters?: Array<CometChatTextFormatter>;
+   * Callback function triggered when the message composer encounters an error.
+   *
+   * @param error - An instance of `CometChat.CometChatException` representing the error.
+   * @returns void
+   */
+  onError?: ((error: CometChat.CometChatException) => void) | null;
+
   /**
- * boolean to hide mentions UI
- */
-  disableMentions?: boolean;
+   * Callback function triggered when the send button is clicked.
+   *
+   * @param message - The message that was sent.
+   * @param previewMessageMode - Optionally, specify if the message is in preview mode.
+   */
+  onSendButtonClick?: (
+    message: CometChat.BaseMessage,
+    previewMessageMode?: PreviewMessageMode
+  ) => void;
+
   /**
- * text to show when mentions limit exceeds
- */
-  mentionsWarningText?: string;
+   * A custom view for the send button to customize its appearance or behavior.
+   */
+  sendButtonView?: JSX.Element;
+
+  /**
+   * A custom view for an auxiliary button, which can be used alongside the send button.
+   */
+  auxiliaryButtonView?: JSX.Element;
+
+  /**
+   * A custom header section displayed at the top of the message composer, often used for media previews or additional information.
+   */
+  headerView?: JSX.Element;
 }
+
 /**
  * Represents the state of the message composer.
  * @type {State}
@@ -209,26 +296,7 @@ export type Action =
     /** Action to show or hide the validation error */
 
   | { type: "setShowValidationError"; showValidationError: boolean };
-/**
- * Processes a file by reading its binary content and creating a new File object.
- * @param {File} file - The file to be processed.
- * @returns {Promise<File>} A promise that resolves with the processed file.
- */
-function processFile(file: File): Promise<File> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.result !== null) {
-        resolve(new File([reader.result], file.name, file));
-      }
-    };
-    reader.onerror = () =>
-      reject(
-        new Error(`Converting the file named "${file.name}" to binary failed`)
-      );
-    reader.readAsArrayBuffer(file);
-  });
-}
+
 
 const USER_GROUP_NOT_PROVIDED_ERROR_STR =
   "No user or group object provided. Should at least provide one.";
@@ -291,24 +359,35 @@ export function CometChatMessageComposer(props: MessageComposerProps) {
   const {
     user,
     group,
-    text: initialText = "",
+    initialComposerText: initialText = "",
     onTextChange,
-    placeHolderText = localize("ENTER_YOUR_MESSAGE_HERE"),
-    sendButtonView,
     onSendButtonClick,
-    secondaryButtonView,
+    onError,
+    sendButtonView,
     auxiliaryButtonView,
+    headerView = null,
     attachmentOptions,
     parentMessageId = null,
-    headerView = null,
-    onError,
     disableTypingEvents = false,
-    hideVoiceRecording = false,
-    hideEmojiKeyboard = false,
-    textFormatters = [],
     disableMentions = false,
-    mentionsWarningText
+    hideImageAttachmentOption = false,
+    hideVideoAttachmentOption = false,
+    hideAudioAttachmentOption = false,
+    hideFileAttachmentOption = false,
+    hidePollsOption = false,
+    hideCollaborativeDocumentOption = false,
+    hideCollaborativeWhiteboardOption = false,
+    hideAttachmentButton = false,
+    hideVoiceRecordingButton = false,
+    hideEmojiKeyboardButton = false,
+    hideStickersButton = false,
+    hideSendButton = false,
+    textFormatters = [],
+    enterKeyBehavior = EnterKeyBehavior.SendMessage,
+    disableSoundForMessage = false,
+    customSoundForMessage,
   } = props;
+  
   /**
    * Initialize state with the reducer, passing initial values for the text input and editor state.
    */
@@ -343,6 +422,31 @@ export function CometChatMessageComposer(props: MessageComposerProps) {
     openPopover: () => void;
     closePopover: () => void;
   }>();
+  /**
+ * Processes a file by reading its binary content and creating a new File object.
+ * @param {File} file - The file to be processed.
+ * @returns {Promise<File>} A promise that resolves with the processed file.
+ */
+function processFile(file: File): Promise<File> {
+  return new Promise((resolve, reject) => {
+  try {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.result !== null) {
+        resolve(new File([reader.result], file.name, file));
+      }
+    };
+    reader.onerror = () => {
+      reject(
+        new Error(`Converting the file named "${file.name}" to binary failed`)
+      );
+    }
+    reader.readAsArrayBuffer(file);
+  } catch (error) {
+    errorHandler(error,"processFile")
+  }
+  });
+}
   /*
   * isPartOfCurrentChatForUIEvent: To check if the message belongs for this list and is not part of thread even for current list
     it only runs for UI event because it assumes logged in user is always sender
@@ -350,28 +454,32 @@ export function CometChatMessageComposer(props: MessageComposerProps) {
 */
 const isPartOfCurrentChatForUIEvent: (message: CometChat.BaseMessage) => boolean | undefined = useCallback(
   (message: CometChat.BaseMessage) => {
-    const receiverId = message?.getReceiverId();
-    const receiverType = message?.getReceiverType();
-    if (parentMessageIdPropRef.current) {
-      if (message.getParentMessageId() === parentMessageIdPropRef.current) {
-        return true;
-      }
-    } else {
-      if (message.getParentMessageId()) {
-        return false
-      }
-
-      if (userPropRef.current) {
-        if (receiverType === CometChatUIKitConstants.MessageReceiverType.user && receiverId === userPropRef.current.getUid()) {
-          return true
-        }
-      } else if (groupPropRef.current) {
-        if (receiverType === CometChatUIKitConstants.MessageReceiverType.group && receiverId === groupPropRef.current.getGuid()) {
-          return true
-        }
-      }
-      return false;
+ try {
+  const receiverId = message?.getReceiverId();
+  const receiverType = message?.getReceiverType();
+  if (parentMessageIdPropRef.current) {
+    if (message.getParentMessageId() === parentMessageIdPropRef.current) {
+      return true;
     }
+  } else {
+    if (message.getParentMessageId()) {
+      return false
+    }
+
+    if (userPropRef.current) {
+      if (receiverType === CometChatUIKitConstants.MessageReceiverType.user && receiverId === userPropRef.current.getUid()) {
+        return true
+      }
+    } else if (groupPropRef.current) {
+      if (receiverType === CometChatUIKitConstants.MessageReceiverType.group && receiverId === groupPropRef.current.getGuid()) {
+        return true
+      }
+    }
+    return false;
+  }
+ } catch (error) {
+    errorHandler(error,"isPartOfCurrentChatForUIEvent")
+ }
   },
   []
 );
@@ -415,6 +523,20 @@ const isPartOfCurrentChatForUIEvent: (message: CometChat.BaseMessage) => boolean
   const currentSelectionForRegexRange = useRef<Range | null>(null);
 
   const mentionsFormatterInstanceId = "composer_" + Date.now();
+  const disableSoundForMessagePropRef = useRefSync(disableSoundForMessage);
+  const customSoundForMessagePropRef = useRefSync(customSoundForMessage);
+    /**
+   * Manages playing audio
+   */
+    const playAudioIfSoundNotDisabled = useCallback((): void => {
+      const disableSoundForMessage = disableSoundForMessagePropRef.current;
+      if (!disableSoundForMessage) {
+        CometChatSoundManager.play(
+          CometChatSoundManager.Sound.outgoingMessage!,
+          customSoundForMessagePropRef.current
+        );
+      }
+    }, [customSoundForMessagePropRef, disableSoundForMessagePropRef]);
 
   /**
    * Called when clicking a user from the mentions list.
@@ -427,6 +549,7 @@ const isPartOfCurrentChatForUIEvent: (message: CometChat.BaseMessage) => boolean
   const defaultMentionsItemClickHandler = (
     user: CometChat.User | CometChat.GroupMember
   ) => {
+  try {
     let cometChatUsers = [user];
     mentionsTextFormatterInstanceRef.current.setCometChatUserGroupMembers(
       cometChatUsers
@@ -435,6 +558,9 @@ const isPartOfCurrentChatForUIEvent: (message: CometChat.BaseMessage) => boolean
     setShowListForMentions(false);
     setMentionsSearchCount(1);
     setMentionsSearchTerm("");
+  } catch (error) {
+    errorHandler(error,"defaultMentionsItemClickHandler")
+  }
   };
   /**
    * Callback to handle resetting mentions search term when there is no valid mention found.
@@ -447,19 +573,23 @@ const isPartOfCurrentChatForUIEvent: (message: CometChat.BaseMessage) => boolean
     mentionsSearchTermTemp.current = "";
   }, [setShowListForMentions, setMentionsSearchTerm]);
   useEffect(()=>{
-var activePopoverSub = CometChatUIEvents.ccActivePopover.subscribe((id:string)=>{
-  if( state.contentToDisplay != id){
-    dispatch({ type: "setContentToDisplay", contentToDisplay: "none" });
-    aiBtnRef.current?.closePopover();
-    attachmentsBtnRef.current?.closePopover();
-    emojiBtnRef.current?.closePopover();
-    voiceRecordingBtnRef.current?.closePopover();
-  }
+try {
+  var activePopoverSub = CometChatUIEvents.ccActivePopover.subscribe((id:string)=>{
+    if( state.contentToDisplay != id){
+      dispatch({ type: "setContentToDisplay", contentToDisplay: "none" });
+      aiBtnRef.current?.closePopover();
+      attachmentsBtnRef.current?.closePopover();
+      emojiBtnRef.current?.closePopover();
+      voiceRecordingBtnRef.current?.closePopover();
+    }
+  })
+  return () => {
+    activePopoverSub.unsubscribe();
+  };
+} catch (error) {
+  errorHandler(error,"ccActivePopover")
 
-})
-return () => {
-  activePopoverSub.unsubscribe();
-};
+}
   },[state.contentToDisplay])
 
   /**
@@ -472,32 +602,36 @@ return () => {
  */
   const searchMentions = useCallback(
     (searchTerm: any) => {
-      if (!searchTerm || !searchTerm.length) {
-        setMentionsSearchTerm("");
-        mentionsSearchTermTemp.current = "";
-        setShowListForMentions(false);
-        setMentionsSearchCount(1);
-        return;
-      }
-      let currentSearchTerm = searchTerm.split("@")[1].toLowerCase()
-        ? searchTerm.split("@")[1].toLowerCase()
-        : undefined;
-
-      if (
-        (!currentSearchTerm ||
-          !(
-            lastEmptySearchTerm.current &&
-            currentSearchTerm.startsWith(
-              lastEmptySearchTerm.current.toLowerCase()
-            )
-          )) &&
-        currentSearchTerm !== mentionsSearchTerm
-      ) {
-        setMentionsSearchTerm(currentSearchTerm);
-        mentionsSearchTermTemp.current = currentSearchTerm;
-        setShowListForMentions(true);
-        lastEmptySearchTerm.current = "";
-        setMentionsSearchCount(mentionsSearchCount + 1);
+      try {
+        if (!searchTerm || !searchTerm.length) {
+          setMentionsSearchTerm("");
+          mentionsSearchTermTemp.current = "";
+          setShowListForMentions(false);
+          setMentionsSearchCount(1);
+          return;
+        }
+        let currentSearchTerm = searchTerm.split("@")[1].toLowerCase()
+          ? searchTerm.split("@")[1].toLowerCase()
+          : undefined;
+  
+        if (
+          (!currentSearchTerm ||
+            !(
+              lastEmptySearchTerm.current &&
+              currentSearchTerm.startsWith(
+                lastEmptySearchTerm.current.toLowerCase()
+              )
+            )) &&
+          currentSearchTerm !== mentionsSearchTerm
+        ) {
+          setMentionsSearchTerm(currentSearchTerm);
+          mentionsSearchTermTemp.current = currentSearchTerm;
+          setShowListForMentions(true);
+          lastEmptySearchTerm.current = "";
+          setMentionsSearchCount(mentionsSearchCount + 1);
+        }
+      } catch (error) {
+        errorHandler(error,"searchMentions")
       }
     },
     [setMentionsSearchTerm, setShowListForMentions, setMentionsSearchCount]
@@ -508,6 +642,7 @@ return () => {
    *   and dispatches the input changes for further processing.
    */
   const reRenderMentions = useCallback(() => {
+   try {
     const contentEditable: any = getCurrentInput();
     if (textFormatterArray && textFormatterArray.length) {
       for (let i = 0; i < textFormatterArray.length; i++) {
@@ -550,6 +685,9 @@ return () => {
       }
       onTextInputChange(undefined, textToDispatch)
     }
+   } catch (error) {
+    errorHandler(error,"reRenderMentions")
+   }
   }, [textFormatterArray])
 
   /**
@@ -563,7 +701,8 @@ return () => {
     receiverType: string;
     isBlocked?: boolean;
   } => {
-    const user = userPropRef.current;
+    try {
+      const user = userPropRef.current;
     const group = groupPropRef.current;
     if (user) {
       const isBlocked = user.getBlockedByMe() || user.getHasBlockedMe();
@@ -580,17 +719,27 @@ return () => {
       };
     }
     throw new Error(USER_GROUP_NOT_PROVIDED_ERROR_STR);
+    } catch (error) {
+      errorHandler(error,"getReceiverDetails")
+      throw new Error(USER_GROUP_NOT_PROVIDED_ERROR_STR);
+
+
+    }
   }, [groupPropRef, userPropRef]);
 
   /**
    * Creates a `CometChat.TypingIndicator` instance
    */
-  const getTypingNotification = useCallback((): CometChat.TypingIndicator | null => {
+  const getTypingNotification = useCallback((): CometChat.TypingIndicator | undefined => {
+  try {
     const { receiverId, receiverType, isBlocked } = getReceiverDetails();
     if (isBlocked) {
-      return null;
+      return undefined;
     }
     return new CometChat.TypingIndicator(receiverId, receiverType);
+  } catch (error) {
+    errorHandler(error,"getTypingNotification")
+  }
   }, [getReceiverDetails]);
 
   /**
@@ -604,7 +753,7 @@ return () => {
       }
       CometChat.startTyping(typingNotification);
     } catch (error) {
-      errorHandler(error);
+      errorHandler(error,"startTyping");
     }
   }, [getTypingNotification, errorHandler]);
 
@@ -616,7 +765,7 @@ return () => {
       CometChat.endTyping(getTypingNotification());
       endTypingTimeoutId.current = null;
     } catch (error) {
-      errorHandler(error);
+      errorHandler(error,"endTyping");
     }
   }, [getTypingNotification, errorHandler]);
 
@@ -624,6 +773,7 @@ return () => {
    * Handles emitting typing events
    */
   const handleTyping = useCallback((): void => {
+   try {
     if (disableTypingEvents) {
       return;
     }
@@ -637,23 +787,32 @@ return () => {
       () => endTyping(),
       END_TYPING_AFTER_START_IN_MS
     );
+   } catch (error) {
+    errorHandler(error,"handleTyping")
+   }
   }, [startTyping, endTyping, disableTypingEvents]);
 
   /**
    * Creates a composerId object
    */
   function getComposerId(): ComposerId {
-    const user = userPropRef.current;
-    if (user != undefined) {
-      return { user: user?.getUid(), group: null, parentMessageId };
-    }
-    const group = groupPropRef.current;
-    if (group != undefined) {
-      return { user: null, group: group?.getGuid(), parentMessageId };
-    }
+    try {
+        const user = userPropRef.current;
+        if (user) {
+            return { user: user.getUid(), group: null, parentMessageId };
+        }
 
-    return { user: null, group: null, parentMessageId };
-  }
+        const group = groupPropRef.current;
+        if (group) {
+            return { user: null, group: group.getGuid(), parentMessageId };
+        }
+
+        return { user: null, group: null, parentMessageId };
+    } catch (error) {
+        errorHandler(error, "getComposerId");
+        return { user: null, group: null, parentMessageId: null };
+    }
+}
 
   /**
    * Sets the `setAddToMsgInputText` state
@@ -664,6 +823,7 @@ return () => {
    */
   const mySetAddToMsgInputText = useCallback(
     function (text: string): void {
+     try {
       flushSync(() => {
         dispatch({ type: "setAddToMsgInputText", addToMsgInputText: "" });
       });
@@ -673,6 +833,9 @@ return () => {
       setTimeout(() => {
         dispatch({ type: "setAddToMsgInputText", addToMsgInputText: "" });
       }, 0)
+     } catch (error) {
+      errorHandler(error,"setAddToMsgInputText")
+     }
     },
     [dispatch]
   );
@@ -686,21 +849,24 @@ return () => {
       message: CometChat.TextMessage | CometChat.MediaMessage,
       wasEditMethodCall: boolean
     ): void => {
-      message.setMetadata({ error });
-      if (wasEditMethodCall) {
-        CometChatMessageEvents.ccMessageEdited.next({
-          message,
-          status: MessageStatus.error,
-        });
+      try {
+        message.setMetadata({ error });
+        if (wasEditMethodCall) {
+          CometChatMessageEvents.ccMessageEdited.next({
+            message,
+            status: MessageStatus.error,
+          });
 
-      } else {
-        CometChatMessageEvents.ccMessageSent.next({
-          message: message,
-          status: MessageStatus.error,
-        });
+        } else {
+          CometChatMessageEvents.ccMessageSent.next({
+            message: message,
+            status: MessageStatus.error,
+          });
 
+        }
+      } catch (error) {
+        errorHandler(error, "handleSDKError")
       }
-      throw error;
     },
     []
   );
@@ -711,23 +877,28 @@ return () => {
    * Creates a `CometChat.TextMessage` instance
    */
   const getTextMessage = useCallback(
-    (text: string): CometChat.TextMessage => {
-      const { receiverId, receiverType } = getReceiverDetails();
-      const textMessage = new CometChat.TextMessage(
-        receiverId,
-        text,
-        receiverType
-      );
-      textMessage.setSentAt(CometChatUIKitUtility.getUnixTimestamp());
-      textMessage.setMuid(CometChatUIKitUtility.ID());
-      const parentMessageId = parentMessageIdPropRef.current;
-      if (parentMessageId !== null) {
-        textMessage.setParentMessageId(parentMessageId);
-      }
-      return textMessage;
+    (text:string) => {
+        try {
+            const { receiverId, receiverType } = getReceiverDetails();
+            const textMessage = new CometChat.TextMessage(
+                receiverId,
+                text,
+                receiverType
+            );
+            textMessage.setSentAt(CometChatUIKitUtility.getUnixTimestamp());
+            textMessage.setMuid(CometChatUIKitUtility.ID());
+            const parentMessageId = parentMessageIdPropRef.current;
+            if (parentMessageId !== null) {
+                textMessage.setParentMessageId(parentMessageId);
+            }
+            return textMessage;
+        } catch (error) {
+            errorHandler(error, "getTextMessage");
+            throw error;
+        }
     },
     [getReceiverDetails, parentMessageIdPropRef]
-  );
+);
 
   /**
    * Calls `sendMessage` SDK function
@@ -747,7 +918,7 @@ return () => {
         mentionsTextFormatterInstanceRef.current.reset();
         return sentTextMessage as T;
       } catch (error) {
-        console.log(error);
+        errorHandler(error,"sendTextMessage")
         handleSDKError(error, textMessage, false);
       }
     },
@@ -788,19 +959,21 @@ return () => {
             message: sentTextMessage,
             status: MessageStatus.success,
           });
+          playAudioIfSoundNotDisabled();
         }
       } catch (error) {
-        errorHandler(error);
+        errorHandler(error,"handleTextMessageSend");
       }
     },
-    [getTextMessage, sendTextMessage, errorHandler]
+    [getTextMessage, sendTextMessage, errorHandler,playAudioIfSoundNotDisabled]
   );
 
   /**
    * Creates a `CometChat.TextMessage` instance with the `id` of the instance set to `textMessageId`
    */
   const getEditedTextMessage = useCallback(
-    (newText: string, textMessageId: number): CometChat.TextMessage => {
+    (newText: string, textMessageId: number) => {
+     try {
       const { receiverId, receiverType } = getReceiverDetails();
       const newTextMessage = new CometChat.TextMessage(
         receiverId,
@@ -809,6 +982,10 @@ return () => {
       );
       newTextMessage.setId(textMessageId);
       return newTextMessage;
+     } catch (error) {
+      errorHandler(error,"getEditedTextMessage");
+      throw error;
+     }
     },
     [getReceiverDetails]
   );
@@ -830,6 +1007,7 @@ return () => {
         mentionsTextFormatterInstanceRef.current.resetCometChatUserGroupMembers();
         return editedMessage as T;
       } catch (error) {
+        errorHandler( error,"sendEditedTextMessage")
         handleSDKError(error, editedTextMessage, true);
       }
     },
@@ -863,7 +1041,7 @@ return () => {
           }
         }
       } catch (error) {
-        errorHandler(error);
+        errorHandler(error,"handleEditTextMessageSend");
       }
     },
     [sendEditedTextMessage, getEditedTextMessage, errorHandler]
@@ -877,6 +1055,8 @@ return () => {
    */
   const handleSendButtonClick = useCallback(
     async (textToDispatch: string): Promise<void> => {
+      try {
+        
       let text = textToDispatch;
       if (textFormatterArray && textFormatterArray.length) {
         for (let i = 0; i < textFormatterArray.length; i++) {
@@ -906,13 +1086,13 @@ return () => {
         dispatch({ type: "setTextMessageToEdit", textMessageToEdit: null });
         await handleEditTextMessageSend(text, state.textMessageToEdit);
       } else if ((onSendButtonClick = onSendButtonClickPropRef.current)) {
-        try {
           await Promise.all([onSendButtonClick(getTextMessage(text), PreviewMessageMode.none)]);
-        } catch (error) {
-          errorHandler(error);
-        }
+       
       } else {
         await handleTextMessageSend(text);
+      }
+      } catch (error) {
+        errorHandler(error,"handleSendButtonClick");
       }
     },
     [
@@ -936,6 +1116,8 @@ return () => {
       file: File,
       fileType: MediaMessageFileType
     ): Promise<CometChat.MediaMessage> => {
+      try {
+        
       const processedFile = fileType == CometChatUIKitConstants.MessageTypes.audio ? await processFileForAudio(file) :  await processFile(file);
       processedFile.type.replace("webm","wav")
       const { receiverId, receiverType } = getReceiverDetails();
@@ -953,6 +1135,10 @@ return () => {
         mediaMessage.setParentMessageId(parentMessageId);
       }
       return mediaMessage;
+      } catch (error) {
+        errorHandler(error,"getMediaMessage");
+        throw error;
+      }
     },
     [getReceiverDetails, parentMessageIdPropRef]
   );
@@ -969,6 +1155,8 @@ return () => {
         return sentMediaMessage as T;
       } catch (error) {
         handleSDKError(error, mediaMessage, false);
+        errorHandler(error,"sendMediaMessage");
+
       }
     },
     [handleSDKError]
@@ -992,12 +1180,14 @@ return () => {
             message: sentMediaMessage,
             status: MessageStatus.success,
           });
+          playAudioIfSoundNotDisabled();
+
         }
       } catch (error) {
-        errorHandler(error);
+        errorHandler(error,"handleMediaMessageSend");
       }
     },
-    [
+    [playAudioIfSoundNotDisabled,
       getMediaMessage,
       sendMediaMessage,
       errorHandler,
@@ -1022,7 +1212,7 @@ return () => {
           CometChatUIKitConstants.MessageTypes.audio
         );
       } catch (error) {
-        errorHandler(error);
+        errorHandler(error,"handleSendVoiceMessage");
       }
     },
     [handleMediaMessageSend, errorHandler]
@@ -1032,6 +1222,7 @@ return () => {
    * @returns A string in the format `audio-recording-yyyyMMddHHmmss`
    */
   function audioRecordingSimpleDateFormat() {
+   try {
     const now = new Date();
     const string = "audio-recording-yyyyMMddHHmmss";
     const year = now.getFullYear().toString();
@@ -1043,12 +1234,16 @@ return () => {
     return string
       .replace("yyyyMMdd", `${year}${month}${date}`)
       .replace("HHmmss", `${hours}${minutes}${seconds}`);
+   } catch (error) {
+    errorHandler(error, "audioRecordingSimpleDateFormat")
+   }
   }
 
   /**
    * Wrapper around `handleMediaMessageSend`
    */
   const handleMediaMessageSendWrapper = useCallback(async (): Promise<void> => {
+   try {
     const mediaFilePickerElement = mediaFilePickerRef.current;
     if (
       !mediaFilePickerElement?.files?.length ||
@@ -1072,13 +1267,17 @@ return () => {
           onSendButtonClick(await getMediaMessage(file, actualFileType), PreviewMessageMode.none),
         ]);
       } catch (error) {
-        errorHandler(error);
+        errorHandler(error,"onSendButtonClick");
       }
     } else {
       await handleMediaMessageSend(file, actualFileType);
     }
   
     mediaFilePickerElement.value = "";
+   } catch (error) {
+    errorHandler(error, "handleMediaMessageSendWrapper")
+
+   }
   }, [
     handleMediaMessageSend,
     errorHandler,
@@ -1091,9 +1290,9 @@ return () => {
   /**
    * @returns Should the component show the send button view
    */
-  function hideSendButton(): boolean {
+  function shouldShowSendButton(): boolean {
     return (
-      state.text.trim() === "" ||
+        state.text.trim() === "" ||
       (state.textMessageToEdit !== null &&
         state.textMessageToEdit.getText() === state.text)
     );
@@ -1113,7 +1312,7 @@ return () => {
     }
     return (
       <div
-        className={`cometchat-message-composer__send-button ${hideSendButton() ? "" : "cometchat-message-composer__send-button-active"}`}
+        className={`cometchat-message-composer__send-button ${shouldShowSendButton() ? "" : "cometchat-message-composer__send-button-active"}`}
       >
         <CometChatButton
           onClick={onSendclick}
@@ -1124,44 +1323,11 @@ return () => {
     );
   }
   /**
- * Function to handle the click event on the AI button.
- * - It toggles the content display to "ai" mode.
- * - Depending on the current `state.contentToDisplay`, it changes the view accordingly.
- */
-  function onAIBtnClick() {
-    setSmartRepliesView(null);
-    switch (state.contentToDisplay) {
-      case "ai":
-        dispatch({ type: "setContentToDisplay", contentToDisplay: "none" });
-        break;
-      case "attachments":
-        attachmentsBtnRef.current?.closePopover()
-        dispatch({ type: "setContentToDisplay", contentToDisplay: "ai" });
-        break;
-      case "emojiKeyboard":
-        emojiBtnRef.current?.closePopover()
-        dispatch({ type: "setContentToDisplay", contentToDisplay: "ai" });
-        break;
-      case "voiceRecording":
-        voiceRecordingBtnRef.current?.closePopover()
-        dispatch({ type: "setContentToDisplay", contentToDisplay: "ai" });
-        break;
-      case "none":
-        dispatch({ type: "setContentToDisplay", contentToDisplay: "ai" });
-        break;
-      default: {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const x: never = state.contentToDisplay;
-      }
-    }
-    setActivePopover(state.contentToDisplay)
-
-  }
-  /**
  * Function to handle the auxiliary button click event (likely emoji keyboard).
  * - Depending on the current `state.contentToDisplay`, it changes the view to emoji keyboard or hides it.
  */
-  function onEmojiButtonClick() {
+  function onEmojiButtonClick() {try {
+    
     switch (state.contentToDisplay) {
       case "attachments":
         attachmentsBtnRef.current?.closePopover()
@@ -1201,6 +1367,9 @@ return () => {
       }
     }
     setActivePopover(state.contentToDisplay)
+  } catch (error) {
+    errorHandler(error, "onEmojiButtonClick")
+  }
 
   }
   /**
@@ -1208,6 +1377,7 @@ return () => {
  * - Depending on the current `state.contentToDisplay`, it switches between voice recording and other modes.
  */
   function onVoiceRecordingBtnClick() {
+   try {
     switch (state.contentToDisplay) {
       case "attachments":
         attachmentsBtnRef.current?.closePopover()
@@ -1246,6 +1416,9 @@ return () => {
     }
     setActivePopover(state.contentToDisplay)
 
+   } catch (error) {
+    errorHandler(error,"onVoiceRecordingBtnClick")
+   }
   }
   /**
  * Function to handle the text input change event.
@@ -1256,13 +1429,17 @@ return () => {
  * @param text Optional text to set instead of using the event target's innerText.
  */
   function onTextInputChange(e: any, text?: string) {
-    const newText = text ?? e.target.innerText;
-    if (typeof newText === "string") {
-      handleTyping();
-      dispatch({ type: "setText", text: newText });
-      mySetAddToMsgInputText("")
-      if (onTextChange !== undefined) onTextChange(newText);
-    }
+try {
+  const newText = text ?? e.target.innerText;
+  if (typeof newText === "string") {
+    handleTyping();
+    dispatch({ type: "setText", text: newText });
+    mySetAddToMsgInputText("")
+    if (onTextChange !== undefined) onTextChange(newText);
+  }
+} catch (error) {
+  errorHandler(error,"onTextInputChange")
+}
   }
   /**
  * Callback for handling the Enter key press in the text input.
@@ -1287,12 +1464,16 @@ return () => {
  * - Triggers the send message action using the current text from the state.
  */
   const onSendclick = useCallback(() => {
+  try {
     var contenteditable = getCurrentInput();
-   let text  =  "";
-   if(contenteditable?.innerHTML){
-    text = contenteditable.innerHTML.replace(/(<br>\s*)+$/, '');
-   }
-    handleSendButtonClick(text);
+    let text  =  "";
+    if(contenteditable?.innerHTML){
+     text = contenteditable.innerHTML.replace(/(<br>\s*)+$/, '');
+    }
+     handleSendButtonClick(text);
+  } catch (error) {
+    errorHandler(error,"onSendclick")
+  }
   }, [state.text, handleSendButtonClick])
 
   /**
@@ -1302,11 +1483,18 @@ return () => {
  * @param input Object containing the clicked emoji.
  */
   const onEmojiClicked = (emoji: string) => {
-    dispatch({ type: "setContentToDisplay", contentToDisplay: "none" });
-    emojiBtnRef.current?.closePopover()
-    if (typeof emoji === "string") pasteHtmlAtCaret(emoji);
-    dispatch({ type: "setText", text: emoji });
+ try {
+  dispatch({ type: "setContentToDisplay", contentToDisplay: "none" });
+  emojiBtnRef.current?.closePopover()
+  if (typeof emoji === "string") pasteHtmlAtCaret(emoji);
+  dispatch({ type: "setText", text: emoji });
+ } catch (error) {
+  errorHandler(error,"onEmojiClicked")
+ }
 
+  }
+  function shouldShowAttachmentButton() {
+return hideAttachmentButton || (hideAudioAttachmentOption && hideVideoAttachmentOption && hideFileAttachmentOption && hideImageAttachmentOption && hidePollsOption && hideCollaborativeDocumentOption && hideCollaborativeWhiteboardOption) || (attachmentOptions && attachmentOptions?.length == 0);
   }
 
   /**
@@ -1316,6 +1504,7 @@ return () => {
    * @returns JSX.Element The action sheet view component.
    */
   function getActionsheetView() {
+   try {
     const defaultSecondaryBtn = (
       <CometChatButton
         hoverText={localize("ATTACH")}
@@ -1329,15 +1518,18 @@ return () => {
     );
     // Use default secondary content
     let actions: CometChatMessageComposerAction[];
+    if(attachmentOptions && attachmentOptions.length == 0){
+      return;
+    }
     if (
       attachmentOptions &&
-      attachmentOptions.length > 0 &&
       (user !== undefined || group !== undefined)
     ) {
       actions = attachmentOptions;
     } else {
       actions = ChatConfigurator.getDataSource().getAttachmentOptions(
-        getComposerId()
+        getComposerId(),
+        {hideAudioAttachmentOption,hideCollaborativeDocumentOption,hideCollaborativeWhiteboardOption,hideFileAttachmentOption,hideImageAttachmentOption,hideVideoAttachmentOption,hidePollsOption}
       );
     }
     for (let i = 0; i < actions.length; i++) {
@@ -1369,7 +1561,7 @@ return () => {
     return (
       <div
 
-        className={`cometchat-message-composer__secondary-button-view-attachment-button ${state.contentToDisplay === "attachments" ? "cometchat-message-composer__secondary-button-view-attachment-button-active" : ""}`}
+        className={`cometchat-message-composer__secondary-button-view-attachment-button ${state.contentToDisplay === "attachments" ? "cometchat-message-composer__secondary-button-view-attachment-button-active" : ""} cometchat-message-composer__secondary-button-view-attachment-button-${actions?.length}`}
       >  <CometChatPopover
         onOutsideClick={() => {
           dispatch({ type: "setContentToDisplay", contentToDisplay: "none" });
@@ -1388,25 +1580,11 @@ return () => {
       </div>
 
     );
+   } catch (error) {
+    errorHandler(error,"getActionsheetView")
+   }
   }
-  /**
- * Retrieves the secondary view button if applicable.
- * - This function checks if a custom secondary button view is provided, and if so, renders it.
- * 
- * @returns JSX.Element | undefined The secondary view component or undefined.
- */
-  function getSecondaryView(): JSX.Element | undefined {
-    if (secondaryButtonView && (user !== undefined || group !== undefined)) {
-      return <div className="cometchat-message-composer__secondary-button-view">
-        {secondaryButtonView}
-      </div>
 
-    }
-    else {
-      return getActionsheetView()
-    }
-
-  }
   /**
  * Renders the default buttons in the message composer.
  * - This function lays out the buttons in a flex container.
@@ -1414,19 +1592,23 @@ return () => {
  * @returns JSX.Element The default buttons container.
  */
   function getDefaultButtons() {
-    return (
-      <div style={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        gap: getThemeVariable("--cometchat-padding-4")
-      }}>
-        {hideVoiceRecording ? null : getVoiceRecordingView()}
-        {hideEmojiKeyboard || isMobileDevice() ? null : getEmojiKeyboardView()}
-      </div>
-    )
-
+    try {
+      const stickerButton = ChatConfigurator.getDataSource().getStickerButton(
+        getComposerId() as unknown as ComposerId,
+        user,
+        group
+      );
+  
+      return (
+        <div className="cometchat-message-composer__default-buttons">
+          {hideVoiceRecordingButton ? null : getVoiceRecordingView()}
+          {hideEmojiKeyboardButton || isMobileDevice() ? null : getEmojiKeyboardView()}
+          {hideStickersButton ? null : stickerButton}
+        </div>
+      );
+    } catch (error) {
+      errorHandler(error, "getDefaultButtons");
+    }
   }
   /**
  * Handles the secondary button click event.
@@ -1434,44 +1616,48 @@ return () => {
  */
   const onSecondaryBtnClick = useCallback(
     () => {
-      switch (state.contentToDisplay) {
-        case "attachments":
-          dispatch({ type: "setContentToDisplay", contentToDisplay: "none" });
-          break;
-        case "emojiKeyboard":
-          emojiBtnRef.current?.closePopover()
-          dispatch({
-            type: "setContentToDisplay",
-            contentToDisplay: "attachments",
-          });
-          break;
-        case "voiceRecording":
-          voiceRecordingBtnRef.current?.closePopover()
-          dispatch({
-            type: "setContentToDisplay",
-            contentToDisplay: "attachments",
-          });
-          break;
-        case "ai":
-          aiBtnRef.current?.closePopover()
-          dispatch({
-            type: "setContentToDisplay",
-            contentToDisplay: "attachments",
-          });
-          break;
-        case "none":
-          dispatch({
-            type: "setContentToDisplay",
-            contentToDisplay: "attachments",
-          });
-          break;
-        default: {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const x: never = state.contentToDisplay;
-        }
+   try {
+    switch (state.contentToDisplay) {
+      case "attachments":
+        dispatch({ type: "setContentToDisplay", contentToDisplay: "none" });
+        break;
+      case "emojiKeyboard":
+        emojiBtnRef.current?.closePopover()
+        dispatch({
+          type: "setContentToDisplay",
+          contentToDisplay: "attachments",
+        });
+        break;
+      case "voiceRecording":
+        voiceRecordingBtnRef.current?.closePopover()
+        dispatch({
+          type: "setContentToDisplay",
+          contentToDisplay: "attachments",
+        });
+        break;
+      case "ai":
+        aiBtnRef.current?.closePopover()
+        dispatch({
+          type: "setContentToDisplay",
+          contentToDisplay: "attachments",
+        });
+        break;
+      case "none":
+        dispatch({
+          type: "setContentToDisplay",
+          contentToDisplay: "attachments",
+        });
+        break;
+      default: {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const x: never = state.contentToDisplay;
       }
-      setActivePopover(state.contentToDisplay)
+    }
+    setActivePopover(state.contentToDisplay)
 
+   } catch (error) {
+    errorHandler(error,"onSecondaryBtnClick")
+   }
     }, [state.contentToDisplay]
   )
   /**
@@ -1497,18 +1683,22 @@ return () => {
  * @param action The action item clicked to show attachments.
  */
   function showAttachments(action: CometChatActionsView | CometChatMessageComposerAction) {
-    const actionOnClick = actionIdToActionOnClick.current.get(
-      `${action.id}`
-    );
-    if (typeof actionOnClick === "function") {
-      actionOnClick();
-    } else {
-      // Open the correct file picker
-      mediaFilePickerRef.current!.accept = `${action.id}/*`;
-      mediaFilePickerRef.current!.click();
+    try {
+      const actionOnClick = actionIdToActionOnClick.current.get(
+        `${action.id}`
+      );
+      if (typeof actionOnClick === "function") {
+        actionOnClick();
+      } else {
+        // Open the correct file picker
+        mediaFilePickerRef.current!.accept = `${action.id}/*`;
+        mediaFilePickerRef.current!.click();
+      }
+      dispatch({ type: "setContentToDisplay", contentToDisplay: "none" });
+      attachmentsBtnRef.current?.closePopover()
+    } catch (error) {
+      errorHandler(error,"showAttachments")
     }
-    dispatch({ type: "setContentToDisplay", contentToDisplay: "none" });
-    attachmentsBtnRef.current?.closePopover()
   }
 
   function getCurrentInput() {
@@ -1530,7 +1720,7 @@ return () => {
       }, 5000);
     }
 
-    let errorText = state.showMentionsCountWarning ? mentionsWarningText ?? localize("MENTIONS_LIMIT_WARNING_MESSAGE") : "You selected a different type of file. Please choose the appropriate file";
+    let errorText = state.showMentionsCountWarning ? localize("MENTIONS_LIMIT_WARNING_MESSAGE") : localize("WRONG_FILE_TYPE");
     return (
       <div
         className='cometchat-message-composer__header'
@@ -1599,103 +1789,23 @@ return () => {
   }
 
   /**
-    * Creates the AI button view, which triggers a popover containing 
-    * AI options. It handles the display of available AI actions and 
-    * their corresponding functionalities.
-    */
-  const getAIButtonView = useCallback(() => {
-
-    {
-      const defaultAIBtn = (
-        <CometChatButton
-          onClick={onAIBtnClick}
-          hoverText={localize("AI")}
-          iconURL={state.contentToDisplay === "ai" ? AIIconFill : AIIcon}
-        />
-      );
-
-      let actions: (CometChatMessageComposerAction | CometChatActionsView)[];
-      actions = ChatConfigurator.getDataSource().getAIOptions(
-        userPropRef?.current || null,
-        groupPropRef?.current || null,
-        getComposerId() as unknown as ComposerId);
-      const closePopover = () => {
-        dispatch({ type: "setContentToDisplay", contentToDisplay: "none" });
-        aiBtnRef.current?.closePopover()
-      };
-      const defaultAIContent = (
-        <CometChatActionSheet
-          actions={actions}
-          onActionItemClick={(action: CometChatMessageComposerAction | CometChatActionsView) => {
-            if (action instanceof CometChatMessageComposerAction) {
-              if (action?.onClick) {
-                action?.onClick();
-                closePopover()
-
-              }
-            }
-            else if (action instanceof CometChatActionsView) {
-              if (action?.customView) {
-                setSmartRepliesView(
-                  action?.customView(() => {
-                    setSmartRepliesView(null)
-                  }) as React.ReactNode
-                );
-              }
-            }
-          }}
-        />
-      );
-
-      if (actions.length <= 0) {
-        return <></>
-      }
-      return (
-        <div className={`cometchat-message-composer__auxilary-button-view-ai-button ${state.contentToDisplay === "ai" ? "cometchat-message-composer__auxilary-button-view-ai-button-active" : ""}`}>
-          <CometChatPopover
-            ref={aiBtnRef}
-            closeOnOutsideClick={!smartRepliesView}
-            onOutsideClick={()=>{
-              dispatch({ type: "setContentToDisplay", contentToDisplay: "none" });
-aiBtnRef.current?.closePopover()
-            }}
-            placement={Placement.top}
-            content={
-              !smartRepliesView ? defaultAIContent : smartRepliesView
-            }
-          >
-            {defaultAIBtn}
-          </CometChatPopover>
-        </div>
-      );
-    }
-  }, [smartRepliesView, state.contentToDisplay, state])
-
-  /**
    * Creates the auxiliary view that may include additional 
    * functionalities or buttons specific to the message composer. 
    * It integrates AI options and any auxiliary buttons provided.
    */
   function getAuxiliaryView(): JSX.Element | undefined {
-    if (auxiliaryButtonView ) {
-     return  <div  className="cometchat-message-composer__auxilary-button-view">{auxiliaryButtonView}</div>;
-    }
-    const defaultAuxiliaryOptions =
-      ChatConfigurator.getDataSource().getAuxiliaryOptions(
-        getComposerId() as unknown as ComposerId,
-        user,
-        group
-      );
 
-    return (
-      <div
+      
+
+    return auxiliaryButtonView ?   <div
         className="cometchat-message-composer__auxilary-button-view"
       >
-  {defaultAuxiliaryOptions.map((option: React.ReactNode) => option)}
-        {getAIButtonView()}
-      </div>
+  {auxiliaryButtonView}
+      </div> : undefined;
+    
+ 
 
-    );
+    
 
   }
   /**
@@ -1825,6 +1935,22 @@ aiBtnRef.current?.closePopover()
     }, [showListForMentions]
   );
   /**
+ * Function to update selection when the focus changes from composer.
+ * @returns void
+ */
+ const updateSelection = useCallback(() => {
+  const selection = window.getSelection();
+  if (selection && selection.rangeCount > 0) {
+    const currentRange = selection.getRangeAt(0);
+    const inputElement =getCurrentInput();
+    if (inputElement && inputElement.contains(currentRange.startContainer)) {
+      sel.current = selection;
+      range.current = currentRange.cloneRange();
+    }
+  }
+}, [textInputRef]);
+
+  /**
   * Handles key down events for the message composer input, 
   * capturing the Enter key to dispatch the text message, 
   * and applying any relevant text formatting before sending.
@@ -1833,14 +1959,18 @@ aiBtnRef.current?.closePopover()
     (event: any) => {
       var contenteditable = getCurrentInput();
       if (event.keyCode === 13 && !event.shiftKey) {
+        if(enterKeyBehavior == EnterKeyBehavior.NewLine){
+          return;
+        }
         event.preventDefault();
+        if(enterKeyBehavior == EnterKeyBehavior.None){
+          return;
+        }
         if (contenteditable?.textContent?.trim()) {
           let textToDispatch = contenteditable?.innerHTML?.trim() == "<br>" ? undefined : contenteditable?.innerHTML.replace(/(<br>\s*)+$/, '');
           if (contenteditable?.innerHTML?.trim() == "<br>") {
             contenteditable.innerHTML = "";
           }
-
-
           if (textFormatterArray && textFormatterArray.length) {
             for (let i = 0; i < textFormatterArray.length; i++) {
               textToDispatch =
@@ -1872,9 +2002,13 @@ aiBtnRef.current?.closePopover()
    */
   const onKeyUp = useCallback(
     (event: any) => {
-      if (event.keyCode === 13 && !event.shiftKey) {
+      if (event.keyCode === 13 && !event.shiftKey || (event.keyCode === 13 && !event.shiftKey && enterKeyBehavior == EnterKeyBehavior.None)) {
         event.preventDefault();
         return;
+      }
+      if(isSafari()){
+        updateSelection()
+
       }
       const element = getCurrentInput() as HTMLElement;
 
@@ -1929,9 +2063,13 @@ aiBtnRef.current?.closePopover()
   * and sets focus back to it for immediate user input.
   */
   const emptyInputField = () => {
-    let contentEditable: any = getCurrentInput();
-    contentEditable.textContent = "";
-    contentEditable?.focus();
+try {
+  let contentEditable: any = getCurrentInput();
+  contentEditable.textContent = "";
+  contentEditable?.focus();
+} catch (error) {
+  errorHandler(error,"emptyInputField")
+}
   };
   /**
  * Sets the current selection and updates caret position and 
@@ -1939,6 +2077,7 @@ aiBtnRef.current?.closePopover()
  * descendant of the message composer input.
  */
   function setSelection(selection: Selection | null) {
+   try {
     if (selection && selection.rangeCount) {
       if (isDescendant(selection)) {
         sel.current = selection;
@@ -1960,6 +2099,9 @@ aiBtnRef.current?.closePopover()
         }
       }
     }
+   } catch (error) {
+    errorHandler(error,"setSelection");
+   }
   }
   /**
  * Checks the availability of the 'plaintext-only' content 
@@ -1979,6 +2121,7 @@ aiBtnRef.current?.closePopover()
         return false;
       }
     } catch (error) {
+      errorHandler(error,"checkPlainTextAvailability")
       return !disabled;
     }
 
@@ -2043,7 +2186,7 @@ aiBtnRef.current?.closePopover()
           contentEditable.textContent = state.addToMsgInputText;
         }
       } catch (error) {
-        console.log("Error pasting html to caret", error);
+        errorHandler(error,"pasteHtmlAtCaret")
       }
     }, [state.addToMsgInputText, state.text]
   )
@@ -2062,7 +2205,7 @@ aiBtnRef.current?.closePopover()
           onMouseDown={handleMouseDown}
           onInput={onTextInputChange}
           className={`cometchat-message-composer__input ${parentMessageIdPropRef.current ? "cometchat-message-composer__input-thread" : ""} ${isMobileDevice() ? "cometchat-message-composer__input-mobile" : ""}`}
-          data-placeholder={placeHolderText}
+          data-placeholder={localize("COMPOSER_PLACEHOLDER_TEXT")}
           ref={textInputRef}
         ></div>
         <div
@@ -2075,12 +2218,10 @@ aiBtnRef.current?.closePopover()
             gap: getThemeVariable('--cometchat-padding-4')
           }}
         >
-
-          {getSecondaryView()}
-
+          {shouldShowAttachmentButton() ? null :  getActionsheetView()}
           {getDefaultButtons()}
           {getAuxiliaryView()}
-          {getSendButton()}
+          {hideSendButton ? null : getSendButton()}
         </div>
       </>
 
@@ -2131,7 +2272,7 @@ aiBtnRef.current?.closePopover()
     parentMessageIdPropRef,
     emptyInputField,
     text: state.text,
-    propsText: props.text,
+    propsText: props.initialComposerText,
     getCurrentInput,
     isPartOfCurrentChatForUIEvent
   });
@@ -2140,7 +2281,7 @@ aiBtnRef.current?.closePopover()
     <>
       {getCreatePollModal()}
       <div className="cometchat" style={{height:"fit-content", width: "100%", position: "relative" }}>
-        {showListForMentions && (
+        {showListForMentions && !disableMentions && (
           <div
             className='cometchat-mention-list'
 

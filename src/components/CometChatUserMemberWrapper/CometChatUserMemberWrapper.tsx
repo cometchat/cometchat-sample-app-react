@@ -51,12 +51,11 @@ export function CometChatUserMemberWrapper(props: MentionsProps) {
     <>
       {userMemberListType === UserMemberListType.users && (
         <CometChatUsers
-          title=""
           hideSearch={true}
           showSectionHeader={false}
           onItemClick={onItemClick}
           searchKeyword={searchKeyword}
-          listItemView={listItemView}
+          itemView={listItemView}
           usersRequestBuilder={usersRequestBuilder}
           subtitleView={subtitleView}
           onEmpty={onEmpty}
@@ -68,15 +67,14 @@ export function CometChatUserMemberWrapper(props: MentionsProps) {
       {userMemberListType === UserMemberListType.groupmembers && group && (
         <CometChatGroupMembers
           group={group}
-          title=""
           hideSearch={true}
           groupMemberRequestBuilder={groupMemberRequestBuilder}
           onItemClick={onItemClick}
           searchKeyword={searchKeyword}
-          listItemView={listItemView}
+          itemView={listItemView}
           subtitleView={subtitleView}
           onEmpty={onEmpty}
-          tailView={(entity: CometChat.GroupMember) => { return <></> }}
+          trailingView={(entity: CometChat.GroupMember) => { return <></> }}
           onError={onError}
           disableLoadingState={true}
         />

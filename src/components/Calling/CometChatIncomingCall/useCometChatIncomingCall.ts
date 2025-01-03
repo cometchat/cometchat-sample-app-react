@@ -16,46 +16,65 @@ function useCometChatIncomingCall(
     rejectIncomingCall: Function,
     showIncomingCallScreen: boolean,
     subscribeToEvents: Function,
+    errorHandler:(error: unknown, source?: string) => void
 
 ) {
     useEffect(
         () => {
+         try {
             CometChat.getLoggedinUser().then(
                 (user: CometChat.User | null) => {
                     if (user) {
                         setLoggedInUser(user);
                     }
                 }
-            )
+            ).catch((error)=>{
+            errorHandler(error,"getLoggedinUser")
+            })
+         } catch (error) {
+            errorHandler(error,"useEffect")
+
+         }
         }, [setLoggedInUser]
     );
 
     useEffect(
         () => {
-            let unsubscribeFromEvents: () => void;
-            if (loggedInUser) {
-                unsubscribeFromEvents = subscribeToEvents();
+       try {
+        let unsubscribeFromEvents: () => void;
+        if (loggedInUser) {
+            unsubscribeFromEvents = subscribeToEvents();
 
-                attachListeners();
-            }
-            return () => {
-                removeListener();
-                unsubscribeFromEvents?.();
-            }
+            attachListeners();
+        }
+        return () => {
+            removeListener();
+            unsubscribeFromEvents?.();
+        }
+       } catch (error) {
+        errorHandler(error,"useEffect")
+
+       }
         }, [loggedInUser, attachListeners, removeListener]
     )
 
     useEffect(
         () => {
-            if (call) {
-                callRef.current = call;
-                showCall(callRef.current);
+            try {
+                if (call) {
+                    callRef.current = call;
+                    showCall(callRef.current);
+                }   
+            } catch (error) {
+                errorHandler(error,"useEffect")
+
             }
         }, [call, callRef, showCall]
     )
 
     useEffect(
-        () => {
+        () => {try {
+            
             const acceptCallButton = acceptCallButtonRef?.current;
             const rejectCallButton = rejectCallButtonRef?.current;
 
@@ -79,6 +98,10 @@ function useCometChatIncomingCall(
                 acceptCallButton?.removeEventListener("cc-button-clicked", acceptCall);
                 rejectCallButton?.removeEventListener("cc-button-clicked", rejectCall);
             }
+        } catch (error) {
+            errorHandler(error,"useEffect")
+
+        }
         }, [showIncomingCallScreen, acceptIncomingCall, rejectIncomingCall, acceptCallButtonRef, rejectCallButtonRef]
     );
 

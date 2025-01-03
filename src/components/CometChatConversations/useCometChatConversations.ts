@@ -18,18 +18,15 @@ type Args = {
   fetchNextAndAppendConversations: (fetchId: string) => Promise<void>,
   fetchNextIdRef: React.MutableRefObject<string>,
   dispatch: React.Dispatch<Action>,
-  conversationToBeDeleted: CometChat.Conversation | null,
-  errorHandler: (error: unknown) => void,
+  errorHandler: (error: unknown,source?:string) => void,
   refreshSingleConversation: (message: CometChat.BaseMessage, remove?: boolean) => Promise<void>,
   onMessageReceived: (message: CometChat.BaseMessage) => Promise<void>,
   setReceipts: (messageReceipt: CometChat.MessageReceipt, updateReadAt: boolean) => void,
   setTypingIndicator: (typingIndicator: CometChat.TypingIndicator, typingStarted: boolean) => void,
-  disableTyping: boolean,
   loggedInUser: CometChat.User | null,
-  isFirstReload: boolean,
-  disableUsersPresence?: boolean,
   activeConversation: Conversation | null,
-  setActiveConversationState: React.Dispatch<React.SetStateAction<Conversation | null>>
+  setActiveConversationState: React.Dispatch<React.SetStateAction<Conversation | null>>,
+  hideUserStatus?:boolean
 };
 
 export function useCometChatConversations(args: Args) {
@@ -39,18 +36,15 @@ export function useCometChatConversations(args: Args) {
     fetchNextAndAppendConversations,
     fetchNextIdRef,
     dispatch,
-    conversationToBeDeleted,
     errorHandler,
     refreshSingleConversation,
     onMessageReceived,
     setReceipts,
     setTypingIndicator,
-    disableTyping,
     loggedInUser,
-    isFirstReload,
-    disableUsersPresence,
     activeConversation,
-    setActiveConversationState
+    setActiveConversationState,
+    hideUserStatus
   } = args;
 
   useEffect(
@@ -58,12 +52,16 @@ export function useCometChatConversations(args: Args) {
      * Creates a new request builder -> empties the `conversationList` state -> initiates a new fetch
      */
     () => {
-      dispatch({ type: "setIsFirstReload", isFirstReload: true });
-      conversationsManagerRef.current = new ConversationsManager({ conversationsRequestBuilder });
+      try {
+        dispatch({ type: "setIsFirstReload", isFirstReload: true });
+      conversationsManagerRef.current = new ConversationsManager({ conversationsRequestBuilder,errorHandler });
       dispatch({ type: "setConversationList", conversationList: [] });
       fetchNextAndAppendConversations(fetchNextIdRef.current = "initialFetchNext_" + String(Date.now()));
 
 
+      } catch (error) {
+        errorHandler(error,"useEffect")
+      }
 
     }, [conversationsRequestBuilder, fetchNextAndAppendConversations, dispatch, conversationsManagerRef, fetchNextIdRef]);
 
@@ -77,7 +75,7 @@ export function useCometChatConversations(args: Args) {
           dispatch({ type: "setLoggedInUser", loggedInUser: CometChatUIKitLoginListener.getLoggedInUser() });
         }
         catch (error) {
-          errorHandler(error);
+          errorHandler(error,"setLoggedInUser");
         }
       })();
     }, [errorHandler, dispatch]);
@@ -91,9 +89,11 @@ export function useCometChatConversations(args: Args) {
      * @returns - Function to remove the added SDK user listener
      */
     () => {
-      if (!disableUsersPresence) {
-        return ConversationsManager.attachUserListener((user: CometChat.User) => dispatch({ type: "updateConversationWithUser", user }));
-      }
+    
+ if(!hideUserStatus){
+  return ConversationsManager.attachUserListener((user: CometChat.User) => dispatch({ type: "updateConversationWithUser", user }));
+ }
+      
     }, [dispatch]);
 
   useEffect(
@@ -145,11 +145,8 @@ export function useCometChatConversations(args: Args) {
      * @returns - Function to remove the added SDK message typing listener
      */
     () => {
-      if (disableTyping) {
-        return;
-      }
       return ConversationsManager.attachMessageTypingListener(setTypingIndicator);
-    }, [disableTyping, setTypingIndicator]);
+    }, [ setTypingIndicator]);
 
   useEffect(
     /**
@@ -163,10 +160,11 @@ export function useCometChatConversations(args: Args) {
 
 
   useEffect(() => {
-    /**
+  try {
+      /**
      * Subscribes to Conversations UI events
      */
-    const ccConversationDeleted =
+      const ccConversationDeleted =
       CometChatConversationEvents.ccConversationDeleted.subscribe(
         (conversation: CometChat.Conversation) => {
           if (conversation) {
@@ -178,6 +176,9 @@ export function useCometChatConversations(args: Args) {
     return () => {
       ccConversationDeleted.unsubscribe();
     }
+  } catch (error) {
+    errorHandler(error,"ccConversationDeleted")
+  }
   }, [dispatch])
 
 
@@ -186,6 +187,8 @@ export function useCometChatConversations(args: Args) {
      * Subscribes to User, Group, Message & Call UI events
      */
     () => {
+      try {
+        
       const groupMemberScopeChangedSub = CometChatGroupEvents.ccGroupMemberScopeChanged.subscribe(item => {
         dispatch({ type: "updateConversationLastMessageAndPlaceAtTheTop", message: item.message });
       });
@@ -274,6 +277,9 @@ export function useCometChatConversations(args: Args) {
         callRejectedSub.unsubscribe();
         callEndedSub.unsubscribe();
       };
+      } catch (error) {
+        errorHandler(error,"useEffect")
+      }
     }, [dispatch]);
 
   useEffect(() => {

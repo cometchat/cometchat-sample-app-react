@@ -22,6 +22,11 @@
     font: var(--cometchat-font-heading2-bold);
 }
 
+.cometchat-call-log-details__call-log-item .cometchat-list-item:hover {
+    background: transparent;
+    cursor: default;
+}
+
 .cometchat-call-log-details__header-text {
     overflow: hidden;
     color: var(--cometchat-text-color-primary, #141414);
@@ -34,11 +39,15 @@
     padding: var(--cometchat-padding-3, 12px) var(--cometchat-padding-4, 16px) var(--cometchat-padding-5, 20px) var(--cometchat-padding-4, 16px);
 }
 
-.cometchat-call-log-details .cometchat-message-header .cometchat-message-header__subtitle {
+.cometchat-call-log-details .cometchat-call-log-details__subtitle {
     overflow: hidden;
     color: var(--cometchat-text-color-secondary, #727272);
     text-overflow: ellipsis;
     font: var(--cometchat-font-body-regular);
+}
+
+.cometchat-call-log-details .cometchat-call-log-details__call-log-item .cometchat-list-item__trailing-view {
+    height: fit-content;
 }
 
 .cometchat-call-log-details .cometchat-call-button {
@@ -74,11 +83,17 @@
     flex: 1 0 0;
 }
 
-.cometchat-call-log-details__call-log-item .cometchat-list-item__leading-view,
+.cometchat-call-log-details .cometchat-message-header .cometchat-list-item .cometchat-list-item__leading-view,
 .cometchat-call-log-details__call-log-item .cometchat-avatar,
 .cometchat-call-log-details__call-log-item .cometchat-avatar__image {
-    height: 60px !important;
-    width: 60px !important;
+    height: 60px;
+    width: 60px;
+}
+
+.cometchat-outgoing-call__avatar .cometchat-avatar,
+.cometchat-outgoing-call__avatar .cometchat-avatar__image {
+    width: 160px;
+    height: 160px;
 }
 
 .cometchat-call-log-details__call-log-item .cometchat-avatar__text {

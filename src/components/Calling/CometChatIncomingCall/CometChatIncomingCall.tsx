@@ -13,71 +13,97 @@ import { CometChatListItem } from "../../BaseComponents/CometChatListItem/CometC
 import { CometChatAvatar } from "../../BaseComponents/CometChatAvatar/CometChatAvatar";
 import { CometChatButton } from "../../BaseComponents/CometChatButton/CometChatButton";
 import { CometChatCallEvents } from "../../../events/CometChatCallEvents";
+import { useCometChatErrorHandler } from "../../../CometChatCustomHooks";
 
 interface IncomingCallProps {
   /**
-   * CometChat call object consumed by the component to launch itself.
+   * The CometChat call object used to initialize and display the incoming call component.
    */
   call?: any;
 
   /**
-   * Used to disable/enable the sound of incoming calls.
-   * 
-   * @default false
-   */
-  disableSoundForCalls?: boolean;
-
-  /**
-   * Used to set a custom sound for incoming calls.
-   * 
-   * @example customSoundForCalls='Your Custom Sound For Calls'
-   */
-  customSoundForCalls?: string;
-
-  /**
-   * Triggered when you click the accept button of the Incoming Call component.
-   * You can override this action.
-   */
-  onAccept?: Function;
-
-  /**
-   * Triggered when you click the decline button of the Incoming Call component.
-   * You can override this action.
-   */
-  onDecline?: Function;
-
-  /**
-   * Used to set custom accept button text.
-   * 
-   * @example acceptButtonText='Your Custom Accept Button Text'
-   */
-  acceptButtonText?: string;
-
-  /**
-   * Used to set custom decline button text.
-   * 
-   * @example declineButtonText='Your Decline Button Text'
-   */
-  declineButtonText?: string;
-
-  /**
-   * Custom subtitle view for the incoming call component.
-   */
-
-  subtitleView?: (call: CometChat.Call) => JSX.Element
-  /**
-   * Triggered when an error occurs in the Incoming Call component.
-   */
-  onError?: Function;
-
-  /**
-   * Builder function for configuring and updating call settings.
+   * A builder function for configuring or updating call settings dynamically.
    * 
    * @param call - The current CometChat call object.
    * @returns An instance of CallSettingsBuilder.
    */
   callSettingsBuilder?: (call: CometChat.Call) => typeof CometChatUIKitCalls.CallSettingsBuilder;
+
+  /**
+   * Disables the sound for incoming calls.
+   * @defaultValue false
+   */
+  disableSoundForCalls?: boolean;
+
+  /**
+   * Specifies a custom sound to play for incoming calls.
+   */
+  customSoundForCalls?: string;
+
+  /**
+   * Callback function triggered when the accept button is clicked. Allows overriding the default behavior.
+   * 
+   * @param call - An instance of `CometChat.Call` representing the Call.
+   * @returns void
+   */
+  onAccept?: (call: CometChat.Call) => void;
+
+  /**
+   * Callback function triggered when the decline button is clicked. Allows overriding the default behavior.
+   * 
+   * @param call - An instance of `CometChat.Call` representing the Call.
+   * @returns void
+   */
+  onDecline?: (call: CometChat.Call) => void;
+
+  /**
+   * Callback function triggered when an error occurs in the incoming call component.
+   * @param error - An instance of `CometChat.CometChatException` representing the error.
+   * @return void
+   */
+  onError?: ((error: CometChat.CometChatException) => void) | null;
+
+  /**
+   * A function that renders a JSX element to display the item view.
+   * 
+   * @param call - An instance of `CometChat.Call` representing the call.
+   * @returns A JSX element to be rendered as the item view.
+   */
+  itemView?: (call: CometChat.Call) => JSX.Element;
+
+  /**
+   * A function that renders a JSX element to display the leading view.
+   * 
+   * @param call - An instance of `CometChat.Call` representing the call.
+   * @returns A JSX element to be rendered as the leading view.
+   */
+  leadingView?: (call: CometChat.Call) => JSX.Element;
+
+  /**
+   * A function that renders a JSX element to display the title view.
+   * 
+   * @param call - An instance of `CometChat.Call` representing the call.
+   * @returns A JSX element to be rendered as the title view.
+   */
+  titleView?: (call: CometChat.Call) => JSX.Element;
+
+  /**
+   * A function that renders a JSX element to display the subtitle view.
+   * 
+   * @param call - An instance of `CometChat.Call` representing the call.
+   * @returns A JSX element to be rendered as the subtitle view.
+   */
+  subtitleView?: (call: CometChat.Call) => JSX.Element;
+
+  /**
+   * A function that renders a JSX element to display the trailing view.
+   * 
+   * @param call - An instance of `CometChat.Call` representing the call.
+   * @returns A JSX element to be rendered as the trailing view.
+   */
+  trailingView?: (call: CometChat.Call) => JSX.Element;
 }
+
 
 const CometChatIncomingCall = (props: IncomingCallProps) => {
   const {
@@ -86,15 +112,18 @@ const CometChatIncomingCall = (props: IncomingCallProps) => {
     customSoundForCalls = "",
     onAccept,
     onDecline,
-    acceptButtonText = localize("ACCEPT"),
-    declineButtonText = localize("DECLINE"),
     subtitleView = null,
-    onError = (error: CometChat.CometChatException) => {
-      console.log(error);
-    },
+    leadingView,
+    titleView,
+    trailingView,
+    itemView,
+    onError,
     callSettingsBuilder
   } = props;
+  const errorHandler = useCometChatErrorHandler(onError);
 
+  const acceptButtonTextRef = useRef<string>(localize("ACCEPT"));
+  const declineButtonTextRef = useRef<string>(localize("DECLINE"));
   const [loggedInUser, setLoggedInuser] = useState<CometChat.User | null>(null);
   const [showIncomingCallScreen, setShowIncomingCallScreen] = useState(false);
   const [showOngoingCallScreen, setShowOngoingCallScreen] = useState(false);
@@ -103,28 +132,11 @@ const CometChatIncomingCall = (props: IncomingCallProps) => {
   const sessionIdRef = useRef("");
   const rejectCallButtonRef = useRef(null);
   const acceptCallButtonRef = useRef(null);
+  const currentOutgoingCallRef = useRef<CometChat.Call | null>(null);
 
 
   let incomingcallListenerId: string = "incomingcall_" + new Date().getTime(),
     subtitleText: string = localize("INCOMING_CALL");
-
-  const onErrorCallback = useCallback(
-    (error: any) => {
-      if (!(error instanceof CometChat.CometChatException)) {
-        let errorModel = {
-          code: error?.code,
-          name: error?.name,
-          message: error?.message,
-          details: error?.details,
-        };
-        let errorObj = new CometChat.CometChatException(errorModel);
-        onError!(errorObj);
-      } else {
-        onError!(error);
-      }
-    },
-    [onError]
-  );
 
   const playAudio = useCallback(() => {
     try {
@@ -137,9 +149,9 @@ const CometChatIncomingCall = (props: IncomingCallProps) => {
         CometChatSoundManager.play(CometChatSoundManager.Sound.incomingCall!);
       }
     } catch (e) {
-      onErrorCallback(e);
+      errorHandler(e, "playAudio");
     }
-  }, [customSoundForCalls, onErrorCallback]);
+  }, [customSoundForCalls]);
 
   const isCallActive = useCallback(
     (call: CometChat.Call) => {
@@ -159,11 +171,11 @@ const CometChatIncomingCall = (props: IncomingCallProps) => {
         }
         return isCurrentCall;
       } catch (e) {
-        onErrorCallback(e);
+        errorHandler(e, "isCallActive");
         return isCurrentCall;
       }
     },
-    [onErrorCallback]
+    []
   );
 
   const rejectIncomingCall = useCallback(
@@ -171,7 +183,7 @@ const CometChatIncomingCall = (props: IncomingCallProps) => {
       try {
         CometChatSoundManager.pause();
         if (onDecline) {
-          onDecline();
+          onDecline(callRef.current!);
         } else if (typeof callRef?.current?.getSessionId() === "string") {
           CometChat.rejectCall(callRef?.current?.getSessionId(), reason).then(
             (rejectedCall: CometChat.Call) => {
@@ -184,15 +196,15 @@ const CometChatIncomingCall = (props: IncomingCallProps) => {
               callRef.current = null;
             },
             (error: CometChat.CometChatException) => {
-              onErrorCallback(error);
+              errorHandler(error, "rejectCall");
             }
           );
         }
       } catch (e) {
-        onErrorCallback(e);
+        errorHandler(e, "rejectIncomingCall");
       }
     },
-    [onDecline, onErrorCallback]
+    [onDecline]
   );
 
   const showCall = useCallback(
@@ -227,7 +239,7 @@ const CometChatIncomingCall = (props: IncomingCallProps) => {
           rejectIncomingCall(CometChatUIKitConstants.calls.busy);
         }
       } catch (e) {
-        onErrorCallback(e);
+        errorHandler(e, "showCall");
       }
     },
     [
@@ -235,7 +247,6 @@ const CometChatIncomingCall = (props: IncomingCallProps) => {
       disableSoundForCalls,
       playAudio,
       rejectIncomingCall,
-      onErrorCallback,
       loggedInUser,
       showOngoingCallScreen,
       showOutGoingCallScreen,
@@ -243,23 +254,27 @@ const CometChatIncomingCall = (props: IncomingCallProps) => {
   );
 
   const localStorageChange = useCallback((event: any) => {
-    if (event?.key !== CometChatUIKitConstants.calls.activecall) {
+    try {
+      if (event?.key !== CometChatUIKitConstants.calls.activecall) {
+        return;
+      }
+      if (event.newValue || event.oldValue) {
+        let call;
+        if (event.newValue) {
+          call = JSON.parse(event.newValue);
+        } else if (event.oldValue) {
+          call = JSON.parse(event.oldValue);
+        }
+        if (callRef.current?.getSessionId() === call?.sessionId) {
+          CometChatSoundManager.pause();
+          callRef.current = null;
+          setShowIncomingCallScreen(false);
+        }
+      }
       return;
+    } catch (error) {
+      errorHandler(error, "localStorageChange")
     }
-    if (event.newValue || event.oldValue) {
-      let call;
-      if (event.newValue) {
-        call = JSON.parse(event.newValue);
-      } else if (event.oldValue) {
-        call = JSON.parse(event.oldValue);
-      }
-      if (callRef.current?.getSessionId() === call?.sessionId) {
-        CometChatSoundManager.pause();
-        callRef.current = null;
-        setShowIncomingCallScreen(false);
-      }
-    }
-    return;
   }, []);
 
   const closeCallScreen = () => {
@@ -269,39 +284,62 @@ const CometChatIncomingCall = (props: IncomingCallProps) => {
     sessionIdRef.current = "";
   };
 
+  const clearStoredActiveCall = () => {
+    try {
+      const currentActiveCall: CometChat.Call = StorageUtils.getItem(CometChatUIKitConstants.calls.activecall);
+      if (currentActiveCall) {
+        StorageUtils.removeItem(CometChatUIKitConstants.calls.activecall);
+      }
+    } catch (e) {
+      errorHandler(e, "clearStoredActiveCall");
+    }
+  }
+
   const subscribeToEvents = useCallback(() => {
     try {
       const ccCallEnded = CometChatCallEvents.ccCallEnded.subscribe(
         (call: CometChat.Call) => {
+          clearStoredActiveCall()
           closeCallScreen();
         }
-
       );
 
       const ccOutgoingCall = CometChatCallEvents.ccOutgoingCall.subscribe(
-        () => {
+        (call: CometChat.Call) => {
           setShowOutGoingCallScreen(true);
+          currentOutgoingCallRef.current = call;
         }
       );
       const ccCallRejected = CometChatCallEvents.ccCallRejected.subscribe(
-        () => {
-          setShowOngoingCallScreen(false);
-          setShowOutGoingCallScreen(false);
+        (call: CometChat.Call) => {
+          clearStoredActiveCall()
+          if (call?.getSessionId() === callRef.current?.getSessionId()) {
+            setShowOngoingCallScreen(false);
+            setShowOutGoingCallScreen(false);
+          } else if (call?.getSessionId() === currentOutgoingCallRef.current?.getSessionId()) {
+            currentOutgoingCallRef.current = null;
+          } else {
+            setShowOutGoingCallScreen(false);
+          }
         }
       );
       return () => {
-        try {
-          ccCallEnded?.unsubscribe();
-          ccOutgoingCall?.unsubscribe();
-          ccCallRejected?.unsubscribe();
-        } catch (error: any) {
-          onErrorCallback(error);
-        }
+        ccCallEnded?.unsubscribe();
+        ccOutgoingCall?.unsubscribe();
+        ccCallRejected?.unsubscribe();
       };
     } catch (e) {
-      onErrorCallback(e);
+      errorHandler(e, "subscribeToEvents");
     }
-  }, [onErrorCallback]);
+  }, []);
+
+  const getIsActiveCall = () => {
+    try {
+      return callRef.current || CometChat.getActiveCall() || StorageUtils.getItem(CometChatUIKitConstants.calls.activecall);
+    } catch (e) {
+      errorHandler(e, "getIsActiveCall");
+    }
+  }
 
   const attachListeners = useCallback(() => {
     try {
@@ -310,7 +348,18 @@ const CometChatIncomingCall = (props: IncomingCallProps) => {
         incomingcallListenerId,
         new CometChat.CallListener({
           onIncomingCallReceived: (call: CometChat.Call) => {
-            if (callRef.current?.getSender()?.getUid() === call.getSender()?.getUid()) {
+            if (getIsActiveCall()) {
+              CometChat.rejectCall(
+                call.getSessionId(),
+                CometChatUIKitConstants.calls.busy
+              ).then(
+                (rejectedCall: CometChat.Call) => {
+                  CometChatCallEvents.ccCallRejected.next(rejectedCall);
+                },
+                (error: CometChat.CometChatException) => {
+                  errorHandler(error, "rejectCall - onIncomingCallReceived");
+                }
+              );
               return;
             }
             callRef.current = call;
@@ -325,31 +374,33 @@ const CometChatIncomingCall = (props: IncomingCallProps) => {
             CometChatSoundManager.pause();
             if (call.getSender()?.getUid() === loggedInUser?.getUid()) {
               callRef.current = null;
+              currentOutgoingCallRef.current = null;
               setShowIncomingCallScreen(false);
             }
           },
           onOutgoingCallRejected: (call: CometChat.Call) => {
             CometChatSoundManager.pause();
             callRef.current = null;
+            currentOutgoingCallRef.current = null;
             setShowOutGoingCallScreen(false);
             setShowOngoingCallScreen(false);
             setShowIncomingCallScreen(false);
-          }
+          },
         })
       );
     } catch (e) {
-      onErrorCallback(e);
+      errorHandler(e, "attachListeners");
     }
-  }, [localStorageChange, showCall, onErrorCallback, incomingcallListenerId, loggedInUser]);
+  }, [localStorageChange, showCall, incomingcallListenerId, loggedInUser]);
 
   const removeListener = useCallback(() => {
     try {
       StorageUtils.detachChangeDetection(localStorageChange);
       CometChat.removeCallListener(incomingcallListenerId);
     } catch (e) {
-      onErrorCallback(e);
+      errorHandler(e, "removeListener");
     }
-  }, [localStorageChange, onErrorCallback, incomingcallListenerId]);
+  }, [localStorageChange, incomingcallListenerId]);
 
   const checkForActiveCallAndEndCall = useCallback(() => {
     try {
@@ -369,15 +420,15 @@ const CometChatIncomingCall = (props: IncomingCallProps) => {
         );
       });
     } catch (e) {
-      onErrorCallback(e);
+      errorHandler(e, "checkForActiveCallAndEndCall");
     }
-  }, [onErrorCallback]);
+  }, []);
 
   const acceptIncomingCall = useCallback(() => {
     try {
       CometChatSoundManager.pause();
       if (onAccept) {
-        onAccept();
+        onAccept(callRef.current!);
       } else {
         checkForActiveCallAndEndCall()?.then(
           (response) => {
@@ -394,54 +445,61 @@ const CometChatIncomingCall = (props: IncomingCallProps) => {
                 setShowIncomingCallScreen(false);
               },
               (error: CometChat.CometChatException) => {
-                onErrorCallback(error);
+                errorHandler(error, "acceptCall");
               }
             );
           },
           (error: CometChat.CometChatException) => {
-            onErrorCallback(error);
+            errorHandler(error, "checkForActiveCallAndEndCall");
           }
         );
       }
-    } catch (e) { }
-  }, [checkForActiveCallAndEndCall, onErrorCallback, onAccept]);
+    } catch (e) {
+      errorHandler(e, "acceptIncomingCall");
+    }
+  }, [checkForActiveCallAndEndCall, onAccept]);
 
   function getCallBuilder(): typeof CometChatUIKitCalls.CallSettings {
-    let audioOnlyCall: boolean =
-      callRef.current?.getType() === CometChatUIKitConstants.MessageTypes.audio
-        ? true
-        : false;
-    if (callRef.current?.getType() === CometChatUIKitConstants.calls.meeting) {
-      return undefined;
-    }
-    let callsBuilder = callSettingsBuilder ? callSettingsBuilder(call) : new CometChatUIKitCalls.CallSettingsBuilder().setIsAudioOnlyCall(audioOnlyCall).enableDefaultLayout(true);
+    try {
+      let audioOnlyCall: boolean =
+        callRef.current?.getType() === CometChatUIKitConstants.MessageTypes.audio
+          ? true
+          : false;
+      if (callRef.current?.getType() === CometChatUIKitConstants.calls.meeting) {
+        return undefined;
+      }
+      let callsBuilder = callSettingsBuilder ? callSettingsBuilder(call) : new CometChatUIKitCalls.CallSettingsBuilder().setIsAudioOnlyCall(audioOnlyCall).enableDefaultLayout(true);
 
-    callsBuilder.setCallListener(
-      new CometChatUIKitCalls.OngoingCallListener({
-        onCallEnded: () => {
-          if (
-            callRef.current?.getReceiverType() ===
-            CometChatUIKitConstants.MessageReceiverType.user
-          ) {
-            CometChatUIKitCalls.endSession();
-            CometChatCallEvents.ccCallEnded.next(null as any);
-            closeCallScreen();
-          }
-        },
-        onCallEndButtonPressed: () => {
-          CometChat.endCall(sessionIdRef.current)
-            .then((call: CometChat.Call) => {
+      callsBuilder.setCallListener(
+        new CometChatUIKitCalls.OngoingCallListener({
+          onCallEnded: () => {
+            if (
+              callRef.current?.getReceiverType() ===
+              CometChatUIKitConstants.MessageReceiverType.user
+            ) {
               CometChatUIKitCalls.endSession();
-              CometChatCallEvents.ccCallEnded.next(call);
-            })
-            .catch((err: CometChat.CometChatException) => { });
-        },
-        onError: (error: any) => {
-          onErrorCallback(error);
-        },
-      })
-    )
-    return callsBuilder;
+              CometChatCallEvents.ccCallEnded.next(null as any);
+              closeCallScreen();
+            }
+          },
+          onCallEndButtonPressed: () => {
+            CometChat.endCall(sessionIdRef.current)
+              .then((call: CometChat.Call) => {
+                CometChatUIKitCalls.endSession();
+                CometChatCallEvents.ccCallEnded.next(call);
+              })
+              .catch((err: CometChat.CometChatException) => { });
+          },
+          onError: (error: any) => {
+            errorHandler(error, "OngoingCallListener");
+          },
+        })
+      )
+      return callsBuilder;
+    } catch (error) {
+      errorHandler(error, "getCallBuilder");
+
+    }
   }
 
   const getCallTypeIcon = () => {
@@ -475,6 +533,9 @@ const CometChatIncomingCall = (props: IncomingCallProps) => {
   }
 
   const ListItemTailView = () => {
+    if (trailingView) {
+      return trailingView(callRef.current!);
+    }
     return <div className="cometchat-incoming-call__avatar">
       <CometChatAvatar
         image={callRef.current?.getSender()?.getAvatar()!}
@@ -496,29 +557,32 @@ const CometChatIncomingCall = (props: IncomingCallProps) => {
     acceptIncomingCall,
     rejectIncomingCall,
     showIncomingCallScreen,
-    subscribeToEvents
+    subscribeToEvents,
+    errorHandler
   );
 
   return (
     <>
       {callRef.current && showIncomingCallScreen ? (
         <div className="cometchat-incoming-call">
-          <CometChatListItem
+          {itemView ? itemView(callRef.current) : <CometChatListItem
             title={callRef.current?.getSender()?.getName()}
             subtitleView={ListItemSubtitleView()}
-            tailView={ListItemTailView()}
+            trailingView={ListItemTailView()}
+            leadingView={leadingView?.(callRef.current)}
+            titleView={titleView?.(callRef.current)}
             avatarURL=""
-          />
+          />}
           <div className="cometchat-incoming-call__button-group">
             <div className="cometchat-incoming-call__button-decline">
               <CometChatButton
-                text={declineButtonText}
+                text={declineButtonTextRef.current}
                 onClick={() => rejectIncomingCall(CometChatUIKitConstants.calls.rejected)}
               />
             </div>
             <div className="cometchat-incoming-call__button-accept">
               <CometChatButton
-                text={acceptButtonText}
+                text={acceptButtonTextRef.current}
                 onClick={() => acceptIncomingCall()}
               />
             </div>
@@ -535,5 +599,4 @@ const CometChatIncomingCall = (props: IncomingCallProps) => {
     </>
   );
 };
-
 export { CometChatIncomingCall };

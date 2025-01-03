@@ -13,7 +13,8 @@ type Args = {
     groupsManagerRef: React.MutableRefObject<GroupsManager | null>,
     dispatch: React.Dispatch<Action>,
     fetchNextAndAppendGroups: (fetchId: string) => Promise<void>,
-    groupsSearchText: React.MutableRefObject<string>
+    groupsSearchText: React.MutableRefObject<string>,
+    errorHandler: (error: unknown, source?: string | undefined) => void,
 };
 
 export function useCometChatGroups(args: Args) {
@@ -25,7 +26,8 @@ export function useCometChatGroups(args: Args) {
         groupsManagerRef,
         dispatch,
         fetchNextAndAppendGroups,
-        groupsSearchText
+        groupsSearchText,
+        errorHandler
     } = args;
 
 
@@ -34,10 +36,14 @@ export function useCometChatGroups(args: Args) {
          * Updates the current search keyword for groups from `groupsRequestBuilder` or `searchRequestBuilder`.
          * Runs whenever either builder changes.
          */
-        if (groupsRequestBuilder?.searchKeyword) {
-            groupsSearchText.current = groupsRequestBuilder?.searchKeyword;
-        } else if (searchRequestBuilder?.searchKeyword) {
-            groupsSearchText.current = searchRequestBuilder?.searchKeyword;
+        try {
+            if (groupsRequestBuilder?.searchKeyword) {
+                groupsSearchText.current = groupsRequestBuilder?.searchKeyword;
+            } else if (searchRequestBuilder?.searchKeyword) {
+                groupsSearchText.current = searchRequestBuilder?.searchKeyword;
+            }
+        } catch (error) {
+            errorHandler(error, 'useEffect');
         }
     }, []);
 
@@ -46,10 +52,14 @@ export function useCometChatGroups(args: Args) {
          * Creates a new request builder -> empties the `groupList` state -> initiates a new fetch
          */
         () => {
-            dispatch({ type: "setIsFirstReload", isFirstReload: true });
-            dispatch({ type: "setGroupList", groupList: [] });
-            groupsManagerRef.current = new GroupsManager({ searchText, groupsRequestBuilder, searchRequestBuilder, groupsSearchText });
-            fetchNextAndAppendGroups(fetchNextIdRef.current = "initialFetch_" + String(Date.now()));
+            try {
+                dispatch({ type: "setIsFirstReload", isFirstReload: true });
+                dispatch({ type: "setGroupList", groupList: [] });
+                groupsManagerRef.current = new GroupsManager({ searchText, groupsRequestBuilder, searchRequestBuilder, groupsSearchText });
+                fetchNextAndAppendGroups(fetchNextIdRef.current = "initialFetch_" + String(Date.now()));
+            } catch (error) {
+                errorHandler(error, 'useEffect');
+            }
         }, [fetchNextAndAppendGroups, groupsRequestBuilder, searchRequestBuilder, searchText, dispatch, fetchNextIdRef, groupsManagerRef, groupsSearchText]);
 
     useEffect(
@@ -68,46 +78,49 @@ export function useCometChatGroups(args: Args) {
          * Subscribes to Group UI events
          */
         () => {
-            const groupCreatedSub = CometChatGroupEvents.ccGroupCreated.subscribe((group: CometChat.Group) => {
-                dispatch({ type: "prependGroup", group: CometChatUIKitUtility.clone(group) });
-            });
-            const groupDeletedSub = CometChatGroupEvents.ccGroupDeleted.subscribe((group: CometChat.Group) => {
-                dispatch({ type: "removeGroup", guid: group.getGuid() });
-            });
-            const groupMemberJoinedSub = CometChatGroupEvents.ccGroupMemberJoined.subscribe((item) => {
-                dispatch({ type: "updateGroup", group: CometChatUIKitUtility.clone(item.joinedGroup) });
-            });
-            const groupMemberKickedSub = CometChatGroupEvents.ccGroupMemberKicked.subscribe((item) => {
-                dispatch({ type: "updateGroup", group: CometChatUIKitUtility.clone(item.kickedFrom) });
-            });
-            const groupMemberLeftSub = CometChatGroupEvents.ccGroupLeft.subscribe((item) => {
-                if (item.leftGroup.getType() === CometChatUIKitConstants.GroupTypes.private) {
-                    dispatch({ type: "removeGroup", guid: item.leftGroup.getGuid() });
-                }
-                else {
-                    item.leftGroup.setMembersCount(item.leftGroup.getMembersCount() - 1);
-                    dispatch({ type: "updateGroup", group:  item.leftGroup });
-                }
-            });
-            const groupMemberBannedSub = CometChatGroupEvents.ccGroupMemberBanned.subscribe((item) => {
-                dispatch({ type: "updateGroup", group: item.kickedFrom });
-            });
-            const groupMemberAddedSub = CometChatGroupEvents.ccGroupMemberAdded.subscribe((item) => {
-                dispatch({ type: "updateGroup", group: item.userAddedIn });
-            });
-            const groupOwnershipChangedSub = CometChatGroupEvents.ccOwnershipChanged.subscribe((item) => {
-                dispatch({ type: "updateGroup", group: item.group });
-            });
-            return () => {
-                groupCreatedSub.unsubscribe();
-                groupDeletedSub.unsubscribe();
-                groupMemberJoinedSub.unsubscribe();
-                groupMemberKickedSub.unsubscribe();
-                groupMemberLeftSub.unsubscribe();
-                groupMemberBannedSub.unsubscribe();
-                groupMemberAddedSub.unsubscribe();
-                groupOwnershipChangedSub.unsubscribe();
-            };
+            try {
+                const groupCreatedSub = CometChatGroupEvents.ccGroupCreated.subscribe((group: CometChat.Group) => {
+                    dispatch({ type: "prependGroup", group: CometChatUIKitUtility.clone(group) });
+                });
+                const groupDeletedSub = CometChatGroupEvents.ccGroupDeleted.subscribe((group: CometChat.Group) => {
+                    dispatch({ type: "removeGroup", guid: group.getGuid() });
+                });
+                const groupMemberJoinedSub = CometChatGroupEvents.ccGroupMemberJoined.subscribe((item) => {
+                    dispatch({ type: "updateGroup", group: CometChatUIKitUtility.clone(item.joinedGroup) });
+                });
+                const groupMemberKickedSub = CometChatGroupEvents.ccGroupMemberKicked.subscribe((item) => {
+                    dispatch({ type: "updateGroup", group: CometChatUIKitUtility.clone(item.kickedFrom) });
+                });
+                const groupMemberLeftSub = CometChatGroupEvents.ccGroupLeft.subscribe((item) => {
+                    if (item.leftGroup.getType() === CometChatUIKitConstants.GroupTypes.private) {
+                        dispatch({ type: "removeGroup", guid: item.leftGroup.getGuid() });
+                    }
+                    else {
+                        dispatch({ type: "updateGroup", group: item.leftGroup });
+                    }
+                });
+                const groupMemberBannedSub = CometChatGroupEvents.ccGroupMemberBanned.subscribe((item) => {
+                    dispatch({ type: "updateGroup", group: item.kickedFrom });
+                });
+                const groupMemberAddedSub = CometChatGroupEvents.ccGroupMemberAdded.subscribe((item) => {
+                    dispatch({ type: "updateGroup", group: item.userAddedIn });
+                });
+                const groupOwnershipChangedSub = CometChatGroupEvents.ccOwnershipChanged.subscribe((item) => {
+                    dispatch({ type: "updateGroup", group: item.group });
+                });
+                return () => {
+                    groupCreatedSub.unsubscribe();
+                    groupDeletedSub.unsubscribe();
+                    groupMemberJoinedSub.unsubscribe();
+                    groupMemberKickedSub.unsubscribe();
+                    groupMemberLeftSub.unsubscribe();
+                    groupMemberBannedSub.unsubscribe();
+                    groupMemberAddedSub.unsubscribe();
+                    groupOwnershipChangedSub.unsubscribe();
+                };
+            } catch (error) {
+                errorHandler(error, 'useEffect');
+            }
         }, [dispatch]);
 
 }

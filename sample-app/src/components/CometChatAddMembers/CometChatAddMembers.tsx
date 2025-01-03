@@ -451,24 +451,20 @@ export function CometChatAddMembers(props: IAddMembersProps) {
             className="cometchat-add-members"
         >
             <CometChatUsers
-                title={title}
                 hideSearch={hideSearch}
-                searchPlaceholderText={searchPlaceholderText}
                 showSectionHeader={showSectionHeader}
                 sectionHeaderKey={sectionHeaderField}
-                loadingStateView={loadingStateView}
-                emptyStateView={emptyStateView}
-                errorStateView={errorStateView}
+                loadingView={loadingStateView}
+                emptyView={emptyStateView}
+                errorView={errorStateView}
                 hideError={hideError}
-                disableUsersPresence={disableUsersPresence}
                 onError={onError}
-                menu={menus}
                 options={options}
                 selectionMode={selectionMode}
                 onSelect={onSelectWrapper}
                 usersRequestBuilder={usersRequestBuilder}
                 searchRequestBuilder={searchRequestBuilder}
-                listItemView={listItemView}
+                itemView={listItemView}
                 subtitleView={subtitleView}
                 onItemClick={onUsersSelected}
                 activeUser={undefined}

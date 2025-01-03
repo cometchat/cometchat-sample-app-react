@@ -1,4 +1,20 @@
+## [5.0.0] - 03-01-2025
+
+### New
+- None
+
+### Enhancements
+- Updated CometChat React UI Kit version to v5.0.0
+
+### Fixes
+- Fixed an issue where the empty state in the Group Members component was not fully visible.
+- Fixed an issue where the Transfer Ownership prompt incorrectly appeared when attempting to leave a group with only one member.
+- Fixed an issue where the selected call log was not highlighted as active in the call logs list.
+- Fixed an issue where the unban option was not visible in the Banned Members View.
+- Fixed an issue where the avatar in Outgoing call was not proper when a call is initiated via Call log detail.
+
 ## [5.0.0-beta2] - 10-12-2024
+
 ### New
 - Introduced a feature to seamlessly open a user's conversation by clicking on their mention.
 

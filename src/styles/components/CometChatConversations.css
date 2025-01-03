@@ -26,7 +26,7 @@
   min-height: 43px;
 }
 
-.cometchat-conversations .cometchat-list-item__tail-view{
+.cometchat-conversations .cometchat-list-item__trailing-view{
   width: auto;
   height: 40px;
 }
@@ -230,19 +230,19 @@
   display: none;
 }
 
-.cometchat-conversations__tail-view {
+.cometchat-conversations__trailing-view {
   display: flex;
   flex-direction: column;
   gap: var(--cometchat-padding-1,4px);
 }
 
-.cometchat-conversations__tail-view-badge {
+.cometchat-conversations__trailing-view-badge {
   display: flex;
   justify-content: flex-end;
   gap: var(--cometchat-padding-1,4px);
 }
 
-.cometchat-conversations__tail-view-badge-count {
+.cometchat-conversations__trailing-view-badge-count {
   display: flex;
   height: 20px;
   padding: 0px 8px;
@@ -356,7 +356,7 @@
   background:var(--cometchat-static-white,#FFF);
 }
 
-.cometchat-conversations__tail-view-options-delete-backdrop {
+.cometchat-conversations__trailing-view-options-delete-backdrop {
   background: rgba(0, 0, 0, 0.5);
   position: absolute;
   top: 0;
@@ -370,17 +370,17 @@
 }
 
 
-.cometchat-conversations__tail-view-options .cometchat-menu-list__menu {
+.cometchat-conversations__trailing-view-options .cometchat-menu-list__menu {
   background-color: transparent;
 }
 
-.cometchat-conversations__tail-view-options .cometchat-menu-list__main-menu-item{
+.cometchat-conversations__trailing-view-options .cometchat-menu-list__main-menu-item{
   background-color: transparent;
   box-shadow: none;
 }
 
 
-.cometchat-conversations__tail-view-options .cometchat-menu-list__main-menu-item-icon-delete {
+.cometchat-conversations__trailing-view-options .cometchat-menu-list__main-menu-item-icon-delete {
  -webkit-mask: url("../../assets/delete_icon.svg") center center no-repeat;
   mask: url("../../assets/delete_icon.svg") center center no-repeat;
   background: var(--cometchat-error-color,#F44649);
@@ -389,14 +389,14 @@
   -webkit-mask-size: contain;
 }
 
-.cometchat-conversations__tail-view-options .cometchat-menu-list__sub-menu-icon {
+.cometchat-conversations__trailing-view-options .cometchat-menu-list__sub-menu-icon {
 width: 20px;
 height: 20px;
 background: var(--cometchat-icon-color-secondary, #A1A1A1);
 }
 
 
-.cometchat-conversations__tail-view-options .cometchat-menu-list__sub-menu {
+.cometchat-conversations__trailing-view-options .cometchat-menu-list__sub-menu {
   display: flex;
   width: 20px;
   height: 20px;

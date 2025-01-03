@@ -9,28 +9,6 @@
     overflow: hidden;
     position: relative;
 }
-
-/* Header section of the list, containing title and possibly other elements */
-.cometchat-list__header {
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    background: var(--cometchat-background-color-01);
-    border-right: 1px solid var(--cometchat-border-color-light);
-    border-bottom: 1px solid var(--cometchat-border-color-light);
-}
-
-/* Menu section of the header, containing custom view */
-.cometchat-list__header-menu {
-    position: absolute;
-    right: 16px;
-    top: 20px;
-}
-
 /* Title section of the header, containing text or other elements */
 .cometchat-list__header-title {
     display: flex;
@@ -51,6 +29,21 @@
     flex: 1 0 0;
     align-self: stretch;
 }
+
+/* Header section of the list, containing title and possibly other elements */
+.cometchat-list__header {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    background: var(--cometchat-background-color-01);
+    border-right: 1px solid var(--cometchat-border-color-light);
+    border-bottom: 1px solid var(--cometchat-border-color-light);
+}
+
 
 /* Search bar section in the header */
 .cometchat-list__header-search-bar {

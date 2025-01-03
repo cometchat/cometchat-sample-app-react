@@ -36,144 +36,183 @@ import { getThemeMode } from "../../utils/util";
 
 interface GroupMembersProps {
   /**
-   * Custom view to render on the top-right of the component
-   */
-  menu?: JSX.Element;
-  /**
-   * Title of the component
-   *
-   * @defaultValue `localize("MEMBERS")`
-   */
-  title?: string;
-  /**
-   * Text to be displayed when the search input has no value
-   *
-   * @defaultValue `localize("SEARCH")`
-   */
-  searchPlaceholderText?: string;
-  /**
-   * Hide the search bar
+   * Hides the default search bar.
    *
    * @defaultValue `false`
    */
   hideSearch?: boolean;
+
   /**
-   * Request builder to fetch group members
-   *
-   * @remarks
-   * If the search input is not empty and the `searchRequestBuilder` prop is not provided,
-   * the search keyword of this request builder is set to the text in the search input
-   *
-   * @defaultValue Default request builder having the limit set to 30
-   */
-  groupMemberRequestBuilder?: CometChat.GroupMembersRequestBuilder;
-  /**
-   * Request builder with search parameters to fetch group members
-   *
-   * @remarks
-   * If the search input is not empty,
-   * the search keyword of this request builder is set to the text in the search input
-   */
-  searchRequestBuilder?: CometChat.GroupMembersRequestBuilder;
-  /**
-   * Group the fetched groupMembers belong to
-   */
-  group: CometChat.Group;
-  /**
-   * Function to call whenever the component encounters an error
-   */
-  onError?: ((error: CometChat.CometChatException) => void) | null;
-  /**
-   * Custom view for the loading state of the component
-   */
-  loadingStateView?: JSX.Element;
-  /**
-   * Custom view for the empty state of the component
-   */
-  emptyStateView?: JSX.Element;
-  /**
-   * Custom view for the error state of the component
-   */
-  errorStateView?: JSX.Element;
-  /**
-   * Hide error view
-   *
-   * @remarks
-   * If set to true, hides the default and the custom error view
+   * Hides the default and custom error view passed in `errorView` prop.
    *
    * @defaultValue `false`
    */
   hideError?: boolean;
+
   /**
-   * Hide user presence
-   *
-   * @remarks
-   * If set to true, the status indicator of the default list item view is not displayed
+   * Disables the loading state while fetching users.
    *
    * @defaultValue `false`
    */
-  disableUsersPresence?: boolean;
-  /**
-   * Custom subtitle view to be rendered for each group member in the fetched list
-   *
-   * @remarks
-   * This prop is used if `listItemView` prop is not provided
-   */
-  subtitleView?: (groupMember: CometChat.GroupMember) => JSX.Element;
-  /**
-   * Custom list item view to be rendered for each group member in the fetched list
-   */
-  listItemView?: (groupMember: CometChat.GroupMember) => JSX.Element;
-  /**
-   * List of actions available on mouse over on the default list item component
-   */
-  options?: (
-    group: CometChat.Group,
-    groupMember: CometChat.GroupMember
-  ) => CometChatOption[];
+  disableLoadingState?: boolean;
 
   /**
-   * View to be placed in the tail view
+   * Hides the option to kick a member from the group.
    *
-   * @remarks
-   * This prop will be used if `listItemView` is not provided
+   * @defaultValue `false`
    */
-  tailView?: (groupMember: CometChat.GroupMember) => JSX.Element;
+  hideKickMemberOption?: boolean;
+
   /**
-   * Selection mode to use for the default list item view
+   * Hides the option to ban a member from the group.
    *
-   * @remarks
-   * This prop is used if `listItemView` prop is not provided
+   * @defaultValue `false`
+   */
+  hideBanMemberOption?: boolean;
+
+  /**
+   * Hides the option to change the scope of a group member.
    *
-   * @defaultValue `SelectionMode.none`
+   * @defaultValue `false`
    */
-  selectionMode?: SelectionMode;
+  hideScopeChangeOption?: boolean;
+
   /**
-   * Function to call on click of the default list item view of a group member
-   */
-  onItemClick?: (groupMember: CometChat.GroupMember) => void;
-  /**
-   * Function to call when a group member from the fetched list is selected
+   * Hides the user's online/offline status indicator.
    *
-   * @remarks
-   * This prop is used if `selectionMode` prop is not `SelectionMode.none`
+   * @defaultValue `false`
    */
-  onSelect?: (groupMember: CometChat.GroupMember, selected: boolean) => void;
+  hideUserStatus?: boolean;
+
   /**
-   * Search keyword to filter the list of users.
+   * The group for which members are being fetched.
+   */
+  group: CometChat.Group;
+
+  /**
+   * Request builder to fetch group members.
+   *
+   * @defaultValue Default request builder having the limit set to `30`.
+   */
+  groupMemberRequestBuilder?: CometChat.GroupMembersRequestBuilder;
+
+  /**
+   * Request builder with search parameters to fetch group members.
+   *
+   * @remarks If the search input is not empty, the search keyword of this request builder is set to the text in the search input.
+   */
+  searchRequestBuilder?: CometChat.GroupMembersRequestBuilder;
+
+  /**
+   * The keyword used to filter the group members list.
    *
    * @defaultValue `""`
    */
   searchKeyword?: string;
+
   /**
-   * Callback function to be executed when the user list is empty.
+   * A function that returns a list of actions available when hovering over a group member item.
+   *
+   * @param group - The group instance.
+   * @param groupMember - An instance of `CometChat.GroupMember` representing the group member.
+   * @returns An array of `CometChatOption`.
+   */
+  options?: (group: CometChat.Group, groupMember: CometChat.GroupMember) => CometChatOption[];
+
+  /**
+   * Selection mode to use for the default list item view.
+   *
+   * @defaultValue `SelectionMode.none`
+   */
+  selectionMode?: SelectionMode;
+
+  /**
+   * Callback function invoked when an error occurs in the component.
+   */
+  onError?: ((error: CometChat.CometChatException) => void) | null;
+
+  /**
+   * Callback function invoked when a group member item is clicked.
+   *
+   * @param groupMember - An instance of `CometChat.GroupMember` representing the group member.
+   * returns void
+   */
+  onItemClick?: (groupMember: CometChat.GroupMember) => void;
+
+  /**
+   * Callback function invoked when a group member is selected or deselected.
+   *
+   * @param groupMember - An instance of `CometChat.GroupMember` representing the group member.
+   * @param selected - Boolean value to identify if the member is selected or removed.
+   * @returns void
+   */
+  onSelect?: (groupMember: CometChat.GroupMember, selected: boolean) => void;
+
+  /**
+   * Callback function invoked when the group members list is empty.
+   * @returns void
    */
   onEmpty?: () => void;
+
   /**
-   * Flag to indicate whether to disable loading state while fetching users.
-   * @defaultValue `false`
+   * A custom component to render in the top-right corner of the group members list.
    */
-  disableLoadingState?: boolean;
+  headerView?: JSX.Element;
+
+  /**
+   * A custom view to display during the loading state.
+   */
+  loadingView?: JSX.Element;
+
+  /**
+   * Custom view for the error state of the component.
+   */
+  errorView?: JSX.Element;
+
+  /**
+   * A custom view to display when no group members are available in the list.
+   */
+  emptyView?: JSX.Element;
+
+  /**
+   * A custom view to render for each group member in the fetched list.
+   *
+   * @param groupMember - An instance of `CometChat.GroupMember` representing the group member.
+   * @returns A JSX element to be rendered as the group member item.
+   */
+  itemView?: (groupMember: CometChat.GroupMember) => JSX.Element;
+
+  /**
+   * A function that renders a JSX element to display the leading view.
+   *
+   * @param groupMember - An instance of `CometChat.GroupMember` representing the group member.
+   * @returns A JSX element to be rendered as the leading view.
+   */
+  leadingView?: (groupMember: CometChat.GroupMember) => JSX.Element;
+
+  /**
+   * A function that renders a JSX element to display the title view.
+   *
+   * @param groupMember - An instance of `CometChat.GroupMember` representing the group member.
+   * @returns A JSX element to be rendered as the title view.
+   */
+  titleView?: (groupMember: CometChat.GroupMember) => JSX.Element;
+
+  /**
+   * A function that renders a JSX element to display the subtitle view.
+   *
+   * @param groupMember - An instance of `CometChat.GroupMember` representing the group member.
+   * @returns A JSX element to be rendered as the subtitle view.
+   */
+  subtitleView?: (groupMember: CometChat.GroupMember) => JSX.Element;
+
+  /**
+   * A function that renders a JSX element to display the trailing view.
+   *
+   * @param groupMember - An instance of `CometChat.GroupMember` representing the group member.
+   * @returns A JSX element to be rendered as the trailing view.
+   */
+  trailingView?: (groupMember: CometChat.GroupMember) => JSX.Element;
 }
 
 type State = {
@@ -344,29 +383,32 @@ function stateReducer(state: State, action: Action): State {
 
 export function CometChatGroupMembers(props: GroupMembersProps) {
   const {
-    menu,
-    title = localize("GROUP_MEMBERS"),
-    searchPlaceholderText = localize("SEARCH"),
+    headerView,
     hideSearch = false,
     groupMemberRequestBuilder = null,
     searchRequestBuilder = null,
     group,
     onError,
-    loadingStateView,
-    errorStateView,
-    emptyStateView,
+    loadingView,
+    errorView,
+    emptyView,
     hideError = false,
-    disableUsersPresence = false,
+    hideUserStatus = false,
     subtitleView = null,
-    listItemView = null,
+    itemView = null,
     options = null,
-    tailView = null,
+    trailingView = null,
     selectionMode = SelectionMode.none,
     onItemClick = null,
     onSelect = null,
     searchKeyword = "",
     onEmpty,
     disableLoadingState = false,
+    hideBanMemberOption = false,
+    hideKickMemberOption = false,
+    hideScopeChangeOption = false,
+    titleView,
+    leadingView
   } = props;
 
   const [state, dispatch] = useReducer(stateReducer, {
@@ -383,19 +425,24 @@ export function CometChatGroupMembers(props: GroupMembersProps) {
   const groupPropRef = useRefSync(group);
   const errorHandler = useCometChatErrorHandler(onError);
   const groupMembersSearchText = useRef<string>("");
-
+  const titleRef = useRef<string>(localize("GROUP_MEMBERS"));
+  const searchPlaceholderTextRef = useRef<string>(localize("SEARCH"));
   /**
    * Updates the `searchText` state
    */
   const onSearchTextChange = useCallback(
     (searchText: string): void => {
-      const trimmedText = searchText.trim();
-      if (
-        searchText.length === 0 ||
-        (trimmedText.length === searchText.length && trimmedText.length > 0)
-      ) {
-        groupMembersSearchText.current = "";
-        dispatch({ type: "setSearchText", searchText });
+      try {
+        const trimmedText = searchText.trim();
+        if (
+          searchText.length === 0 ||
+          (trimmedText.length === searchText.length && trimmedText.length > 0)
+        ) {
+          groupMembersSearchText.current = "";
+          dispatch({ type: "setSearchText", searchText });
+        }
+      } catch (error) {
+        errorHandler(error, 'onSearchTextChange');
       }
     },
     [dispatch]
@@ -435,7 +482,7 @@ export function CometChatGroupMembers(props: GroupMembersProps) {
         dispatch({ type: "setFetchState", fetchState: States.loaded });
       } catch (error) {
         dispatch({ type: "setFetchState", fetchState: States.error });
-        errorHandler(error);
+        errorHandler(error, 'fetchNextAndAppendGroupMembers');
       }
     },
     [dispatch, errorHandler]
@@ -450,37 +497,41 @@ export function CometChatGroupMembers(props: GroupMembersProps) {
       action: string,
       group: CometChat.Group,
       loggedInUser: CometChat.User
-    ): CometChat.Action => {
-      const actionMessage = new CometChat.Action(
-        group.getGuid(),
-        CometChatUIKitConstants.MessageTypes.groupMember,
-        CometChatUIKitConstants.MessageReceiverType.group,
-        CometChatUIKitConstants.MessageCategory
-          .action as CometChat.MessageCategory
-      );
-      actionMessage.setAction(action);
-      actionMessage.setActionBy(CometChatUIKitUtility.clone(loggedInUser));
-      actionMessage.setSender(CometChatUIKitUtility.clone(loggedInUser));
-      actionMessage.setMessage(
-        `${loggedInUser.getUid()} ${action} ${actionOn.getUid()}`
-      );
-      actionMessage.setActionFor(CometChatUIKitUtility.clone(group));
-      actionMessage.setActionOn(CometChatUIKitUtility.clone(actionOn));
-      actionMessage.setReceiver(CometChatUIKitUtility.clone(group));
-      actionMessage.setConversationId("group_" + group.getGuid());
-      actionMessage.setMuid(CometChatUIKitUtility.ID());
-      actionMessage.setSentAt(CometChatUIKitUtility.getUnixTimestamp());
-      actionMessage.setReceiverType(
-        CometChatUIKitConstants.MessageReceiverType.group
-      );
-      actionMessage.setData({
-        extras: {
-          scope: {
-            new: actionOn.getScope(),
+    ): CometChat.Action | undefined => {
+      try {
+        const actionMessage = new CometChat.Action(
+          group.getGuid(),
+          CometChatUIKitConstants.MessageTypes.groupMember,
+          CometChatUIKitConstants.MessageReceiverType.group,
+          CometChatUIKitConstants.MessageCategory
+            .action as CometChat.MessageCategory
+        );
+        actionMessage.setAction(action);
+        actionMessage.setActionBy(CometChatUIKitUtility.clone(loggedInUser));
+        actionMessage.setSender(CometChatUIKitUtility.clone(loggedInUser));
+        actionMessage.setMessage(
+          `${loggedInUser.getUid()} ${action} ${actionOn.getUid()}`
+        );
+        actionMessage.setActionFor(CometChatUIKitUtility.clone(group));
+        actionMessage.setActionOn(CometChatUIKitUtility.clone(actionOn));
+        actionMessage.setReceiver(CometChatUIKitUtility.clone(group));
+        actionMessage.setConversationId("group_" + group.getGuid());
+        actionMessage.setMuid(CometChatUIKitUtility.ID());
+        actionMessage.setSentAt(CometChatUIKitUtility.getUnixTimestamp());
+        actionMessage.setReceiverType(
+          CometChatUIKitConstants.MessageReceiverType.group
+        );
+        actionMessage.setData({
+          extras: {
+            scope: {
+              new: actionOn.getScope(),
+            },
           },
-        },
-      });
-      return actionMessage;
+        });
+        return actionMessage;
+      } catch (error) {
+        errorHandler(error, 'createActionMessage');
+      }
     },
     []
   );
@@ -516,10 +567,10 @@ export function CometChatGroupMembers(props: GroupMembersProps) {
           CometChatUIKitConstants.groupMemberAction.BANNED,
           groupClone,
           loggedInUser
-        ),
+        )!,
       });
     } catch (error) {
-      errorHandler(error);
+      errorHandler(error, 'banGroupMember');
     }
   };
 
@@ -554,10 +605,10 @@ export function CometChatGroupMembers(props: GroupMembersProps) {
           CometChatUIKitConstants.groupMemberAction.KICKED,
           groupClone,
           loggedInUser
-        ),
+        )!,
       });
     } catch (error) {
-      errorHandler(error);
+      errorHandler(error, 'kickGroupMember');
     }
   };
 
@@ -566,45 +617,45 @@ export function CometChatGroupMembers(props: GroupMembersProps) {
   /**
    * Updates the scope of the provided `groupMember`
    */
-   const updateGroupMemberScope = useCallback(
-     (newScope: string): Promise<void> => {
-return new Promise<void>(async (resolve,reject)=>{
-  const loggedInUser = loggedInUserRef.current;
-  if (!groupMember || !loggedInUser) {
-    return reject()
-  }
-  try {
-    const newScopeCasted = newScope as CometChat.GroupMemberScope;
-    const currentGroup = groupPropRef.current;
-    await CometChat.updateGroupMemberScope(
-      currentGroup.getGuid(),
-      groupMember.getUid(),
-      newScopeCasted
-    );
-    
-    const updatedGroupMember = CometChatUIKitUtility.clone(groupMember);
-    updatedGroupMember.setScope(newScopeCasted);
-    dispatch({ type: "replaceGroupMemberIfPresent", updatedGroupMember });
-    CometChatGroupEvents.ccGroupMemberScopeChanged.next({
-      scopeChangedFrom: groupMember.getScope(),
-      scopeChangedTo: updatedGroupMember.getScope(),
-      message: createActionMessage(
-        updatedGroupMember,
-        CometChatUIKitConstants.groupMemberAction.SCOPE_CHANGE,
-        currentGroup,
-        loggedInUser
-      ),
-      group: CometChatUIKitUtility.clone(currentGroup),
-      updatedUser: CometChatUIKitUtility.clone(updatedGroupMember),
-    });
-    return resolve()
-  } catch (error) {
-     reject()
-    errorHandler(error);
-  } finally {
-    dispatch({ type: "setGroupMemberToChangeScopeOf", groupMember: null });
-  }
-})
+  const updateGroupMemberScope = useCallback(
+    (newScope: string): Promise<void> => {
+      return new Promise<void>(async (resolve, reject) => {
+        const loggedInUser = loggedInUserRef.current;
+        if (!groupMember || !loggedInUser) {
+          return reject()
+        }
+        try {
+          const newScopeCasted = newScope as CometChat.GroupMemberScope;
+          const currentGroup = groupPropRef.current;
+          await CometChat.updateGroupMemberScope(
+            currentGroup.getGuid(),
+            groupMember.getUid(),
+            newScopeCasted
+          );
+
+          const updatedGroupMember = CometChatUIKitUtility.clone(groupMember);
+          updatedGroupMember.setScope(newScopeCasted);
+          dispatch({ type: "replaceGroupMemberIfPresent", updatedGroupMember });
+          CometChatGroupEvents.ccGroupMemberScopeChanged.next({
+            scopeChangedFrom: groupMember.getScope(),
+            scopeChangedTo: updatedGroupMember.getScope(),
+            message: createActionMessage(
+              updatedGroupMember,
+              CometChatUIKitConstants.groupMemberAction.SCOPE_CHANGE,
+              currentGroup,
+              loggedInUser
+            )!,
+            group: CometChatUIKitUtility.clone(currentGroup),
+            updatedUser: CometChatUIKitUtility.clone(updatedGroupMember),
+          });
+          return resolve()
+        } catch (error) {
+          reject()
+          errorHandler(error, 'updateGroupMemberScope');
+        } finally {
+          dispatch({ type: "setGroupMemberToChangeScopeOf", groupMember: null });
+        }
+      })
     },
     [errorHandler, dispatch, createActionMessage, groupMember, groupPropRef]
   );
@@ -616,14 +667,18 @@ return new Promise<void>(async (resolve,reject)=>{
     action: string,
     groupMember: CometChat.GroupMember
   ): void | Promise<void> {
-    if (action === CometChatUIKitConstants.GroupMemberOptions.ban) {
-      return banGroupMember(groupMember);
-    }
-    if (action === CometChatUIKitConstants.GroupMemberOptions.kick) {
-      return kickGroupMember(groupMember);
-    }
-    if (action === CometChatUIKitConstants.GroupMemberOptions.changeScope) {
-      return dispatch({ type: "setGroupMemberToChangeScopeOf", groupMember });
+    try {
+      if (action === CometChatUIKitConstants.GroupMemberOptions.ban) {
+        return banGroupMember(groupMember);
+      }
+      if (action === CometChatUIKitConstants.GroupMemberOptions.kick) {
+        return kickGroupMember(groupMember);
+      }
+      if (action === CometChatUIKitConstants.GroupMemberOptions.changeScope) {
+        return dispatch({ type: "setGroupMemberToChangeScopeOf", groupMember });
+      }
+    } catch (error) {
+      errorHandler(error, 'handleActionOnGroupMember');
     }
   }
 
@@ -634,25 +689,43 @@ return new Promise<void>(async (resolve,reject)=>{
   function getDefaultListItemMenuView(
     groupMember: CometChat.GroupMember
   ): JSX.Element | null {
-    let groupMemberOptionsProps: CometChatOption[] | undefined;
-    let groupMemberOptions = GroupMemberUtils.getViewMemberOptions(
-      groupMember,
-      group,
-      loggedInUserRef.current?.getUid(),
-    )
+    try {
+      let groupMemberOptionsProps: CometChatOption[] | undefined;
+      let groupMemberOptions = GroupMemberUtils.getViewMemberOptions(
+        groupMember,
+        group,
+        loggedInUserRef.current?.getUid(),
+        { hideBanMemberOption, hideKickMemberOption, hideScopeChangeOption }
+      )
 
-    if (typeof groupMemberOptions === "string") {
-      return null
-    }
+      if (typeof groupMemberOptions === "string") {
+        return null
+      }
 
-    if (
-      tailView === null &&
-      (groupMemberOptionsProps = options?.(group, groupMember))?.length
-    ) {
-      return (
+      if (
+        trailingView === null &&
+        (groupMemberOptionsProps = options?.(group, groupMember))?.length
+      ) {
+        return (
+          <CometChatContextMenu
+            placement={Placement.left}
+            data={groupMemberOptionsProps as unknown as CometChatActionsIcon[]}
+            onOptionClicked={(e: CometChatOption) => {
+              const { id, onClick } = e;
+              if (onClick) {
+                onClick();
+              } else if (typeof id === "string") {
+                handleActionOnGroupMember(id, groupMember);
+              }
+            }}
+          />
+        );
+      }
+      return <>
         <CometChatContextMenu
           placement={Placement.left}
-          data={groupMemberOptionsProps as unknown as CometChatActionsIcon[]}
+          topMenuSize={1}
+          data={groupMemberOptions as unknown as CometChatActionsIcon[]}
           onOptionClicked={(e: CometChatOption) => {
             const { id, onClick } = e;
             if (onClick) {
@@ -662,23 +735,11 @@ return new Promise<void>(async (resolve,reject)=>{
             }
           }}
         />
-      );
+      </>;
+    } catch (error) {
+      errorHandler(error, 'getDefaultListItemMenuView');
+      return null;
     }
-    return <>
-      <CometChatContextMenu
-        placement={Placement.left}
-        topMenuSize={1}
-        data={groupMemberOptions as unknown as CometChatActionsIcon[]}
-        onOptionClicked={(e: CometChatOption) => {
-          const { id, onClick } = e;
-          if (onClick) {
-            onClick();
-          } else if (typeof id === "string") {
-            handleActionOnGroupMember(id, groupMember);
-          }
-        }}
-      />
-    </>;
   }
 
   /**
@@ -687,21 +748,26 @@ return new Promise<void>(async (resolve,reject)=>{
   function getSelectionInput(
     groupMember: CometChat.GroupMember
   ): JSX.Element | null {
-    if (selectionMode === SelectionMode.single) {
-      return (
-        <CometChatRadioButton
-          onRadioButtonChanged={(e) => onSelect?.(groupMember, e.checked)}
-        />
-      );
+    try {
+      if (selectionMode === SelectionMode.single) {
+        return (
+          <CometChatRadioButton
+            onRadioButtonChanged={(e) => onSelect?.(groupMember, e.checked)}
+          />
+        );
+      }
+      if (selectionMode === SelectionMode.multiple) {
+        return (
+          <CometChatCheckbox
+            onCheckBoxValueChanged={(e) => onSelect?.(groupMember, e.checked)}
+          />
+        );
+      }
+      return null;
+    } catch (error) {
+      errorHandler(error, 'getSelectionInput');
+      return null;
     }
-    if (selectionMode === SelectionMode.multiple) {
-      return (
-        <CometChatCheckbox
-          onCheckBoxValueChanged={(e) => onSelect?.(groupMember, e.checked)}
-        />
-      );
-    }
-    return null;
   }
 
   /**
@@ -713,15 +779,20 @@ return new Promise<void>(async (resolve,reject)=>{
     groupMemberOptions: string | CometChatOption[],
     groupMember: CometChat.GroupMember
   ): JSX.Element {
-    if (typeof groupMemberOptions === "string" && groupMemberOptions !== "participant") {
-      return (
-        <div className={`cometchat-group-members__tail-view-options cometchat-group-members__tail-view-options-${groupMemberOptions}`}>
-          {localize(groupMemberOptions.toUpperCase())}
-        </div>
-      );
-    }
+    try {
+      if (typeof groupMemberOptions === "string" && groupMemberOptions !== "participant") {
+        return (
+          <div className={`cometchat-group-members__trailing-view-options cometchat-group-members__trailing-view-options-${groupMemberOptions}`}>
+            {localize(groupMemberOptions.toUpperCase())}
+          </div>
+        );
+      }
 
-    return <div className={`cometchat-group-members__tail-view-options cometchat-group-members__tail-view-options-${groupMember?.getScope()}`}>{groupMember?.getScope() !== CometChatUIKitConstants.groupMemberScope.participant && localize(groupMember?.getScope().toUpperCase())}</div>
+      return <div className={`cometchat-group-members__trailing-view-options cometchat-group-members__trailing-view-options-${groupMember?.getScope()}`}>{groupMember?.getScope() !== CometChatUIKitConstants.groupMemberScope.participant && localize(groupMember?.getScope().toUpperCase())}</div>
+    } catch (error) {
+      errorHandler(error, 'getDefaultTailOptionsView');
+      return <></>;
+    }
   }
 
   /**
@@ -730,20 +801,25 @@ return new Promise<void>(async (resolve,reject)=>{
   function getDefaultTailView(
     groupMember: CometChat.GroupMember
   ): JSX.Element | null {
-    if (tailView !== null) {
+    try {
+      if (trailingView !== null) {
+        return null;
+      }
+      return (
+        <div className='cometchat-group-members__trailing-view'>
+          {getDefaultTailOptionsView(
+            GroupMemberUtils.getViewMemberOptions(
+              groupMember,
+              group,
+              loggedInUserRef.current?.getUid()),
+            groupMember,
+          )}
+        </div>
+      );
+    } catch (error) {
+      errorHandler(error, 'getDefaultTailView');
       return null;
     }
-    return (
-      <div className='cometchat-group-members__tail-view'>
-        {getDefaultTailOptionsView(
-          GroupMemberUtils.getViewMemberOptions(
-            groupMember,
-            group,
-            loggedInUserRef.current?.getUid()),
-          groupMember
-        )}
-      </div>
-    );
   }
 
   /**
@@ -752,47 +828,58 @@ return new Promise<void>(async (resolve,reject)=>{
   function getDefaultListItemTailView(
     groupMember: CometChat.GroupMember
   ): JSX.Element {
-    return (
-      <div>
-        {tailView?.(groupMember)}
-        {getSelectionInput(groupMember)}
-        {getDefaultTailView(groupMember)}
-      </div>
-    );
+    try {
+      return (
+        <div>
+          {trailingView?.(groupMember)}
+          {getSelectionInput(groupMember)}
+          {getDefaultTailView(groupMember)}
+        </div>
+      );
+    } catch (error) {
+      errorHandler(error, 'getDefaultListItemTailView');
+      return <></>;
+    }
   }
 
 
   /**
    * Creates the default list item view
    */
-  function getDefaultListItemView(
+  function getDefaultItemView(
     groupMember: CometChat.GroupMember
   ): JSX.Element {
-
-    const status = groupMember.getStatus()
-    return (
-      <div
-        className={`cometchat-group-members__list-item ${!disableUsersPresence ?  `cometchat-group-members__list-item-${status}` : ''}`}
-      >
-        <CometChatListItem
-          id={groupMember.getUid()}
-          title={groupMember.getName()}
-          avatarURL={groupMember.getAvatar()}
-          avatarName={groupMember.getName()}
-          subtitleView={subtitleView?.(groupMember)}
-          tailView={getDefaultListItemTailView(groupMember)}
-          menuView={!tailView ? getDefaultListItemMenuView(groupMember) : null}
-          onListItemClicked={(e) => onItemClick?.(groupMember)}
-        />
-      </div>
-    );
+    try {
+      const status = groupMember.getStatus()
+      return (
+        <div
+          className={`cometchat-group-members__list-item ${!hideUserStatus ? `cometchat-group-members__list-item-${status}` : ''}`}
+        >
+          <CometChatListItem
+            id={groupMember.getUid()}
+            title={groupMember.getName()}
+            leadingView={leadingView?.(groupMember)}
+            titleView={titleView?.(groupMember)}
+            avatarURL={groupMember.getAvatar()}
+            avatarName={groupMember.getName()}
+            subtitleView={subtitleView?.(groupMember)}
+            trailingView={getDefaultListItemTailView(groupMember)}
+            menuView={!trailingView ? getDefaultListItemMenuView(groupMember) : null}
+            onListItemClicked={(e) => onItemClick?.(groupMember)}
+          />
+        </div>
+      );
+    } catch (error) {
+      errorHandler(error, 'getDefaultItemView');
+      return <></>;
+    }
   }
 
   /**
    * Gets the list item view of the component
    */
   function getListItem(): (groupMember: CometChat.GroupMember) => JSX.Element {
-    return listItemView !== null ? listItemView : getDefaultListItemView;
+    return itemView !== null ? itemView : getDefaultItemView;
   }
 
   /**
@@ -810,29 +897,34 @@ return new Promise<void>(async (resolve,reject)=>{
    * Creates the group member scope change modal view
    */
   function getGroupMemberScopeChangeModal(): JSX.Element | null {
-    let groupMemberAllowedScopes: string[];
-    const { groupMemberToChangeScopeOf } = state;
-    if (
-      groupMemberToChangeScopeOf !== null &&
-      (groupMemberAllowedScopes = GroupMemberUtils.allowScopeChange(
-        group,
-        groupMemberToChangeScopeOf
-      )).length > 0
+    try {
+      let groupMemberAllowedScopes: string[];
+      const { groupMemberToChangeScopeOf } = state;
+      if (
+        groupMemberToChangeScopeOf !== null &&
+        (groupMemberAllowedScopes = GroupMemberUtils.allowScopeChange(
+          group,
+          groupMemberToChangeScopeOf
+        )).length > 0
 
-    ) {
+      ) {
 
-      return (
-        <div className="cometchat-group-members__backdrop">
-          <CometChatChangeScope
-            options={groupMemberAllowedScopes}
-            defaultSelection={groupMemberToChangeScopeOf.getScope()}
-            onScopeChanged ={updateGroupMemberScope}
-            onCloseClick={handleChangeScopeClose}
-          />
-        </div>
-      );
+        return (
+          <div className="cometchat-group-members__backdrop">
+            <CometChatChangeScope
+              options={groupMemberAllowedScopes}
+              defaultSelection={groupMemberToChangeScopeOf.getScope()}
+              onScopeChanged={updateGroupMemberScope}
+              onCloseClick={handleChangeScopeClose}
+            />
+          </div>
+        );
+      }
+      return null;
+    } catch (error) {
+      errorHandler(error, 'getGroupMemberScopeChangeModal');
+      return null;
     }
-    return null;
   }
 
 
@@ -841,22 +933,26 @@ return new Promise<void>(async (resolve,reject)=>{
    * Renders the loading state view with shimmer effect
    *
    * @remarks
-   * If a custom `loadingStateView` is provided, it will be used. Otherwise, the default shimmer effect is displayed.
+   * If a custom `loadingView` is provided, it will be used. Otherwise, the default shimmer effect is displayed.
    *
    * @returns A JSX element representing the loading state
    */
   const getLoadingView = () => {
-    if (loadingStateView) {
-      return loadingStateView
+    try {
+      if (loadingView) {
+        return loadingView
+      }
+      return <div className="cometchat-group-members__shimmer">
+        {[...Array(15)].map((_, index) => (
+          <div key={index} className="cometchat-group-members__shimmer-item">
+            <div className="cometchat-group-members__shimmer-item-avatar"></div>
+            <div className="cometchat-group-members__shimmer-item-title"></div>
+          </div>
+        ))}
+      </div>
+    } catch (error) {
+      errorHandler(error, 'getLoadingView');
     }
-    return <div className="cometchat-group-members__shimmer">
-      {[...Array(15)].map((_, index) => (
-        <div key={index} className="cometchat-group-members__shimmer-item">
-          <div className="cometchat-group-members__shimmer-item-avatar"></div>
-          <div className="cometchat-group-members__shimmer-item-title"></div>
-        </div>
-      ))}
-    </div>
   }
 
 
@@ -865,57 +961,64 @@ return new Promise<void>(async (resolve,reject)=>{
    * Renders the empty state view when there are no groups to display
    *
    * @remarks
-   * If a custom `emptyStateView` is provided, it will be used. Otherwise, a default empty state view with a message is displayed.
+   * If a custom `emptyView` is provided, it will be used. Otherwise, a default empty state view with a message is displayed.
    *
    * @returns A JSX element representing the empty state
    */
-  const getEmptyStateView = () => {
-    const isDarkMode = getThemeMode() == "dark" ? true : false;
+  const getEmptyView = () => {
+    try {
+      const isDarkMode = getThemeMode() == "dark" ? true : false;
 
-    if (emptyStateView) {
-      return emptyStateView
+      if (emptyView) {
+        return emptyView
+      }
+      return (
+        <div className="cometchat-group-members__empty-state-view">
+          <div className="cometchat-group-members__empty-state-view-icon">
+            <img src={isDarkMode ? emptyIconDark : emptyIcon} alt="" />
+          </div>
+          <div className="cometchat-group-members__empty-state-view-body">
+            <div className="cometchat-group-members__empty-state-view-body-title">{localize("NO_GROUP_MEMBER_AVAILABLE")}</div>
+            <div className="cometchat-group-members__empty-state-view-body-description">{localize("GROUP_MEMBER_EMPTY_STATE_MESSAGE")}</div>
+          </div>
+        </div>
+      )
+    } catch (error) {
+      errorHandler(error, 'getEmptyView');
     }
-    return (
-      <div className="cometchat-group-members__empty-state-view">
-        <div className="cometchat-group-members__empty-state-view-icon">
-          <img src={isDarkMode ? emptyIconDark : emptyIcon} alt="" />
-        </div>
-        <div className="cometchat-group-members__empty-state-view-body">
-          <div className="cometchat-group-members__empty-state-view-body-title">{localize("NO_GROUP_MEMBER_AVAILABLE")}</div>
-          <div className="cometchat-group-members__empty-state-view-body-description">{localize("GROUP_MEMBER_EMPTY_STATE_MESSAGE")}</div>
-        </div>
-      </div>
-    )
   }
 
   /**
    * Renders the error state view when an error occurs
    *
    * @remarks
-   * If a custom `errorStateView` is provided, it will be used. Otherwise, a default error message is displayed.
+   * If a custom `errorView` is provided, it will be used. Otherwise, a default error message is displayed.
    *
    * @returns A JSX element representing the error state
    */
-  const getErrorStateView = () => {
+  const getErrorView = () => {
+    try {
+      const isDarkMode = getThemeMode() == "dark" ? true : false;
 
-    const isDarkMode = getThemeMode() == "dark" ? true : false;
+      if (errorView) {
+        return errorView
+      }
 
-    if (errorStateView) {
-      return errorStateView
-    }
-
-    return (
-      <div className="cometchat-group-members__error-state-view">
-        <div className="cometchat-group-members__error-state-view-icon">
-          <img src={isDarkMode ? errorIconDark : errorIcon} alt="" />
-        </div>
-        <div className="cometchat-group-members__error-state-view-body">
-          <div className="cometchat-group-members__error-state-view-body-title">{localize("OOPS!")}</div>
-          <div className="cometchat-group-members__error-state-view-body-description">{localize("LOOKS_LIKE_SOMETHING_WENT_WRONG")}
+      return (
+        <div className="cometchat-group-members__error-state-view">
+          <div className="cometchat-group-members__error-state-view-icon">
+            <img src={isDarkMode ? errorIconDark : errorIcon} alt="" />
+          </div>
+          <div className="cometchat-group-members__error-state-view-body">
+            <div className="cometchat-group-members__error-state-view-body-title">{localize("OOPS!")}</div>
+            <div className="cometchat-group-members__error-state-view-body-description">{localize("LOOKS_LIKE_SOMETHING_WENT_WRONG")}
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    } catch (error) {
+      errorHandler(error, 'getErrorView');
+    }
   }
 
 
@@ -934,7 +1037,7 @@ return new Promise<void>(async (resolve,reject)=>{
     searchKeyword,
     disableLoadingState,
     groupMembersSearchText,
-    disableUsersPresence
+    hideUserStatus
   });
 
   return (
@@ -943,14 +1046,13 @@ return new Promise<void>(async (resolve,reject)=>{
         className='cometchat-group-members'
       >
         <CometChatList
-          title={title}
-          searchPlaceholderText={searchPlaceholderText}
+          searchPlaceholderText={searchPlaceholderTextRef.current}
           searchText={state.searchText}
           onSearch={onSearchTextChange}
           hideSearch={hideSearch}
           list={state.groupMemberList}
           listItemKey='getUid'
-          listItem={getListItem()}
+          itemView={getListItem()}
           showSectionHeader={false}
           onScrolledToBottom={() =>
             fetchNextAndAppendGroupMembers(
@@ -960,10 +1062,11 @@ return new Promise<void>(async (resolve,reject)=>{
           }
           state={state.fetchState === States.loaded && state.groupMemberList.length === 0 ? States.empty : state.fetchState}
           loadingView={getLoadingView()}
-          emptyStateView={getEmptyStateView()}
-          errorStateView={getErrorStateView()}
+          emptyView={getEmptyView()}
+          errorView={getErrorView()}
           hideError={hideError}
-          menu={menu}
+          headerView={headerView}
+
         />
         {getGroupMemberScopeChangeModal()}
       </div>

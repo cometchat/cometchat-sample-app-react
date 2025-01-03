@@ -4,6 +4,7 @@ import { Placement, States } from "../../../Enums/Enums";
 import { CometChatUIKitLoginListener } from "../../../CometChatUIKit/CometChatUIKitLoginListener";
 import { localize } from "../../../resources/CometChatLocalize/cometchat-localize";
 import { CometChatUIKitConstants } from "../../../constants/CometChatUIKitConstants";
+import { useCometChatErrorHandler } from "../../../CometChatCustomHooks";
 
 interface ReactionInfoProps {
     /* Base message object of which reaction info is viewed. */
@@ -12,12 +13,15 @@ interface ReactionInfoProps {
     reaction: string;
     /* To specify the position of the component. */
     placement?: Placement;
+    /* Optional callback function to handle error logs. */
+    onError?: ((error: CometChat.CometChatException) => void) | null;
 }
 
-const CometChatReactionInfo: React.FC<ReactionInfoProps> = ({
+export const CometChatReactionInfo: React.FC<ReactionInfoProps> = ({
     messageObject,
     reaction,
     placement = Placement.top,
+    onError
 }) => {
     const [reactionNames, setReactionNames] = useState<string[]>([]);
     const [totalReactions, setTotalReactions] = useState(0);
@@ -34,6 +38,7 @@ const CometChatReactionInfo: React.FC<ReactionInfoProps> = ({
     const othersText = localize("OTHERS");
     const youText = localize("YOU");
     const limit = CometChatUIKitConstants.requestBuilderLimits.reactionInfoLimit;
+    const errorHandler = useCometChatErrorHandler(onError);
 
     useEffect(() => {
         checkVisibilityOfElement();
@@ -42,6 +47,7 @@ const CometChatReactionInfo: React.FC<ReactionInfoProps> = ({
                 observerRef.current.disconnect();
             }
         };
+  
     }, []);
 
     useEffect(() => {
@@ -58,22 +64,27 @@ const CometChatReactionInfo: React.FC<ReactionInfoProps> = ({
     /* This function is used to check the visibility of the reaction info tooltip. */
     const checkVisibilityOfElement = useCallback(
         () => {
+        try {
             observerRef.current = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         isInteracting.current = true;
-                        setTotalReactions(getTotalReactionCount());
+                        setTotalReactions(getTotalReactionCount()!);
                         fetchReactionsOnInteraction();
                     }
                 });
             });
-            observerRef.current.observe(document.getElementById("reaction-info-container") as Element);
+            observerRef.current.observe(document.getElementById("reaction-info-container") as Element); 
+        } catch (error) {
+            errorHandler(error,"checkVisibilityOfElement")
+        }
         }, []
     )
 
     /* Purpose of this function is to fetch the reaction data when interaction happens. */
     const fetchReactionsOnInteraction = useCallback(
         async () => {
+        try {
             if (isInteracting && hasMessageUpdated) {
                 isInteracting.current = false;
                 hasMessageUpdated.current = false;
@@ -86,42 +97,53 @@ const CometChatReactionInfo: React.FC<ReactionInfoProps> = ({
                 };
                 isInteracting.current = false;
             }
+        } catch (error) {
+            errorHandler(error,"fetchReactionsOnInteraction")
+        }
         }, []
     )
 
     /* The purpose of this function is to fetch the reactions data and update all the required states. */
     const fetchReactions = async () => {
-        if (reactionNames.length > 0) {
-            return;
-        }
-        setState(States.loading);
-        let builder: ReactionsRequestBuilder = new CometChat.ReactionsRequestBuilder().setLimit(limit);
-        const reactionBuilder = builder.setMessageId(messageObject?.getId()).setReaction(reaction).build();
         try {
-            const reactionList = await reactionBuilder.fetchNext();
-            const fetchedReactionNames: string[] = [];
-            reactionList.forEach((reaction: any) => {
-                if (reaction?.reactedBy?.uid === loggedInUser?.getUid()) {
-                    fetchedReactionNames.unshift(youText);
-                } else {
-                    fetchedReactionNames.push(reaction?.reactedBy?.name);
-                }
-            });
-            setReactionNames(fetchedReactionNames);
-            setState(States.loaded);
+            if (reactionNames.length > 0) {
+                return;
+            }
+            setState(States.loading);
+            let builder: ReactionsRequestBuilder = new CometChat.ReactionsRequestBuilder().setLimit(limit);
+            const reactionBuilder = builder.setMessageId(messageObject?.getId()).setReaction(reaction).build();
+            try {
+                const reactionList = await reactionBuilder.fetchNext();
+                const fetchedReactionNames: string[] = [];
+                reactionList.forEach((reaction: any) => {
+                    if (reaction?.reactedBy?.uid === loggedInUser?.getUid()) {
+                        fetchedReactionNames.unshift(youText);
+                    } else {
+                        fetchedReactionNames.push(reaction?.reactedBy?.name);
+                    }
+                });
+                setReactionNames(fetchedReactionNames);
+                setState(States.loaded);
+            } catch (error) {
+                setState(States.error);
+                console.log("error", error);
+            }
         } catch (error) {
-            setState(States.error);
-            console.log("error", error);
+            errorHandler(error,"fetchReactions")
         }
     };
 
     /* This function is used to calculate the total count of the reactions on required message. */
     const getTotalReactionCount = () => {
+       try {
         const messageReactions = messageObject.getReactions();
         const reactionObj = messageReactions.find((reaction: any) => {
             return reaction.getReaction() === reaction;
         });
         return reactionObj ? reactionObj.getCount() : 0;
+       } catch (error) {
+        errorHandler(error,"getTotalReactionCount")
+       }
     };
 
     /* This function returns the Error state component for the reaction info. */
@@ -162,6 +184,7 @@ const CometChatReactionInfo: React.FC<ReactionInfoProps> = ({
     );
 
     const updatePlacementBasedOnPosition = () => {
+       try {
         const height = infoRef.current?.scrollHeight!;
         const width = infoRef.current?.scrollWidth!;
         const rect = infoRef.current?.getBoundingClientRect();
@@ -192,6 +215,9 @@ const CometChatReactionInfo: React.FC<ReactionInfoProps> = ({
                 }
             }
         }
+       } catch (error) {
+        errorHandler(error,"updatePlacementBasedOnPosition")
+       }
     }
 
     useEffect(() => {
@@ -228,5 +254,3 @@ const CometChatReactionInfo: React.FC<ReactionInfoProps> = ({
         </div>
     );
 };
-
-export default CometChatReactionInfo;

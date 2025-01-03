@@ -17,7 +17,7 @@ import { isMobileDevice } from "../../utils/util";
 type Args = {
   dispatch: React.Dispatch<Action>;
   mySetAddToMsgInputText: (text: string) => void;
-  errorHandler: (error: unknown) => void;
+  errorHandler: (error: unknown,source?:string) => void;
   pasteHtmlAtCaret: (text: string) => void;
   textFormatters: Array<CometChatTextFormatter>;
   disableMentions: boolean;
@@ -102,104 +102,108 @@ export function useCometChatMessageComposer(args: Args) {
      * Subscribes to message edited Message UI event
      */
     () => {
-      const subMessageEdited = CometChatMessageEvents.ccMessageEdited.subscribe(
-        (object: IMessages) => {
-          let parentId = object?.message?.getParentMessageId()
-          if ((parentMessageIdPropRef.current && parentId
-            && parentId === parentMessageIdPropRef.current)
-            || (!parentMessageIdPropRef.current && !parentId)) {
-              if (isPartOfCurrentChatForUIEvent(object.message)) {
-            if (
-              object.status === MessageStatus.inprogress &&
-              object.message instanceof CometChat.TextMessage
-            ) {
-              isPreviewVisible.current = true;
-              dispatch({
-                type: "setTextMessageToEdit",
-                textMessageToEdit: object.message,
-              });
-              emptyInputField()
-              if (pasteHtmlAtCaret) {
-                const sel = window?.getSelection();
-                setSelection(sel);
-                let finalText: string | void = object.message.getText();
-                if (textFormatterArray && textFormatterArray.length) {
-                  for (let i = 0; i < textFormatterArray.length; i++) {
-                    if (textFormatterArray[i] instanceof CometChatMentionsFormatter && (textFormatterArray[i] as CometChatMentionsFormatter).getCometChatUserGroupMembers()?.length <= 0) {
-                      (textFormatterArray[i] as CometChatMentionsFormatter).setCometChatUserGroupMembers(object.message.getMentionedUsers())
+      try {
+        const subMessageEdited = CometChatMessageEvents.ccMessageEdited.subscribe(
+          (object: IMessages) => {
+            let parentId = object?.message?.getParentMessageId()
+            if ((parentMessageIdPropRef.current && parentId
+              && parentId === parentMessageIdPropRef.current)
+              || (!parentMessageIdPropRef.current && !parentId)) {
+                if (isPartOfCurrentChatForUIEvent(object.message)) {
+              if (
+                object.status === MessageStatus.inprogress &&
+                object.message instanceof CometChat.TextMessage
+              ) {
+                isPreviewVisible.current = true;
+                dispatch({
+                  type: "setTextMessageToEdit",
+                  textMessageToEdit: object.message,
+                });
+                emptyInputField()
+                if (pasteHtmlAtCaret) {
+                  const sel = window?.getSelection();
+                  setSelection(sel);
+                  let finalText: string | void = object.message.getText();
+                  if (textFormatterArray && textFormatterArray.length) {
+                    for (let i = 0; i < textFormatterArray.length; i++) {
+                      if (textFormatterArray[i] instanceof CometChatMentionsFormatter && (textFormatterArray[i] as CometChatMentionsFormatter).getCometChatUserGroupMembers()?.length <= 0) {
+                        (textFormatterArray[i] as CometChatMentionsFormatter).setCometChatUserGroupMembers(object.message.getMentionedUsers())
+                      }
+  
+                      const element = getCurrentInput() as HTMLElement;
+  
+                      if (element) {
+                        textFormatterArray[i].setInputElementReference(element);
+                      }
+  
+                      textFormatterArray[i].setCaretPositionAndRange(
+                        currentSelectionForRegex.current,
+                        currentSelectionForRegexRange.current
+                      );
+                      finalText = textFormatterArray[i].getFormattedText(
+                        finalText!,
+                        { mentionsTargetElement: MentionsTargetElement.textinput }
+  
+                      );
                     }
-
-                    const element = getCurrentInput() as HTMLElement;
-
-                    if (element) {
-                      textFormatterArray[i].setInputElementReference(element);
-                    }
-
-                    textFormatterArray[i].setCaretPositionAndRange(
-                      currentSelectionForRegex.current,
-                      currentSelectionForRegexRange.current
-                    );
-                    finalText = textFormatterArray[i].getFormattedText(
-                      finalText!,
-                      { mentionsTargetElement: MentionsTargetElement.textinput }
-
-                    );
                   }
+                  pasteHtmlAtCaret(finalText as string)
                 }
-                pasteHtmlAtCaret(finalText as string)
+              }
+              if (object.status === MessageStatus.success &&
+                object.message instanceof CometChat.TextMessage) {
+                dispatch({
+                  type: "setTextMessageToEdit",
+                  textMessageToEdit: null,
+                });
+                emptyInputField();
+                isPreviewVisible.current = false;
+              }
+              else {
+                isPreviewVisible.current = true;
               }
             }
-            if (object.status === MessageStatus.success &&
-              object.message instanceof CometChat.TextMessage) {
-              dispatch({
-                type: "setTextMessageToEdit",
-                textMessageToEdit: null,
-              });
-              emptyInputField();
-              isPreviewVisible.current = false;
-            }
-            else {
-              isPreviewVisible.current = true;
             }
           }
+        );
+  
+        const subComposeMessage = CometChatUIEvents.ccComposeMessage.subscribe(
+          (text: string) => {
+            dispatch({ type: "setText", text: "" });
+            emptyInputField()
+            pasteHtmlAtCaret(text);
+            dispatch({ type: "setText", text: text });
           }
-        }
-      );
-
-      const subComposeMessage = CometChatUIEvents.ccComposeMessage.subscribe(
-        (text: string) => {
-          dispatch({ type: "setText", text: "" });
-          emptyInputField()
-          pasteHtmlAtCaret(text);
-          dispatch({ type: "setText", text: text });
-        }
-      );
-      mentionsTextFormatterInstanceRef.current.setId(
-        mentionsFormatterInstanceId
-      );
-
-      const ccShowMentionsCountWarning =
-        CometChatUIEvents.ccShowMentionsCountWarning.subscribe(
-          (data: IMentionsCountWarning) => {
-            if (data.id === mentionsFormatterInstanceId) {
-              if (data.showWarning) {
+        );
+        mentionsTextFormatterInstanceRef.current.setId(
+          mentionsFormatterInstanceId
+        );
+  
+        const ccShowMentionsCountWarning =
+          CometChatUIEvents.ccShowMentionsCountWarning.subscribe(
+            (data: IMentionsCountWarning) => {
+              if (data.id === mentionsFormatterInstanceId) {
+                if (data.showWarning) {
+                  dispatch({
+                    type: "setShowMentionsCountWarning",
+                    showMentionsCountWarning: true,
+                  });
+                  return;
+                }
                 dispatch({
                   type: "setShowMentionsCountWarning",
-                  showMentionsCountWarning: true,
+                  showMentionsCountWarning: false,
                 });
-                return;
               }
-              dispatch({
-                type: "setShowMentionsCountWarning",
-                showMentionsCountWarning: false,
-              });
-            }
-          })
-      return () => {
-        subMessageEdited.unsubscribe();
-        subComposeMessage.unsubscribe();
-        ccShowMentionsCountWarning.unsubscribe();
-      };
+            })
+        return () => {
+          subMessageEdited.unsubscribe();
+          subComposeMessage.unsubscribe();
+          ccShowMentionsCountWarning.unsubscribe();
+        };
+      } catch (error) {
+        errorHandler(error,"useEffect")
+      }
     },
     [
       mySetAddToMsgInputText,
@@ -214,10 +218,14 @@ export function useCometChatMessageComposer(args: Args) {
   */
 
   useEffect(() => {
-    // Maintain the initial text passed from props when the conversation changes
-    if (propsText && (user?.getUid() || group?.getGuid())) {
-      dispatch({ type: "setAddToMsgInputText", addToMsgInputText: propsText });
-    }
+  try {
+      // Maintain the initial text passed from props when the conversation changes
+      if (propsText && (user?.getUid() || group?.getGuid())) {
+        dispatch({ type: "setAddToMsgInputText", addToMsgInputText: propsText });
+      }
+  } catch (error) {
+    errorHandler(error,"setAddToMsgInputText")
+  }
   }, [user?.getUid(), group?.getGuid(), propsText, dispatch]);
 
 
@@ -226,23 +234,25 @@ export function useCometChatMessageComposer(args: Args) {
      * Subscribes to showModal & hideModal UI event to show & hide the Polls UI.
      */
     () => {
-      const subShowModal = CometChatUIEvents.ccShowModal.subscribe(
-        (data: IModal) => {
-         if((parentMessageIdPropRef?.current && data.composerId && data.composerId.parentMessageId && data.composerId.parentMessageId == parentMessageIdPropRef?.current) || !parentMessageIdPropRef?.current){
-          dispatch({ type: "setShowPoll", showPoll: true });
-          createPollViewRef.current = data.child;
-         }
-        }
-      );
-
-      const subHideModal = CometChatUIEvents.ccHideModal.subscribe(() => {
-        dispatch({ type: "setShowPoll", showPoll: false });
-        createPollViewRef.current = null;
-      });
-      return () => {
-        subShowModal.unsubscribe();
-        subHideModal.unsubscribe();
-      };
+      try {
+        const subShowModal = CometChatUIEvents.ccShowModal.subscribe(
+          (data: IModal) => {
+            dispatch({ type: "setShowPoll", showPoll: true });
+            createPollViewRef.current = data.child;
+          }
+        );
+  
+        const subHideModal = CometChatUIEvents.ccHideModal.subscribe(() => {
+          dispatch({ type: "setShowPoll", showPoll: false });
+          createPollViewRef.current = null;
+        });
+        return () => {
+          subShowModal.unsubscribe();
+          subHideModal.unsubscribe();
+        };
+      } catch (error) {
+        errorHandler(error,"ccShowModal")
+      }
     },
     [createPollViewRef, dispatch]
   );
@@ -252,25 +262,31 @@ export function useCometChatMessageComposer(args: Args) {
    */
   useEffect(() => {
     function triggerSelection(): void {
+     try {
       let sel = window?.getSelection();
       setSelection(sel);
+     } catch (error) {
+      errorHandler(error,"triggerSelection")
+     }
     }
-    const contentEditable = getCurrentInput();
-    const preventPaste = (e: ClipboardEvent) => {
-      e.preventDefault();
-      let clipboardData = e.clipboardData!.getData("text/plain");
-      const sanitizedData = clipboardData
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-      if (sanitizedData) {
-        contentEditable.removeEventListener("paste", preventPaste);
-        pasteHtmlAtCaret(sanitizedData);
-        dispatch({ type: "setText", text: sanitizedData });
-        setTimeout(() => {
-          contentEditable.addEventListener("paste", preventPaste);
-        }, 0);
+    try {
+      const contentEditable = getCurrentInput();
+      const preventPaste = (e: ClipboardEvent) => {
+        e.preventDefault();
+        let clipboardData = e.clipboardData!.getData("text/plain");
+        const sanitizedData = clipboardData
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+        if (sanitizedData) {
+          contentEditable.removeEventListener("paste", preventPaste);
+          pasteHtmlAtCaret(sanitizedData);
+          dispatch({ type: "setText", text: sanitizedData });
+          setTimeout(() => {
+            contentEditable.addEventListener("paste", preventPaste);
+          }, 0);
+        }
       }
-    }
+    
     contentEditable.addEventListener("paste", preventPaste);
     document?.addEventListener("selectionchange", triggerSelection);
     if(!isMobileDevice()){
@@ -314,43 +330,49 @@ export function useCometChatMessageComposer(args: Args) {
           mentionsTextFormatterInstanceRef.current,
         ]);
       }
+      return () => {
+        contentEditable.removeEventListener("paste", preventPaste);
+        document.removeEventListener("selectionchange", triggerSelection);
+      };
+    }} catch (error) {
+      errorHandler(error,"preventPaste")
     }
-    return () => {
-      contentEditable.removeEventListener("paste", preventPaste);
-      document.removeEventListener("selectionchange", triggerSelection);
-    };
   }, [disableMentions, setTextFormatters,textFormatterArray]);
 
   /**
    * Handle user or group changes and reset the composer input accordingly.
    */
   useEffect(() => {
+   try {
     const shouldClearText =
-      (userPropRef.current &&
-        user &&
-        userPropRef.current.getUid() !== user.getUid()) ||
-      (groupPropRef.current &&
-        group &&
-        groupPropRef?.current.getGuid() !== group.getGuid());
+    (userPropRef.current &&
+      user &&
+      userPropRef.current.getUid() !== user.getUid()) ||
+    (groupPropRef.current &&
+      group &&
+      groupPropRef?.current.getGuid() !== group.getGuid());
 
-    if (shouldClearText) {
-      dispatch({ type: "setText", text: "" });
-      mySetAddToMsgInputText("");
-    }
+  if (shouldClearText) {
+    dispatch({ type: "setText", text: "" });
+    mySetAddToMsgInputText("");
+  }
 
-    if (userPropRef.current) {
-      setShowListForMentions(
-        user && userPropRef.current.getUid() !== user.getUid()
-      );
-    }
-    if (groupPropRef.current) {
-      setShowListForMentions(
-        group && groupPropRef?.current.getGuid() !== group.getGuid()
-      );
-    }
-    for (let i = 0; i < textFormatterArray.length; i++) {
-      textFormatterArray[i].setComposerConfig(user, group, getComposerId());
-    }
+  if (userPropRef.current) {
+    setShowListForMentions(
+      user && userPropRef.current.getUid() !== user.getUid()
+    );
+  }
+  if (groupPropRef.current) {
+    setShowListForMentions(
+      group && groupPropRef?.current.getGuid() !== group.getGuid()
+    );
+  }
+  for (let i = 0; i < textFormatterArray.length; i++) {
+    textFormatterArray[i].setComposerConfig(user, group, getComposerId());
+  }
+   } catch (error) {
+    errorHandler(error,"useEffect")
+   }
   }, [
     user,
     group,
@@ -364,7 +386,8 @@ export function useCometChatMessageComposer(args: Args) {
     * Update text when the message composer detects pasted HTML content.
     * Handles mentions or user-group requests for the message being composed.
     */
-  useEffect(() => {
+  useEffect(() => {try {
+    
     if (pasteHtmlAtCaret && propsText)  {
       pasteHtmlAtCaret(propsText)
     }
@@ -390,6 +413,9 @@ export function useCometChatMessageComposer(args: Args) {
         setUsersRequestBuilder(requestBuilder);
       }
     }
+  } catch (error) {
+    errorHandler(error,"useEffect")
+  }
   }, [user, group, disableMentions]);
 
 
@@ -415,7 +441,7 @@ export function useCometChatMessageComposer(args: Args) {
       });
     }
     catch (error) {
-      errorHandler(error);
+      errorHandler(error,"setTimeout");
     }
 
   }, [user, group, parentMessageIdPropRef

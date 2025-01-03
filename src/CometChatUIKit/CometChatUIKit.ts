@@ -1,7 +1,3 @@
-import { AIConversationStarterExtension } from "../components/AI/AIConversationStarter/AIConversationStarterExtension";
-import { AIConversationSummaryExtension } from "../components/AI/AIConversationSummary/AIConversationSummaryExtension";
-import { AIExtensionDataSource } from "../components/AI/AIExtensionDataSource";
-import { AISmartRepliesExtension } from "../components/AI/AISmartReplies/AISmartRepliesExtension";
 import { CallingExtension } from "../components/Calling/CallingExtension";
 import { ChatConfigurator } from "../utils/ChatConfigurator";
 import { CollaborativeDocumentExtension } from "../components/Extensions/CollaborativeDocument/CollaborativeDocumentExtension";
@@ -103,7 +99,7 @@ class CometChatUIKit {
         return new Promise((resolve, reject) => {
             window.CometChatUiKit = {
                 name: "@cometchat/chat-uikit-react",
-                version: "5.0.0-beta2",
+                version: "5.0.0",
             };
             CometChat.init(uiKitSettings?.appId, appSettings).then(() => {
                 CometChat.getLoggedinUser().then((user: CometChat.User | null) => {
@@ -143,15 +139,6 @@ class CometChatUIKit {
     */
         static defaultCallingExtension: CallingExtension = new CallingExtension()
 
-    /**
-    * Default AI features included in the UI Kit.
-    * @type {AIExtensionDataSource[]}
-    */
-    static defaultAIFeatures: AIExtensionDataSource[] = [
-        new AISmartRepliesExtension(),
-        new AIConversationStarterExtension(),
-        new AIConversationSummaryExtension(),
-    ]
 
     /**
      * Checking if the SDK is initialized.
@@ -207,18 +194,11 @@ class CometChatUIKit {
             let extensionList: ExtensionsDataSource[] = this.uiKitSettings?.extensions || this.defaultExtensions;
             ChatSdkEventInitializer.attachListeners();
             CometChatUIKitLoginListener.attachListener();
-            let aiFeaturesList: AIExtensionDataSource[] = this.uiKitSettings?.aiFeatures || this.defaultAIFeatures;
 
             if (extensionList.length > 0) {
                 extensionList.forEach((extension: ExtensionsDataSource) => {
                     extension?.enable();
                 });
-            }
-
-            if (aiFeaturesList.length > 0) {
-                aiFeaturesList.forEach((aiFeatures: AIExtensionDataSource) => {
-                    aiFeatures.enable();
-                })
             }
             this.enableCalling();
         }

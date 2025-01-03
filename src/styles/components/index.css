@@ -1,6 +1,6 @@
-@import url('./AIConversationStarter.css');
-@import url('./AIConversationSummary.css');
-@import url('./AISmartReplies.css');
+@import url('./CometChatConversationStarter.css');
+@import url('./CometChatSmartReplies.css');
+@import url('./CometChatConversationSummary.css');
 @import url('./CometChatActionSheet.css');
 @import url('./CometChatAudioBubble.css');
 @import url('./CometChatAvatar.css');

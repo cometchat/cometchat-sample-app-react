@@ -32,7 +32,7 @@
     justify-content: space-around;
 }
 
-.cometchat-incoming-call .cometchat-list-item__tail-view {
+.cometchat-incoming-call .cometchat-list-item__trailing-view {
     width: fit-content;
     height: fit-content;
 }

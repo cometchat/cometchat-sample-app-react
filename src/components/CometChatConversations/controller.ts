@@ -3,21 +3,28 @@ import { CometChatUIKit } from "../../CometChatUIKit/CometChatUIKit";
 import { CometChatUIKitConstants } from "../../constants/CometChatUIKitConstants";
 
 type Args = {
-    conversationsRequestBuilder: CometChat.ConversationsRequestBuilder | null
+    conversationsRequestBuilder: CometChat.ConversationsRequestBuilder | null,
+    errorHandler: (error: unknown, source?: string) => void
 };
 
 export class ConversationsManager {
     private static limit = 30;
     private conversationsRequest: CometChat.ConversationsRequest;
     private static conversationType: string | undefined = undefined;
+    private static errorHandler: (error: unknown, source?: string) => void = (error: unknown, source?: string) =>{
+        console.log(error)
+    };
 
     /**
      * Set `conversationsRequest` of the instance
      */
     constructor(args: Args) {
         const {
-            conversationsRequestBuilder
+            conversationsRequestBuilder,
+            errorHandler
         } = args;
+        ConversationsManager.errorHandler = errorHandler;
+
         const convRequestBuilder = conversationsRequestBuilder || new CometChat.ConversationsRequestBuilder().setLimit(ConversationsManager.limit);
         this.conversationsRequest = convRequestBuilder.build();
         if (conversationsRequestBuilder) {
@@ -40,6 +47,7 @@ export class ConversationsManager {
      * @returns Function to call to remove the attached SDK user listener
      */
     static attachUserListener(callback: (user: CometChat.User) => void) {
+       try {
         const listenerId = "ConversationList_User_" + String(Date.now());
         CometChat.addUserListener(
             listenerId,
@@ -49,6 +57,9 @@ export class ConversationsManager {
             })
         );
         return () => CometChat.removeUserListener(listenerId);
+       } catch (error) {
+        ConversationsManager.errorHandler(error,"attachUserListener")
+       }
     }
 
     /**
@@ -57,6 +68,7 @@ export class ConversationsManager {
      * @returns Function to call to remove the attached SDK group listener
      */
     static attachGroupListener(callback: (message: CometChat.BaseMessage, remove?: boolean) => Promise<void>, loggedInUser: CometChat.User | null) {
+       try {
         const listenerId = "ConversationList_Group_" + String(Date.now());
         CometChat.addGroupListener(
             listenerId,
@@ -100,6 +112,9 @@ export class ConversationsManager {
             })
         );
         return () => CometChat.removeGroupListener(listenerId);
+       } catch (error) {
+        ConversationsManager.errorHandler(error,"attachGroupListener")
+       }
     }
 
     /**
@@ -108,7 +123,8 @@ export class ConversationsManager {
      * @returns - Function to remove the added SDK message received listener
      */
     static attachMessageReceivedListener(callback: (message: CometChat.BaseMessage) => Promise<void>) {
-        const messageListenerId: string = "message_" + new Date().getTime();
+        try {
+            const messageListenerId: string = "message_" + new Date().getTime();
 
         CometChat.addMessageListener(messageListenerId, new CometChat.MessageListener({
             onTextMessageReceived: (textMessage: CometChat.TextMessage) => {
@@ -126,6 +142,9 @@ export class ConversationsManager {
         return () => {
             CometChat.removeMessageListener(messageListenerId)
         };
+        } catch (error) {
+            ConversationsManager.errorHandler(error,"attachMessageReceivedListener");
+        }
     }
 
     /**
@@ -134,6 +153,7 @@ export class ConversationsManager {
      * @returns - Function to remove the added SDK message receipt listener
      */
     static attachMessageReceiptListener(callback: (receipt: CometChat.MessageReceipt, updateReadAt: boolean) => void) {
+      try {
         const messageListenerId: string = "message-receipt_" + new Date().getTime();
 
 
@@ -161,6 +181,9 @@ export class ConversationsManager {
         return () => {
             CometChat.removeMessageListener(messageListenerId)
         };
+      } catch (error) {
+        ConversationsManager.errorHandler(error,"attachMessageReceiptListener")
+      }
     }
 
     /**
@@ -169,6 +192,7 @@ export class ConversationsManager {
      * @returns - Function to remove the added SDK message typing listener
      */
     static attachMessageTypingListener(callback: (typingIndicator: CometChat.TypingIndicator, typingStarted: boolean) => void) {
+       try {
         const messageListenerId: string = "typing_" + new Date().getTime();
 
         CometChat.addMessageListener(messageListenerId, new CometChat.MessageListener({
@@ -183,6 +207,11 @@ export class ConversationsManager {
         return () => {
             CometChat.removeMessageListener(messageListenerId)
         };
+       } catch (error) {
+        ConversationsManager.errorHandler(error,"attachMessageTypingListener")
+
+       }
+
     }
 
     /**
@@ -191,21 +220,22 @@ export class ConversationsManager {
      * @returns - Function to remove the added SDK message modified listener
      */
     static attachMessageModifiedListener(callback: (message: CometChat.BaseMessage) => void) {
-
-        const messageListenerId: string = "delete_" + new Date().getTime();
-
-        CometChat.addMessageListener(messageListenerId, new CometChat.MessageListener({
-            onMessageEdited: (message: CometChat.BaseMessage) => {
-                callback(message);
-            },
-            onMessageDeleted: (message: CometChat.BaseMessage) => {
-                callback(message);
-            },
-        }))
-       
-        return () => {
-            CometChat.removeMessageListener(messageListenerId)
-        };
+try {
+    const messageListenerId: string = "delete_" + new Date().getTime();
+    CometChat.addMessageListener(messageListenerId, new CometChat.MessageListener({
+        onMessageEdited: (message: CometChat.BaseMessage) => {
+            callback(message);
+        },
+        onMessageDeleted: (message: CometChat.BaseMessage) => {
+            callback(message);
+        },
+    }))
+    return () => {
+        CometChat.removeMessageListener(messageListenerId)
+    };
+} catch (error) {
+    ConversationsManager.errorHandler(error,"attachMessageModifiedListener")
+}
     }
 
     /**
@@ -214,7 +244,8 @@ export class ConversationsManager {
      * @returns - Function to remove the added SDK call listener
      */
     static attachCallListener(callback: (message: CometChat.BaseMessage) => void) {
-        const listenerId = "ConversationList_Call_" + String(Date.now());
+        try {
+            const listenerId = "ConversationList_Call_" + String(Date.now());
         CometChat.addCallListener(
             listenerId,
             new CometChat.CallListener({
@@ -225,6 +256,9 @@ export class ConversationsManager {
             })
         );
         return () => CometChat.removeCallListener(listenerId);
+        } catch (error) {
+            ConversationsManager.errorHandler(error,"attachCallListener")
+        }
     }
     /**
   * Attaches an SDK websocket  listener
@@ -232,22 +266,27 @@ export class ConversationsManager {
   * @returns - Function to remove the added SDK websocket listener
   */
     static attachConnestionListener(callback: () => void) {
-        const listenerId = "ConversationList_connection_" + String(Date.now());
-        CometChat.addConnectionListener(
-            listenerId,
-            new CometChat.ConnectionListener({
-                onConnected: () => {
-                    console.log("ConnectionListener =>connected");
-                    if (callback) {
-                        callback()
-                    }
-                },
-                onDisconnected: () => {
-                    console.log("ConnectionListener => On Disconnected");
+try {
+    const listenerId = "ConversationList_connection_" + String(Date.now());
+    CometChat.addConnectionListener(
+        listenerId,
+        new CometChat.ConnectionListener({
+            onConnected: () => {
+                console.log("ConnectionListener =>connected");
+                if (callback) {
+                    callback()
                 }
-            })
-        );
-        return () => CometChat.removeConnectionListener(listenerId);
+            },
+            onDisconnected: () => {
+                console.log("ConnectionListener => On Disconnected");
+            }
+        })
+    );
+    return () => CometChat.removeConnectionListener(listenerId);
+} catch (error) {
+    ConversationsManager.errorHandler(error,"attachConnestionListener")
+
+}
     }
 
     /**
@@ -259,42 +298,53 @@ export class ConversationsManager {
 
     static shouldLastMessageAndUnreadCountBeUpdated = (message: CometChat.BaseMessage) => {
 
-        // Checking if the message is a custom message
-        let isCustomMessage = message?.getCategory() === CometChatUIKitConstants.MessageCategory.custom
-        // Check if the message is a reply to another message
-        if (message?.getParentMessageId() && !CometChatUIKit.conversationUpdateSettings?.shouldUpdateOnMessageReplies()) {
-            return false;
-        }
-        if (isCustomMessage) {
-            if (message?.getParentMessageId() && CometChatUIKit.conversationUpdateSettings?.shouldUpdateOnMessageReplies() && this.shouldIncrementForCustomMessage(message as CometChat.CustomMessage)) {
-                return true
-            }
-            return this.shouldIncrementForCustomMessage(message as CometChat.CustomMessage);
-        }
-        // Check if the message is an action message
-        if (message?.getCategory() === CometChatUIKitConstants.MessageCategory.action) {
-            // Check if the message is a group member action
-            if (message?.getType() === CometChatUIKitConstants.MessageTypes.groupMember) {
-                return CometChatUIKit.conversationUpdateSettings?.shouldUpdateOnGroupActions();
-            }
-            // By default, action messages should trigger an update
-            return true
-        }
-        // Check if the message is a call (either audio or video)
-        if (message?.getCategory() === CometChatUIKitConstants.MessageCategory.call &&
-            (message?.getType() === CometChatUIKitConstants.MessageTypes.audio ||
-                message?.getType() === CometChatUIKitConstants.MessageTypes.video)) {
-            return CometChatUIKit.conversationUpdateSettings?.shouldUpdateOnCallActivities();
-        }
-        // By default, messages should trigger an update
-        return true;
+       try {
+         // Checking if the message is a custom message
+         let isCustomMessage = message?.getCategory() === CometChatUIKitConstants.MessageCategory.custom
+         // Check if the message is a reply to another message
+         if (message?.getParentMessageId() && !CometChatUIKit.conversationUpdateSettings?.shouldUpdateOnMessageReplies()) {
+             return false;
+         }
+         if (isCustomMessage) {
+             if (message?.getParentMessageId() && CometChatUIKit.conversationUpdateSettings?.shouldUpdateOnMessageReplies() && this.shouldIncrementForCustomMessage(message as CometChat.CustomMessage)) {
+                 return true
+             }
+             return this.shouldIncrementForCustomMessage(message as CometChat.CustomMessage);
+         }
+         // Check if the message is an action message
+         if (message?.getCategory() === CometChatUIKitConstants.MessageCategory.action) {
+             // Check if the message is a group member action
+             if (message?.getType() === CometChatUIKitConstants.MessageTypes.groupMember) {
+                 return CometChatUIKit.conversationUpdateSettings?.shouldUpdateOnGroupActions();
+             }
+             // By default, action messages should trigger an update
+             return true
+         }
+         // Check if the message is a call (either audio or video)
+         if (message?.getCategory() === CometChatUIKitConstants.MessageCategory.call &&
+             (message?.getType() === CometChatUIKitConstants.MessageTypes.audio ||
+                 message?.getType() === CometChatUIKitConstants.MessageTypes.video)) {
+             return CometChatUIKit.conversationUpdateSettings?.shouldUpdateOnCallActivities();
+         }
+         // By default, messages should trigger an update
+         return true;
+       } catch (error) {
+        ConversationsManager.errorHandler(error,"shouldLastMessageAndUnreadCountBeUpdated")
+
+       }
+
     }
 
     static shouldIncrementForCustomMessage(message: CometChat.CustomMessage) {
-        const metadata: any = message?.getMetadata();
+        try {
+            const metadata: any = message?.getMetadata();
         // Checking if the custom message should increment the unread message counter
         return message?.willUpdateConversation()
             || (metadata && metadata.hasOwnProperty("incrementUnreadCount") && metadata.incrementUnreadCount) || CometChatUIKit.conversationUpdateSettings?.shouldUpdateOnCustomMessages();
+        } catch (error) {
+            ConversationsManager.errorHandler(error,"shouldIncrementForCustomMessage")
+
+        }
     }
 
 

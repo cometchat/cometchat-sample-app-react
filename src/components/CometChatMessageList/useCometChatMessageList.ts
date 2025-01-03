@@ -16,16 +16,26 @@ function useCometChatMessageList(
 	messageIdRef: MutableRefObject<any>,
 	totalMessagesCountRef: MutableRefObject<any>,
 	messageList: CometChat.BaseMessage[],
-	onErrorCallback: (error: CometChat.CometChatException) => void,
+	errorHandler: (error: unknown,source?:string) => void,
 	setMessageList: (messages: CometChat.BaseMessage[]) => void,
 	setScrollListToBottom: (scrollToBottom: boolean) => void,
 	smartReplyViewRef: MutableRefObject<any>,
 	isOnBottomRef: MutableRefObject<boolean>,
 	isFirstReloadRef: MutableRefObject<boolean>,
 	subscribeToUIEvents: Function,
+	showSmartRepliesRef: MutableRefObject<any>,
 	setDateHeader?: Function,
-	parentMessageId?:number
+	parentMessageId?: number,
+	hideGroupActionMessages?: boolean,
+	showSmartReplies?:boolean
+
 ): void {
+		/**
+	 * useEffect hook to update the smart replies view when the prop changes
+	 * **/
+	useEffect(()=>{
+		showSmartRepliesRef.current = showSmartReplies!
+	  },[showSmartReplies])
 
 	/**
 	 * useEffect hook to fetch the logged-in user when we first launch the user/group chat and set isFirstReloadRef to true. This state variable is used to add a connection listener when the chat is launched for the first time.
@@ -39,51 +49,63 @@ function useCometChatMessageList(
 						loggedInUserRef.current = userObject;
 					}
 				}, (error: CometChat.CometChatException) => {
-					onErrorCallback(error);
+					errorHandler(error,"getLoggedinUser");
 				}
 			);
-	}, [user, group,onErrorCallback]);
+	}, [user, group,errorHandler]);
 	/**
 	* useEffect hook to subscribe to SDK and UI events when the component launches for the first time, or when changing from one chat to another.
 	**/
 
 	useEffect(() => {
-		if (setDateHeader) {
-			setDateHeader(null)
-		}
-		let unsubscribeEvents: (() => void) | undefined;
-		if (CometChatUIKitLoginListener.getLoggedInUser() && (user || group)) {
-			messageListManagerRef.current = {
-				previous: new MessageListManager(
-					messagesRequestBuilder,
-					user,
-					group
-				)
+		try {
+			if (setDateHeader) {
+				setDateHeader(null)
 			}
-			if(!parentMessageId){
-				MessageListManager.attachListeners(updateMessage);
+			let unsubscribeEvents: (() => void) | undefined;
+			if (CometChatUIKitLoginListener.getLoggedInUser() && (user || group)) {
+				messageListManagerRef.current = {
+					previous: new MessageListManager(
+						errorHandler,
+						messagesRequestBuilder,
+						user,
+						group,
+						undefined,
+						undefined,
+						hideGroupActionMessages
+					)
+				}
+				if(!parentMessageId){
+					MessageListManager.attachListeners(updateMessage);
+				}
+				unsubscribeEvents = subscribeToUIEvents();
+				setMessageList([]);
+				setScrollListToBottom(true);
+				isOnBottomRef.current = true;
+				fetchPreviousMessages();
+				smartReplyViewRef.current = null;
 			}
-			unsubscribeEvents = subscribeToUIEvents();
-			setMessageList([]);
-			setScrollListToBottom(true);
-			isOnBottomRef.current = true;
-			fetchPreviousMessages();
-			smartReplyViewRef.current = null;
-		}
-		return () => {
-			MessageListManager?.removeListeners?.();
-			unsubscribeEvents?.();
-
+			return () => {
+				MessageListManager?.removeListeners?.();
+				unsubscribeEvents?.();
+	
+			}
+		} catch (error) {
+			errorHandler(error,"useEffect")
 		}
 	}, [user, group]);
 	/**
 	 * useEffect hook to store the first and last message ID in the messageList array. These are used to fetch new messages after a particular message when the connection gets reestablished after being interrupted.
 	**/
 	useEffect(() => {
-		totalMessagesCountRef.current = messageList.length;
+		try {
+			totalMessagesCountRef.current = messageList.length;
 		if (messageList?.length > 0) {
 			messageIdRef.current.prevMessageId = messageList[0].getId();
 			messageIdRef.current.nextMessageId = messageList[messageList.length - 1].getId();
+		}
+		} catch (error) {
+			errorHandler(error,"useEffect")
 		}
 	}, [messageList]);
 

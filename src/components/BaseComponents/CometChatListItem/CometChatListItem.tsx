@@ -18,7 +18,11 @@ interface ListItemProps {
     /* html component which is used for showing subtitle view. */
     subtitleView?: ReactNode;
     /* html component which is used for showing tail view. */
-    tailView?: ReactNode;
+    trailingView?: ReactNode;
+    /* html component which is used for showing title view. */
+    titleView?: ReactNode;
+    /* html component which is used for showing leading  view. */
+    leadingView?: ReactNode;
 }
 
 /* 
@@ -34,8 +38,10 @@ const CometChatListItem = (props: ListItemProps) => {
         title = "",
         onListItemClicked = () => { },
         menuView,
-        subtitleView = <></>,
-        tailView = <></>,
+        subtitleView,
+        trailingView,
+        titleView,
+        leadingView
     } = props;
 
     const {
@@ -52,19 +58,19 @@ const CometChatListItem = (props: ListItemProps) => {
             height: "fit-content"
         }}>
             <div
-               onMouseEnter={()=>{
-                showTail()
-                setIsMenuVisible(true)
-               }}
-               onMouseLeave={()=>{
-                hideTail()
-                setIsMenuVisible(false)
-               }}
+                onMouseEnter={() => {
+                    showTail()
+                    setIsMenuVisible(true)
+                }}
+                onMouseLeave={() => {
+                    hideTail()
+                    setIsMenuVisible(false)
+                }}
                 className="cometchat-list-item"
                 id={id}
                 onClick={listItemClick}
             >
-                {
+                {!leadingView ?
                     avatarName?.trim()?.length > 0 ||
                         avatarURL?.trim()?.length > 0
                         ? <div className="cometchat-list-item__leading-view">
@@ -78,35 +84,30 @@ const CometChatListItem = (props: ListItemProps) => {
 
                         </div>
                         : null
-                }
+                    : leadingView}
                 <div className="cometchat-list-item__body">
                     <div className="cometchat-list-item__title-container">
-                        <div className="cometchat-list-item__body-title">
+                        {titleView ?? <div className="cometchat-list-item__body-title">
                             {title}
-                        </div>
+                        </div>}
                         <div className="cometchat-list-item__body-subtitle">
                             {subtitleView}
                         </div>
                     </div >
                     <div
-                        className={!isHovering || (isHovering && !menuView) ? "cometchat-list-item__tail-view" : "cometchat-list-item__tail-view-hidden"}
-                        onClick={(event: MouseEvent<HTMLDivElement>) => {
-                            if (event?.stopPropagation) {
-                                event.stopPropagation();
-                            }
-                        }}
+                        className={!isHovering || (isHovering && !menuView) ? "cometchat-list-item__trailing-view" : "cometchat-list-item__trailing-view-hidden"}
                     >
-                        {tailView}
+                        {trailingView}
                     </div>
                     <div
-                        className={isHovering && menuView ? "cometchat-list-item__menu-view" : "cometchat-list-item__tail-view-hidden"}
+                        className={isHovering && menuView ? "cometchat-list-item__menu-view" : "cometchat-list-item__trailing-view-hidden"}
                         onClick={(event: MouseEvent<HTMLDivElement>) => {
                             if (event?.stopPropagation) {
                                 event.stopPropagation();
                             }
                         }}
                     >
-                        {isMenuVisible && menuView? menuView : null}
+                        {isMenuVisible && menuView ? menuView : null}
                     </div>
                 </div >
             </div >

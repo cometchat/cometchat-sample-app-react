@@ -86,7 +86,7 @@ export class StickersExtensionDecorator extends DataSourceDecorator {
    * @param group - Optional group object.
    * @returns An array of auxiliary options.
    */
-  override getAuxiliaryOptions(
+  override getStickerButton(
     id: ComposerId,
     user?: CometChat.User,
     group?: CometChat.Group
@@ -94,11 +94,7 @@ export class StickersExtensionDecorator extends DataSourceDecorator {
     this.id = id;
     this.user = user;
     this.group = group;
-    let auxiliaryOptions = super.getAuxiliaryOptions(id, user, group);
-    auxiliaryOptions.push(
-      this.getStickerAuxiliaryButton(id as any, user, group) // toDO remove any
-    );
-    return auxiliaryOptions;
+    return this.getStickerAuxiliaryButton(id as any, user, group);
   }
 
   /**
@@ -310,19 +306,21 @@ closeSticker()
         let stickerMessage: CometChat.CustomMessage =
           message as CometChat.CustomMessage;
         if (stickerMessage.getDeletedAt()) {
-          return super.getDeleteMessageBubble(stickerMessage);
+          return super.getDeleteMessageBubble(stickerMessage,undefined,_alignment);
         }
         return this.getStickerMessageContentView(stickerMessage);
       },
       options: (
         loggedInUser: CometChat.User,
         messageObject: CometChat.BaseMessage,
-        group?: CometChat.Group
+        group?: CometChat.Group,
+        additionalParams?: Object | undefined
       ) => {
         return super.getCommonOptions(
           loggedInUser,
           messageObject,
-          group
+          group,
+          additionalParams
         );
       },
       bottomView: (
@@ -354,8 +352,8 @@ closeSticker()
    * Retrieves all message categories, including custom categories.
    * @returns An array of message categories.
    */
-  override getAllMessageCategories(): string[] {
-    let categories: string[] = super.getAllMessageCategories();
+  override getAllMessageCategories(additionalConfigurations?: Object | undefined): string[] {
+    let categories: string[] = super.getAllMessageCategories(additionalConfigurations);
     if (
       !categories.some(
         (category) =>

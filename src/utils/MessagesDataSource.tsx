@@ -52,6 +52,18 @@ export type ComposerId = { parentMessageId: number | null, user: string | null, 
  * Utility class that extends DataSource and provides getters for message options.
  * It is used in message and dataSource utils.
  */
+
+export interface additionalParamsOptions {
+  hideReplyInThreadOption?: boolean,
+  hideTranslateMessageOption?: boolean,
+  hideReactionOption?: boolean,
+  hideEditMessageOption?: boolean,
+  hideDeleteMessageOption?: boolean,
+  hideMessagePrivatelyOption?: boolean,
+  hideCopyMessageOption?: boolean,
+  hideMessageInfoOption?: boolean,
+}
+
 export class MessagesDataSource implements DataSource {
   getEditOption(): CometChatActionsIcon {
     return new CometChatActionsIcon({
@@ -129,7 +141,8 @@ export class MessagesDataSource implements DataSource {
   getTextMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: additionalParamsOptions
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     let isSentByMe: boolean = this.isSentByMe(loggedInUser, messageObject);
     let isParticipant: boolean = false;
@@ -140,21 +153,25 @@ export class MessagesDataSource implements DataSource {
       isParticipant = true;
     }
 
-    let messageOptionList: Array<CometChatActionsIcon | CometChatActionsView> = []
-    messageOptionList.push(this.getReactionOption());
-    if (!messageObject.getParentMessageId()) {
+    let messageOptionList: Array<CometChatActionsIcon | CometChatActionsView> = [];
+    if (!additionalParams?.hideReactionOption) {
+      messageOptionList.push(this.getReactionOption());
+    }
+    if (!messageObject.getParentMessageId() && !additionalParams?.hideReplyInThreadOption) {
       messageOptionList.push(this.getReplyInThreadOption());
     }
-    messageOptionList.push(this.getCopyOption());
-    if (isSentByMe || (!isParticipant && group)) {
+    if (!additionalParams?.hideCopyMessageOption) {
+      messageOptionList.push(this.getCopyOption());
+    }
+    if ((isSentByMe || (!isParticipant && group)) && !additionalParams?.hideEditMessageOption) {
       messageOptionList.push(this.getEditOption());
     }
-    if (isSentByMe) {
+    if (isSentByMe && !additionalParams?.hideMessageInfoOption) {
       messageOptionList.push(this.getMessageInfoOption());
     }
-    if (isSentByMe || (!isParticipant && group))
+    if ((isSentByMe || (!isParticipant && group)) && !additionalParams?.hideDeleteMessageOption)
       messageOptionList.push(this.getDeleteOption());
-    if (group && !isSentByMe) {
+    if (group && !isSentByMe && !additionalParams?.hideMessagePrivatelyOption) {
       messageOptionList.push(this.getSendMessagePrivatelyOption());
     }
     return messageOptionList;
@@ -165,14 +182,16 @@ export class MessagesDataSource implements DataSource {
   getImageMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     let messageOptionList: Array<CometChatActionsIcon | CometChatActionsView> =
       [];
     messageOptionList = ChatConfigurator.getDataSource().getCommonOptions(
       loggedInUser,
       messageObject,
-      group
+      group,
+      additionalParams
     );
 
     return messageOptionList;
@@ -181,14 +200,16 @@ export class MessagesDataSource implements DataSource {
   getVideoMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     let messageOptionList: Array<CometChatActionsIcon | CometChatActionsView> =
       [];
     messageOptionList = ChatConfigurator.getDataSource().getCommonOptions(
       loggedInUser,
       messageObject,
-      group
+      group,
+      additionalParams
     );
 
     return messageOptionList;
@@ -197,15 +218,16 @@ export class MessagesDataSource implements DataSource {
   getAudioMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     let messageOptionList: Array<CometChatActionsIcon | CometChatActionsView> =
       [];
     messageOptionList = ChatConfigurator.getDataSource().getCommonOptions(
       loggedInUser,
       messageObject,
-      group
+      group,
+      additionalParams
     );
 
     return messageOptionList;
@@ -214,15 +236,16 @@ export class MessagesDataSource implements DataSource {
   getFileMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     let messageOptionList: Array<CometChatActionsIcon | CometChatActionsView> =
       [];
     messageOptionList = ChatConfigurator.getDataSource().getCommonOptions(
       loggedInUser,
       messageObject,
-      group
+      group,
+      additionalParams
     );
 
     return messageOptionList;
@@ -253,7 +276,7 @@ export class MessagesDataSource implements DataSource {
   getBubbleStatusInfoReceipt: (item: CometChat.BaseMessage, hideReceipt?: boolean) => JSX.Element | null =
     (item: CometChat.BaseMessage, hideReceipt?: boolean) => {
       if (
-        
+
         !hideReceipt &&
         (!item?.getSender() ||
           CometChatUIKitLoginListener.getLoggedInUser()?.getUid() === item?.getSender()?.getUid()) &&
@@ -333,7 +356,7 @@ export class MessagesDataSource implements DataSource {
         let textMessage: CometChat.TextMessage =
           message as CometChat.TextMessage;
         if (textMessage.getDeletedAt() != null) {
-          return this.getDeleteMessageBubble(textMessage);
+          return this.getDeleteMessageBubble(textMessage,undefined,_alignment);
         }
         return ChatConfigurator.getDataSource().getTextMessageContentView(
           textMessage,
@@ -367,7 +390,7 @@ export class MessagesDataSource implements DataSource {
         let audioMessage: CometChat.MediaMessage =
           message as CometChat.MediaMessage;
         if (audioMessage.getDeletedAt() != null) {
-          return this.getDeleteMessageBubble(message);
+          return this.getDeleteMessageBubble(message,undefined,_alignment);
         }
         return ChatConfigurator.getDataSource().getAudioMessageContentView(
           audioMessage,
@@ -399,7 +422,7 @@ export class MessagesDataSource implements DataSource {
         let videoMessage: CometChat.MediaMessage =
           message as CometChat.MediaMessage;
         if (videoMessage.getDeletedAt() != null) {
-          return this.getDeleteMessageBubble(message);
+          return this.getDeleteMessageBubble(message,undefined,_alignment);
         }
         return ChatConfigurator.getDataSource().getVideoMessageContentView(
           videoMessage,
@@ -431,7 +454,7 @@ export class MessagesDataSource implements DataSource {
         let imageMessage: CometChat.MediaMessage =
           message as CometChat.MediaMessage;
         if (imageMessage.getDeletedAt() != null) {
-          return this.getDeleteMessageBubble(message);
+          return this.getDeleteMessageBubble(message,undefined,_alignment);
         }
 
         return ChatConfigurator.getDataSource().getImageMessageContentView(
@@ -452,7 +475,7 @@ export class MessagesDataSource implements DataSource {
     });
   }
 
-  getGroupActionTemplate(): CometChatMessageTemplate {
+  getGroupActionTemplate(additionalConfigurations?: { hideGroupActionMessages?: boolean }): CometChatMessageTemplate {
     return new CometChatMessageTemplate({
       type: CometChatUIKitConstants.MessageTypes.groupMember,
       category: CometChatUIKitConstants.MessageCategory.action,
@@ -460,7 +483,7 @@ export class MessagesDataSource implements DataSource {
         message: CometChat.BaseMessage,
         _alignment: MessageBubbleAlignment
       ) => {
-        return this.getGroupActionBubble(message);
+        return !additionalConfigurations?.hideGroupActionMessages ? this.getGroupActionBubble(message) : null;
       },
     });
   }
@@ -477,7 +500,7 @@ export class MessagesDataSource implements DataSource {
         let fileMessage: CometChat.MediaMessage =
           message as CometChat.MediaMessage;
         if (fileMessage.getDeletedAt() != null) {
-          return this.getDeleteMessageBubble(message);
+          return this.getDeleteMessageBubble(message,undefined,_alignment);
         }
 
         return ChatConfigurator.getDataSource().getFileMessageContentView(
@@ -515,7 +538,7 @@ export class MessagesDataSource implements DataSource {
       ChatConfigurator.getDataSource().getVideoMessageTemplate(),
       ChatConfigurator.getDataSource().getAudioMessageTemplate(),
       ChatConfigurator.getDataSource().getFileMessageTemplate(),
-      ChatConfigurator.getDataSource().getGroupActionTemplate()
+      ChatConfigurator.getDataSource().getGroupActionTemplate(additionalConfigurations)
     ];
   }
 
@@ -551,7 +574,7 @@ export class MessagesDataSource implements DataSource {
 
         case CometChatUIKitConstants.MessageTypes.groupMember:
           _template =
-            ChatConfigurator.getDataSource().getGroupActionTemplate();
+            ChatConfigurator.getDataSource().getGroupActionTemplate(additionalConfigurations);
           break;
 
         case CometChatUIKitConstants.MessageTypes.file:
@@ -571,7 +594,8 @@ export class MessagesDataSource implements DataSource {
   getMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: additionalParamsOptions
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     let _optionList: Array<CometChatActionsIcon | CometChatActionsView> = [];
 
@@ -584,24 +608,24 @@ export class MessagesDataSource implements DataSource {
           _optionList = ChatConfigurator.getDataSource().getTextMessageOptions(
             loggedInUser,
             messageObject,
-
-            group
+            group,
+            additionalParams
           );
           break;
         case CometChatUIKitConstants.MessageTypes.image:
           _optionList = ChatConfigurator.getDataSource().getImageMessageOptions(
             loggedInUser,
             messageObject,
-
-            group
+            group,
+            additionalParams
           );
           break;
         case CometChatUIKitConstants.MessageTypes.video:
           _optionList = ChatConfigurator.getDataSource().getVideoMessageOptions(
             loggedInUser,
             messageObject,
-
-            group
+            group,
+            additionalParams
           );
           break;
         case CometChatUIKitConstants.MessageTypes.groupMember:
@@ -611,24 +635,24 @@ export class MessagesDataSource implements DataSource {
           _optionList = ChatConfigurator.getDataSource().getFileMessageOptions(
             loggedInUser,
             messageObject,
-
-            group
+            group,
+            additionalParams
           );
           break;
         case CometChatUIKitConstants.MessageTypes.audio:
           _optionList = ChatConfigurator.getDataSource().getAudioMessageOptions(
             loggedInUser,
             messageObject,
-
-            group
+            group,
+            additionalParams
           );
           break;
         default:
           _optionList = ChatConfigurator.getDataSource().getCommonOptions(
             loggedInUser,
             messageObject,
-
-            group
+            group,
+            additionalParams
           );
           break;
       }
@@ -639,8 +663,8 @@ export class MessagesDataSource implements DataSource {
   getCommonOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: additionalParamsOptions
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     let isSentByMe: boolean = this.isSentByMe(loggedInUser, messageObject);
     let isParticipant: boolean = false;
@@ -650,21 +674,21 @@ export class MessagesDataSource implements DataSource {
     let messageOptionList: Array<CometChatActionsIcon | CometChatActionsView> =
       [];
 
-    messageOptionList.push(this.getReactionOption());
-
-    if (!messageObject?.getParentMessageId()) {
+    if (!additionalParams?.hideReactionOption) {
+      messageOptionList.push(this.getReactionOption());
+    }
+    if (!messageObject?.getParentMessageId() && !additionalParams?.hideReplyInThreadOption) {
       messageOptionList.push(this.getReplyInThreadOption());
     }
-    if (isSentByMe) {
+    if (isSentByMe && !additionalParams?.hideMessageInfoOption) {
       messageOptionList.push(this.getMessageInfoOption());
     }
-    if (isSentByMe || (!isParticipant && group))
+    if ((isSentByMe || (!isParticipant && group)) && !additionalParams?.hideDeleteMessageOption)
       messageOptionList.push(this.getDeleteOption());
 
-    if (group?.getGuid() && !isSentByMe) {
+    if (group?.getGuid() && !isSentByMe && !additionalParams?.hideMessagePrivatelyOption) {
       messageOptionList.push(this.getSendMessagePrivatelyOption());
     }
-
     return messageOptionList;
   }
 
@@ -683,20 +707,20 @@ export class MessagesDataSource implements DataSource {
     return "<Message Utils>";
   }
 
-  getAllMessageCategories(): Array<string> {
+  getAllMessageCategories(additionalConfigurations?: { hideGroupActionMessages?: boolean }): Array<string> {
     return [
       CometChatUIKitConstants.MessageCategory.message,
-      CometChatUIKitConstants.MessageCategory.action,
+      !additionalConfigurations?.hideGroupActionMessages ? CometChatUIKitConstants.MessageCategory.action : "",
     ];
   }
 
-  getAuxiliaryOptions(
+  getStickerButton(
     id: ComposerId,
 
     user?: CometChat.User,
     group?: CometChat.Group
-  ): JSX.Element[] {
-    return [];
+  ): JSX.Element | undefined {
+    return undefined;
   }
 
   getId(): string {
@@ -725,7 +749,8 @@ export class MessagesDataSource implements DataSource {
     return ChatConfigurator.getDataSource().getAudioMessageBubble(
       message?.getAttachments()[0]?.getUrl(),
       message,
-      message?.getAttachments()[0]?.getName()
+      message?.getAttachments()[0]?.getName(),
+      _alignment
     );
   }
 
@@ -737,7 +762,8 @@ export class MessagesDataSource implements DataSource {
     return ChatConfigurator.getDataSource().getFileMessageBubble(
       message?.getAttachments()[0]?.getUrl(),
       message,
-      message?.getAttachments()[0]?.getName()
+      message?.getAttachments()[0]?.getName(),
+      _alignment
     );
   }
 
@@ -750,7 +776,9 @@ export class MessagesDataSource implements DataSource {
     return ChatConfigurator.getDataSource().getImageMessageBubble(
       imageUrl,
       PlaceholderImage,
-      message
+      message,
+      undefined,
+      _alignment
     );
   }
 
@@ -761,7 +789,9 @@ export class MessagesDataSource implements DataSource {
   ): Element | JSX.Element {
     return ChatConfigurator.getDataSource().getVideoMessageBubble(
       message?.getAttachments()[0]?.getUrl(),
-      message
+      message,
+      undefined,undefined,
+      _alignment
     );
   }
 
@@ -855,9 +885,10 @@ export class MessagesDataSource implements DataSource {
 
   getDeleteMessageBubble(
     message: CometChat.BaseMessage,
-    text?:string
+    text?:string,
+    alignment?:MessageBubbleAlignment
   ) {
-    return <CometChatDeleteBubble isSentByMe={this.getIsSentByMe(message)} text={text}/>;
+    return <CometChatDeleteBubble isSentByMe={alignment == MessageBubbleAlignment.right} text={text}/>;
   }
 
   getGroupActionBubble(
@@ -947,7 +978,7 @@ export class MessagesDataSource implements DataSource {
     }
     return (
       <CometChatTextBubble
-        isSentByMe={this.getIsSentByMe(message)} text={messageText}
+        isSentByMe={alignment == MessageBubbleAlignment.right} text={messageText}
         textFormatters={textFormatters}
       />
     );
@@ -956,9 +987,8 @@ export class MessagesDataSource implements DataSource {
   getAudioMessageBubble(
     audioUrl: string,
     message: CometChat.MediaMessage,
-
-    title?: string): Element | JSX.Element {
-    return <CometChatAudioBubble isSentByMe={this.getIsSentByMe(message)}
+    title?: string,alignment?:MessageBubbleAlignment): Element | JSX.Element {
+    return <CometChatAudioBubble isSentByMe={alignment == MessageBubbleAlignment.right}
       src={audioUrl} />;
   }
   /**
@@ -967,7 +997,7 @@ export class MessagesDataSource implements DataSource {
    * @returns 
    */
   getFileType = (mimeType: string): string => {
-    if(!mimeType){
+    if (!mimeType) {
       return "";
     }
     if (mimeType.startsWith('audio/')) {
@@ -1005,7 +1035,7 @@ export class MessagesDataSource implements DataSource {
    * @returns 
    */
   getFileSize = (sizeInBytes: number): string => {
-    if(!sizeInBytes){
+    if (!sizeInBytes) {
       return "";
     }
     const sizeUnits = ['bytes', 'KB', 'MB', 'GB', 'TB'];
@@ -1022,8 +1052,8 @@ export class MessagesDataSource implements DataSource {
   getFileMessageBubble(
     fileUrl: string,
     message: CometChat.MediaMessage,
-    title?: string
-  ): Element | JSX.Element {
+    title?: string,
+    alignment?: MessageBubbleAlignment  ): Element | JSX.Element {
     let attachment = message.getAttachments()[0];
     const metadataFile = (message.getMetadata() as any)?.file as File | undefined;
     const name = title ?? attachment?.getName() ?? metadataFile?.name;
@@ -1037,7 +1067,7 @@ export class MessagesDataSource implements DataSource {
         subtitle={subtitle}
         title={name}
         fileURL={fileUrl}
-        isSentByMe={this.getIsSentByMe(message)}
+        isSentByMe={alignment == MessageBubbleAlignment.right}
       />
     );
   }
@@ -1129,15 +1159,22 @@ export class MessagesDataSource implements DataSource {
 
   getAttachmentOptions(
 
-    id: ComposerId
+    id: ComposerId,
+    additionalConfigurations?:any
   ): Array<CometChatMessageComposerAction> {
-    let actions: Array<CometChatMessageComposerAction> = [
+    const actionsData: CometChatMessageComposerAction[] = [
       this.imageAttachmentOption(),
       this.videoAttachmentOption(),
       this.audioAttachmentOption(),
       this.fileAttachmentOption(),
     ];
-
+    const showAttachmentsMap = {
+      [CometChatUIKitConstants.MessageTypes.image]: additionalConfigurations?.hideImageAttachmentOption,
+      [CometChatUIKitConstants.MessageTypes.video]: additionalConfigurations?.hideVideoAttachmentOption,
+      [CometChatUIKitConstants.MessageTypes.audio]: additionalConfigurations?.hideAudioAttachmentOption,
+      [CometChatUIKitConstants.MessageTypes.file]: additionalConfigurations?.hideFileAttachmentOption,
+    };
+    const actions = actionsData.filter(action => !showAttachmentsMap[action.id]);
     return actions;
   }
 
@@ -1216,18 +1253,10 @@ export class MessagesDataSource implements DataSource {
 
 
 
-  getAuxiliaryHeaderMenu(user?: CometChat.User, group?: CometChat.Group): Element[] | JSX.Element[] {
+  getAuxiliaryHeaderMenu(user?: CometChat.User, group?: CometChat.Group,additionalConfigurations?:any): Element[] | JSX.Element[] {
     return [];
   }
 
-  getAIOptions(
-    user: CometChat.User | null,
-    group: CometChat.Group | null,
-
-    id?: ComposerId,
-  ): Array<CometChatMessageComposerAction | CometChatActionsView> {
-    return [];
-  }
 
   /**
    * Adds styled @ for every mention in the text by matching uid

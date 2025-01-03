@@ -74,8 +74,8 @@ export class PollsExtensionDecorator extends DataSourceDecorator {
   * Retrieves all message categories, including the custom message category if not already present.
   * @returns An array of message categories.
   */
-  override getAllMessageCategories(): string[] {
-    const categories = super.getAllMessageCategories();
+  override getAllMessageCategories(additionalConfigurations?: Object | undefined): string[] {
+    const categories = super.getAllMessageCategories(additionalConfigurations);
     if (!categories.includes(CometChatUIKitConstants.MessageCategory.custom)) {
       categories.push(CometChatUIKitConstants.MessageCategory.custom);
     }
@@ -130,19 +130,21 @@ export class PollsExtensionDecorator extends DataSourceDecorator {
         let pollsMessage: CometChat.CustomMessage =
           message as CometChat.CustomMessage;
         if (pollsMessage.getDeletedAt()) {
-          return super.getDeleteMessageBubble(pollsMessage);
+          return super.getDeleteMessageBubble(pollsMessage,undefined,_alignment);
         }
-        return this.getPollsContentView(pollsMessage);
+        return this.getPollsContentView(pollsMessage,_alignment);
       },
       options: (
         loggedInUser: CometChat.User,
         messageObject: CometChat.BaseMessage,
-        group?: CometChat.Group
+        group?: CometChat.Group,
+        additionalParams?: Object | undefined
       ) => {
         return super.getCommonOptions(
           loggedInUser,
           messageObject,
-          group
+          group,
+          additionalParams
         );
       },
       bottomView: (
@@ -164,8 +166,7 @@ export class PollsExtensionDecorator extends DataSourceDecorator {
     * @returns The content view for the poll message.
     */
   getPollsContentView(
-    message: CometChat.CustomMessage) {
-
+    message: CometChat.CustomMessage,alignment?: MessageBubbleAlignment) {
     return (
       <PollsBubble
         pollQuestion={this.getPollBubbleData(message, "question")}
@@ -173,6 +174,7 @@ export class PollsExtensionDecorator extends DataSourceDecorator {
         senderUid={this.getPollBubbleData(message)}
         loggedInUser={this.loggedInUser ?? undefined}
         metadata={message?.getMetadata()}
+        alignment={alignment}
       />
     );
   }
@@ -202,10 +204,10 @@ export class PollsExtensionDecorator extends DataSourceDecorator {
    * @param id - The ID for the attachment options.
    * @returns An array of message composer actions.
    */
-  override getAttachmentOptions(id: any) {
-    if (!id?.parentMessageId) {
+  override getAttachmentOptions(id: any,additionalConfigurations?:any) {
+    if (!id?.parentMessageId && !additionalConfigurations?.hidePollsOption) {
       const messageComposerActions: CometChatMessageComposerAction[] =
-        super.getAttachmentOptions(id);
+        super.getAttachmentOptions(id,additionalConfigurations);
       let newAction: CometChatMessageComposerAction =
         new CometChatMessageComposerAction({
           id: PollsConstants.extension_poll,
@@ -220,7 +222,7 @@ export class PollsExtensionDecorator extends DataSourceDecorator {
       messageComposerActions.push(newAction);
       return messageComposerActions;
     } else {
-      return super.getAttachmentOptions(id);
+      return super.getAttachmentOptions(id,additionalConfigurations);
     }
   }
 

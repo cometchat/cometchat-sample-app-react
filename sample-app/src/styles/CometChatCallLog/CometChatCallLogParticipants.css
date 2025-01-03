@@ -10,7 +10,7 @@
     font: var(--cometchat-font-body-regular);
 }
 
-.cometchat-call-log-participants__tail-view {
+.cometchat-call-log-participants__trailing-view {
     overflow: hidden;
     color: var(--cometchat-text-color-primary, #141414);
     text-align: right;
@@ -19,7 +19,7 @@
     font: var(--cometchat-font-body-medium);
 }
 
-.cometchat-call-log-participants__tail-view-disabled {
+.cometchat-call-log-participants__trailing-view-disabled {
     overflow: hidden;
     color: var(--cometchat-text-color-tertiary, #A1A1A1);
     text-align: right;
@@ -28,6 +28,6 @@
     font: var(--cometchat-font-body-medium);
 }
 
-.cometchat-call-log-participants .cometchat-list-item__tail-view {
+.cometchat-call-log-participants .cometchat-list-item__trailing-view {
     width: fit-content;
 }

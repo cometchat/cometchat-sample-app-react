@@ -38,9 +38,9 @@ export function useStateRef<T>(initialValue : T) : [T, (node : T) => void] {
     return [state, setRef];
 }
 
-export function useCometChatErrorHandler(onError? : ((error : CometChat.CometChatException) => void) | null) : (error : unknown) => void {
+export function useCometChatErrorHandler(onError? : ((error : CometChat.CometChatException) => void) | null) : (error : unknown, source?: string) => void {
     const onErrorRef = useRefSync(onError);
-    const errorHandler = useCallback(function fn(error : unknown) : void {
+    const errorHandler = useCallback(function fn(error : unknown, source?: string) : void {
         if (typeof error === "object" && error) {
             if (error instanceof CometChat.CometChatException) {
                 const onError = onErrorRef.current;
@@ -50,8 +50,9 @@ export function useCometChatErrorHandler(onError? : ((error : CometChat.CometCha
             }
             else if (error instanceof Error) {
                 return fn(new CometChat.CometChatException({
-                    code: "ERROR",
-                    name: error.name,
+                    code: "ERR_SYSTEM",
+                    name: source ? source + ": " + error.name : error.name,
+                    details: error.stack,
                     message: error.message
                 }));
             }

@@ -53,7 +53,7 @@ export const CometChatCallDetailsParticipants = (props: { call: any }) => {
     const getListItemTailView = useCallback((item: any): JSX.Element => {
         return (
             <div
-                className={item?.getHasJoined() || item?.getJoinedAt() ? "cometchat-call-log-participants__tail-view" : "cometchat-call-log-participants__tail-view-disabled" }
+                className={item?.getHasJoined() || item?.getJoinedAt() ? "cometchat-call-log-participants__trailing-view" : "cometchat-call-log-participants__trailing-view-disabled" }
             >
                 {getDurationOfCall(item)}
             </div>
@@ -70,7 +70,7 @@ export const CometChatCallDetailsParticipants = (props: { call: any }) => {
                         avatarURL={item?.getAvatar()}
                         avatarName={item?.getName()}
                         subtitleView={getListItemSubtitleView(item)}
-                        tailView={getListItemTailView(item)}
+                        trailingView={getListItemTailView(item)}
                     />
                 </>
             )
@@ -83,7 +83,7 @@ export const CometChatCallDetailsParticipants = (props: { call: any }) => {
             <CometChatList
                 hideSearch={true}
                 list={getCallParticipants() || []}
-                listItem={getListItem}
+                itemView={getListItem}
                 listItemKey="getUid"
                 state={States.loaded}
                 showSectionHeader={false}

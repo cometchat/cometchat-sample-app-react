@@ -60,13 +60,7 @@ export { CometChatUsers } from './components/CometChatUsers/CometChatUsers';
 export { CometChatMessageInformation } from './components/CometChatMessageInformation/CometChatMessageInformation';
 
 // AI
-export { AIConversationStarterExtension } from './components/AI/AIConversationStarter/AIConversationStarterExtension';
-export { AIConversationStarterDecorator } from './components/AI/AIConversationStarter/AIConversationStarterDecorator';
-export { AISmartRepliesExtension } from './components/AI/AISmartReplies/AISmartRepliesExtension';
-export { AISmartRepliesDecorator } from './components/AI/AISmartReplies/AISmartRepliesDecorator';
-export { AIConversationSummaryExtension } from './components/AI/AIConversationSummary/AIConversationSummaryExtension';
-export { AIConversationSummaryDecorator } from './components/AI/AIConversationSummary/AIConversationSummaryDecorator';
-export { AIExtensionDataSource } from './components/AI/AIExtensionDataSource'
+
 export {CometChatUIKitCalls} from './CometChatUIKit/CometChatCalls';
 
 // constants
@@ -100,6 +94,12 @@ export { ChatSdkEventInitializer } from "./utils/ChatSdkEventInitializer";
 
 export {CometChatActionBubble} from './components/BaseComponents/CometChatActionBubble/CometChatActionBubble';
 export {CometChatActionSheet} from './components/BaseComponents/CometChatActionSheet/CometChatActionSheet'
+export {CallButtonConfiguration} from './components/Calling/CallButtonConfiguration'
+export {CallingConfiguration} from './components/Calling/CallingConfiguration'
+export {CometChatCallButtons} from './components/Calling/CometChatCallButtons/CometChatCallButtons'
+export {OutgoingCallConfiguration} from './components/Calling/OutgoingCallConfiguration'
+export *  from './components/Calling/Utils/utils'
+
 
 export {CometChatAudioBubble} from './components/BaseComponents/CometChatAudioBubble/CometChatAudioBubble';
 export {CometChatAvatar} from './components/BaseComponents/CometChatAvatar/CometChatAvatar';
@@ -127,6 +127,9 @@ export {CometChatDocumentBubble} from './components/BaseComponents/CometChatDocu
 export {CometChatDate} from './components/BaseComponents/CometChatDate/CometChatDate';
 export {CometChatDeleteBubble} from './components/BaseComponents/CometChatDeleteBubble/CometChatDeleteBubble';
 
+export {CometChatReactionInfo} from './components/Reactions/CometChatReactionInfo/CometChatReactionInfo';
+export {CometChatReactionList} from './components/Reactions/CometChatReactionList/CometChatReactionList';
+export {CometChatReactions} from './components/Reactions/CometChatReactions/CometChatReactions';
 
 export {CallingDetailsUtils} from './utils/CallingDetailsUtils';
 export {ConversationUtils} from './utils/ConversationUtils';

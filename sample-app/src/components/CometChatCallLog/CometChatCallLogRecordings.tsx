@@ -65,7 +65,7 @@ export const CometChatCallDetailsRecording = (props: { call: any }) => {
                         avatarURL=""
                         title={item?.getRid()}
                         subtitleView={getListItemSubtitleView(item)}
-                        tailView={getListItemTailView(item)}
+                        trailingView={getListItemTailView(item)}
                     />
                 </>
             )
@@ -85,7 +85,7 @@ export const CometChatCallDetailsRecording = (props: { call: any }) => {
                 <CometChatList
                     hideSearch={true}
                     list={getRecordings()}
-                    listItem={getListItem}
+                    itemView={getListItem}
                     listItemKey="getRid"
                     state={States.loaded}
                     showSectionHeader={false}

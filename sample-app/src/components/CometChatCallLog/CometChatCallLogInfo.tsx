@@ -47,7 +47,7 @@ export const CometChatCallDetailsInfo = (props: { call: any }) => {
 
     const getListItemTailView = useCallback((item: any): JSX.Element => {
         return (
-            <div className={getCallDuration(item) ? "cometchat-call-log-info__tail-view" : "cometchat-call-log-info__tail-view-disabled"}>
+            <div className={getCallDuration(item) ? "cometchat-call-log-info__trailing-view" : "cometchat-call-log-info__trailing-view-disabled"}>
                 {getCallDuration(item) ? getCallDuration(item) : '00:00'}
             </div>
         );
@@ -162,7 +162,7 @@ export const CometChatCallDetailsInfo = (props: { call: any }) => {
                 title={getCallStatus(call, loggedInUser!)}
                 avatarURL={getAvatarUrlForCall(call)}
                 subtitleView={getListItemSubtitleView(call)}
-                tailView={getListItemTailView(call)}
+                trailingView={getListItemTailView(call)}
             />
         </div>
     )

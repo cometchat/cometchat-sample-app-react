@@ -31,3 +31,7 @@
     text-align: center;
     font: var(--cometchat-font-heading4-medium);
 }
+
+.cometchat-banned-members .cometchat-list-item__trailing-view .cometchat-button__icon-default {
+    background: var(--cometchat-icon-color-secondary, #A1A1A1);
+}

@@ -11,7 +11,7 @@ export class MessageListManager {
     static groupListenerId: string = "group_" + new Date().getTime();
     static callListenerId: string = "call_" + new Date().getTime();
     static connectionListenerId: string = "MessageList_connection_" + String(Date.now());
-
+    private static errorHandler: (error: unknown, source?: string) => void;
     /**
      * Creates an instance of MessageListManager which constructs a request builder for fetching messages from a particular user/group in the chat.
      * @param {CometChat.MessagesRequestBuilder} [messagesRequestBuilder]
@@ -19,9 +19,11 @@ export class MessageListManager {
      * @param {CometChat.Group} [group]
      * @param {number} [messageId]
      * @param {number} [parentMessageId]
+     * @param {boolean} [hideGroupActionMessages]
      * @memberof MessageListManager
      */
-    constructor(messagesRequestBuilder?: CometChat.MessagesRequestBuilder, user?: CometChat.User, group?: CometChat.Group, messageId?: number, parentMessageId?: number) {
+    constructor(errorHandler: (error: unknown, source?: string) => void,messagesRequestBuilder?: CometChat.MessagesRequestBuilder, user?: CometChat.User, group?: CometChat.Group, messageId?: number, parentMessageId?: number, hideGroupActionMessages?: boolean) {
+        MessageListManager.errorHandler = errorHandler;
         if (messagesRequestBuilder) {
             let requestBuilder!: CometChat.MessagesRequestBuilder;
             if (user) {
@@ -39,7 +41,7 @@ export class MessageListManager {
         } else {
             const builder: CometChat.MessagesRequestBuilder = new CometChat.MessagesRequestBuilder()
                 .setTypes(ChatConfigurator.dataSource.getAllMessageTypes())
-                .setCategories(ChatConfigurator.dataSource.getAllMessageCategories())
+                .setCategories(ChatConfigurator.dataSource.getAllMessageCategories({ hideGroupActionMessages }))
                 .hideReplies(true)
                 .setLimit(30)
 
@@ -84,7 +86,8 @@ export class MessageListManager {
      */
     static attachListeners: (callback: (key: string, mesage: CometChat.BaseMessage, group?: CometChat.Group) => void) => void = (callback: (key: string, mesage: CometChat.BaseMessage, group?: CometChat.Group) => void) => {
 
-
+try {
+    
         /** Add Group Listener to listen to group action messages */
         CometChat.addGroupListener(
             this.groupListenerId,
@@ -135,16 +138,23 @@ export class MessageListManager {
                 })
             );
         }
+} catch (error) {
+    this.errorHandler(error,"attachListeners")
+}
     };
     /**
      * Function to remove the attached listeners for a particular user/group.
      *  */
     static removeListeners(): void {
+     try {
         CometChat.removeGroupListener(this.groupListenerId);
         CometChat.removeConnectionListener(this.connectionListenerId)
         if (ChatConfigurator.names.includes("calling")) {
             CometChat.removeCallListener(this.callListenerId);
         }
+     } catch (error) {
+        this.errorHandler(error,"removeListeners")
+     }
     }
     /**
 * Attaches an SDK websocket listener to monitor when the connection disconnects or reconnects.
@@ -152,6 +162,7 @@ export class MessageListManager {
 * @returns - Function to remove the added SDK websocket listener
 */
     static attachConnectionListener(callback: () => void): void {
+      try {
         const listenerId = "MessageList_connection_" + String(Date.now());
         CometChat.addConnectionListener(
             listenerId,
@@ -167,5 +178,8 @@ export class MessageListManager {
                 }
             })
         );
+      } catch (error) {
+        this.errorHandler(error,"attachConnectionListener")
+      }
     }
 }

@@ -20,7 +20,9 @@
     border: none;
     align-self: center;
 }
-
+.cometchat-message-list .cometchat-message-list__footer-smart-replies,.cometchat-message-list__footer-conversation-starter{
+    width: 100%;
+}
 /* Body of the error state view */
 .cometchat-message-list__error-state-view-body {
     display: flex;
@@ -310,9 +312,7 @@ width: fit-content;
 
 /* Message indicator inside message list */
 .cometchat-message-list__message-indicator {
-    z-index: 1;
-    position: absolute;
-    bottom: 8px;
+    margin-bottom: 8px;
     display: flex;
     width: 100;
     justify-content: center;
@@ -362,6 +362,7 @@ width: fit-content;
     justify-content: flex-start;
     width: 100%;
     box-sizing: border-box;
+    background: transparent;
 }
 
 /* Leading view inside message bubble */
@@ -698,7 +699,7 @@ width: fit-content;
 .cometchat-message-information__popup-wrapper {
     display: flex;
     position: fixed;
-    z-index: 1;
+    z-index: 2;
     left: 0;
     top: 0;
     width: 100%;

@@ -42,17 +42,11 @@ export type DivElementRef = HTMLDivElement | null;
 
 interface ListProps<T> {
   /**
-   * Title of the component
-   *
-   * @defaultValue `""`
-   */
-  title?: string;
-  /**
    * Menu view of the component
    *
    * @defaultValue `""`
    */
-  menu?: JSX.Element;
+  headerView?: JSX.Element;
   /**
    * Alignment of the `title` text
    *
@@ -95,7 +89,7 @@ interface ListProps<T> {
   /**
    * Custom list item view to be rendered for each object in the `list` prop
    */
-  listItem: (item: T, itemIndex: number) => JSX.Element;
+  itemView: (item: T, itemIndex: number) => JSX.Element;
   /**
    * Function to call when the scrollbar is at the top-most position of the scrollable list
    */
@@ -120,14 +114,14 @@ interface ListProps<T> {
    * @remarks
    * This property will be used to extract the section header character from each object in the `list` prop
    */
-  sectionHeaderKey?: keyof T;
+  sectionHeaderKey?: keyof T | string;
   /**
    * Property on each object in the `list` prop
    *
    * @remarks
    * This property will be used to extract the key value from each object in the `list` prop. The extracted key value is set as a `key` of a React element
    */
-  listItemKey?: keyof T;
+  listItemKey?: keyof T | string;
   /**
    * Fetch state of the component
    */
@@ -152,7 +146,7 @@ interface ListProps<T> {
   /**
    * Custom view for the error state of the component
    */
-  errorStateView?: JSX.Element;
+  errorView?: JSX.Element;
   /**
    * Text to display in the default error view
    *
@@ -162,7 +156,7 @@ interface ListProps<T> {
   /**
    * Custom view for the empty state of the component
    */
-  emptyStateView?: JSX.Element;
+  emptyView?: JSX.Element;
   /**
    * Text to display in the default empty view
    *
@@ -180,6 +174,12 @@ interface ListProps<T> {
    * Function to call whenever the component encounters an error
    */
   onError?: ((error: CometChat.CometChatException) => void) | null;
+    /**
+   * Title of the component
+   *
+   * @defaultValue `""`
+   */
+    title?: string;
 }
 /**
  * Renders a list component that can display a title, search bar,
@@ -189,13 +189,12 @@ interface ListProps<T> {
  */
 function List<T>(props: ListProps<T>): JSX.Element {
   const {
-    title = "",
     hideSearch = false,
     searchText = "",
     onSearch,
     searchPlaceholderText = "Search",
     list,
-    listItem,
+    itemView,
     showSectionHeader = true,
     sectionHeaderKey,
     listItemKey,
@@ -204,12 +203,13 @@ function List<T>(props: ListProps<T>): JSX.Element {
     state,
     loadingView,
     hideError = false,
-    errorStateView,
-    emptyStateView,
+    errorView,
+    emptyView,
     scrollToBottom = false,
     onError,
     scrolledUpCallback,
-    menu
+    headerView,
+    title = ""
   } = props;
   // Refs for DOM elements and other states
   const intersectionObserverRootRef = useRef<DivElementRef>(null);
@@ -226,18 +226,6 @@ function List<T>(props: ListProps<T>): JSX.Element {
   const onSearchRef = useRefSync(onSearch);
   const errorHandler = useCometChatErrorHandler(onError);
 
-  /**
-   * Renders the title view if the title prop is provided.
-   */
-  function getTitle(): JSX.Element {
-    return (
-      <div
-        className="cometchat-list__header-title"
-      >
-        {title}
-      </div>
-    );
-  }
   /**
  * Handles changes in the search input field and triggers a search with a debounce of 500ms.
  *
@@ -298,7 +286,7 @@ function List<T>(props: ListProps<T>): JSX.Element {
           );
           itemSectionHeader = " ";
         } else {
-          itemSectionHeader = (getKeyValue(sectionHeaderKey, item) ||
+          itemSectionHeader = (getKeyValue(sectionHeaderKey as keyof T, item) ||
             " ")[0].toUpperCase();
         }
         let sectionHeaderJSX: JSX.Element | null = null;
@@ -318,9 +306,9 @@ function List<T>(props: ListProps<T>): JSX.Element {
         );
       }
       return (
-        <div key={listItemKey ? getKeyValue(listItemKey, item) : itemIdx} className="cometchat-list__item-wrapper">
+        <div key={listItemKey ? getKeyValue(listItemKey as keyof T, item) : itemIdx} className="cometchat-list__item-wrapper">
           {listSectionJSX}
-          {listItem(item, itemIdx)}
+          {itemView(item, itemIdx)}
         </div>
       );
     });
@@ -348,7 +336,7 @@ function List<T>(props: ListProps<T>): JSX.Element {
     return <div
       className="cometchat-list__error-view"
     >
-      {errorStateView}
+      {errorView}
     </div>
   }
 
@@ -360,7 +348,7 @@ function List<T>(props: ListProps<T>): JSX.Element {
       <div
         className="cometchat-list__empty-view"
       >
-        {emptyStateView}
+        {emptyView}
       </div>
     )
   }
@@ -405,8 +393,20 @@ function List<T>(props: ListProps<T>): JSX.Element {
     scrollHeightTupleRef,
     didTopObserverCallbackRunRef,
     errorHandler,
-    scrolledUpCallback,
-  });
+    scrolledUpCallback
+     });
+    /**
+   * Renders the title view if the title prop is provided.
+   */
+    function getTitle(): JSX.Element {
+      return (
+        <div
+          className="cometchat-list__header-title"
+        >
+          {title}
+        </div>
+      );
+    }
   return (
     <div className="cometchat" style={{
       width: "100%",
@@ -414,11 +414,9 @@ function List<T>(props: ListProps<T>): JSX.Element {
     }}>
       <div className="cometchat-list">
         <div className="cometchat-list__header">
-          {title ? getTitle() : null}
+          {headerView ?? null}
+          {!headerView && title ? getTitle() : null}
           {getSearchBox()}
-          {menu ? <div className="cometchat-list__header-menu">
-            {menu}
-          </div> : null}
         </div>
         <div ref={intersectionObserverRootRef} className="cometchat-list__body">
           <div ref={intersectionObserverTopTargetRef} style={{ height: "1px", minHeight: "1px" }}></div>

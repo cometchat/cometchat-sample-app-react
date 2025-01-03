@@ -21,7 +21,7 @@
     padding: 0px;
 }
 
-.cometchat-call-log-history .cometchat-call-log-history__tail-view {
+.cometchat-call-log-history .cometchat-call-log-history__trailing-view {
     overflow: hidden;
     color: var(--cometchat-text-color-primary, #141414);
     text-align: right;
@@ -30,7 +30,7 @@
     font: var(--cometchat-font-body-medium);
 }
 
-.cometchat-call-log-history .cometchat-call-log-history__tail-view-disabled {
+.cometchat-call-log-history .cometchat-call-log-history__trailing-view-disabled {
     overflow: hidden;
     color: var(--cometchat-text-color-tertiary, #A1A1A1);
     text-align: right;
@@ -39,6 +39,6 @@
     font: var(--cometchat-font-body-medium);
 }
 
-.cometchat-call-log-history .cometchat-list-item__tail-view {
+.cometchat-call-log-history .cometchat-list-item__trailing-view {
     width: fit-content;
 }

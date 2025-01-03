@@ -55,6 +55,9 @@
   font: var(--cometchat-font-heading4-bold);
   font-style: normal;
   text-align: left;
+  width: 100%;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
 }
 
 .cometchat-polls-bubble-incoming .cometchat-polls-bubble__question {
@@ -157,6 +160,9 @@
   font: var(--cometchat-font-body-regular);
   font-style: normal;
   text-align: left;
+  word-wrap: break-word;
+  width: 100%;
+  overflow: hidden;
 }
 
 .cometchat-polls-bubble-incoming .cometchat-poll-bubble__option-item-body-content-title {
@@ -173,7 +179,7 @@
   max-width: 100px;
   position: relative;
   height: 20px;
-  width: 100px;
+  width: fit-content;
   gap: var(--cometchat-padding-1);
 }
 

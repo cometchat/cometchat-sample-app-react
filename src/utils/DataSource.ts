@@ -6,7 +6,7 @@ import { CometChatMentionsFormatter } from "../formatters/CometChatFormatters/Co
 import { CometChatTextFormatter } from "../formatters/CometChatFormatters/CometChatTextFormatter";
 import { CometChatUrlsFormatter } from "../formatters/CometChatFormatters/CometChatUrlsFormatter/CometChatUrlsFormatter";
 import { additionalParams } from "./ConversationUtils";
-import {  CometChatActionsIcon, CometChatActionsView, CometChatMessageComposerAction, CometChatMessageTemplate} from "../modals/";
+import { CometChatActionsIcon, CometChatActionsView, CometChatMessageComposerAction, CometChatMessageTemplate } from "../modals/";
 import { DatePatterns, MessageBubbleAlignment } from "../Enums/Enums";
 import { ComposerId } from "./MessagesDataSource";
 /**
@@ -17,27 +17,32 @@ export abstract class DataSource {
   abstract getTextMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView>;
   abstract getImageMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView>;
   abstract getVideoMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView>;
   abstract getAudioMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView>;
   abstract getFileMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView>;
   abstract getBottomView(
     message: CometChat.BaseMessage,
@@ -90,7 +95,7 @@ export abstract class DataSource {
 
   ): CometChatMessageTemplate;
   abstract getGroupActionTemplate(
-
+    additionalConfigurations?: Object | undefined
   ): CometChatMessageTemplate;
   abstract getAllMessageTemplates(
     additionalConfigurations?: Object | undefined
@@ -102,26 +107,31 @@ export abstract class DataSource {
   abstract getMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView>;
   abstract getCommonOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView>;
   abstract getAttachmentOptions(
-    id: ComposerId
+    id: ComposerId,
+    additionalConfigurations?:any
   ): CometChatMessageComposerAction[];
   abstract getAllMessageTypes(): Array<string>;
-  abstract getAllMessageCategories(): Array<string>;
-  abstract getAuxiliaryOptions(
+  abstract getAllMessageCategories(additionalConfigurations?: Object | undefined): Array<string>;
+  abstract getStickerButton(
     id: ComposerId,
     user?: CometChat.User,
     group?: CometChat.Group
-  ): JSX.Element[];
+  ): JSX.Element | undefined;
   abstract getId(): string;
   abstract getDeleteMessageBubble(
     messageObject: CometChat.BaseMessage,
+    text?:string,
+    alignment?: MessageBubbleAlignment,
   ): Element | JSX.Element;
   abstract getGroupActionBubble(
     message: CometChat.BaseMessage,
@@ -137,22 +147,26 @@ export abstract class DataSource {
     message: CometChat.MediaMessage,
     thumbnailUrl?: string,
     onClick?: Function,
+    alignment?: MessageBubbleAlignment,
   ): Element | JSX.Element;
   abstract getImageMessageBubble(
     imageUrl: string,
     placeholderImage: string,
     message: CometChat.MediaMessage,
     onClick?: Function,
+    alignment?: MessageBubbleAlignment,
   ): Element | JSX.Element;
   abstract getAudioMessageBubble(
     audioUrl: string,
     message: CometChat.MediaMessage,
     title?: string,
+    alignment?: MessageBubbleAlignment,
   ): Element | JSX.Element;
   abstract getFileMessageBubble(
     fileUrl: string,
     message: CometChat.MediaMessage,
     title?: string,
+    alignment?: MessageBubbleAlignment,
   ): Element | JSX.Element;
   abstract getLastConversationMessage(
     conversation: CometChat.Conversation,
@@ -162,13 +176,9 @@ export abstract class DataSource {
 
   abstract getAuxiliaryHeaderMenu(
     user?: CometChat.User,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalConfigurations?:any
   ): Element[] | JSX.Element[];
-  abstract getAIOptions(
-    user: CometChat.User | null,
-    group: CometChat.Group | null,
-    id?: ComposerId,
-  ): (CometChatMessageComposerAction | CometChatActionsView)[];
   abstract getAllTextFormatters(formatterParams: additionalParams): CometChatTextFormatter[];
   abstract getMentionsTextFormatter(
     params: Object

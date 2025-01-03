@@ -6,23 +6,26 @@ import { CometChatSoundManager } from "../../../resources/CometChatSoundManager/
  * @param call - Optional CometChat.Call object representing the outgoing call.
  */
 function useCometChatOutgoingCall(
+    errorHandler:(error: unknown, source?: string) => void,
     playAudio: Function,
     call?: CometChat.Call,
 ) {
     useEffect(
         () => {
-            // If there's an active call, play audio after a delay
-            if (call) {
-                setTimeout(() => {
-
-                    playAudio();
-                });
-            }
-            // Cleanup function to pause the audio when the component unmounts or dependencies change
-
-            return () => {
-                CometChatSoundManager.pause();
-            }
+        try {
+                // If there's an active call, play audio after a delay
+                if (call) {
+                    setTimeout(() => {
+                        playAudio();
+                    });
+                }
+                // Cleanup function to pause the audio when the component unmounts or dependencies change
+                return () => {
+                    CometChatSoundManager.pause();
+                }
+        } catch (error) {
+            errorHandler(error,"useEffect")
+        }
         }, [call, playAudio]
     );
 

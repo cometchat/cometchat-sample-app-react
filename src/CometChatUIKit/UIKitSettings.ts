@@ -1,5 +1,4 @@
 
-import { AIExtensionDataSource } from "../components/AI/AIExtensionDataSource";
 import { CallingExtension } from "../components/Calling/CallingExtension";
 import { ExtensionsDataSource } from "../components/Extensions/ExtensionsDataSource";
 
@@ -90,12 +89,6 @@ export class UIKitSettings {
     readonly callingExtension?:CallingExtension;
 
   /**
-   * Data source for managing AI features.
-   * @type {AIExtensionDataSource[]}
-   */
-  readonly aiFeatures?: AIExtensionDataSource[];
-
-  /**
    * Private constructor to initialize the settings using the provided builder.
    * @param {UIKitSettingsBuilder} builder - The builder instance containing the settings configuration.
    */
@@ -112,7 +105,6 @@ export class UIKitSettings {
     this.clientHost = builder.clientHost;
     this.extensions = builder.extensions;
     this.callingExtension  = builder.callingExtension;
-    this.aiFeatures = builder.aiFeatures;
     this.roles = builder.roles;
   }
 
@@ -203,14 +195,6 @@ export class UIKitSettings {
     public getCallsExtension(): ExtensionsDataSource {
       return this.callingExtension!;
     }
-
-  /**
-   * Retrieves the list of AI features.
-   * @returns {AIExtensionDataSource[]} The list of AI features.
-   */
-  public getAiFeatures(): AIExtensionDataSource[] {
-    return this.aiFeatures!
-  }
 }
 
 export class UIKitSettingsBuilder {
@@ -292,12 +276,6 @@ export class UIKitSettingsBuilder {
    * @type {string}
    */
   clientHost?: string;
-
-  /**
-   * Data source for managing AI features.
-   * @type {AIExtensionDataSource[]}
-   */
-  aiFeatures?: AIExtensionDataSource[];
 
   /**
   * Builds and returns an instance of UIKitSettings.
@@ -427,14 +405,4 @@ export class UIKitSettingsBuilder {
       this.callingExtension = callingExtension;
       return this
     }
-
-  /**
-   * Sets the list of AI features.
-   * @param {AIExtensionDataSource[]} aiFeatures - The list of AI features.
-   * @returns {UIKitSettingsBuilder} The builder instance.
-   */
-  public setAiFeatures(aiFeatures: AIExtensionDataSource[]): UIKitSettingsBuilder {
-    this.aiFeatures = aiFeatures
-    return this
-  }
 }

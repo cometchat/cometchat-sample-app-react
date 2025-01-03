@@ -31,6 +31,14 @@ export function isMessageSentByMe(message: CometChat.BaseMessage, loggedInUser: 
         loggedInUser?.getUid() === message.getSender().getUid()
     );
 }
+/**
+ * Function to check if the current browser is safari.
+ * @returns boolean
+ */
+export function isSafari():boolean {
+  const userAgent = navigator.userAgent;
+  return /^((?!chrome|android).)*safari/i.test(userAgent);
+}
 
 /**
  * Checks if a given text is a URL.

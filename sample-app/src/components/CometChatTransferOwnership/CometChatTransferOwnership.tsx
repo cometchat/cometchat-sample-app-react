@@ -289,25 +289,21 @@ export function CometChatTransferOwnership(props: ITransferOwnershipProps) {
             className="cometchat-transfer-ownership"
         >
             <CometChatGroupMembers
-                menu={undefined}
                 hideError={undefined}
                 onItemClick={undefined}
                 options={options}
                 group={group}
-                title={title}
-                searchPlaceholderText={searchPlaceholderText}
                 hideSearch={hideSearch}
                 groupMemberRequestBuilder={groupMembersRequestBuilder}
                 searchRequestBuilder={searchRequestBuilder}
-                loadingStateView={loadingStateView}
-                emptyStateView={emptyStateView}
-                errorStateView={errorStateView}
+                loadingView={loadingStateView}
+                emptyView={emptyStateView}
+                errorView={errorStateView}
                 onError={errorHandler}
-                disableUsersPresence={disableUsersPresence}
                 selectionMode={SelectionMode.none}
-                listItemView={listItemView}
+                itemView={listItemView}
                 subtitleView={subtitleView}
-                tailView={tailView}
+                trailingView={tailView}
             />
          
             <div className="cometchat-transfer-ownership__buttons-wrapper">

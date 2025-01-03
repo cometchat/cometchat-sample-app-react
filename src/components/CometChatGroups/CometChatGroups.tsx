@@ -18,113 +18,144 @@ import errorIconDark from "../../assets/list_error_state_icon_dark.svg"
 import { getThemeMode } from "../../utils/util";
 interface GroupsProps {
     /**
-     * Custom view to render on the top-right of the component
-     */
-    menu?: JSX.Element,
-    /**
-     * Title of the component
-     *
-     * @defaultValue `localize("GROUPS")`
-    */
-    title?: string,
-    /**
-     * Text to be displayed when the search input has no value
-     *
-     * @defaultValue `localize("SEARCH")`
-     */
-    searchPlaceholderText?: string,
-    /**
-     * Hide the search bar
+     * Hides the default search bar.
      *
      * @defaultValue `false`
      */
-    hideSearch?: boolean,
+    hideSearch?: boolean;
+  
     /**
-     * Request builder to fetch groups
+     * Hides the default and custom error view passed in `errorView` prop.
      *
-     * @remarks
-     * If the search input is not empty and the `searchRequestBuilder` prop is not provided,
-     * the search keyword of this request builder is set to the text in the search input
+     * @defaultValue `false`
+     */
+    hideError?: boolean;
+  
+    /**
+     * Hides the group type icon.
      *
-     * @defaultValue Default request builder having the limit set to 30
+     * @defaultValue `false`
      */
-    groupsRequestBuilder?: CometChat.GroupsRequestBuilder,
+    hideGroupType?: boolean;
+  
     /**
-     * Request builder with search parameters to fetch groups
+     * The group to highlight in the list.
+     */
+    activeGroup?: CometChat.Group;
+  
+    /**
+     * A request builder for fetching groups.
      *
-     * @remarks
-     * If the search input is not empty,
-     * the search keyword of this request builder is set to the text in the search input
+     * @defaultValue Default request builder having the limit set to `30`.
      */
-    searchRequestBuilder?: CometChat.GroupsRequestBuilder,
+    groupsRequestBuilder?: CometChat.GroupsRequestBuilder;
+  
     /**
-     * Function to call whenever the component encounters an error
-     */
-    onError?: ((error: CometChat.CometChatException) => void) | null,
-    /**
-     * Custom list item view to be rendered for each group in the fetched list
-     */
-    listItemView?: (group: CometChat.Group) => JSX.Element,
-    /**
-     * Custom subtitle view to be rendered for each group in the fetched list
+     * A request builder configured with search parameters to fetch groups.
      *
-     * @remarks
-     * This prop is used if `listItemView` prop is not provided
+     * @remarks If the search input is not empty, the search keyword of this request builder is set to the text in the search input.
      */
-    subtitleView?: (group: CometChat.Group) => JSX.Element,
+    searchRequestBuilder?: CometChat.GroupsRequestBuilder;
+  
     /**
-     * List of actions available on mouse over on the default list item component
+     * A function that returns a list of actions available when hovering over a group item.
+     * @param group - An instance of `CometChat.Group` representing the group.
+     * @returns An array of `CometChatOption` objects.
      */
-    options?: (group: CometChat.Group) => CometChatOption[],
+    options?: (group: CometChat.Group) => CometChatOption[];
+  
     /**
-     * Selection mode to use for the default tail view
-     *
-     * @remarks
-     * This prop is used if `listItemView` prop is not provided.
+     * Selection mode to use for the default trailing view.
      *
      * @defaultValue `SelectionMode.none`
      */
-    selectionMode?: SelectionMode,
+    selectionMode?: SelectionMode;
+  
     /**
-     * Function to call when a group from the fetched list is selected
+     * Callback function invoked when an error occurs in the component.
+     * @param error - An instance of `CometChat.CometChatException` representing the error that occurred.
+     * @returns void
+     */
+    onError?: ((error: CometChat.CometChatException) => void) | null;
+  
+    /**
+     * Callback function invoked when a group is selected.
      *
-     * @remarks
-     * This prop is used if `selectionMode` prop is not `SelectionMode.none`
+     * @remarks This prop works only if `selectionMode` is not set to `SelectionMode.none`.
+     * @param group - An instance of `CometChat.Group` representing the selected group.
+     * @param selected - A boolean indicating whether the group is selected.
+     * @returns void
      */
-    onSelect?: (group: CometChat.Group, selected: boolean) => void,
+    onSelect?: (group: CometChat.Group, selected: boolean) => void;
+  
     /**
-     * Function to call on click of the default list item view of a group
-     */
-    onItemClick?: (group: CometChat.Group) => void,
-    /**
-     * Group to highlight
+     * Callback function invoked when a group item is clicked.
      *
-     * @remarks
-     * This prop is used if `listItemView` prop is not provided
+     * @param group - An instance of `CometChat.Group` representing the clicked group.
+     * @returns void
      */
-    activeGroup?: CometChat.Group,
+    onItemClick?: (group: CometChat.Group) => void;
+  
     /**
-     * Custom view for the loading state of the component
+     * A custom component to render in the top-right corner of the groups list.
      */
-    loadingStateView?: JSX.Element,
+    headerView?: JSX.Element;
+  
     /**
-     * Custom view for the empty state of the component
+     * A custom view to display during the loading state.
      */
-    emptyStateView?: JSX.Element,
+    loadingView?: JSX.Element;
+  
     /**
-     * Custom view for the error state of the component
+     * Custom view for the empty state of the component.
      */
-    errorStateView?: JSX.Element,
+    emptyView?: JSX.Element;
+  
     /**
-     * Hide error view
+     * A custom view to display when an error occurs.
+     */
+    errorView?: JSX.Element;
+  
+    /**
+     * A custom view to render for each group in the fetched list.
      *
-     * @remarks
-     * If set to true, hides the default and the custom error view
-     *
-     * @defaultValue `false`
+     * @param group - An instance of `CometChat.Group` representing the group.
+     * @returns A JSX element to be rendered as the group item.
      */
-    hideError?: boolean,
-};
+    itemView?: (group: CometChat.Group) => JSX.Element;
+  
+    /**
+     * A function that renders a JSX element to display the leading view.
+     *
+     * @param group - An instance of `CometChat.Group` representing the group.
+     * @returns A JSX element to be rendered as the leading view.
+     */
+    leadingView?: (group: CometChat.Group) => JSX.Element;
+  
+    /**
+     * A function that renders a JSX element to display the title view.
+     *
+     * @param group - An instance of `CometChat.Group` representing the group.
+     * @returns A JSX element to be rendered as the title view.
+     */
+    titleView?: (group: CometChat.Group) => JSX.Element;
+  
+    /**
+     * Custom subtitle view to be rendered for each group in the fetched list.
+     *
+     * @param group - An instance of `CometChat.Group` representing the group.
+     * @returns A JSX element to be rendered as the subtitle view.
+     */
+    subtitleView?: (group: CometChat.Group) => JSX.Element;
+  
+    /**
+     * A function that renders a JSX element to display the trailing view.
+     *
+     * @param group - An instance of `CometChat.Group` representing the group.
+     * @returns A JSX element to be rendered as the trailing view.
+     */
+    trailingView?: (group: CometChat.Group) => JSX.Element;
+  };
 
 type State = {
     searchText: string,
@@ -137,7 +168,7 @@ export type Action = { type: "appendGroups", groups: CometChat.Group[], removeOl
 { type: "setGroupList", groupList: CometChat.Group[] } |
 { type: "setFetchState", fetchState: States } |
 { type: "updateGroup", group: CometChat.Group } |
-{ type: "updateGroupForSDKEvents", group: CometChat.Group, newScope?: CometChat.GroupMemberScope, newCount?: number, hasJoined?: boolean, addGroup?: boolean } | 
+{ type: "updateGroupForSDKEvents", group: CometChat.Group, newScope?: CometChat.GroupMemberScope, newCount?: number, hasJoined?: boolean, addGroup?: boolean } |
 { type: "removeGroup", guid: string } |
 { type: "prependGroup", group: CometChat.Group } |
 { type: "setSearchText", searchText: string } |
@@ -200,51 +231,51 @@ var stateReducer = (state: State, action: Action): State => {
         case "setIsFirstReload":
             newState = { ...state, isFirstReload: action.isFirstReload };
             break;
-            case "updateGroupForSDKEvents": {
-                const { groupList, searchText } = state;
-                const { group, hasJoined, newScope, newCount, addGroup } = action;
-                const targetGuid = group.getGuid();
-                const targetIdx = groupList.findIndex(g => g.getGuid() === targetGuid);
-    
-                if (addGroup && searchText && searchText.length > 0) {
-                    return state; 
+        case "updateGroupForSDKEvents": {
+            const { groupList, searchText } = state;
+            const { group, hasJoined, newScope, newCount, addGroup } = action;
+            const targetGuid = group.getGuid();
+            const targetIdx = groupList.findIndex(g => g.getGuid() === targetGuid);
+
+            if (addGroup && searchText && searchText.length > 0) {
+                return state;
+            }
+            if (targetIdx > -1) {
+                const updatedGroup = groupList[targetIdx];
+
+                if (hasJoined !== undefined) {
+                    updatedGroup.setHasJoined(hasJoined);
                 }
-                if (targetIdx > -1) {
-                    const updatedGroup = groupList[targetIdx];
-    
-                    if (hasJoined !== undefined) {
-                        updatedGroup.setHasJoined(hasJoined);
-                    }
-                    if (newScope !== undefined) {
-                        updatedGroup.setScope(newScope);
-                    }
-                    if(newCount!== undefined){
+                if (newScope !== undefined) {
+                    updatedGroup.setScope(newScope);
+                }
+                if (newCount !== undefined) {
                     updatedGroup.setMembersCount(newCount);
-                    }
-                    newState = {
-                        ...state,
-                        groupList: groupList.map((g, i) =>
-                            i === targetIdx ? updatedGroup : g
-                        )
-                    };
                 }
-                else if (addGroup) {
-                    if (hasJoined !== undefined) {
-                        group.setHasJoined(hasJoined);
-                    }
-                    if (newScope !== undefined) {
-                        group.setScope(newScope);
-                    }
-                    if (newCount !== undefined) {
-                        group.setMembersCount(newCount);
-                    }
-                    newState = {
-                        ...state,
-                        groupList: [group, ...groupList]
-                    };
+                newState = {
+                    ...state,
+                    groupList: groupList.map((g, i) =>
+                        i === targetIdx ? updatedGroup : g
+                    )
+                };
+            }
+            else if (addGroup) {
+                if (hasJoined !== undefined) {
+                    group.setHasJoined(hasJoined);
                 }
-                break;
-            }        
+                if (newScope !== undefined) {
+                    group.setScope(newScope);
+                }
+                if (newCount !== undefined) {
+                    group.setMembersCount(newCount);
+                }
+                newState = {
+                    ...state,
+                    groupList: [group, ...groupList]
+                };
+            }
+            break;
+        }
         default: {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const x: never = type;
@@ -258,26 +289,29 @@ var stateReducer = (state: State, action: Action): State => {
  */
 export function CometChatGroups(props: GroupsProps) {
     const {
-        menu,
-        title = localize("GROUPS"),
-        searchPlaceholderText = localize("SEARCH"),
+        headerView,
         hideSearch = false,
         groupsRequestBuilder = null,
         searchRequestBuilder = null,
         onError,
-        listItemView = null,
+        itemView = null,
         subtitleView = null,
         options = null,
         selectionMode = SelectionMode.none,
         onSelect,
         onItemClick,
         activeGroup = null,
-        loadingStateView,
-        emptyStateView,
-        errorStateView,
+        loadingView,
+        emptyView,
+        errorView,
         hideError = false,
+        hideGroupType = false,
+        leadingView,
+        titleView,
+        trailingView
     } = props;
-
+    const titleRef = useRef<string>(localize("GROUPS"));
+    const searchPlaceholderTextRef = useRef<string>(localize("SEARCH"));
     const [state, dispatch] = useReducer(stateReducer, {
         searchText: "",
         groupList: [],
@@ -307,10 +341,14 @@ export function CometChatGroups(props: GroupsProps) {
      * Updates the `searchText` state
      */
     const onSearch = useCallback((searchText: string): void => {
-        const trimmedText = searchText.trim();
-        if (searchText.length === 0 || (trimmedText.length === searchText.length && trimmedText.length > 0)) {
-            groupsSearchText.current = ""
-            dispatch({ type: "setSearchText", searchText });
+        try {
+            const trimmedText = searchText.trim();
+            if (searchText.length === 0 || (trimmedText.length === searchText.length && trimmedText.length > 0)) {
+                groupsSearchText.current = ""
+                dispatch({ type: "setSearchText", searchText });
+            }
+        } catch (error) {
+            errorHandler(error, 'onSearch');
         }
     }, [dispatch]);
 
@@ -359,7 +397,7 @@ export function CometChatGroups(props: GroupsProps) {
             if (fetchId === fetchNextIdRef.current && state.groupList?.length <= 0) {
                 dispatch({ type: "setFetchState", fetchState: States.error });
             }
-            errorHandler(error);
+            errorHandler(error, 'fetchNextAndAppendGroups');
         }
     }, [errorHandler, dispatch]);
 
@@ -368,17 +406,22 @@ export function CometChatGroups(props: GroupsProps) {
      * Creates a subtitle view for the default list item view
      */
     function getSubtitleView(group: CometChat.Group): JSX.Element {
-        if (subtitleView !== null) {
-            return subtitleView(group);
+        try {
+            if (subtitleView !== null) {
+                return subtitleView(group);
+            }
+            const membersCount = group.getMembersCount();
+            return (
+                <div
+                    className="cometchat-groups__subtitle"
+                >
+                    {`${membersCount} ${membersCount > 1 ? localize("MEMBERS") : localize("MEMBER")}`}
+                </div>
+            );
+        } catch (error) {
+            errorHandler(error, 'getSubtitleView');
+            return (<></>);
         }
-        const membersCount = group.getMembersCount();
-        return (
-            <div
-                className="cometchat-groups__subtitle"
-            >
-                {`${membersCount} ${membersCount > 1 ? localize("MEMBERS") : localize("MEMBER")}`}
-            </div>
-        );
     }
 
     /**
@@ -389,43 +432,55 @@ export function CometChatGroups(props: GroupsProps) {
      * The visibility of view is handled by the default list item view
      */
     function getMenuView(group: CometChat.Group): JSX.Element | null {
-        let curOptions: CometChatOption[] | undefined;
-        if (!(curOptions = options?.(group))?.length) {
+        try {
+            let curOptions: CometChatOption[] | undefined;
+            if (!(curOptions = options?.(group))?.length) {
+                return null;
+            }
+            return (
+                <CometChatContextMenu
+                    data={curOptions}
+                    onOptionClicked={(e: CometChatOption) => e.onClick?.()}
+                />
+            );
+        } catch (error) {
+            errorHandler(error, 'getMenuView');
             return null;
         }
-        return (
-            <CometChatContextMenu
-                data={curOptions}
-                onOptionClicked={(e: CometChatOption) => e.onClick?.()}
-            />
-        );
     }
 
     /**
      * Creates a tail view for the default list item view
      */
     function getTailView(group: CometChat.Group): JSX.Element | null | undefined {
-        switch (selectionMode) {
-            case SelectionMode.none:
-                return null;
-            case SelectionMode.single: {
-                return (
-                    <CometChatRadioButton
-                        onRadioButtonChanged={e => onSelect?.(group, e.checked)}
-                    />
-                );
+        try {
+            if (trailingView) {
+                return trailingView(group)
             }
-            case SelectionMode.multiple: {
-                return (
-                    <CometChatCheckbox
-                        onCheckBoxValueChanged={e => onSelect?.(group, e.checked)}
-                    />
-                );
+            switch (selectionMode) {
+                case SelectionMode.none:
+                    return null;
+                case SelectionMode.single: {
+                    return (
+                        <CometChatRadioButton
+                            onRadioButtonChanged={e => onSelect?.(group, e.checked)}
+                        />
+                    );
+                }
+                case SelectionMode.multiple: {
+                    return (
+                        <CometChatCheckbox
+                            onCheckBoxValueChanged={e => onSelect?.(group, e.checked)}
+                        />
+                    );
+                }
+                default: {
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    const x: never = selectionMode;
+                }
             }
-            default: {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const x: never = selectionMode;
-            }
+        } catch (error) {
+            errorHandler(error, 'getTailView');
         }
     }
 
@@ -433,29 +488,35 @@ export function CometChatGroups(props: GroupsProps) {
      * Creates `listItem` prop of the `CometChatList` component
      */
     function getListItem(): (group: CometChat.Group) => JSX.Element {
-        if (listItemView !== null) {
-            return listItemView;
+        if (itemView !== null) {
+            return itemView;
         }
         return function (group: CometChat.Group) {
-            const groupType = group.getType()
-            const isActive = activeGroup?.getGuid() === group.getGuid();
-            let newGroup = isActive ? activeGroup : group
-            return (
-                <div className={`cometchat-groups__list-item cometchat-groups__list-item-${groupType}
+            try {
+                const groupType = group.getType()
+                const isActive = activeGroup?.getGuid() === group.getGuid();
+                return (
+                    <div className={`cometchat-groups__list-item ${hideGroupType ? "" : `cometchat-groups__list-item-${groupType}`}
                 ${isActive ? `cometchat-groups__list-item-active` : ""}
                 `}>
-                    <CometChatListItem
-                        id={newGroup.getGuid()}
-                        avatarURL={newGroup.getIcon()}
-                        avatarName={newGroup.getName()}
-                        title={newGroup.getName()}
-                        subtitleView={getSubtitleView(newGroup)}
-                        menuView={getMenuView(newGroup)}
-                        tailView={getTailView(newGroup)}
-                        onListItemClicked={e => onItemClick?.(newGroup)}
-                    />
-                </div>
-            );
+                        <CometChatListItem
+                            id={group.getGuid()}
+                            avatarURL={group.getIcon()}
+                            avatarName={group.getName()}
+                            title={group.getName()}
+                            titleView={titleView?.(group)}
+                            leadingView={leadingView?.(group)}
+                            subtitleView={getSubtitleView(group)}
+                            menuView={getMenuView(group)}
+                            trailingView={getTailView(group)}
+                            onListItemClicked={e => onItemClick?.(group)}
+                        />
+                    </div>
+                );
+            } catch (error) {
+                errorHandler(error, 'getListItem');
+                return (<></>)
+            }
         };
     }
 
@@ -463,83 +524,94 @@ export function CometChatGroups(props: GroupsProps) {
      * Renders the loading state view with shimmer effect
      *
      * @remarks
-     * If a custom `loadingStateView` is provided, it will be used. Otherwise, the default shimmer effect is displayed.
+     * If a custom `loadingView` is provided, it will be used. Otherwise, the default shimmer effect is displayed.
      *
      * @returns A JSX element representing the loading state
      */
     const getLoadingView = () => {
-        if (loadingStateView) {
-            return loadingStateView
-        }
-        return <div className="cometchat-groups__shimmer">
-            {[...Array(15)].map((_, index) => (
-                <div key={index} className="cometchat-groups__shimmer-item">
-                    <div className="cometchat-groups__shimmer-item-avatar"></div>
-                    <div className="cometchat-groups__shimmer-item-body">
-                        <div className="cometchat-groups__shimmer-item-body-title"></div>
-                        <div className="cometchat-groups__shimmer-item-body-subtitle"></div>
+        try {
+            if (loadingView) {
+                return loadingView
+            }
+            return <div className="cometchat-groups__shimmer">
+                {[...Array(15)].map((_, index) => (
+                    <div key={index} className="cometchat-groups__shimmer-item">
+                        <div className="cometchat-groups__shimmer-item-avatar"></div>
+                        <div className="cometchat-groups__shimmer-item-body">
+                            <div className="cometchat-groups__shimmer-item-body-title"></div>
+                            <div className="cometchat-groups__shimmer-item-body-subtitle"></div>
+                        </div>
                     </div>
-                </div>
-            ))}
-        </div>
+                ))}
+            </div>
+        } catch (error) {
+            errorHandler(error, 'getLoadingView');
+        }
     }
 
     /**
      * Renders the empty state view when there are no groups to display
      *
      * @remarks
-     * If a custom `emptyStateView` is provided, it will be used. Otherwise, a default empty state view with a message is displayed.
+     * If a custom `emptyView` is provided, it will be used. Otherwise, a default empty state view with a message is displayed.
      *
      * @returns A JSX element representing the empty state
      */
-    const getEmptyStateView = () => {
-        const isDarkMode = getThemeMode() == "dark" ? true : false;
+    const getEmptyView = () => {
+        try {
+            const isDarkMode = getThemeMode() == "dark" ? true : false;
 
-        if (emptyStateView) {
-            return emptyStateView
+            if (emptyView) {
+                return emptyView
+            }
+
+            return (
+                <div className="cometchat-groups__empty-state-view">
+                    <div className="cometchat-groups__empty-state-view-icon">
+                        <img src={isDarkMode ? emptyIconDark : emptyIcon} alt="" />
+                    </div>
+                    <div className="cometchat-groups__empty-state-view-body">
+                        <div className="cometchat-groups__empty-state-view-body-title">{localize("NO_GROUPS_AVAILABLE")}</div>
+                        <div className="cometchat-groups__empty-state-view-body-description">{localize("GROUPS_EMPTY_STATE_MESSAGE")}</div>
+                    </div>
+                </div>
+            )
+        } catch (error) {
+            errorHandler(error, 'getEmptyView');
         }
-
-        return (
-            <div className="cometchat-groups__empty-state-view">
-                <div className="cometchat-groups__empty-state-view-icon">
-                <img src={isDarkMode ? emptyIconDark : emptyIcon} alt="" />
-                </div>
-                <div className="cometchat-groups__empty-state-view-body">
-                    <div className="cometchat-groups__empty-state-view-body-title">{localize("NO_GROUPS_AVAILABLE")}</div>
-                    <div className="cometchat-groups__empty-state-view-body-description">{localize("GROUPS_EMPTY_STATE_MESSAGE")}</div>
-                </div>
-            </div>
-        )
     }
 
     /**
      * Renders the error state view when an error occurs
      *
      * @remarks
-     * If a custom `errorStateView` is provided, it will be used. Otherwise, a default error message is displayed.
+     * If a custom `errorView` is provided, it will be used. Otherwise, a default error message is displayed.
      *
      * @returns A JSX element representing the error state
      */
-    const getErrorStateView = () => {
+    const getErrorView = () => {
+        try {
+            const isDarkMode = getThemeMode() == "dark" ? true : false;
 
-        const isDarkMode = getThemeMode() == "dark" ? true : false;
+            if (errorView) {
+                return errorView
+            }
 
-        if (errorStateView) {
-            return errorStateView
-        }
-
-        return (
-            <div className="cometchat-groups__error-state-view">
-                <div className="cometchat-groups__error-state-view-icon">
-                <img src={isDarkMode ? errorIconDark : errorIcon} alt="" />
-                </div>
-                <div className="cometchat-groups__error-state-view-body">
-                    <div className="cometchat-groups__error-state-view-body-title">{localize("OOPS!")}</div>
-                    <div className="cometchat-groups__error-state-view-body-description">{localize("LOOKS_LIKE_SOMETHING_WENT_WRONG")}
+            return (
+                <div className="cometchat-groups__error-state-view">
+                    <div className="cometchat-groups__error-state-view-icon">
+                        <img src={isDarkMode ? errorIconDark : errorIcon} alt="" />
+                    </div>
+                    <div className="cometchat-groups__error-state-view-body">
+                        <div className="cometchat-groups__error-state-view-body-title">{localize("OOPS!")}</div>
+                        <div className="cometchat-groups__error-state-view-body-description">{localize("LOOKS_LIKE_SOMETHING_WENT_WRONG")}
+                        </div>
                     </div>
                 </div>
-            </div>
-        )
+            )
+        } catch (error) {
+            errorHandler(error, 'getErrorView');
+        }
     }
 
 
@@ -551,7 +623,8 @@ export function CometChatGroups(props: GroupsProps) {
         groupsManagerRef,
         dispatch,
         fetchNextAndAppendGroups,
-        groupsSearchText
+        groupsSearchText,
+        errorHandler,
     });
 
     return (
@@ -559,23 +632,23 @@ export function CometChatGroups(props: GroupsProps) {
             <div
                 className="cometchat-groups">
                 <CometChatList
-                    title={title}
-                    searchPlaceholderText={searchPlaceholderText}
+                    title={titleRef.current}
+                    searchPlaceholderText={searchPlaceholderTextRef.current}
                     hideSearch={hideSearch}
                     searchText={state.searchText}
                     onSearch={onSearch}
                     list={state.groupList}
-                    listItem={getListItem()}
+                    itemView={getListItem()}
                     onScrolledToBottom={() => fetchNextAndAppendGroups(fetchNextIdRef.current = "onScrolledToBottom_" + String(Date.now()))}
                     listItemKey="getGuid"
                     showSectionHeader={false}
                     state={state.fetchState === States.loaded && state.groupList.length === 0 ? States.empty : state.fetchState}
                     loadingView={getLoadingView()}
-                    emptyStateView={getEmptyStateView()}
-                    errorStateView={getErrorStateView()}
+                    emptyView={getEmptyView()}
+                    errorView={getErrorView()}
                     hideError={hideError}
-                    menu={menu}
-                />
+                    headerView={headerView}
+                    />
             </div>
         </div>
     );

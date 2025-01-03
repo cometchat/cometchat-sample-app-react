@@ -13,146 +13,226 @@ import { CollaborativeDocumentConstants } from "../Extensions/CollaborativeDocum
 import { CollaborativeWhiteboardConstants } from "../Extensions/CollaborativeWhiteboard/CollaborativeWhiteboardConstants";
 import { StickersConstants } from "../Extensions/Stickers/StickersConstants";
 import { CometChatMessageEvents, IMessages } from "../../events/CometChatMessageEvents";
+import { useCometChatErrorHandler } from "../../CometChatCustomHooks";
 
 interface ThreadedMessagePreviewProps {
-    title?: string;
+    /**
+     * Hides the visibility of the date header.
+     * @default false
+     */
+    hideDate?: boolean;
+  
+    /**
+     * Hides the visibility of the reply count.
+     * @default false
+     */
+    hideReplyCount?: boolean;
+  
+    /**
+     * Represents the parent message for displaying threaded conversations.
+     */
     parentMessage: CometChat.BaseMessage;
+  
+    /**
+     * Template for customizing the appearance of the message.
+     */
     template?: CometChatMessageTemplate;
-    bubbleView?: (messageObject: CometChat.BaseMessage) => void | JSX.Element;
+  
+    /**
+     * Callback function triggered when the threaded message header is closed.
+     * @returns void
+     */
     onClose?: () => void;
+  
+    /**
+     * A custom view for rendering the message bubble.
+     *
+     * @param messageObject - The message to be rendered.
+     * @returns A JSX Element to be rendered as message bubble view.
+     */
+    messageBubbleView?: (messageObject: CometChat.BaseMessage) => JSX.Element;
+  
+    /**
+     * Callback function triggered when an error occurs.
+     * 
+     * @param error - An instance of CometChat.CometChatException representing the error.
+     * @returns void
+     */
+    onError?: ((error: CometChat.CometChatException) => void) | null;
 }
 
 const CometChatThreadedMessagePreview = (props: ThreadedMessagePreviewProps) => {
     const {
-        title = localize("THREAD"),
         parentMessage,
-        bubbleView,
-        onClose
+        messageBubbleView,
+        onClose,
+        onError = (error: CometChat.CometChatException) => {
+            console.log(error);
+        },
+        hideDate = false,
+        hideReplyCount = false,
     } = props;
 
     const loggedInUser = useRef<CometChat.User | null>(null);
     const [replyCount, setReplyCount] = useState<number>(0);
+    const onErrorCallback = useCometChatErrorHandler(onError);
 
     useEffect(() => {
-        setReplyCount(parentMessage?.getReplyCount() ?? 0);
+        try {
+            setReplyCount(parentMessage?.getReplyCount() ?? 0);
+        } catch (error) {
+            onErrorCallback(error, 'useEffect');
+        }
     }, [parentMessage, setReplyCount]);
 
     useEffect(() => {
-        loggedInUser.current = CometChatUIKitLoginListener.getLoggedInUser();
+        try {
+            loggedInUser.current = CometChatUIKitLoginListener.getLoggedInUser();
+        } catch (error) {
+            onErrorCallback(error, 'useEffect');
+        }
     }, []);
 
     const addListener = useCallback(() => {
-        const onTextMessageReceived =
-            CometChatMessageEvents.onTextMessageReceived.subscribe(
-                (message: CometChat.TextMessage) => {
-                    if (
-                        message?.getParentMessageId() &&
-                        message.getParentMessageId() == parentMessage.getId()
-                    ) {
-                        setReplyCount((prevCount) => prevCount + 1);
+        try {
+            const onTextMessageReceived =
+                CometChatMessageEvents.onTextMessageReceived.subscribe(
+                    (message: CometChat.TextMessage) => {
+                        if (
+                            message?.getParentMessageId() &&
+                            message.getParentMessageId() == parentMessage.getId()
+                        ) {
+                            setReplyCount((prevCount) => prevCount + 1);
+                        }
                     }
-                }
-            );
-        const onMediaMessageReceived =
-            CometChatMessageEvents.onMediaMessageReceived.subscribe(
-                (message: CometChat.MediaMessage) => {
-                    if (
-                        message?.getParentMessageId() &&
-                        message.getParentMessageId() == parentMessage.getId()
-                    ) {
-                        setReplyCount((prevCount) => prevCount + 1);
+                );
+            const onMediaMessageReceived =
+                CometChatMessageEvents.onMediaMessageReceived.subscribe(
+                    (message: CometChat.MediaMessage) => {
+                        if (
+                            message?.getParentMessageId() &&
+                            message.getParentMessageId() == parentMessage.getId()
+                        ) {
+                            setReplyCount((prevCount) => prevCount + 1);
+                        }
                     }
-                }
-            );
-        const onCustomMessageReceived =
-            CometChatMessageEvents.onCustomMessageReceived.subscribe(
-                (message: CometChat.CustomMessage) => {
-                    if (
-                        message?.getParentMessageId() &&
-                        message.getParentMessageId() == parentMessage.getId()
-                    ) {
-                        setReplyCount((prevCount) => prevCount + 1);
+                );
+            const onCustomMessageReceived =
+                CometChatMessageEvents.onCustomMessageReceived.subscribe(
+                    (message: CometChat.CustomMessage) => {
+                        if (
+                            message?.getParentMessageId() &&
+                            message.getParentMessageId() == parentMessage.getId()
+                        ) {
+                            setReplyCount((prevCount) => prevCount + 1);
+                        }
                     }
-                }
-            );
+                );
 
-        return () => {
-            onTextMessageReceived?.unsubscribe();
-            onMediaMessageReceived?.unsubscribe();
-            onCustomMessageReceived?.unsubscribe();
-        };
+            return () => {
+                onTextMessageReceived?.unsubscribe();
+                onMediaMessageReceived?.unsubscribe();
+                onCustomMessageReceived?.unsubscribe();
+            };
+        }
+        catch (error) {
+            onErrorCallback(error, 'addListener');
+            return () => { }
+        }
     }, [parentMessage]);
 
     const subscribeToEvents = useCallback(() => {
-        const ccMessageSent = CometChatMessageEvents.ccMessageSent.subscribe(
-            ({ status, message }: IMessages) => {
-                if (
-                    status === MessageStatus.success &&
-                    message?.getParentMessageId() === parentMessage?.getId()
-                ) {
-                    setReplyCount((prevCount) => prevCount + 1);
+        try {
+            const ccMessageSent = CometChatMessageEvents.ccMessageSent.subscribe(
+                ({ status, message }: IMessages) => {
+                    if (
+                        status === MessageStatus.success &&
+                        message?.getParentMessageId() === parentMessage?.getId()
+                    ) {
+                        setReplyCount((prevCount) => prevCount + 1);
+                    }
                 }
-            }
-        );
+            );
 
-        return () => {
-            ccMessageSent?.unsubscribe();
-        };
+            return () => {
+                ccMessageSent?.unsubscribe();
+            };
+        } catch (error) {
+            onErrorCallback(error, 'subscribeToEvents');
+            return () => { }
+        }
     }, [parentMessage]);
 
     useEffect(() => {
-        if (loggedInUser) {
-            const removeListener = addListener();
-            const unsubscribeFromEvents = subscribeToEvents();
-            return () => {
-                removeListener();
-                unsubscribeFromEvents();
-            };
+        try {
+            if (loggedInUser) {
+                const removeListener = addListener();
+                const unsubscribeFromEvents = subscribeToEvents();
+                return () => {
+                    removeListener();
+                    unsubscribeFromEvents();
+                };
+            }
+        } catch (error) {
+            onErrorCallback(error, 'useEffect');
         }
     }, [loggedInUser, addListener, subscribeToEvents]);
 
     /* This function returns close button view. */
     function getCloseBtnView() {
-        return (
-            <CometChatButton
-                iconURL={closeIcon}
-                hoverText={localize("CLOSE")}
-                onClick={onClose}
-            />
-        );
+        try {
+            return (
+                <CometChatButton
+                    iconURL={closeIcon}
+                    hoverText={localize("CLOSE")}
+                    onClick={onClose}
+                />
+            );
+        } catch (error) {
+            onErrorCallback(error, 'getCloseBtnView');
+        }
     }
 
     /* This function returns Message bubble view of which information is getting viewed. */
     const getBubbleView = useCallback(() => {
-        let alignment = MessageBubbleAlignment.right;
-        if (parentMessage && loggedInUser.current) {
-            if (bubbleView) return bubbleView(parentMessage);
-            else {
-                const templatesArray = CometChatUIKit.getDataSource()?.getAllMessageTemplates();
-                const template = templatesArray?.find((template: CometChatMessageTemplate) => template.type === parentMessage.getType() && template.category === parentMessage.getCategory());
-                if (!template) {
-                    return <></>
-                }
-                if (parentMessage.getSender()?.getUid() !== loggedInUser.current?.getUid()) {
-                    alignment = MessageBubbleAlignment.left;
-                } else {
-                    alignment = MessageBubbleAlignment.right;
-                }
+        try {
+            let alignment = MessageBubbleAlignment.right;
+            if (parentMessage && loggedInUser.current) {
+                if (messageBubbleView) return messageBubbleView(parentMessage);
+                else {
+                    const templatesArray = CometChatUIKit.getDataSource()?.getAllMessageTemplates();
+                    const template = templatesArray?.find((template: CometChatMessageTemplate) => template.type === parentMessage.getType() && template.category === parentMessage.getCategory());
+                    if (!template) {
+                        return <></>
+                    }
+                    if (parentMessage.getSender()?.getUid() !== loggedInUser.current?.getUid()) {
+                        alignment = MessageBubbleAlignment.left;
+                    } else {
+                        alignment = MessageBubbleAlignment.right;
+                    }
 
-                const view = new MessageUtils().getMessageBubble(
-                    parentMessage,
-                    template,
-                    alignment
-                );
-                return view;
+                    const view = new MessageUtils().getMessageBubble(
+                        parentMessage,
+                        template,
+                        alignment
+                    );
+                    return view;
+                }
             }
+            return null;
+        } catch (error) {
+            onErrorCallback(error, 'getBubbleView');
         }
         return null;
-    }, [parentMessage, bubbleView]);
+    }, [parentMessage, messageBubbleView]);
 
     const getAdditionalClassName = useCallback(() => {
-        const messageTypes = [CometChatUIKitConstants.MessageTypes.audio, CometChatUIKitConstants.MessageTypes.file, CometChatUIKitConstants.MessageTypes.text, CollaborativeDocumentConstants.extension_document, CollaborativeWhiteboardConstants.extension_whiteboard, StickersConstants.sticker];
-        if (parentMessage && messageTypes.includes(parentMessage.getType())) return "cometchat-threaded-message-preview__message-small";
+        try {
+            const messageTypes = [CometChatUIKitConstants.MessageTypes.audio, CometChatUIKitConstants.MessageTypes.file, CometChatUIKitConstants.MessageTypes.text, CollaborativeDocumentConstants.extension_document, CollaborativeWhiteboardConstants.extension_whiteboard, StickersConstants.sticker];
+            if (parentMessage && messageTypes.includes(parentMessage.getType())) return "cometchat-threaded-message-preview__message-small";
+        } catch (error) {
+            onErrorCallback(error, 'getAdditionalClassName');
+        }
     }, [parentMessage]);
 
 
@@ -161,7 +241,7 @@ const CometChatThreadedMessagePreview = (props: ThreadedMessagePreviewProps) => 
             <div className="cometchat-threaded-message-preview">
                 <div className="cometchat-threaded-message-preview__header">
                     <div className="cometchat-threaded-message-preview__header-title">
-                        {title}
+                        {localize("THREAD")}
                     </div>
                     <div className="cometchat-threaded-message-preview__header-close">
                         {getCloseBtnView()}
@@ -169,23 +249,23 @@ const CometChatThreadedMessagePreview = (props: ThreadedMessagePreviewProps) => 
 
                 </div>
                 <div className="cometchat-threaded-message-preview__content">
-                    <div className="cometchat-threaded-message-preview__content-time">
+                    {!hideDate && <div className="cometchat-threaded-message-preview__content-time">
                         <CometChatDate
                             timestamp={parentMessage.getSentAt()}
                             pattern={DatePatterns.DayDate}
                         ></CometChatDate>
-                    </div>
+                    </div>}
                     <div className={`cometchat-threaded-message-preview__message ${parentMessage.getSender()?.getUid() !== loggedInUser.current?.getUid() ? "cometchat-threaded-message-preview__message-incoming" : "cometchat-threaded-message-preview__message-outgoing"} ${getAdditionalClassName()}`}>
                         {getBubbleView()}
                     </div>
 
                     <div className="cometchat-threaded-message-preview__footer">
-                        <div className="cometchat-threaded-message-preview__footer-reply-count">
+                        {!hideReplyCount && <div className="cometchat-threaded-message-preview__footer-reply-count">
                             {replyCount + " "}
                             {
                                 (replyCount === 0 || replyCount > 1) ? localize("REPLIES") : localize("REPLY")
                             }
-                        </div>
+                        </div>}
                         <div className="cometchat-threaded-message-preview__footer-divider" />
                     </div>
                 </div>

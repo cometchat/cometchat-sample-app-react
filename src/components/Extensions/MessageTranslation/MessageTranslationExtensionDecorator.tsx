@@ -47,15 +47,17 @@ export class MessageTranslationExtensionDecorator extends DataSourceDecorator {
   override getTextMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: { hideTranslateMessageOption: boolean }
   ): (CometChatActionsIcon | CometChatActionsView)[] {
     let options: (CometChatActionsIcon | CometChatActionsView)[] =
-      super.getTextMessageOptions(loggedInUser, messageObject, group);
+      super.getTextMessageOptions(loggedInUser, messageObject, group, additionalParams);
     if (
       !this.checkIfOptionExist(
         options,
         CometChatUIKitConstants.MessageOption.translateMessage
-      )
+      ) &&
+      !additionalParams?.hideTranslateMessageOption
     ) {
       let newOption: CometChatActionsIcon = new CometChatActionsIcon({
         id: CometChatUIKitConstants.MessageOption.translateMessage,

@@ -7,46 +7,66 @@ import { localize } from "../../../resources/CometChatLocalize/cometchat-localiz
 import { CometChatButton } from "../../BaseComponents/CometChatButton/CometChatButton";
 import { CometChatAvatar } from "../../BaseComponents/CometChatAvatar/CometChatAvatar";
 import { CometChatSoundManager } from "../../../resources/CometChatSoundManager/CometChatSoundManager";
+import { useCometChatErrorHandler } from "../../../CometChatCustomHooks";
 
 /**
  * Props interface for the outgoing call component
  */
 interface OutgoingCallProps {
     /**
-     * Sets the call object for CometChatOutgoingCall.
+     * The CometChat call object used to set up and launch the outgoing call.
      */
-    call: CometChat.Call;
-  
+    call?: CometChat.Call;
+
     /**
-     * Used to disable/enable the sound of outgoing calls.
-     * 
-     * @default false
-     * @example disableSoundForCalls={false}
+     * Disables the sound of outgoing calls.
+     * @defaultValue false
      */
     disableSoundForCalls?: boolean;
-  
+
     /**
-     * Used to set a custom sound for outgoing calls.
-     * 
-     * @example customSoundForCalls='Your Custom Sound For Calls'
+     * Specifies a custom sound to play for outgoing calls.
      */
     customSoundForCalls?: string;
-  
+
     /**
-     * Custom view for the outgoing call component.
+     * Callback function triggered when an error occurs in the outgoing call component.
+     * @param error - An instance of `CometChat.CometChatException` representing the error.
+     * @return void
      */
-    customView?: any;
-  
+    onError?: ((error: CometChat.CometChatException) => void) | null;
+
     /**
-     * Triggered when an error occurs in the outgoing call component.
+     * Callback function triggered when the cancel button is clicked in the outgoing call component.
+     * @return void
      */
-    onError?: Function;
-  
+    onCallCanceled?: Function;
+
     /**
-     * Triggered when the close button is clicked in the outgoing call component.
+     * This prop renders the custom title view for the outgoing call.
+     * Use this to override the existing title of user name from the outgoing call.
      */
-    onCloseClicked?: Function;
-  }
+    titleView?: JSX.Element;
+
+    /**
+     * This prop renders the custom sub title view for the outgoing call.
+     * Use this to override the existing sub title text from the outgoing call.
+     */
+    subtitleView?: JSX.Element;
+
+    /**
+     * This prop renders the custom avatar view for the outgoing call.
+     * Use this to override the existing avatar image from the outgoing call.
+     */
+    avatarView?: JSX.Element;
+
+    /**
+     * This prop renders the custom cancel-call button view for the outgoing call.
+     * Use this to override the existing cancel call button view from the outgoing call.
+     */
+    cancelButtonView?: JSX.Element;
+}
+
 
 const CometChatOutgoingCall = (props: OutgoingCallProps) => {
     /**
@@ -56,45 +76,31 @@ const CometChatOutgoingCall = (props: OutgoingCallProps) => {
         call,
         disableSoundForCalls = false,
         customSoundForCalls = "",
-        customView = null,
-        onError = (error: CometChat.CometChatException) => { console.log(error); },
-        onCloseClicked = () => { }
+        onError,
+        onCallCanceled = () => { },
+        titleView,
+        subtitleView,
+        avatarView,
+        cancelButtonView,
     } = props;
 
-
+    const errorHandler = useCometChatErrorHandler(onError);
     const callRef = useRef<CometChat.Call | null>(null);
     callRef.current = call!;
     let subtitleText: string = localize("CALLING");
-    /**
-   * Callback to handle errors, ensuring errors are wrapped in a CometChatException object.
-   */
-    const onErrorCallback = useCallback((error: any) => {
-        if (!(error instanceof CometChat.CometChatException)) {
-            let errorModel = {
-                code: error?.code,
-                name: error?.name,
-                message: error?.message,
-                details: error?.details
-            }
-            let errorObj = new CometChat.CometChatException(errorModel);
-            onError!(errorObj);
-        } else {
-            onError!(error);
-        }
-    }, [onError]);
     /**
        * Handles the logic to close the outgoing call and stops the sound.
        */
     const onClose = useCallback(() => {
         try {
             CometChatSoundManager.pause();
-            if (onCloseClicked) {
-                onCloseClicked();
+            if (onCallCanceled) {
+                onCallCanceled();
             }
         } catch (e) {
-            onErrorCallback(e);
+            errorHandler(e, "onClose");
         }
-    }, [onCloseClicked, onErrorCallback])
+    }, [onCallCanceled])
     /**
        * Get the avatar URL based on the receiver type (user or group).
        */
@@ -114,11 +120,12 @@ const CometChatOutgoingCall = (props: OutgoingCallProps) => {
                 }
             }
         } catch (e) {
-            onErrorCallback(e);
+            errorHandler(e, "playAudio");
         }
-    }, [disableSoundForCalls, customSoundForCalls, onErrorCallback])
+    }, [disableSoundForCalls, customSoundForCalls])
 
     useCometChatOutgoingCall(
+        errorHandler,
         playAudio,
         call,
     );
@@ -127,21 +134,33 @@ const CometChatOutgoingCall = (props: OutgoingCallProps) => {
         <>
             <div className="cometchat">
                 {callRef.current ? <>
-                    {customView ? customView : <div className="cometchat-outgoing-call">
-                        <div>
-                            <div className="cometchat-outgoing-call__title">{callRef.current?.getReceiver()?.getName()}</div>
-                            <div className="cometchat-outgoing-call__subtitle">{subtitleText}</div></div>
-                        <div className="cometchat-outgoing-call__avatar">
-                            <CometChatAvatar name={callRef.current?.getReceiver()?.getName()} image={getAvatarURL()} />
+                    {<div className="cometchat-outgoing-call">
+                        <div className="cometchat-outgoing-call__title-container">
+                            {titleView ? titleView :
+                                <div className="cometchat-outgoing-call__title">
+                                    {callRef.current?.getReceiver()?.getName()}
+                                </div>
+                            }
+                            {subtitleView ? subtitleView :
+                                <div className="cometchat-outgoing-call__subtitle">
+                                    {subtitleText}
+                                </div>
+                            }
                         </div>
-                        <div className="cometchat-outgoing-call__button">
-                            <CometChatButton onClick={onClose} iconURL={endCallIcon} />
-                        </div>
-                    </div>}</> : null}
-
+                        {avatarView ? avatarView :
+                            <div className="cometchat-outgoing-call__avatar">
+                                <CometChatAvatar name={callRef.current?.getReceiver()?.getName()} image={getAvatarURL()} />
+                            </div>
+                        }
+                        {cancelButtonView ? cancelButtonView :
+                            <div className="cometchat-outgoing-call__button">
+                                <CometChatButton onClick={onClose} iconURL={endCallIcon} />
+                            </div>
+                        }
+                    </div>}
+                </> : null}
             </div>
         </>
-
     );
 };
 

@@ -1,10 +1,10 @@
-.cometchat-ai-conversation-summary__wrapper {
+.cometchat-smart-replies__wrapper {
   width: 100%;
   height: 100%;
   padding: var(--cometchat-padding-1, 4px) var(--cometchat-padding-2, 8px);
 }
 
-.cometchat-ai-conversation-summary {
+.cometchat-smart-replies {
   display: flex;
   height: 100%;
   width: 100%;
@@ -12,20 +12,20 @@
   flex-direction: column;
   align-items: flex-start;
   border: 1px solid var(--cometchat-border-color-light, #F5F5F5);
-  border-radius: var(--cometchat-radius-2, 8px);
+  border-radius: var(--cometchat-radius-4, 16px);
   background: var(--cometchat-background-color-01, #FFF);
   box-shadow: 0px 12px 16px -4px rgb(16 24 40 / 2%), 0px 4px 6px -2px rgba(16, 24, 40, 0.03);
   gap: var(--cometchat-padding-2, 8px);
 }
 
-.cometchat-ai-conversation-summary__header {
+.cometchat-smart-replies__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   align-self: stretch;
 }
 
-.cometchat-ai-conversation-summary__header-title {
+.cometchat-smart-replies__header-title {
   overflow: hidden;
   color: var(--cometchat-text-color-primary, #141414);
   text-overflow: ellipsis;
@@ -33,7 +33,7 @@
   font-style: normal;
 }
 
-.cometchat-ai-conversation-summary__header-close-button {
+.cometchat-smart-replies__header-close-button {
   mask: url("../../assets/close.svg");
   -webkit-mask: url("../../assets/close.svg");
   background-color: var(--cometchat-icon-color-primary, #141414);
@@ -42,7 +42,7 @@
   cursor: pointer;
 }
 
-.cometchat-ai-conversation-summary__body {
+.cometchat-smart-replies__body {
   width: 100%;
   flex: 1 0 0;
   color: var(--cometchat-text-color-primary, #141414);
@@ -51,35 +51,25 @@
   text-align: left;
 }
 
-.cometchat-ai-conversation-summary__shimmer {
+.cometchat-smart-replies__shimmer-container {
   display: flex;
   width: 100%;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
   gap: var(--cometchat-padding-2, 8px);
+  flex-direction: row;
 }
 
-.cometchat-ai-conversation-summary__shimmer-item {
-  width: 100%;
-  display: flex;
-  height: 14px;
-  padding: var(--cometchat-padding-2, 8px) var(--cometchat-padding-5, 20px);
-  align-items: center;
-  align-content: center;
-  gap: 4px var(--cometchat-padding-1, 4px);
-  align-self: stretch;
+.cometchat-smart-replies__shimmer-item {
   flex-wrap: wrap;
+  width: 20%;
+  display: flex;
+  height: 33px;
   border-radius: var(--cometchat-radius-max, 1000px);
   background: var(--cometchat-shimmer-gradient-color, linear-gradient(90deg, #E0E0E0 0%, #EEE 100%));
   background-size: 800px 104px;
-  /* Increase background size for smooth animation */
   animation: shimmerAnimation 1.5s infinite linear;
-  /* Add animation properties */
-}
-
-.cometchat-ai-conversation-summary__shimmer .cometchat-ai-conversation-summary__shimmer-item:last-child {
-  width: 70%;
 }
 
 @keyframes shimmerAnimation {
@@ -92,19 +82,34 @@
   }
 }
 
-.cometchat-ai-conversation-summary__shimmer-item {
-  background: var(--cometchat-shimmer-gradient-color, linear-gradient(90deg, #E0E0E0 0%, #EEE 100%));
-  background-size: 800px 104px;
-  /* Consistent background size for animation */
-  animation: shimmerAnimation 1.5s infinite linear;
-  /* Apply shimmer animation */
+.cometchat-smart-replies__items-container {
+  display: flex;
+ flex-direction: column;
+  gap: var(--cometchat-padding-2, 8px);
+  justify-content: flex-start;
 }
 
+.cometchat-smart-replies__item {
+  display: flex;
+  padding: var(--cometchat-padding-2, 8px) var(--cometchat-padding-3, 12px);
+  align-items: center;
+  border-radius: var(--cometchat-radius-max, 1000px);
+  border: 1px solid var(--cometchat-border-color-light, #F5F5F5);
+  background: var(--cometchat-background-color-01, #FFF);
+  cursor: pointer;
+  width: 100%;
+}
 
-.cometchat-ai-conversation-summary__error-view,
-.cometchat-ai-conversation-summary__empty-view {
-  color: var(--cometchat-text-color-secondary, #727272);
-  text-align: center;
-  font: var(--cometchat-font-body-regular);
-  font-style: normal;
+.cometchat-smart-replies__item:hover {
+  background: var(--cometchat-white-hover, #FAFAFA);
+  cursor: pointer;
+}
+
+.cometchat-smart-replies__item-button {
+  background-color: transparent;
+  border: none;
+  color: var(--cometchat-text-color-primary);
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
 }

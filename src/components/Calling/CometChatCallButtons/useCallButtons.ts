@@ -6,7 +6,7 @@ function useCallButtons(
     setLoggedInUser: Function,
     user: any,
     group: any,
-    onErrorCallback: Function,
+    errorHandler: Function,
     attachListeners: Function,
     removeListener: Function,
     setActiveUser: any,
@@ -20,67 +20,85 @@ function useCallButtons(
 ) {
     useEffect(
         () => {
-            CometChat.getLoggedinUser().then(
-                (user: CometChat.User | null) => {
-                    if (user) {
-                        setLoggedInUser(user);
-                    }
-                }, (error: CometChat.CometChatException) => {
-                    onErrorCallback(error);
+     try {
+        CometChat.getLoggedinUser().then(
+            (user: CometChat.User | null) => {
+                if (user) {
+                    setLoggedInUser(user);
                 }
-            );
-        }, [setLoggedInUser, onErrorCallback]
+            }, (error: CometChat.CometChatException) => {
+                errorHandler(error,"getLoggedinUser")
+            }
+        );
+     } catch (error) {
+        errorHandler(error,"getLoggedinUser")
+     }
+        }, [setLoggedInUser]
     )
 
     useEffect(() => {
-        let unsubscribeFromEvents: () => void;
-        if (loggedInUser) {
-            unsubscribeFromEvents = subscribeToEvents();
-            attachListeners();
-        }
-        return () => {
-            unsubscribeFromEvents?.();
-            removeListener();
-        }
+   try {
+    let unsubscribeFromEvents: () => void;
+    if (loggedInUser) {
+        unsubscribeFromEvents = subscribeToEvents();
+        attachListeners();
+    }
+    return () => {
+        unsubscribeFromEvents?.();
+        removeListener();
+    }
+   } catch (error) {
+    errorHandler(error,"useEffect")
+   }
     }, [loggedInUser, attachListeners, removeListener, subscribeToEvents])
 
-    useEffect(
-        () => {
+    useEffect(() => {
+        try {
             if (user) {
                 setActiveUser(user);
                 setActiveGroup(null);
             }
-        }, [user, setActiveUser, setActiveGroup]
-    )
+        } catch (error) {
+            errorHandler(error, "setActiveUser");
+        }
+    }, [user, setActiveUser, setActiveGroup]);
 
-    useEffect(
-        () => {
+    useEffect(() => {
+        try {
             if (group) {
                 setActiveUser(null);
                 setActiveGroup(group);
             }
-        }, [group, setActiveUser, setActiveGroup]
-    )
+        } catch (error) {
+            errorHandler(error, "setActiveGroup");
+        }
+    }, [group, setActiveUser, setActiveGroup]);
 
     const audioCallButtonClicked = () => {
-        const onVoiceCallClick = onVoiceCallClickRef.current;
-        if (onVoiceCallClick) {
-            onVoiceCallClick();
+        try {
+            const onVoiceCallClick = onVoiceCallClickRef.current;
+            if (onVoiceCallClick) {
+                onVoiceCallClick();
+            } else {
+                initiateAudioCall();
+            }
+        } catch (error) {
+            errorHandler(error, "audioCallButtonClicked");
         }
-        else {
-            initiateAudioCall();
-        }
-    }
+    };
 
     const videoCallButtonClicked = () => {
-        const onVideoCallClick = onVideoCallClickRef.current;
-        if (onVideoCallClick) {
-            onVideoCallClick();
+        try {
+            const onVideoCallClick = onVideoCallClickRef.current;
+            if (onVideoCallClick) {
+                onVideoCallClick();
+            } else {
+                initiateVideoCall();
+            }
+        } catch (error) {
+            errorHandler(error, "videoCallButtonClicked");
         }
-        else {
-            initiateVideoCall();
-        }
-    }
+    };
 
     return {
         audioCallButtonClicked,

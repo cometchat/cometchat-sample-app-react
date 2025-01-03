@@ -87,6 +87,45 @@ export const CometChatSelector = (props: SelectorProps) => {
         })
     }
 
+    const conversationsHeaderView = () => {
+        return (
+            <div className="cometchat-conversations-header">
+                <div className="cometchat-conversations-header__title">
+                    {localize("CHATS")}
+                </div>
+                <div className="chat-menu">
+                    <CometChatContextMenu
+                        key="delete-button"
+                        closeOnOutsideClick={true}
+                        placement={Placement.left}
+                        data={getOptions() as CometChatOption[]}
+                        topMenuSize={1}
+                        onOptionClicked={(e: CometChatOption) => {
+                            const { id, onClick } = e;
+                            if (onClick) {
+                                onClick();
+                            }
+                        }}
+                    />
+                </div>
+            </div>
+        )
+    }
+
+    const groupsHeaderView = () => {
+        return (
+            <div className="cometchat-groups-header" >
+                <div className="cometchat-groups-header__title" >
+                    {localize("GROUPS")}
+                </div>
+                < CometChatButton onClick={() => {
+                    setShowCreateGroup(true)
+                }}
+                    iconURL={createGroupIcon} />
+            </div>
+        )
+    }
+
     return (
         <>
             {loggedInUser && <>
@@ -100,23 +139,7 @@ export const CometChatSelector = (props: SelectorProps) => {
                 {activeTab == "chats" ? (
                     <CometChatConversations
                         activeConversation={activeItem as Conversation}
-                        menu={
-                            <div className="chat-menu">
-                                <CometChatContextMenu
-                                    key="delete-button"
-                                    closeOnOutsideClick={true}
-                                    placement={Placement.left}
-                                    data={getOptions() as CometChatOption[]}
-                                    topMenuSize={1}
-                                    onOptionClicked={(e: CometChatOption) => {
-                                        const { id, onClick } = e;
-                                        if (onClick) {
-                                            onClick();
-                                        }
-                                    }}
-                                />
-                            </div>
-                        }
+                        headerView={conversationsHeaderView()}
                         onItemClick={(e) => {
                             onSelectorItemClicked(e, "updateSelectedItem");
                         }}
@@ -138,16 +161,7 @@ export const CometChatSelector = (props: SelectorProps) => {
                 ) : activeTab == "groups" ? (
                     <CometChatGroups
                         activeGroup={activeItem as Group}
-                        menu={
-                            <>
-                                <CometChatButton
-                                    onClick={() => {
-                                        setShowCreateGroup(true);
-                                    }}
-                                    iconURL={createGroupIcon}
-                                />
-                            </>
-                        }
+                        headerView={groupsHeaderView()}
                         onItemClick={(e) => {
                             onSelectorItemClicked(e, "updateSelectedItemGroup");
                         }}

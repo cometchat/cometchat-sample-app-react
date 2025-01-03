@@ -3,7 +3,7 @@ import { CometChat } from "@cometchat/chat-sdk-javascript";
 import { CometChatOutgoingCall } from "../CometChatOutgoingCall/CometChatOutgoingCall";
 import { CometChatOngoingCall } from "../CometChatOngoingCall/CometChatOngoingCall";
 import { useCallButtons } from "./useCallButtons";
-import { useRefSync } from "../../../CometChatCustomHooks";
+import { useCometChatErrorHandler, useRefSync } from "../../../CometChatCustomHooks";
 import { CometChatUIKitCalls } from "../../../CometChatUIKit/CometChatCalls";
 import { CometChatSoundManager } from "../../../resources/CometChatSoundManager/CometChatSoundManager";
 import { CometChatUIKitUtility } from "../../../CometChatUIKit/CometChatUIKitUtility";
@@ -18,45 +18,63 @@ import { CometChatCallEvents } from "../../../events/CometChatCallEvents";
 import { CometChatMessageEvents } from "../../../events/CometChatMessageEvents";
 
 interface CallButtonsProps {
-  /* callback which is triggered on click of audio call button. */
-  onVoiceCallClick?: () => void;
-  /* callback which is triggered on click of video call button. */
-  onVideoCallClick?: () => void;
-  /* callback which is triggered on error occured. */
-  onError?: (error: CometChat.CometChatException) => void;
-  /* builder for checking and updating call settings. */
+  /**
+   * Boolean flag to hide the video call button.
+   */
+  hideVideoCallButton?: boolean;
+
+  /**
+   * Boolean flag to hide the voice call button.
+   */
+  hideVoiceCallButton?: boolean;
+
+  /**
+   * Builder for checking and updating call settings.
+   * @param isAudioOnlyCall - Whether it's an audio-only call.
+   * @param user - The user object for the call (optional).
+   * @param group - The group object for the call (optional).
+   */
   callSettingsBuilder?: (isAudioOnlyCall: boolean, user?: CometChat.User, group?: CometChat.Group) => typeof CometChatUIKitCalls.CallSettingsBuilder;
-  /* Configurations object which is required for outgoing call. */
+
+  /**
+   * Configuration object for managing outgoing call settings, such as call parameters, UI behaviors, or any pre-call settings.
+   */
   outgoingCallConfiguration?: OutgoingCallConfiguration;
+
+  /**
+   * Callback function triggered when an error occurs in the call buttons component.
+   * @param error - An instance of `CometChat.CometChatException` representing the error.
+   * @returns void
+   */
+  onError?: ((error: CometChat.CometChatException) => void) | null;
 }
 
 interface CallButtonsUserProps extends CallButtonsProps {
-/** 
-   * Sets the user object for Call Buttons.
+  /**
+   * A CometChat.User object representing the user in which the call will be initiated.
    */
-user: CometChat.User;
+  user?: CometChat.User;
 
-/** 
- * Used to set the group object for Call Buttons.
- * 
- * @default null
- */
-group?: CometChat.Group | null;
+  /**
+   * A CometChat.Group object representing the group in which the call will be initiated.
+   * @default null
+   */
+  group?: CometChat.Group | null;
 }
 
 interface CallButtonsGroupProps extends CallButtonsProps {
-  /** 
-   * Sets the user object for Call Buttons, or null if no user is involved.
-   * 
+  /**
+   * A CometChat.User object representing the user in which the call will be initiated.
    * @default null
    */
   user?: CometChat.User | null;
 
-  /** 
-   * Used to set the group object for Call Buttons.
+  /**
+   * A CometChat.Group object representing the group in which the call will be initiated.
    */
-  group: CometChat.Group;
+  group?: CometChat.Group;
 }
+
 
 type CallButtonsPropsType = CallButtonsUserProps | CallButtonsGroupProps
 
@@ -80,7 +98,10 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
     callSettingsBuilder,
     onError,
     outgoingCallConfiguration,
+    hideVideoCallButton = false,
+    hideVoiceCallButton = false,
   } = { ...defaultProps, ...props };
+  const errorHandler = useCometChatErrorHandler(onError);
 
   const [loggedInUser, setLoggedInuser] = useState<CometChat.User | null>(null);
   const [activeUser, setActiveUser] = useState(user);
@@ -96,26 +117,6 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
   const onVideoCallClickRef = useRefSync(onVideoCallClick);
 
   let callbuttonsListenerId: string = "callbuttons_" + new Date().getTime();
-
-  /* The purpose of this function is to trigger the onError callback function. */
-  const onErrorCallback = useCallback(
-    (error: unknown) => {
-      if (!(error instanceof CometChat.CometChatException)) {
-        let errorModel = {
-          code: (error as { code: string }).code,
-          name: (error as { name: string }).name,
-          message: (error as { message: string }).message,
-          details: (error as { details: string }).details,
-        };
-        let errorObj = new CometChat.CometChatException(errorModel);
-        onError?.(errorObj);
-      } else {
-        onError?.(error);
-      }
-    },
-    [onError]
-  );
-
   const subscribeToEvents = useCallback(() => {
     try {
       const ccCallRejected = CometChatCallEvents.ccCallRejected.subscribe(
@@ -137,18 +138,15 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
       });
 
       return () => {
-        try {
-          ccCallEnded?.unsubscribe();
-          ccCallRejected?.unsubscribe();
-          ccOutgoingCall?.unsubscribe();
-        } catch (e) {
-          onErrorCallback(e);
-        }
+        ccCallEnded?.unsubscribe();
+        ccCallRejected?.unsubscribe();
+        ccOutgoingCall?.unsubscribe();
+
       };
     } catch (e) {
-      onErrorCallback(e);
+      errorHandler(e, "subscribeToEvents");
     }
-  }, [onErrorCallback]);
+  }, []);
 
   /* The purpose of this function is to attach the required call listners. */
   const attachListeners = useCallback(() => {
@@ -187,18 +185,19 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
         })
       );
     } catch (e) {
-      onErrorCallback(e);
+      errorHandler(e, "attachListeners");
     }
-  }, [onErrorCallback, callbuttonsListenerId]);
+  }, [callbuttonsListenerId]);
 
   /* This function removes the call listeners on component unmount. */
   const removeListener = useCallback(() => {
     try {
       CometChat.removeCallListener(callbuttonsListenerId);
     } catch (e) {
-      onErrorCallback(e);
+      errorHandler(e, "removeListener");
+
     }
-  }, [onErrorCallback, callbuttonsListenerId]);
+  }, [callbuttonsListenerId]);
 
   /* This function closes the call and resets the states. */
   const closeCallScreen = () => {
@@ -211,51 +210,56 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
 
   /* This function updates and returns the call builder with required configs and listeners attached. */
   function getCallBuilder(): typeof CometChatUIKitCalls.CallSettings {
-    let audioOnlyCall: boolean =
-      activeUser ? callRef.current?.getType() === CometChatUIKitConstants.MessageTypes.audio
-        ? true
-        : false : isGroupAudioCallRef.current;
-    let callsBuilder = callSettingsBuilder ? callSettingsBuilder(audioOnlyCall, user!, group!) : new CometChatUIKitCalls.CallSettingsBuilder()
-      .enableDefaultLayout(true)
-      .setIsAudioOnlyCall(audioOnlyCall);
+    try {
+      let audioOnlyCall: boolean =
+        activeUser ? callRef.current?.getType() === CometChatUIKitConstants.MessageTypes.audio
+          ? true
+          : false : isGroupAudioCallRef.current;
+      let callsBuilder = callSettingsBuilder ? callSettingsBuilder(audioOnlyCall, user!, group!) : new CometChatUIKitCalls.CallSettingsBuilder()
+        .enableDefaultLayout(true)
+        .setIsAudioOnlyCall(audioOnlyCall);
 
-    const sessionId = sessionIdRef.current;
-    callsBuilder.setCallListener(
-      new CometChatUIKitCalls.OngoingCallListener({
-        onCallEnded: () => {
-          if (
-            callRef.current?.getReceiverType() ===
-            CometChatUIKitConstants.MessageReceiverType.user
-          ) {
-            CometChatUIKitCalls.endSession();
-            CometChatCallEvents.ccCallEnded.next(null as any);
-            closeCallScreen();
-          }
-        },
-        onCallEndButtonPressed: () => {
-          if (
-            callRef.current?.getReceiverType() ===
-            CometChatUIKitConstants.MessageReceiverType.user
-          ) {
-            CometChat.endCall(sessionId)
-              .then((call: CometChat.Call) => {
-                CometChatUIKitCalls.endSession();
-                CometChatCallEvents.ccCallEnded.next(call);
-                closeCallScreen()
-              })
-              .catch((err: CometChat.CometChatException) => {
-                onErrorCallback(err);
-              });
-          } else {
-            closeCallScreen();
-          }
-        },
-        onError: (error: unknown) => {
-          onErrorCallback(error);
-        },
-      })
-    );
-    return callsBuilder;
+      const sessionId = sessionIdRef.current;
+      callsBuilder.setCallListener(
+        new CometChatUIKitCalls.OngoingCallListener({
+          onCallEnded: () => {
+            if (
+              callRef.current?.getReceiverType() ===
+              CometChatUIKitConstants.MessageReceiverType.user
+            ) {
+              CometChatUIKitCalls.endSession();
+              CometChatCallEvents.ccCallEnded.next(null as any);
+              closeCallScreen();
+            }
+          },
+          onCallEndButtonPressed: () => {
+            if (
+              callRef.current?.getReceiverType() ===
+              CometChatUIKitConstants.MessageReceiverType.user
+            ) {
+              CometChat.endCall(sessionId)
+                .then((call: CometChat.Call) => {
+                  CometChatUIKitCalls.endSession();
+                  CometChatCallEvents.ccCallEnded.next(call);
+                  closeCallScreen()
+                })
+                .catch((err: CometChat.CometChatException) => {
+                  errorHandler(err, "endCall");
+                });
+            } else {
+              closeCallScreen();
+            }
+          },
+          onError: (error: unknown) => {
+            errorHandler(error, "callSettingsBuilder");
+          },
+        })
+      );
+      return callsBuilder;
+    } catch (error) {
+      errorHandler(error, "getCallBuilder");
+
+    }
 
   }
 
@@ -284,14 +288,14 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
             CometChatCallEvents.ccOutgoingCall.next(outgoingCall);
           },
           (error: CometChat.CometChatException) => {
-            onErrorCallback(error);
+            errorHandler(error, "initiateCall")
           }
         );
       } catch (e) {
-        onErrorCallback(e);
+        errorHandler(e, "initiateCall")
       }
     },
-    [activeUser, activeGroup, onErrorCallback]
+    [activeUser, activeGroup]
   );
 
   /* This function initiates the audio call on click of the button. */
@@ -307,9 +311,9 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
         setShowOngoingCall(true);
       }
     } catch (e) {
-      onErrorCallback(e);
+      errorHandler(e, "initiateAudioCall")
     }
-  }, [activeUser, initiateCall, onErrorCallback]);
+  }, [activeUser, initiateCall]);
 
   /* This function sends the custom message on group after the call is started. */
   const sendCustomMessage = useCallback((callType?: string) => {
@@ -359,13 +363,13 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
           });
         },
         (error: CometChat.CometChatException) => {
-          onErrorCallback(error);
+          errorHandler(error, "sendCustomMessage")
         }
       );
     } catch (e) {
-      onErrorCallback(e);
+      errorHandler(e, "sendCustomMessage")
     }
-  }, [activeUser, activeGroup, loggedInUser, onErrorCallback]);
+  }, [activeUser, activeGroup, loggedInUser]);
 
   /* This function initiates the video call on click of the button. */
   const initiateVideoCall = useCallback(() => {
@@ -380,9 +384,9 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
         setShowOngoingCall(true);
       }
     } catch (e) {
-      onErrorCallback(e);
+      errorHandler(e, "initiateVideoCall")
     }
-  }, [activeUser, activeGroup, sendCustomMessage, onErrorCallback, initiateCall]);
+  }, [activeUser, activeGroup, sendCustomMessage, initiateCall]);
 
   /* This function cancels/rejects the call on click of button. */
   const cancelOutgoingCall = useCallback(() => {
@@ -403,21 +407,21 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
           callRef.current = null;
         },
         (error: CometChat.CometChatException) => {
-          onErrorCallback(error);
+          errorHandler(error, "rejectCall")
         }
       );
       setShowOutgoingCallScreen(false);
     } catch (e) {
-      onErrorCallback(e);
+      errorHandler(e, "cancelOutgoingCall")
     }
-  }, [onErrorCallback]);
+  }, []);
 
   const { audioCallButtonClicked, videoCallButtonClicked } = useCallButtons(
     loggedInUser,
     setLoggedInuser,
     user,
     group,
-    onErrorCallback,
+    errorHandler,
     attachListeners,
     removeListener,
     setActiveUser,
@@ -435,7 +439,7 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
   return (
     <>
       <div className="cometchat-call-button">
-        {activeUser || activeGroup ? (
+        {(activeUser || activeGroup) && !hideVoiceCallButton ? (
           <div className="cometchat-call-button__voice">
             <CometChatButton
               {...ccBtnDisabledPropSpreadObject}
@@ -446,7 +450,7 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
           </div>
         ) : null}
 
-        {activeUser || activeGroup ? (
+        {(activeUser || activeGroup) && !hideVideoCallButton ? (
           <div className="cometchat-call-button__video">
             <CometChatButton
               {...ccBtnDisabledPropSpreadObject}
@@ -468,12 +472,15 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
       {showOutgoingCallScreen && callRef.current ? (
         <div className="cometchat-backdrop cometchat-outgoing-call__backdrop">
           <CometChatOutgoingCall
-            onCloseClicked={outgoingCallConfiguration?.onCloseClicked ?? cancelOutgoingCall}
+            onCallCanceled={outgoingCallConfiguration?.onCallCanceled ?? cancelOutgoingCall}
             call={callRef.current}
             customSoundForCalls={outgoingCallConfiguration?.customSoundForCalls}
-            customView={outgoingCallConfiguration?.customView}
             disableSoundForCalls={outgoingCallConfiguration?.disableSoundForCalls}
             onError={outgoingCallConfiguration?.onError}
+            titleView={outgoingCallConfiguration?.titleView?.(callRef.current)}
+            subtitleView={outgoingCallConfiguration?.subtitleView?.(callRef.current)}
+            avatarView={outgoingCallConfiguration?.avatarView?.(callRef.current)}
+            cancelButtonView={outgoingCallConfiguration?.cancelButtonView?.(callRef.current)}
           />
         </div>
       ) : null}

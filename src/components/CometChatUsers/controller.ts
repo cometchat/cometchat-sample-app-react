@@ -83,5 +83,3 @@ export class UsersManager {
         return () => CometChat.removeConnectionListener(listenerId);
     }
 }
-
-

@@ -17,6 +17,16 @@ export enum AuxiliaryButtonAlignment {
   left,
   right,
 }
+/**
+ * It is used for specifying the function of enter button
+ * It is used in CometChatMessageComposer component.
+ */
+export enum EnterKeyBehavior
+{
+  SendMessage = "sendMessage",
+  NewLine = "newLine",
+  None = "none",
+}
 
 /**
  * It is used for describing the position of the element on the UI.

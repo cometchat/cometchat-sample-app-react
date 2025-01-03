@@ -94,9 +94,11 @@ const CometChatContextMenu = (props: ContextMenuProps) => {
     const getMenu = useCallback((menu: Array<CometChatActionsIcon | CometChatActionsView | CometChatOption>, isSubMenu: boolean) => {
         if (menu.length > 0) {
             return menu?.map((menuData, index: number) => {
-
+                const className =
+                index == 0 && !isSubMenu
+                    ? ""
+                    : "cometchat-menu-list__menu";
                 let menuButton, moreButton = null;
-
                 if (menuData instanceof CometChatActionsView && menuData?.customView) {
                     menuButton = (
                         <div id={menuData.id} >
@@ -125,7 +127,7 @@ const CometChatContextMenu = (props: ContextMenuProps) => {
                         </div>);
                 } else {
                     menuButton = (
-                        <div id={menuData.id} className="cometchat-menu-list__menu">
+                        <div id={menuData.id} className={className}>
                             <div
                                 className={isSubMenu ? `cometchat-menu-list__sub-menu-list-item` : `cometchat-menu-list__main-menu-item`}
                                 title={menuData?.title}
@@ -174,9 +176,10 @@ const CometChatContextMenu = (props: ContextMenuProps) => {
     }, [getMenu, topMenuSize, data])
 
     const getPositionStyle = useCallback(() => {
-        const height = subMenuRef.current?.scrollHeight!;
-        const width = subMenuRef.current?.scrollWidth!;
+
         const rect = moreButtonRef.current?.getBoundingClientRect();
+        const height = document.getElementById("subMenuContext")?.clientHeight || (48 * data.length);
+        const width = document.getElementById("subMenuContext")?.clientWidth || 160;
         const x_left = rect?.left!,
             x_right = rect?.right!,
             y_bot = rect?.bottom!,

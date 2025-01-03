@@ -4,29 +4,22 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { localize } from '../../../resources/CometChatLocalize/cometchat-localize';
 import { States } from '../../../Enums/Enums';
-import { AIConversationSummaryConfiguration } from './AIConversationSummaryConfiguration';
 
-interface IAIConversationSummaryProps {
-    getConversationSummaryCallback?: () => Promise<string>
-    editReplyCallback?: (reply: string) => void
+interface CometChatConversationSummaryProps {
+    getConversationSummary?: () => Promise<string>
     closeCallback?: () => void
-    configuration?: AIConversationSummaryConfiguration
 };
 
-const defaultProps: IAIConversationSummaryProps = {
-    getConversationSummaryCallback: undefined,
-    editReplyCallback: undefined,
+const defaultProps: CometChatConversationSummaryProps = {
+    getConversationSummary: undefined,
     closeCallback: undefined,
-    configuration: undefined
 }
 
 
-const AIConversationSummaryView = (props: IAIConversationSummaryProps) => {
+const CometChatConversationSummary = (props: CometChatConversationSummaryProps) => {
     const {
-        getConversationSummaryCallback,
-        editReplyCallback,
+        getConversationSummary,
         closeCallback,
-        configuration,
     } = { ...defaultProps, ...props };
 
     const [messageListState, setMessageListState] = useState<States>(States.loading);
@@ -43,8 +36,8 @@ const AIConversationSummaryView = (props: IAIConversationSummaryProps) => {
 
     function fetchButtonContent() {
         setMessageListState(States.loading);
-        if (getConversationSummaryCallback) {
-            getConversationSummaryCallback().then(async (response) => {
+        if (getConversationSummary) {
+            getConversationSummary().then(async (response) => {
                 if (response) {
                     setMessageListState(States.loaded);
                     setActiveView(await getLoadedView(response));
@@ -85,16 +78,11 @@ const AIConversationSummaryView = (props: IAIConversationSummaryProps) => {
      * Creates the loading view
      */
     function getLoadingView(): JSX.Element {
-        let LoadingView = configuration?.loadingStateView;
-
-        if (LoadingView) {
-            return LoadingView
-        }
         const shimmerView = (
-            <div className="cometchat-ai-conversation-summary__shimmer">
-                <div className="cometchat-ai-conversation-summary__shimmer-item"></div>
-                <div className="cometchat-ai-conversation-summary__shimmer-item"></div>
-                <div className="cometchat-ai-conversation-summary__shimmer-item"></div>
+            <div className="cometchat-conversation-summary__shimmer">
+                <div className="cometchat-conversation-summary__shimmer-item"></div>
+                <div className="cometchat-conversation-summary__shimmer-item"></div>
+                <div className="cometchat-conversation-summary__shimmer-item"></div>
             </div>
         )
         return shimmerView
@@ -104,13 +92,8 @@ const AIConversationSummaryView = (props: IAIConversationSummaryProps) => {
      * Creates the error view
      */
     function getErrorView(): JSX.Element | null {
-        let ErrorView = configuration?.errorStateView;
-
-        if (ErrorView) {
-            return ErrorView
-        }
         return (
-            <div className="cometchat-ai-conversation-summary__error-view">
+            <div className="cometchat-conversation-summary__error-view">
                 {errorStateText}
             </div>
         );
@@ -120,13 +103,8 @@ const AIConversationSummaryView = (props: IAIConversationSummaryProps) => {
      * Creates the empty view
      */
     function getEmptyView(): JSX.Element {
-        let EmptyView = configuration?.emptyStateView;
-
-        if (EmptyView) {
-            return EmptyView
-        }
         return (
-            <div className="cometchat-ai-conversation-summary__empty-view">
+            <div className="cometchat-conversation-summary__empty-view">
                 {emptyStateText}
             </div>
         );
@@ -138,19 +116,8 @@ const AIConversationSummaryView = (props: IAIConversationSummaryProps) => {
     async function getLoadedView(conversationSummary: string): Promise<JSX.Element> {
         return new Promise((resolve, reject) => {
             try {
-                let CustomView = configuration?.customView;
-
-                if (CustomView) {
-                    configuration?.customView!(conversationSummary, closeCallback).then((res: any) => {
-                        return resolve(res);
-                    })
-                        .catch((err: CometChat.CometChatException) => {
-                            return reject(err)
-                        })
-                } else {
-                    let conversationSummaryView = <React.Fragment>{conversationSummary}</React.Fragment>
-                    return resolve(conversationSummaryView);
-                }
+                let conversationSummaryView = <React.Fragment>{conversationSummary}</React.Fragment>
+                return resolve(conversationSummaryView);
             } catch (e) {
                 reject(e);
             }
@@ -159,18 +126,18 @@ const AIConversationSummaryView = (props: IAIConversationSummaryProps) => {
 
     return (
         <div className="cometchat" style={{ width: "100%", height: "100%" }}>
-            <div className="cometchat-ai-conversation-summary__wrapper">
-                <div className="cometchat-ai-conversation-summary" >
-                    <div className="cometchat-ai-conversation-summary__header">
-                        <div className="cometchat-ai-conversation-summary__header-title" >
+            <div className="cometchat-conversation-summary__wrapper">
+                <div className="cometchat-conversation-summary" >
+                    <div className="cometchat-conversation-summary__header">
+                        <div className="cometchat-conversation-summary__header-title" >
                             {titleText}
                         </div>
                         <button
-                            className="cometchat-ai-conversation-summary__header-close-button"
+                            className="cometchat-conversation-summary__header-close-button"
                             onClick={() => closeCallback!()}
                         />
                     </div>
-                    <div className="cometchat-ai-conversation-summary__body">
+                    <div className="cometchat-conversation-summary__body">
                         {messageListState === States.loaded ? activeView : getStateView()}
                     </div>
                 </div>
@@ -179,4 +146,4 @@ const AIConversationSummaryView = (props: IAIConversationSummaryProps) => {
     );
 };
 
-export { AIConversationSummaryView };
+export { CometChatConversationSummary };

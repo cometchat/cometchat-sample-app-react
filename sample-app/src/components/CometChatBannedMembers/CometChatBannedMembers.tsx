@@ -71,7 +71,7 @@ export const CometChatBannedMembers = (props: bannedMembersProp) => {
                     title={bannedMember.getName()}
                     avatarURL={bannedMember.getAvatar()}
                     avatarName={bannedMember.getName()}
-                    tailView={getDefaultListTailView(bannedMember)}
+                    trailingView={getDefaultListTailView(bannedMember)}
                 />
             );
         };
@@ -189,7 +189,7 @@ export const CometChatBannedMembers = (props: bannedMembersProp) => {
                     hideSearch={true}
                     list={bannedMembers}
                     listItemKey="getUid"
-                    listItem={getListItem()}
+                    itemView={getListItem()}
                     showSectionHeader={false}
                     onScrolledToBottom={() => fetchNextAndAppendBannedMembers()}
                     state={bannedMembers.length === 0

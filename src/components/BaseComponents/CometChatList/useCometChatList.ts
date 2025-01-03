@@ -1,6 +1,7 @@
 import React, { JSX, useEffect } from "react";
 
 import { DivElementRef } from "./CometChatList";
+import { States } from "../../../Enums/Enums";
 
 type Args = {
     intersectionObserverRootRef: React.MutableRefObject<DivElementRef>,
@@ -13,7 +14,7 @@ type Args = {
     scrollHeightTupleRef: React.MutableRefObject<[number, number]>,
     didTopObserverCallbackRunRef: React.MutableRefObject<boolean>,
     errorHandler: (error: unknown) => void,
-    scrolledUpCallback?: (boolean?: boolean) => void
+    scrolledUpCallback?: (boolean?: boolean) => void,
 };
 
 export function useCometChatList(args: Args) {
@@ -29,7 +30,7 @@ export function useCometChatList(args: Args) {
         didTopObserverCallbackRunRef,
         errorHandler,
         scrolledUpCallback
-    } = args;
+        } = args;
     useEffect(
         /**
          * Creates an observer and sets it to observe a dummy element that is the bottom-most child of the scrollable list
@@ -155,6 +156,6 @@ export function useCometChatList(args: Args) {
                     intersectionObserverBottomTargetRef.current!.scrollIntoView(false);
                   }, 50);
                 }
-            });
+            }); 
         });
 }

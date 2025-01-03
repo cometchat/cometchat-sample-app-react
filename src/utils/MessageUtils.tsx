@@ -22,7 +22,8 @@ export class MessageUtils {
    */
   getContentView(
     message: CometChat.BaseMessage,
-    template: CometChatMessageTemplate
+    template: CometChatMessageTemplate,
+    alignment?:MessageBubbleAlignment
   ) {
     let view;
     const messageTypesMap: any = {};
@@ -35,7 +36,7 @@ export class MessageUtils {
     ) {
       view = messageTypesMap[
         `${message?.getCategory()}_${message?.getType()}`
-      ]?.contentView(message, MessageBubbleAlignment.right);
+      ]?.contentView(message, alignment);
       // default would be html string using lit components
       if (typeof view === "string") {
         return {
@@ -129,7 +130,7 @@ export class MessageUtils {
   ) {
     return this.getBubbleWrapper(baseMessage, template)
       ? this.getBubbleWrapper(baseMessage, template)
-      : <CometChatMessageBubble bottomView={null} headerView={null} options={[]} footerView={null} leadingView={null} statusInfoView={this.getStatusInfoView(baseMessage, template, alignment)} contentView={this.getContentView(baseMessage, template)} replyView={null} threadView={null} alignment={alignment} id={baseMessage?.getId() || baseMessage?.getMuid()} />
+      : <CometChatMessageBubble bottomView={null} headerView={null} options={[]} footerView={null} leadingView={null} statusInfoView={this.getStatusInfoView(baseMessage, template, alignment)} contentView={this.getContentView(baseMessage, template,alignment)} replyView={null} threadView={null} alignment={alignment} id={baseMessage?.getId() || baseMessage?.getMuid()} />
   }
   /**
    *

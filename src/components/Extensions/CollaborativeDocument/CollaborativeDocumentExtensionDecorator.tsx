@@ -96,8 +96,8 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
    * @returns {string[]} An array of message categories.
    * @override
    */
-  override getAllMessageCategories(): string[] {
-    const categories = super.getAllMessageCategories();
+  override getAllMessageCategories(additionalConfigurations?: Object | undefined): string[] {
+    const categories = super.getAllMessageCategories(additionalConfigurations);
     if (!categories.includes(CometChatUIKitConstants.MessageCategory.custom)) {
       categories.push(CometChatUIKitConstants.MessageCategory.custom);
     }
@@ -159,19 +159,21 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
         let documentMessage: CometChat.CustomMessage =
           message as CometChat.CustomMessage;
         if (documentMessage.getDeletedAt()) {
-          return super.getDeleteMessageBubble(documentMessage);
+          return super.getDeleteMessageBubble(documentMessage,undefined,_alignment);
         }
-        return this.getDocumentContentView(documentMessage);
+        return this.getDocumentContentView(documentMessage,_alignment);
       },
       options: (
         loggedInUser: CometChat.User,
         messageObject: CometChat.BaseMessage,
-        group?: CometChat.Group
+        group?: CometChat.Group,
+        additionalParams?: Object | undefined
       ) => {
         return super.getCommonOptions(
           loggedInUser,
           messageObject,
-          group
+          group,
+          additionalParams
         );
       },
       bottomView: (
@@ -190,7 +192,7 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
    * @returns {JSX.Element} The document content view component.
    */
   getDocumentContentView(
-    documentMessage: CometChat.CustomMessage) {
+    documentMessage: CometChat.CustomMessage,alignment?:MessageBubbleAlignment) {
     const documentURL = this.getDocumentURL(documentMessage);
     const documentTitle = localize("COLLABORATIVE_DOCUMENT");
     const documentButtonText = localize("OPEN_DOCUMENT");
@@ -208,7 +210,7 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
         buttonText={documentButtonText}
         onClicked={this.launchCollaborativeDocument}
         bannerImage={bannerImage}
-        isSentByMe={isSentByMe}
+        isSentByMe={alignment == MessageBubbleAlignment.right}
       />
       </div>
     );
@@ -261,15 +263,15 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
    * @param {any} id - The identifier object containing user or group information.
    * @returns {CometChatMessageComposerAction[]} The list of attachment options including the new document action.
    */
-  override getAttachmentOptions(id: any) {
-    if (!id?.parentMessageId) {
+  override getAttachmentOptions(id: any,additionalConfigurations?:any) {
+    if (!id?.parentMessageId && !additionalConfigurations?.hideCollaborativeDocumentOption) {
       let isUser = id?.user ? true : false;
       let receiverType: string = isUser
         ? CometChatUIKitConstants.MessageReceiverType.user
         : CometChatUIKitConstants.MessageReceiverType.group;
       let receiverId: string | undefined = isUser ? id.user : id.group;
       const messageComposerActions: CometChatMessageComposerAction[] =
-        super.getAttachmentOptions(id);
+        super.getAttachmentOptions(id,additionalConfigurations);
       let newAction: CometChatMessageComposerAction =
         new CometChatMessageComposerAction({
           id: CollaborativeDocumentConstants.document,
@@ -292,7 +294,7 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
       messageComposerActions.push(newAction);
       return messageComposerActions;
     } else {
-      return super.getAttachmentOptions(id);
+      return super.getAttachmentOptions(id,additionalConfigurations);
     }
   }
 

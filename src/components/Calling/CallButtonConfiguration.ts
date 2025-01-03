@@ -5,7 +5,7 @@ export class CallButtonConfiguration {
     public callSettingsBuilder?: (isAudioOnlyCall: boolean, user?: CometChat.User, group?: CometChat.Group) => typeof CometChatUIKitCalls.CallSettingsBuilder;
     onVoiceCallClick?: () => void;
     onVideoCallClick?: () => void;
-    onError?: (error: CometChat.CometChatException) => void;
+    onError?: ((error: CometChat.CometChatException) => void) | null;
     public outgoingCallConfiguration?: OutgoingCallConfiguration = new OutgoingCallConfiguration({})
     constructor(configuration?: CallButtonConfiguration) {
         this.callSettingsBuilder = configuration?.callSettingsBuilder;

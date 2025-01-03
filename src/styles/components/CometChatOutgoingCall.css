@@ -21,6 +21,11 @@
     font: var(--cometchat-font-title-medium);
 }
 
+.cometchat-outgoing-call__title-container {
+    display: flex;
+    flex-direction: column;
+}
+
 /* Subtitle text for the outgoing call UI */
 .cometchat-outgoing-call__subtitle {
     color: var(--cometchat-text-color-secondary);

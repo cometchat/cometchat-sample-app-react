@@ -5,6 +5,7 @@ import { States } from "../../../Enums/Enums";
 import { localize } from "../../../resources/CometChatLocalize/cometchat-localize";
 import { CometChatUIKitConstants } from "../../../constants/CometChatUIKitConstants";
 import { CometChatUIKitLoginListener } from "../../../CometChatUIKit/CometChatUIKitLoginListener";
+import { useCometChatErrorHandler } from "../../../CometChatCustomHooks";
 
 interface ReactionListProps {
     /* Base message object of which reaction info is viewed. */
@@ -13,12 +14,15 @@ interface ReactionListProps {
     reactionsRequestBuilder?: CometChat.ReactionsRequestBuilder;
     /* Callback which is triggered when any of the reaction item is clicked. */
     reactionItemClicked?: (reaction: CometChat.Reaction, message: CometChat.BaseMessage) => void;
+     /* Optional callback function to handle error logs. */
+    onError?: ((error: CometChat.CometChatException) => void) | null;
 }
 
-const CometChatReactionList: React.FC<ReactionListProps> = ({
+export const CometChatReactionList: React.FC<ReactionListProps> = ({
     messageObject,
     reactionsRequestBuilder,
     reactionItemClicked,
+    onError
 }) => {
     const [messageReactions, setMessageReactions] = useState<CometChat.ReactionCount[]>([]);
     const [selectedReaction, setSelectedReaction] = useState<string>("all");
@@ -36,6 +40,7 @@ const CometChatReactionList: React.FC<ReactionListProps> = ({
     const limit = CometChatUIKitConstants.requestBuilderLimits.reactionListLimit;
     const loggedInUser = CometChatUIKitLoginListener.getLoggedInUser();
     const parentRef = useRef<HTMLDivElement | null>(null);
+    const errorHandler = useCometChatErrorHandler(onError);
 
     useEffect(() => {
         if (selectedReaction || messageObject) {
@@ -52,24 +57,30 @@ const CometChatReactionList: React.FC<ReactionListProps> = ({
             try {
                 setMessageReactions(messageObject?.getReactions() || []);
             } catch (error) {
-                console.log(error);
+                errorHandler(error,"checkReaction")
             }
         }, [messageObject]
     );
 
     /* Purpose of this function is to reset all the states used in the component. */
     const resetComponent = () => {
+       try {
         setMessageReactions([]);
         setSelectedReaction("all");
         setRequestBuilderMap({});
         setReactionList({});
         setState(States.loading);
         setIsFirstRender(true);
+       } catch (error) {
+        errorHandler(error,"resetComponent")
+
+       }
     };
 
     /* This function returns a request builder which is used to fetch and update the reactions data. */
     const getRequestBuilder = useCallback(
         (reaction: string) => {
+           try {
             let requestBuilder;
             if (requestBuilderMap[reaction]) {
                 return requestBuilderMap[reaction];
@@ -95,43 +106,57 @@ const CometChatReactionList: React.FC<ReactionListProps> = ({
                 }
             });
             return request;
+           } catch (error) {
+            errorHandler(error,"getRequestBuilder")
+
+           }
         }, [requestBuilderMap]
     );
 
     /* This function is used to trigger the fetch reaction list logic and update the list state. */
     const showReactions = useCallback(
         async () => {
+           try {
             const requestBuilder = getRequestBuilder(selectedRecRef.current!);
-            const list = await getReactionList(requestBuilder, selectedRecRef.current!);
-            setCurrentUIList(list);
+            const list = await getReactionList(requestBuilder!, selectedRecRef.current!);
+            setCurrentUIList(list!);
+           } catch (error) {
+            errorHandler(error,"showReactions")
+
+           }
         }, [selectedReaction, selectedRecRef, reactionList]
     );
 
     /* Purpose of this function is to fetch the reaction list data and retun the list. */
     const getReactionList = useCallback(async (requestBuilder: CometChat.ReactionsRequest, reaction: string) => {
-        setState(States.loading);
-        if (reactionList[reaction]) {
-            setState(States.loaded);
-            return reactionList[reaction];
-        }
+   try {
+    setState(States.loading);
+    if (reactionList[reaction]) {
+        setState(States.loaded);
+        return reactionList[reaction];
+    }
 
-        try {
-            let list = await requestBuilder.fetchNext();
-            if (list.length == 0) {
-                list = await requestBuilder.fetchPrevious();
-            }
-            setState(States.loaded);
-            setReactionList((prev) => ({ ...prev, [reaction || "all"]: list }));
-            return list;
-        } catch (error) {
-            setState(States.error);
-            return [];
+    try {
+        let list = await requestBuilder.fetchNext();
+        if (list.length == 0) {
+            list = await requestBuilder.fetchPrevious();
         }
+        setState(States.loaded);
+        setReactionList((prev) => ({ ...prev, [reaction || "all"]: list }));
+        return list;
+    } catch (error) {
+        setState(States.error);
+        return [];
+    }
+   } catch (error) {
+    errorHandler(error,"getReactionList")
+   }
     }, [reactionList]);
 
     /* This function is triggered when the component is rendered, to fetch and display the reaction data. */
     const showReactionsIfNeeded = useCallback(
         async () => {
+           try {
             if (messageUpdated && isFirstRender) {
                 resetComponent();
                 setMessageUpdated(false);
@@ -143,6 +168,9 @@ const CometChatReactionList: React.FC<ReactionListProps> = ({
                 checkReaction();
                 await showReactions();
             }
+           } catch (error) {
+            errorHandler(error,"showReactionsIfNeeded")
+           }
         }, [isFirstRender, messageUpdated, setIsFirstRender, reactionList, selectedRecRef]
     );
 
@@ -150,7 +178,7 @@ const CometChatReactionList: React.FC<ReactionListProps> = ({
     const fetchNext = useCallback(
         async () => {
             try {
-                const requestBuilder = getRequestBuilder(selectedReaction);
+                const requestBuilder = getRequestBuilder(selectedReaction)!;
                 if (!reactionList[selectedReaction] || (reactionList[selectedReaction] && reactionList[selectedReaction].length === 0)) {
                     return;
                 } else {
@@ -163,19 +191,27 @@ const CometChatReactionList: React.FC<ReactionListProps> = ({
                     setCurrentUIList(updatedCurrentUIList);
                 }
             } catch (error) {
-                console.log(error);
+                errorHandler(error,"fetchNext")
             }
         }, [setSelectedReaction, selectedReaction, reactionList, currentUIList]
     );
 
     /* This function is used to return the total reactions count for a message. */
     const getTotalReactionCount = () => {
+       try {
         return messageReactions.reduce((acc, reaction) => acc + reaction.getCount(), 0);
+       } catch (error) {
+        errorHandler(error,"getTotalReactionCount")
+       }
     };
 
     /* Purpose of this function is to check if the reaction is added by the logged in user. */
     const isMyReaction = (reaction: CometChat.Reaction) => {
-        return loggedInUser?.getUid() === reaction?.getReactedBy()?.getUid();
+        try {
+            return loggedInUser?.getUid() === reaction?.getReactedBy()?.getUid();
+           } catch (error) {
+            errorHandler(error,"isMyReaction")
+           }
     };
 
     /*
@@ -183,6 +219,7 @@ const CometChatReactionList: React.FC<ReactionListProps> = ({
     * It is done locally using states.
     */
     const updateMessageToRemoveReactionLocally = (reaction: CometChat.Reaction) => {
+     try {
         const message = messageObject;
         let changedSelectedReaction = false;
 
@@ -208,6 +245,9 @@ const CometChatReactionList: React.FC<ReactionListProps> = ({
                 }
             }
         }
+     } catch (error) {
+        errorHandler(error,"updateMessageToRemoveReactionLocally")
+     }
     };
 
     /* The purpose of this function is to update the state for reaction list. */
@@ -225,36 +265,40 @@ const CometChatReactionList: React.FC<ReactionListProps> = ({
 
     /* Purpose of this function is to return the slider component view for reactions. */
     const showReactionsSlider = useCallback(() => {
-        const reactionsObject = [
-            {
-                id: "all",
-                reaction: allText,
-                count: getTotalReactionCount(),
-            },
-        ];
-
-        messageReactions.forEach((reaction) => {
-            reactionsObject.push({
-                id: reaction.getReaction(),
-                reaction: reaction.getReaction(),
-                count: reaction.getCount(),
+        try {
+            const reactionsObject = [
+                {
+                    id: "all",
+                    reaction: allText,
+                    count: getTotalReactionCount(),
+                },
+            ];
+    
+            messageReactions.forEach((reaction) => {
+                reactionsObject.push({
+                    id: reaction.getReaction(),
+                    reaction: reaction.getReaction(),
+                    count: reaction.getCount(),
+                });
             });
-        });
-
-        return reactionsObject.map((reactionObject) => (
-            <div
-                className={`cometchat-reaction-list__tabs-tab ${selectedReaction === reactionObject.id && "cometchat-reaction-list__tabs-tab-active"}`}
-                onClick={() => { setSelectedReaction(reactionObject.id); selectedRecRef.current = reactionObject.id }}
-                key={reactionObject.id}
-            >
-                <div className={`cometchat-reaction-list__tabs-tab-emoji ${selectedReaction === reactionObject.id && "cometchat-reaction-list__tabs-tab-emoji-active"}`}>
-                    {reactionObject.reaction}
+    
+            return reactionsObject.map((reactionObject) => (
+                <div
+                    className={`cometchat-reaction-list__tabs-tab ${selectedReaction === reactionObject.id && "cometchat-reaction-list__tabs-tab-active"}`}
+                    onClick={() => { setSelectedReaction(reactionObject.id); selectedRecRef.current = reactionObject.id }}
+                    key={reactionObject.id}
+                >
+                    <div className={`cometchat-reaction-list__tabs-tab-emoji ${selectedReaction === reactionObject.id && "cometchat-reaction-list__tabs-tab-emoji-active"}`}>
+                        {reactionObject.reaction}
+                    </div>
+                    <div className={`cometchat-reaction-list__tabs-tab-count ${selectedReaction === reactionObject.id && "cometchat-reaction-list__tabs-tab-count-active"}`}>
+                        {reactionObject.count}
+                    </div>
                 </div>
-                <div className={`cometchat-reaction-list__tabs-tab-count ${selectedReaction === reactionObject.id && "cometchat-reaction-list__tabs-tab-count-active"}`}>
-                    {reactionObject.count}
-                </div>
-            </div>
-        ));
+            ));
+        } catch (error) {
+            errorHandler(error,"showReactionsSlider")
+        }
     }, [messageReactions, selectedReaction]);
 
     return (
@@ -299,7 +343,7 @@ const CometChatReactionList: React.FC<ReactionListProps> = ({
                                             subtitleView={isMe ? <div>
                                                 {subtitleText}
                                             </div> : null}
-                                            tailView={<div>
+                                            trailingView={<div>
                                                 {reaction?.getReaction()}
                                             </div>}
                                             avatarURL={reaction?.getReactedBy()?.getAvatar()}
@@ -321,5 +365,3 @@ const CometChatReactionList: React.FC<ReactionListProps> = ({
         </div>
     );
 };
-
-export default CometChatReactionList;

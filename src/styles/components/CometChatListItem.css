@@ -51,7 +51,7 @@
 }
 
 .cometchat-list-item__menu-view,
-.cometchat-list-item__tail-view {
+.cometchat-list-item__trailing-view {
     display: flex;
     width: 24px;
     height: 24px;
@@ -59,7 +59,7 @@
     align-items: center;
 }
 
-.cometchat-list-item__tail-view-hidden {
+.cometchat-list-item__trailing-view-hidden {
     display: none;
 }
 

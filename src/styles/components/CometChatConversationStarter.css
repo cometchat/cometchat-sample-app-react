@@ -1,4 +1,4 @@
-.cometchat-ai-conversation-starter {
+.cometchat-conversation-starter {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -61,7 +61,7 @@
   animation: shimmerAnimation 1.5s infinite linear;
 }
 
-.cometchat-ai-conversation-stater__error-view {
+.cometchat-conversation-starter__error-view {
   color: var(--cometchat-text-color-secondary, #727272);
   text-align: center;
   font: var(--cometchat-font-body-regular);

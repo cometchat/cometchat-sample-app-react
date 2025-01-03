@@ -20,56 +20,66 @@ export abstract class DataSourceDecorator implements DataSource {
   getTextMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     return (this.dataSource ?? new MessagesDataSource()).getTextMessageOptions(
       loggedInUser,
       messageObject,
-      group
+      group,
+      additionalParams
     );
   }
   getImageMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     return (this.dataSource ?? new MessagesDataSource()).getImageMessageOptions(
       loggedInUser,
       messageObject,
-      group
+      group,
+      additionalParams
     );
   }
   getVideoMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     return (this.dataSource ?? new MessagesDataSource()).getVideoMessageOptions(
       loggedInUser,
       messageObject,
-      group
+      group,
+      additionalParams
     );
   }
   getAudioMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     return (this.dataSource ?? new MessagesDataSource()).getAudioMessageOptions(
       loggedInUser,
       messageObject,
-      group
+      group,
+      additionalParams
     );
   }
   getFileMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     return (this.dataSource ?? new MessagesDataSource()).getFileMessageOptions(
       loggedInUser,
       messageObject,
-      group
+      group,
+      additionalParams
     );
   }
 
@@ -168,9 +178,9 @@ export abstract class DataSourceDecorator implements DataSource {
 
     );
   }
-  getGroupActionTemplate(): CometChatMessageTemplate {
+  getGroupActionTemplate(additionalConfigurations?: Object | undefined): CometChatMessageTemplate {
     return (this.dataSource ?? new MessagesDataSource()).getGroupActionTemplate(
-
+      additionalConfigurations
     );
   }
   getAllMessageTemplates(
@@ -192,46 +202,53 @@ export abstract class DataSourceDecorator implements DataSource {
   getMessageOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     return (this.dataSource ?? new MessagesDataSource()).getMessageOptions(
       loggedInUser,
       messageObject,
-      group
+      group,
+      additionalParams
     );
   }
   getCommonOptions(
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalParams?: Object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     return (this.dataSource ?? new MessagesDataSource()).getCommonOptions(
       loggedInUser,
       messageObject,
-      group
+      group,
+      additionalParams
     );
   }
   getAttachmentOptions(
-    id: ComposerId
+    id: ComposerId,
+    additionalConfigurations?:any
+
   ): CometChatMessageComposerAction[] {
     return (this.dataSource ?? new MessagesDataSource()).getAttachmentOptions(
-      id
+      id,
+      additionalConfigurations
     );
   }
   getAllMessageTypes(): string[] {
     return (this.dataSource ?? new MessagesDataSource()).getAllMessageTypes();
   }
-  getAllMessageCategories(): string[] {
+  getAllMessageCategories(additionalConfigurations?: Object | undefined): string[] {
     return (
       this.dataSource ?? new MessagesDataSource()
-    ).getAllMessageCategories();
+    ).getAllMessageCategories(additionalConfigurations);
   }
-  getAuxiliaryOptions(
+  getStickerButton(
     id: ComposerId,
     user?: CometChat.User,
     group?: CometChat.Group
-  ): JSX.Element[] {
-    return (this.dataSource ?? new MessagesDataSource()).getAuxiliaryOptions(
+  ): JSX.Element | undefined {
+    return (this.dataSource ?? new MessagesDataSource()).getStickerButton(
       id,
       user,
       group
@@ -241,9 +258,9 @@ export abstract class DataSourceDecorator implements DataSource {
     return (this.dataSource ?? new MessagesDataSource()).getId();
   }
   getDeleteMessageBubble(
-    messageObject: CometChat.BaseMessage) {
+    messageObject: CometChat.BaseMessage,text?:string,alignment?: MessageBubbleAlignment) {
     return (this.dataSource ?? new MessagesDataSource()).getDeleteMessageBubble(
-      messageObject);
+      messageObject,text,alignment);
   }
   getGroupActionBubble(
     message: CometChat.BaseMessage
@@ -269,47 +286,53 @@ export abstract class DataSourceDecorator implements DataSource {
     videoUrl: string,
     message: CometChat.MediaMessage,
     thumbnailUrl?: string,
-    onClick?: Function) {
+    onClick?: Function,alignment?: MessageBubbleAlignment) {
     return (this.dataSource ?? new MessagesDataSource()).getVideoMessageBubble(
       videoUrl,
       message,
       thumbnailUrl,
-      onClick
+      onClick,
+      alignment
     );
   }
   getImageMessageBubble(
     imageUrl: string,
     placeholderImage: string,
     message: CometChat.MediaMessage,
-    onClick?: Function
+    onClick?: Function,alignment?: MessageBubbleAlignment
   ) {
     return (this.dataSource ?? new MessagesDataSource()).getImageMessageBubble(
       imageUrl,
       placeholderImage,
       message,
-      onClick
+      onClick,
+      alignment
     );
   }
   getAudioMessageBubble(
     audioUrl: string,
     message: CometChat.MediaMessage,
-    title?: string
+    title?: string,
+    alignment?:MessageBubbleAlignment
   ) {
     return (this.dataSource ?? new MessagesDataSource()).getAudioMessageBubble(
       audioUrl,
       message,
-      title
+      title,
+      alignment
     );
   }
   getFileMessageBubble(
     fileUrl: string,
     message: CometChat.MediaMessage,
     title?: string
+    ,alignment?: MessageBubbleAlignment
   ) {
     return (this.dataSource ?? new MessagesDataSource()).getFileMessageBubble(
       fileUrl,
       message,
-      title
+      title,
+      alignment
     );
   }
   getLastConversationMessage(
@@ -326,21 +349,11 @@ export abstract class DataSourceDecorator implements DataSource {
     );
   }
 
-  getAuxiliaryHeaderMenu(user?: CometChat.User, group?: CometChat.Group): Element[] | JSX.Element[] {
+  getAuxiliaryHeaderMenu(user?: CometChat.User, group?: CometChat.Group,    additionalConfigurations?:any): Element[] | JSX.Element[] {
     return (this.dataSource ?? new MessagesDataSource()).getAuxiliaryHeaderMenu(
       user,
-      group
-    );
-  }
-  getAIOptions(
-    user: CometChat.User | null,
-    group: CometChat.Group | null,
-    id?: ComposerId
-  ): (CometChatMessageComposerAction | CometChatActionsView)[] {
-    return (this.dataSource ?? new MessagesDataSource()).getAIOptions(
-      user,
       group,
-      id
+      additionalConfigurations
     );
   }
   getAllTextFormatters(formatterParams: additionalParams): CometChatTextFormatter[] {

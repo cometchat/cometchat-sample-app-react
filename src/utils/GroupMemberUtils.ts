@@ -18,15 +18,15 @@ export class GroupMemberUtils {
    * @param {string} [loggedInUser=""] - The UID of the logged-in user.
    * @returns {CometChatOption[] | string} - An array of options or the member's scope as a string.
    */
-  static getViewMemberOptions(groupMember: CometChat.GroupMember, group: CometChat.Group, loggedInUser: string = "") {
+  static getViewMemberOptions(groupMember: CometChat.GroupMember, group: CometChat.Group, loggedInUser: string = "",additionalConfigurations?:any) {
     let options: CometChatOption[] | string = [];
     if (group.getOwner() == groupMember.getUid()) {
       options = CometChatUIKitConstants.groupMemberScope.owner
     } else {
       let loggedInUserScope: string = group.getOwner() == loggedInUser ? CometChatUIKitConstants.groupMemberScope.owner : group.getScope() ?? CometChatUIKitConstants.groupMemberScope.participant
-      let isKickAllowed = _allowedGroupMemberOptions[loggedInUserScope + groupMember.getScope()][CometChatUIKitConstants.GroupMemberOptions.kick];
-      let isBanAllowed = _allowedGroupMemberOptions[loggedInUserScope + groupMember.getScope()][CometChatUIKitConstants.GroupMemberOptions.kick];
-      let ischangeScopeAllowed = _allowedGroupMemberOptions[loggedInUserScope + groupMember.getScope()][CometChatUIKitConstants.GroupMemberOptions.kick];
+      let isKickAllowed = !additionalConfigurations?.hideKickMemberOption &&  _allowedGroupMemberOptions[loggedInUserScope + groupMember.getScope()][CometChatUIKitConstants.GroupMemberOptions.kick];
+      let isBanAllowed =  !additionalConfigurations?.hideBanMemberOption &&  _allowedGroupMemberOptions[loggedInUserScope + groupMember.getScope()][CometChatUIKitConstants.GroupMemberOptions.kick];
+      let ischangeScopeAllowed =  !additionalConfigurations?.hideScopeChangeOption &&  _allowedGroupMemberOptions[loggedInUserScope + groupMember.getScope()][CometChatUIKitConstants.GroupMemberOptions.kick];
       if (isKickAllowed) {
         options.push(new CometChatOption({
           id: CometChatUIKitConstants.GroupMemberOptions.kick,

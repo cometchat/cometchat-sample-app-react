@@ -65,7 +65,7 @@
     pointer-events: none;
 }
 
-.cometchat-transfer-ownership .cometchat-list-item__tail-view .cometchat-radiobutton__label {
+.cometchat-transfer-ownership .cometchat-list-item__trailing-view .cometchat-radiobutton__label {
     flex-direction: row-reverse;
 }
 

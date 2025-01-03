@@ -3,6 +3,7 @@
   import { PollsConstants } from './PollsConstants';
   import { CometChatAvatar } from "../../BaseComponents/CometChatAvatar/CometChatAvatar";
   import { CometChatRadioButton } from "../../BaseComponents/CometChatRadioButton/CometChatRadioButton";
+import { MessageBubbleAlignment } from "../../../Enums/Enums";
 
   interface PollsBubbleProps {
     /** 
@@ -35,6 +36,10 @@
      * Optional metadata associated with the poll.
      */
     metadata?: any;
+    /** 
+     * ALignemtn of the message bubble
+     */
+    alignment?: MessageBubbleAlignment;
 
   }
 
@@ -50,6 +55,7 @@
     loggedInUser: undefined,
     senderUid: "",
     metadata: {},
+    alignment: MessageBubbleAlignment.right,
   };
 
   /**
@@ -66,6 +72,7 @@
       loggedInUser,
       senderUid,
       metadata,
+      alignment,
     } = { ...defaultProps, ...props };
 
   const isSentByMe =  !senderUid || loggedInUser?.getUid() === senderUid
@@ -110,7 +117,7 @@
     };
     return (
       <div className="cometchat">
-        <div className={`cometchat-polls-bubble ${!isSentByMe ? "cometchat-polls-bubble-incoming" : "cometchat-polls-bubble-outgoing"} `}>
+        <div className={`cometchat-polls-bubble ${alignment == MessageBubbleAlignment.left ? "cometchat-polls-bubble-incoming" : "cometchat-polls-bubble-outgoing"} `}>
           <div
             className="cometchat-polls-bubble__question"
           >

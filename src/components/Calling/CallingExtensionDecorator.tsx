@@ -85,8 +85,8 @@ export class CallingExtensionDecorator extends DataSourceDecorator {
     return "calling";
   }
 
-  override getAllMessageCategories(): string[] {
-    const categories = super.getAllMessageCategories();
+  override getAllMessageCategories(additionalConfigurations?: Object | undefined): string[] {
+    const categories = super.getAllMessageCategories(additionalConfigurations);
     if (!categories.includes(CometChatUIKitConstants.MessageCategory.call)) {
       categories.push(CometChatUIKitConstants.MessageCategory.call);
     }
@@ -140,7 +140,7 @@ export class CallingExtensionDecorator extends DataSourceDecorator {
         _alignment: MessageBubbleAlignment
       ) => {
         if (message.getDeletedAt()) {
-          return super.getDeleteMessageBubble(message)
+          return super.getDeleteMessageBubble(message, undefined, _alignment);
         }
         return this.getDirectCallMessageBubble(
           message as CometChat.CustomMessage,
@@ -150,12 +150,14 @@ export class CallingExtensionDecorator extends DataSourceDecorator {
       options: (
         loggedInUser: CometChat.User,
         messageObject: CometChat.BaseMessage,
-        group?: CometChat.Group
+        group?: CometChat.Group,
+        additionalParams?: Object | undefined
       ) => {
         return ChatConfigurator.getDataSource().getCommonOptions(
           loggedInUser,
           messageObject,
-          group
+          group,
+          additionalParams
         );
       },
       bottomView: (
@@ -388,19 +390,23 @@ export class CallingExtensionDecorator extends DataSourceDecorator {
 
   override getAuxiliaryHeaderMenu(
     user?: CometChat.User,
-    group?: CometChat.Group
+    group?: CometChat.Group,
+    additionalConfigurations?: any
   ) {
     let auxMenus: Array<any> = [];
+    if (additionalConfigurations?.hideVideoCallButton && additionalConfigurations?.hideVoiceCallButton) {
+      return []
+    }
     let callButtons = (
       <CometChatCallButtons
         user={user!}
         group={group!}
         key={"callbuttons"}
         onError={this.configuration?.callButtonConfiguration?.onError}
-        onVideoCallClick={this.configuration?.callButtonConfiguration?.onVideoCallClick}
-        onVoiceCallClick={this.configuration?.callButtonConfiguration?.onVoiceCallClick}
         outgoingCallConfiguration={this.configuration?.callButtonConfiguration?.outgoingCallConfiguration}
         callSettingsBuilder={this.configuration?.callButtonConfiguration?.callSettingsBuilder}
+        hideVideoCallButton={additionalConfigurations?.hideVideoCallButton}
+        hideVoiceCallButton={additionalConfigurations?.hideVoiceCallButton}
       />
     );
     auxMenus.push(callButtons);
