@@ -1,3 +1,16 @@
+## [5.0.1] - 13-01-2025
+
+#### New
+- None  
+
+#### Enhancements
+- None  
+
+#### Fixes
+- Removed unused dependencies to improve application performance and reduce build size.  
+- Adjusted the minimum width of the sidebar and tabs to ensure proper layout rendering when the sample app is displayed within fixed-width containers.  
+- Resolved a flickering issue on the **Banned Member** page when clicking the "Banned Member" option, ensuring a smoother user experience.  
+
 ## [5.0.0] - 03-01-2025
 
 ### New

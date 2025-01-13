@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-import './App.scss';
 import "./styles/App.css";
 import { BrowserRouter } from 'react-router-dom';
 import Login from "./components/CometChatLogin/CometChatLogin";

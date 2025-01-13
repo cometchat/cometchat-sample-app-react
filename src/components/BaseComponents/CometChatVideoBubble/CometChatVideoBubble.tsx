@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useCometChatVideoBubble } from "./useCometChatVideoBubble";
+import { closeCurrentMediaPlayer, currentMediaPlayer } from "../../../utils/util";
 interface VideoBubbleProps {
     /* URL of the video to be played. */
     src: string;
@@ -34,7 +35,9 @@ const CometChatVideoBubble = (props: VideoBubbleProps) => {
      * Function to request fullscreen when video starts to play.
      */
     const startVideoInFullscreen = () => {
+        closeCurrentMediaPlayer();
         const videoElement: any = videoRef.current;
+        currentMediaPlayer.video = videoElement;
         if (videoElement) {
             if (videoElement && !document.fullscreenElement) {
                 if (videoElement.requestFullscreen) {

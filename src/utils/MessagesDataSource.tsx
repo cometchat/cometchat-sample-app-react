@@ -21,7 +21,7 @@ import EditIcon from "../assets/edit_icon.svg";
 import FileIcon from "../assets/document_icon.svg";
 import ImageIcon from "../assets/photo.svg";
 import InformationIcon from "../assets/info_icon.svg";
-import PlaceholderImage from "../assets/placeholder.png";
+import PlaceholderImage from "../assets/image_placeholder.png";
 import PrivateMessageIcon from "../assets/send_message_privately.svg";
 import ReactionIcon from "../assets/add_reaction_icon.svg";
 import ThreadIcon from "../assets/reply_in_thread.svg";

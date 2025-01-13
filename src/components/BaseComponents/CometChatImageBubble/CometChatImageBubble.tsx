@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import placeholderIcon from "../../../assets/placeholder.png"
+import placeholderIcon from "../../../assets/image_placeholder.png"
 import { useCometChatImageBubble } from "./useCometChatImageBubble";
 
 interface ImageBubbleProps {
@@ -9,8 +9,10 @@ interface ImageBubbleProps {
     placeholderImage?: string;
     /* callback which is triggered on click of the image. */
     onImageClicked?: (input: { src: string }) => void;
-    /* boolean to oggle bubble styling. */
+    /* boolean to toggle bubble styling. */
     isSentByMe?: boolean;
+    /* boolean flag to hide the placeholder image while loading. */
+    disableLoadingState?: boolean;
 }
 /*
     CometChatImageBubble is a generic component used to display images. It is generally used for image messages in chat.
@@ -23,19 +25,28 @@ const CometChatImageBubble = (props: ImageBubbleProps) => {
         placeholderImage = placeholderIcon,
         onImageClicked = () => { },
         isSentByMe = true,
+        disableLoadingState = false
     } = props;
 
     const { image, updateImage } = useCometChatImageBubble({ src, placeholderImage });
 
     useEffect(() => {
-        updateImage()
-    }, []);
+        if (!disableLoadingState) {
+            updateImage();
+        }
+    }, [disableLoadingState]);
+
+    const getImageBubbleView = () => {
+        return (
+            <div className={`cometchat-image-bubble ${isSentByMe ? "cometchat-image-bubble-outgoing" : "cometchat-image-bubble-incoming"}`} onClick={() => onImageClicked({ src })}>
+                <img className="cometchat-image-bubble__body" src={disableLoadingState ? src : image} />
+            </div >
+        )
+    }
 
     return (
         <div className="cometchat">
-            <div className={`cometchat-image-bubble ${isSentByMe ? "cometchat-image-bubble-outgoing" : "cometchat-image-bubble-incoming"}`} onClick={() => onImageClicked({ src })}>
-                <img className="cometchat-image-bubble__body" src={image} />
-            </div >
+            {getImageBubbleView()}
         </div>
     )
 }

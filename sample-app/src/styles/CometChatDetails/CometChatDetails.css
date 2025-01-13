@@ -1,6 +1,6 @@
 .side-component-wrapper {
     display: flex;
-    width: 30vw;
+    width: 30%;
     max-width: 420px;
     flex-direction: column;
     align-items: flex-start;
@@ -82,6 +82,11 @@
     align-self: stretch;
     overflow: auto;
     border-left: 1px solid var(--cometchat-border-color-light, #F5F5F5);
+}
+
+.side-component-content::-webkit-scrollbar,
+.side-component-content::-webkit-scrollbar-thumb {
+    display: none;
 }
 
 .side-component-content__group {

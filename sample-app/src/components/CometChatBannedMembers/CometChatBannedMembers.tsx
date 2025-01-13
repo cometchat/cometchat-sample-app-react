@@ -10,6 +10,7 @@ interface bannedMembersProp {
 export const CometChatBannedMembers = (props: bannedMembersProp) => {
     const { group } = props;
     const [bannedMembers, setBannedMembers] = useState<CometChat.User[]>([]);
+    const [state, setState] = useState<States>(States.loading);
     const bannedMembersRequestBuilderRef = useRef<any>({});
 
     useEffect(() => {
@@ -79,6 +80,7 @@ export const CometChatBannedMembers = (props: bannedMembersProp) => {
 
     const fetchNextAndAppendBannedMembers = useCallback(async (): Promise<void> => {
         try {
+            setState(States.loading);
             if (Object.keys(bannedMembersRequestBuilderRef.current).length == 0) {
                 let finalBannedMembersRequestBuilder = new CometChat.BannedMembersRequestBuilder(group.getGuid()).setLimit(30).build();
                 bannedMembersRequestBuilderRef.current = finalBannedMembersRequestBuilder;
@@ -93,9 +95,11 @@ export const CometChatBannedMembers = (props: bannedMembersProp) => {
                     return unique;
                 })
             }
+            setState(States.loaded);
         }
         catch (error) {
             console.log(error);
+            setState(States.error);
         }
     }, [group, bannedMembersRequestBuilderRef]);
 
@@ -177,26 +181,39 @@ export const CometChatBannedMembers = (props: bannedMembersProp) => {
 
     return (
         <div className="cometchat-banned-members">
-            {bannedMembers.length == 0 ?
-                <div className="cometchat-banned-members__empty">
-                    <div className="cometchat-banned-members__empty-icon" />
-                    <div className="cometchat-banned-members__empty-text">
-                        {localize("NO_BANNED_MEMBERS")}
-                    </div>
+            {state === States.loading ?
+                <div className="cometchat-banned-members__shimmer">
+                    {[...Array(3)].map((_, index) => (
+                        <div key={index} className="cometchat-banned-members__shimmer-item">
+                            <div className="cometchat-banned-members__shimmer-item-avatar"></div>
+                            <div className="cometchat-banned-members__shimmer-item-title"></div>
+                        </div>
+                    ))}
                 </div>
                 :
-                <CometChatList
-                    hideSearch={true}
-                    list={bannedMembers}
-                    listItemKey="getUid"
-                    itemView={getListItem()}
-                    showSectionHeader={false}
-                    onScrolledToBottom={() => fetchNextAndAppendBannedMembers()}
-                    state={bannedMembers.length === 0
-                        ? States.loading
-                        : States.loaded}
-                />
+                <>
+                    {bannedMembers.length == 0 ?
+                        <div className="cometchat-banned-members__empty">
+                            <div className="cometchat-banned-members__empty-icon" />
+                            <div className="cometchat-banned-members__empty-text">
+                                {localize("NO_BANNED_MEMBERS")}
+                            </div>
+                        </div>
+                        :
+                        <CometChatList
+                            hideSearch={true}
+                            list={bannedMembers}
+                            listItemKey="getUid"
+                            itemView={getListItem()}
+                            showSectionHeader={false}
+                            onScrolledToBottom={() => fetchNextAndAppendBannedMembers()}
+                            state={bannedMembers.length === 0
+                                ? States.loading
+                                : States.loaded}
+                        />
+                    }
+                </>
             }
-        </div>
+        </div >
     )
 }

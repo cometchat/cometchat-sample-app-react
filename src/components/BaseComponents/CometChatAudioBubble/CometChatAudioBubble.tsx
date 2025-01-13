@@ -1,20 +1,12 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import WaveSurfer from "./src/wavesurfer";
-
+import { closeCurrentMediaPlayer, currentAudioPlayer } from "../../../utils/util";
 interface AudioBubbleProps {
     /* URL of the audio to be played. */
     src: string;
     /* flag for toggle styling for audio bubble */
     isSentByMe?: boolean;
 }
-/*
-global instance of waveSurfer.
-*/
-let currentPlayingWaveSurfer: {
-    instance: WaveSurfer | null;
-    setIsPlaying: ((isPlaying: boolean) => void) | null;
-  } = { instance: null, setIsPlaying: null };
-
 /*
     CometChatAudioBubble is a generic component used to play audio. It is generally used for audio messages in chat.
     It accepts the URL of the audio to be played, along with other props like autoPlay, loop, and muted for customization purposes.
@@ -23,14 +15,12 @@ const CometChatAudioBubble = (props: AudioBubbleProps) => {
     const { src = "", isSentByMe = true } = props;
     const waveformRef = useRef<HTMLDivElement | null>(null);
     const abortControllerRef = useRef<AbortController | null>(null);
-
     const [waveSurfer, setWaveSurfer] = useState<WaveSurfer | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
     const [isDownloading, setIsDownloading] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
-
     // Moved useEffect logic to a separate function
     const initializeWaveSurfer = useCallback(() => {
         if (waveformRef.current) {
@@ -70,7 +60,6 @@ const CometChatAudioBubble = (props: AudioBubbleProps) => {
                 width: 140,
 
             });
-
             wave.load(src);
             setWaveSurfer(wave);
             // Set duration when audio is ready
@@ -93,7 +82,11 @@ const CometChatAudioBubble = (props: AudioBubbleProps) => {
             });
 
             // Clean up WaveSurfer instance on unmount
-            return () => wave.destroy();
+            return () => {
+                waveformRef.current = null;
+                currentAudioPlayer.instance = null;
+                closeCurrentMediaPlayer(false);
+            }
         }
     }, [src, isSentByMe]);
 
@@ -112,27 +105,25 @@ const CometChatAudioBubble = (props: AudioBubbleProps) => {
     // Handle play/pause functionality
     const handlePlayPause = () => {
         if (waveSurfer) {
+            closeCurrentMediaPlayer(false);
           // Pause the currently playing instance
           if (
-            currentPlayingWaveSurfer.instance &&
-            currentPlayingWaveSurfer.instance !== waveSurfer
+            currentAudioPlayer.instance &&
+            currentAudioPlayer.instance !== waveSurfer
           ) {
-            currentPlayingWaveSurfer.instance.pause();
-            if (currentPlayingWaveSurfer.setIsPlaying) {
-              currentPlayingWaveSurfer.setIsPlaying(false);
+            currentAudioPlayer.instance.pause();
+            if (currentAudioPlayer.setIsPlaying) {
+              currentAudioPlayer.setIsPlaying(false);
             }
           }
-    
           // Play or pause the current instance
           waveSurfer.playPause();
           const currentlyPlaying = waveSurfer.isPlaying();
           setIsPlaying(currentlyPlaying);
-    
           // Update the global reference
-          currentPlayingWaveSurfer = {
-            instance: currentlyPlaying ? waveSurfer : null,
-            setIsPlaying: currentlyPlaying ? setIsPlaying : null,
-          };
+          currentAudioPlayer.instance =  currentlyPlaying ? waveSurfer : null;
+          currentAudioPlayer.setIsPlaying  = currentlyPlaying ? setIsPlaying : null;
+
         }
       };
 
@@ -169,7 +160,7 @@ const CometChatAudioBubble = (props: AudioBubbleProps) => {
     
             // Use the original URL to extract the filename
             const urlParts = src.split('/');
-            const fileName = urlParts[urlParts.length - 1]; // Extracts "1729545215_1928686939_84043460f10973c094be04725f4cc776.mp3"
+            const fileName = urlParts[urlParts.length - 1];
     
             // Set the download attribute with the correct filename
             link.href = URL.createObjectURL(blob);

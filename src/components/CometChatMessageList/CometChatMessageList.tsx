@@ -24,7 +24,7 @@ import { DatePatterns, MessageBubbleAlignment, MessageListAlignment, MessageStat
 import { CometChatUIKitConstants } from "../../constants/CometChatUIKitConstants";
 import { localize } from "../../resources/CometChatLocalize/cometchat-localize";
 import { CometChatTextFormatter } from "../../formatters/CometChatFormatters/CometChatTextFormatter";
-import {CometChatReactions} from "../Reactions/CometChatReactions/CometChatReactions";
+import { CometChatReactions } from "../Reactions/CometChatReactions/CometChatReactions";
 import { CometChatDate } from "../BaseComponents/CometChatDate/CometChatDate";
 import { CometChatEmojiKeyboard } from "../BaseComponents/CometChatEmojiKeyboard/CometChatEmojiKeyboard";
 import { CometChatAvatar } from "../BaseComponents/CometChatAvatar/CometChatAvatar";
@@ -47,17 +47,17 @@ import { CometChatSmartReplies } from "../BaseComponents/CometChatSmartReplies/C
  * Props for the MessageList component.
  */
 interface MessageListProps {
-   /**
-    * Enables conversation starters for new chats.
-    * @default false
-    */
-   showConversationStarters?: boolean;
+  /**
+   * Enables conversation starters for new chats.
+   * @default false
+   */
+  showConversationStarters?: boolean;
 
-   /**
-    * Enables the generation of Smart Replies for incoming messages.
-    * @default false
-    */
-   showSmartReplies?: boolean;
+  /**
+   * Enables the generation of Smart Replies for incoming messages.
+   * @default false
+   */
+  showSmartReplies?: boolean;
 
   /**
    * Hides the visibility of the date separator in the message list.
@@ -244,7 +244,7 @@ interface MessageListProps {
    *
    * @param parentMessageId - The ID of the parent message to which replies belong.
    */
-  onThreadRepliesClick?: (message:CometChat.BaseMessage)=>void;
+  onThreadRepliesClick?: (message: CometChat.BaseMessage) => void;
 
   /**
    * Callback function that triggers when a reaction is clicked.
@@ -291,7 +291,7 @@ interface MessageListProps {
 
 const defaultProps: MessageListProps = {
   disableSoundForMessages: false,
-  customSoundForMessages:"",
+  customSoundForMessages: "",
   parentMessageId: 0,
   user: undefined,
   group: undefined,
@@ -329,8 +329,8 @@ const defaultProps: MessageListProps = {
   hideGroupActionMessages: false,
   hideStickyDate: false,
   quickOptionsCount: 2,
-  showConversationStarters:false,
-  showSmartReplies:false,
+  showConversationStarters: false,
+  showSmartReplies: false,
   smartRepliesKeywords: ['what', 'when', 'why', 'who', 'where', 'how', '?'],
   smartRepliesDelayDuration: 10000,
 };
@@ -426,30 +426,65 @@ const CometChatMessageList = (props: MessageListProps) => {
   const isConnectionReestablishedRef = useRef<boolean>(false);
   const isOnBottomRef = useRef<boolean>(false);
   const showSmartRepliesRef = useRef<boolean>(props.showSmartReplies || false);
-  var timeoutId: NodeJS.Timeout | null  | number = null;
-/**
-    * Function to play an audio notification for new messages if sound is enabled.
-    * @returns {void}
-    */
+  var timeoutId: NodeJS.Timeout | null | number = null;
 
-const playAudio: () => void = useCallback(() => {
-  try {
-    if (!disableSoundForMessages) {
-      if (customSoundForMessages) {
-        CometChatSoundManager.play(
-          CometChatSoundManager.Sound.incomingMessage!,
-          customSoundForMessages
-        );
-      } else {
-        CometChatSoundManager.play(
-          CometChatSoundManager.Sound.incomingMessage!
-        );
+  useEffect((() => {
+    let ccOwnershipChanged = CometChatGroupEvents.ccOwnershipChanged.subscribe((groupMember) => {
+      if (groupMember.group.getGuid() === groupRef.current?.getGuid?.()) {
+        groupRef.current = groupMember.group;
       }
+    })
+    let ccGroupMemberScopeChanged = CometChatGroupEvents.ccGroupMemberScopeChanged.subscribe((groupMember) => {
+      if (groupMember.group.getGuid() === groupRef.current?.getGuid?.()) {
+        groupRef.current = groupMember.group;
+      }
+    })
+    let ccGroupMemberAdded = CometChatGroupEvents.ccGroupMemberAdded.subscribe((groupMember) => {
+      if (groupMember.userAddedIn.getGuid() === groupRef.current?.getGuid?.()) {
+        groupRef.current = groupMember.userAddedIn;
+      }
+    })
+    let ccGroupMemberBanned = CometChatGroupEvents.ccGroupMemberBanned.subscribe((groupMember) => {
+      if (groupMember.kickedFrom.getGuid() === groupRef.current?.getGuid?.()) {
+        groupRef.current = groupMember.kickedFrom;
+      }
+    })
+    let ccGroupMemberKicked = CometChatGroupEvents.ccGroupMemberKicked.subscribe((groupMember) => {
+      if (groupMember.kickedFrom.getGuid() === groupRef.current?.getGuid?.()) {
+        groupRef.current = groupMember.kickedFrom;
+      }
+    })
+    return () => {
+      ccOwnershipChanged?.unsubscribe();
+      ccGroupMemberScopeChanged?.unsubscribe();
+      ccGroupMemberAdded?.unsubscribe();
+      ccGroupMemberBanned?.unsubscribe();
+      ccGroupMemberKicked?.unsubscribe();
     }
-  } catch (error: any) {
-    errorHandler(error,"playAudio");
-  }
-}, [disableSoundForMessages, customSoundForMessages]);
+  }), [groupRef]);
+
+  /**
+      * Function to play an audio notification for new messages if sound is enabled.
+      * @returns {void}
+      */
+  const playAudio: () => void = useCallback(() => {
+    try {
+      if (!disableSoundForMessages) {
+        if (customSoundForMessages) {
+          CometChatSoundManager.play(
+            CometChatSoundManager.Sound.incomingMessage!,
+            customSoundForMessages
+          );
+        } else {
+          CometChatSoundManager.play(
+            CometChatSoundManager.Sound.incomingMessage!
+          );
+        }
+      }
+    } catch (error: any) {
+      errorHandler(error, "playAudio");
+    }
+  }, [disableSoundForMessages, customSoundForMessages]);
   const renderShimmerBubble = (align: 'start' | 'end', key: number) => {
     return user || align == 'end' ? (
       <div key={key} className="cometchat-message-list__shimmer-body" style={{
@@ -577,33 +612,33 @@ const playAudio: () => void = useCallback(() => {
   const isPartOfCurrentChatForUIEvent: (message: CometChat.BaseMessage) => boolean | undefined = useCallback(
     (message: CometChat.BaseMessage) => {
       try {
-        
-      const receiverId = message?.getReceiverId();
-      const receiverType = message?.getReceiverType();
-      if (parentMessageIdRef.current) {
-        if (message.getParentMessageId() === parentMessageIdRef.current) {
-          return true;
-        }
-      } else {
-        if (message.getParentMessageId()) {
+
+        const receiverId = message?.getReceiverId();
+        const receiverType = message?.getReceiverType();
+        if (parentMessageIdRef.current) {
+          if (message.getParentMessageId() === parentMessageIdRef.current) {
+            return true;
+          }
+        } else {
+          if (message.getParentMessageId()) {
+            return false
+          }
+
+          if (userRef.current) {
+            if (receiverType === CometChatUIKitConstants.MessageReceiverType.user && receiverId === userRef.current.getUid()) {
+              return true
+            }
+          } else if (groupRef.current) {
+            if (receiverType === CometChatUIKitConstants.MessageReceiverType.group && receiverId === groupRef.current.getGuid()) {
+              return true
+            }
+          }
+
           return false
+
         }
-
-        if (userRef.current) {
-          if (receiverType === CometChatUIKitConstants.MessageReceiverType.user && receiverId === userRef.current.getUid()) {
-            return true
-          }
-        } else if (groupRef.current) {
-          if (receiverType === CometChatUIKitConstants.MessageReceiverType.group && receiverId === groupRef.current.getGuid()) {
-            return true
-          }
-        }
-
-        return false
-
-      }
       } catch (error) {
-        errorHandler(error,"isPartOfCurrentChatForUIEvent")
+        errorHandler(error, "isPartOfCurrentChatForUIEvent")
       }
     },
     []
@@ -620,25 +655,25 @@ const playAudio: () => void = useCallback(() => {
     (message: CometChat.TransientMessage) => {
       try {
         const receiverId = message?.getReceiverId();
-      const receiverType = message?.getReceiverType();
-      const senderId = message?.getSender()?.getUid();
-      if (parentMessageIdRef.current) {
-        return false;
-      } else {
-        if (userRef.current) {
-          if (receiverType === CometChatUIKitConstants.MessageReceiverType.user && (receiverId === userRef.current.getUid() || senderId === userRef.current.getUid())) {
-            return true
+        const receiverType = message?.getReceiverType();
+        const senderId = message?.getSender()?.getUid();
+        if (parentMessageIdRef.current) {
+          return false;
+        } else {
+          if (userRef.current) {
+            if (receiverType === CometChatUIKitConstants.MessageReceiverType.user && (receiverId === userRef.current.getUid() || senderId === userRef.current.getUid())) {
+              return true
+            }
+          } else if (groupRef.current) {
+            if (receiverType === CometChatUIKitConstants.MessageReceiverType.group && (receiverId === groupRef.current.getGuid())) {
+              return true
+            }
           }
-        } else if (groupRef.current) {
-          if (receiverType === CometChatUIKitConstants.MessageReceiverType.group && (receiverId === groupRef.current.getGuid())) {
-            return true
-          }
-        }
-        return false
+          return false
 
-      }
+        }
       } catch (error) {
-        errorHandler(error,"validateTransientMessage")
+        errorHandler(error, "validateTransientMessage")
       }
     }, []
   )
@@ -651,33 +686,33 @@ const playAudio: () => void = useCallback(() => {
   const isPartOfCurrentChatForSDKEvent: (message: CometChat.BaseMessage) => boolean | undefined = useCallback(
     (message: CometChat.BaseMessage) => {
       try {
-        
-      const receiverId = message?.getReceiverId();
-      const receiverType = message?.getReceiverType();
-      const senderId = message?.getSender()?.getUid();
-      if (parentMessageIdRef.current) {
-        if (message.getParentMessageId() === parentMessageIdRef.current) {
-          return true;
-        }
-      } else {
-        if (message.getParentMessageId()) {
+
+        const receiverId = message?.getReceiverId();
+        const receiverType = message?.getReceiverType();
+        const senderId = message?.getSender()?.getUid();
+        if (parentMessageIdRef.current) {
+          if (message.getParentMessageId() === parentMessageIdRef.current) {
+            return true;
+          }
+        } else {
+          if (message.getParentMessageId()) {
+            return false
+          }
+          if (userRef.current) {
+            if (receiverType === CometChatUIKitConstants.MessageReceiverType.user && (receiverId === userRef.current.getUid() || senderId === userRef.current.getUid())) {
+              return true
+            }
+          } else if (groupRef.current) {
+            if (receiverType === CometChatUIKitConstants.MessageReceiverType.group && (receiverId === groupRef.current.getGuid())) {
+              return true
+            }
+          }
+
           return false
-        }
-        if (userRef.current) {
-          if (receiverType === CometChatUIKitConstants.MessageReceiverType.user && (receiverId === userRef.current.getUid() || senderId === userRef.current.getUid())) {
-            return true
-          }
-        } else if (groupRef.current) {
-          if (receiverType === CometChatUIKitConstants.MessageReceiverType.group && (receiverId === groupRef.current.getGuid())) {
-            return true
-          }
-        }
 
-        return false
-
-      }
+        }
       } catch (error) {
-        errorHandler(error,"isPartOfCurrentChatForSDKEvent")
+        errorHandler(error, "isPartOfCurrentChatForSDKEvent")
       }
     }, []
   )
@@ -689,27 +724,27 @@ const playAudio: () => void = useCallback(() => {
   */
   const isThreadOfCurrentChatForUIEvent: (message: CometChat.BaseMessage) => boolean | undefined = useCallback(
     (message: CometChat.BaseMessage) => {
-     try {
-      if (!message.getParentMessageId()) {
+      try {
+        if (!message.getParentMessageId()) {
+          return false
+        }
+
+        const receiverId = message?.getReceiverId();
+
+        if (userRef.current) {
+          if (receiverId === userRef.current.getUid()) {
+            return true
+          }
+        } else if (groupRef.current) {
+          if (receiverId === groupRef.current.getGuid()) {
+            return true
+          }
+        }
+
         return false
+      } catch (error) {
+        errorHandler(error, "isThreadOfCurrentChatForUIEvent")
       }
-
-      const receiverId = message?.getReceiverId();
-
-      if (userRef.current) {
-        if (receiverId === userRef.current.getUid()) {
-          return true
-        }
-      } else if (groupRef.current) {
-        if (receiverId === groupRef.current.getGuid()) {
-          return true
-        }
-      }
-
-      return false
-     } catch (error) {
-      errorHandler(error,"isThreadOfCurrentChatForUIEvent")
-     }
     }, []
   );
 
@@ -722,14 +757,14 @@ const playAudio: () => void = useCallback(() => {
   const isThreadOfCurrentChatForSDKEvent: (message: CometChat.BaseMessage) => boolean | undefined = useCallback(
     (message: CometChat.BaseMessage) => {
       try {
-      
+
         if (!message.getParentMessageId()) {
           return false;
         }
-  
+
         const receiverId = message?.getReceiverId();
         const senderId = message?.getSender()?.getUid();
-  
+
         if (userRef.current) {
           if (receiverId === userRef.current.getUid() || senderId === userRef.current.getUid()) {
             return true;
@@ -739,11 +774,11 @@ const playAudio: () => void = useCallback(() => {
             return true;
           }
         }
-  
+
         return false;
-    } catch (error) {
-      errorHandler(error,"isThreadOfCurrentChatForSDKEvent")
-    }
+      } catch (error) {
+        errorHandler(error, "isThreadOfCurrentChatForSDKEvent")
+      }
     },
     []
   );
@@ -764,7 +799,7 @@ const playAudio: () => void = useCallback(() => {
         );
         return messageObject;
       } catch (error: any) {
-        errorHandler(error,"getMessageById");
+        errorHandler(error, "getMessageById");
       }
     },
     [messageList, errorHandler]
@@ -782,7 +817,7 @@ const playAudio: () => void = useCallback(() => {
           onThreadRepliesClick(message);
         }
       } catch (error: any) {
-        errorHandler(error,"openThreadView");
+        errorHandler(error, "openThreadView");
       }
     },
     [onThreadRepliesClick, errorHandler, isOnBottomRef]
@@ -798,6 +833,7 @@ const playAudio: () => void = useCallback(() => {
     (hasScrolled?: boolean) => {
       if (hasScrolled !== undefined) {
         isOnBottomRef.current = hasScrolled;
+        setScrollListToBottom(isOnBottomRef.current);
       }
     },
     [isOnBottomRef]
@@ -809,29 +845,29 @@ const playAudio: () => void = useCallback(() => {
 * @returns {string} The message text, with  mention replaced by the actual name of the user.
 */
   const getMentionsTextWithoutStyle: (message: CometChat.TextMessage) => string = (message: CometChat.TextMessage) => {
-  try {
-    const regex = /<@uid:(.*?)>/g;
-    let messageText = message.getText();
-    let messageTextTmp = message.getText();
-    let match = regex.exec(messageText);
-    let mentionedUsers = message.getMentionedUsers();
-    while (match !== null) {
-      let user;
-      for (let i = 0; i < mentionedUsers.length; i++) {
-        if (match[1] === mentionedUsers[i].getUid()) {
-          user = mentionedUsers[i];
+    try {
+      const regex = /<@uid:(.*?)>/g;
+      let messageText = message.getText();
+      let messageTextTmp = message.getText();
+      let match = regex.exec(messageText);
+      let mentionedUsers = message.getMentionedUsers();
+      while (match !== null) {
+        let user;
+        for (let i = 0; i < mentionedUsers.length; i++) {
+          if (match[1] === mentionedUsers[i].getUid()) {
+            user = mentionedUsers[i];
+          }
         }
+        if (user) {
+          messageTextTmp = messageTextTmp.replace(match[0], "@" + user?.getName());
+        }
+        match = regex.exec(messageText);
       }
-      if (user) {
-        messageTextTmp = messageTextTmp.replace(match[0], "@" + user?.getName());
-      }
-      match = regex.exec(messageText);
+      return messageTextTmp;
+    } catch (error) {
+      errorHandler(error, "getMentionsTextWithoutStyle");
+      throw error;
     }
-    return messageTextTmp;
-  } catch (error) {
-    errorHandler(error,"getMentionsTextWithoutStyle");
-    throw error;
-  }
   };
 
   /**
@@ -853,7 +889,7 @@ const playAudio: () => void = useCallback(() => {
           return messages;
         });
       } catch (error: any) {
-        errorHandler(error,"updateMessageByMuid");
+        errorHandler(error, "updateMessageByMuid");
       }
     },
     [errorHandler]
@@ -880,7 +916,7 @@ const playAudio: () => void = useCallback(() => {
           return messages;
         });
       } catch (error: any) {
-        errorHandler(error,"updateMessageByMessageId");
+        errorHandler(error, "updateMessageByMessageId");
       }
     },
     [errorHandler]
@@ -898,7 +934,7 @@ const playAudio: () => void = useCallback(() => {
           updateMessageByMessageId(editedMessage);
         }
       } catch (error: any) {
-        errorHandler(error,"replaceUpdatedMessage");
+        errorHandler(error, "replaceUpdatedMessage");
       }
     },
     [updateMessageByMessageId, errorHandler, isPartOfCurrentChatForSDKEvent]
@@ -921,7 +957,7 @@ const playAudio: () => void = useCallback(() => {
           updateMessageByMessageId(message);
         }
       } catch (error: any) {
-        errorHandler(error,"updateMessage");
+        errorHandler(error, "updateMessage");
       }
     },
     [
@@ -939,75 +975,75 @@ const playAudio: () => void = useCallback(() => {
    */
   const reactToMessages: (emoji: string, messageObject: CometChat.BaseMessage) => void = useCallback(
     (emoji: string, messageObject: CometChat.BaseMessage) => {
-     try {
-      const messageId = messageObject?.getId();
-      const msgObject = getMessageById(messageId) as CometChat.BaseMessage;
-      const reactions = msgObject?.getReactions() || [];
-      const emojiObject = reactions?.find((reaction: any) => {
-        return reaction?.reaction === emoji;
-      });
+      try {
+        const messageId = messageObject?.getId();
+        const msgObject = getMessageById(messageId) as CometChat.BaseMessage;
+        const reactions = msgObject?.getReactions() || [];
+        const emojiObject = reactions?.find((reaction: any) => {
+          return reaction?.reaction === emoji;
+        });
 
-      if (emojiObject && emojiObject?.getReactedByMe()) {
-        const updatedReactions: CometChat.ReactionCount[] = [];
-        reactions.forEach((reaction) => {
-          if (reaction?.getReaction() === emoji) {
-            if (reaction?.getCount() === 1) {
-              return;
+        if (emojiObject && emojiObject?.getReactedByMe()) {
+          const updatedReactions: CometChat.ReactionCount[] = [];
+          reactions.forEach((reaction) => {
+            if (reaction?.getReaction() === emoji) {
+              if (reaction?.getCount() === 1) {
+                return;
+              } else {
+                reaction.setCount(reaction?.getCount() - 1);
+                reaction.setReactedByMe(false);
+                updatedReactions.push(reaction);
+              }
             } else {
-              reaction.setCount(reaction?.getCount() - 1);
-              reaction.setReactedByMe(false);
               updatedReactions.push(reaction);
             }
-          } else {
-            updatedReactions.push(reaction);
-          }
-        });
-        const newMessageObj = CometChatUIKitUtility.clone(msgObject);
-        newMessageObj.setReactions(updatedReactions);
-        updateMessage(newMessageObj);
-        CometChat.removeReaction(messageId, emoji)
-          .then((message) => { })
-          .catch((error) => {
-            updateMessage(msgObject);
-            console.log(error);
           });
-      } else {
-        const updatedReactions = [];
-        const reactionAvailable = reactions.find((reaction) => {
-          return reaction?.getReaction() === emoji;
-        });
-
-        reactions.forEach((reaction) => {
-          if (reaction?.getReaction() === emoji) {
-            reaction.setCount(reaction?.getCount() + 1);
-            reaction.setReactedByMe(true);
-            updatedReactions.push(reaction);
-          } else {
-            updatedReactions.push(reaction);
-          }
-        });
-        if (!reactionAvailable) {
-          const react: CometChat.ReactionCount = new CometChat.ReactionCount(emoji, 1, true);
-          updatedReactions.push(react);
-        }
-
-        const newMessageObj = CometChatUIKitUtility.clone(msgObject);
-        newMessageObj.setReactions(updatedReactions);
-        updateMessage(newMessageObj);
-        if (newMessageObj.getReactions() && newMessageObj.getReactions().length == 1 && isOnBottomRef.current) {
-          scrollToBottom()
-        }
-        CometChat.addReaction(messageId, emoji)
-          .then(() => { })
-          .catch((error: CometChat.CometChatException) => {
-            errorHandler(error,"addReaction");
-            updateMessage(msgObject);
+          const newMessageObj = CometChatUIKitUtility.clone(msgObject);
+          newMessageObj.setReactions(updatedReactions);
+          updateMessage(newMessageObj);
+          CometChat.removeReaction(messageId, emoji)
+            .then((message) => { })
+            .catch((error) => {
+              updateMessage(msgObject);
+              console.log(error);
+            });
+        } else {
+          const updatedReactions = [];
+          const reactionAvailable = reactions.find((reaction) => {
+            return reaction?.getReaction() === emoji;
           });
+
+          reactions.forEach((reaction) => {
+            if (reaction?.getReaction() === emoji) {
+              reaction.setCount(reaction?.getCount() + 1);
+              reaction.setReactedByMe(true);
+              updatedReactions.push(reaction);
+            } else {
+              updatedReactions.push(reaction);
+            }
+          });
+          if (!reactionAvailable) {
+            const react: CometChat.ReactionCount = new CometChat.ReactionCount(emoji, 1, true);
+            updatedReactions.push(react);
+          }
+
+          const newMessageObj = CometChatUIKitUtility.clone(msgObject);
+          newMessageObj.setReactions(updatedReactions);
+          updateMessage(newMessageObj);
+          if (newMessageObj.getReactions() && newMessageObj.getReactions().length == 1 && isOnBottomRef.current) {
+            scrollToBottom()
+          }
+          CometChat.addReaction(messageId, emoji)
+            .then(() => { })
+            .catch((error: CometChat.CometChatException) => {
+              errorHandler(error, "addReaction");
+              updateMessage(msgObject);
+            });
+        }
+      } catch (error) {
+        errorHandler(error, "reactToMessages");
+
       }
-     } catch (error) {
-      errorHandler(error,"reactToMessages");
-
-     }
     }, [getMessageById, errorHandler, updateMessage]
   );
 
@@ -1035,10 +1071,10 @@ const playAudio: () => void = useCallback(() => {
               reactToMessages(args, messageObject);
             }}
           />
-  
+
         }
       } catch (error) {
-        errorHandler(error,"onReactMessage");
+        errorHandler(error, "onReactMessage");
         throw error;
       }
     },
@@ -1068,7 +1104,7 @@ const playAudio: () => void = useCallback(() => {
         }
 
       } catch (error: any) {
-        errorHandler(error,"onCopyMessage");
+        errorHandler(error, "onCopyMessage");
       }
     },
     [getMessageById, errorHandler, setShowToast]
@@ -1093,7 +1129,7 @@ const playAudio: () => void = useCallback(() => {
         }
 
       } catch (error: any) {
-        errorHandler(error,"onOpenMessageInfo");
+        errorHandler(error, "onOpenMessageInfo");
       }
     },
     [errorHandler, isOnBottomRef, getMessageById]
@@ -1115,7 +1151,7 @@ const playAudio: () => void = useCallback(() => {
 
         }
       } catch (error: any) {
-        errorHandler(error,"onOpenThread");
+        errorHandler(error, "onOpenThread");
       }
     },
     [openThreadView, errorHandler, getMessageById]
@@ -1140,7 +1176,7 @@ const playAudio: () => void = useCallback(() => {
 
         }
       } catch (error: any) {
-        errorHandler(error,"onMessagePrivately");
+        errorHandler(error, "onMessagePrivately");
       }
     },
     [getMessageById, errorHandler]
@@ -1166,12 +1202,12 @@ const playAudio: () => void = useCallback(() => {
               setShowToast(true);
             },
             (error: CometChat.CometChatException) => {
-              errorHandler(error,"onDeleteMessage");
+              errorHandler(error, "onDeleteMessage");
             }
           );
         }
       } catch (error: any) {
-        errorHandler(error,"onDeleteMessage");
+        errorHandler(error, "onDeleteMessage");
       }
     },
     [replaceUpdatedMessage, errorHandler, getMessageById]
@@ -1196,7 +1232,7 @@ const playAudio: () => void = useCallback(() => {
         }
 
       } catch (error: any) {
-        errorHandler(error,"onEditMessage");
+        errorHandler(error, "onEditMessage");
       }
     },
     [errorHandler, getMessageById]
@@ -1256,7 +1292,7 @@ const playAudio: () => void = useCallback(() => {
         );
         return options;
       } catch (error: any) {
-        errorHandler(error,"setDefaultOptionsCallback");
+        errorHandler(error, "setDefaultOptionsCallback");
         return options;
       }
     },
@@ -1322,7 +1358,7 @@ const playAudio: () => void = useCallback(() => {
         }
         return options;
       } catch (error: any) {
-        errorHandler(error,"getMessageOptions");
+        errorHandler(error, "getMessageOptions");
         return options;
       }
     },
@@ -1351,7 +1387,7 @@ const playAudio: () => void = useCallback(() => {
           if (messageAlignment === MessageListAlignment.left) {
             bubbleAlignment = MessageBubbleAlignment.left;
           }
-           else if (
+          else if (
             !message.getSender() ||
             (message?.getSender().getUid() === loggedInUserRef.current?.getUid())
           ) {
@@ -1362,7 +1398,7 @@ const playAudio: () => void = useCallback(() => {
         }
         return bubbleAlignment;
       } catch (error: any) {
-        errorHandler(error,"setBubbleAlignment");
+        errorHandler(error, "setBubbleAlignment");
         return bubbleAlignment;
       }
     },
@@ -1389,7 +1425,7 @@ const playAudio: () => void = useCallback(() => {
         }
         return null;
       } catch (error: any) {
-        errorHandler(error,"getContentView");
+        errorHandler(error, "getContentView");
         return null;
       }
     },
@@ -1416,7 +1452,7 @@ const playAudio: () => void = useCallback(() => {
         }
         return null;
       } catch (error: any) {
-        errorHandler(error,"getBottomView");
+        errorHandler(error, "getBottomView");
         return null;
       }
     },
@@ -1441,7 +1477,7 @@ const playAudio: () => void = useCallback(() => {
         }
         return view;
       } catch (error: any) {
-        errorHandler(error,"getHeaderView");
+        errorHandler(error, "getHeaderView");
         return null;
       }
     },
@@ -1466,7 +1502,7 @@ const playAudio: () => void = useCallback(() => {
         }
         return view;
       } catch (error: any) {
-        errorHandler(error,"getFooterView");
+        errorHandler(error, "getFooterView");
         return null;
       }
     },
@@ -1491,7 +1527,7 @@ const playAudio: () => void = useCallback(() => {
         }
         return view;
       } catch (error: any) {
-        errorHandler(error,"getBubbleWrapper");
+        errorHandler(error, "getBubbleWrapper");
         return view;
       }
     },
@@ -1509,7 +1545,7 @@ const playAudio: () => void = useCallback(() => {
         CometChatMessageEvents.ccMessageRead.next(message);
       },
       (error: unknown) => {
-        errorHandler(error,"markAsRead");
+        errorHandler(error, "markAsRead");
       }
     );
   }, [errorHandler])
@@ -1521,14 +1557,14 @@ const playAudio: () => void = useCallback(() => {
      */
   const checkAndMarkMessageAsRead: (message: CometChat.BaseMessage) => void = useCallback(
     (message: CometChat.BaseMessage) => {
-    try {
-      if (!hideReceipts &&
-        message.getSender().getUid() !== loggedInUserRef.current?.getUid()) {
-        markMessageRead(message);
+      try {
+        if (!hideReceipts &&
+          message.getSender().getUid() !== loggedInUserRef.current?.getUid()) {
+          markMessageRead(message);
+        }
+      } catch (error) {
+        errorHandler(error, "checkAndMarkMessageAsRead")
       }
-    } catch (error) {
-      errorHandler(error,"checkAndMarkMessageAsRead")
-    }
     }, [hideReceipts, markMessageRead])
 
   /**
@@ -1538,23 +1574,23 @@ const playAudio: () => void = useCallback(() => {
 
   const clearNewMessagesCount: () => void = useCallback(() => {
     try {
-      
-    isOnBottomRef.current = true;
-    const lastMessage: CometChat.BaseMessage =
-      UnreadMessagesRef.current[UnreadMessagesRef.current.length - 1];
-    if (lastMessage) {
-      checkAndMarkMessageAsRead(lastMessage);
-    }
-    UnreadMessagesRef.current = [];
-    if (newMessageTextRef.current) {
-      newMessageTextRef.current = "";
-    }
 
-    if (showNewMessagesBanner) {
-      setShowNewMessagesBanner(false)
-    }
+      isOnBottomRef.current = true;
+      const lastMessage: CometChat.BaseMessage =
+        UnreadMessagesRef.current[UnreadMessagesRef.current.length - 1];
+      if (lastMessage) {
+        checkAndMarkMessageAsRead(lastMessage);
+      }
+      UnreadMessagesRef.current = [];
+      if (newMessageTextRef.current) {
+        newMessageTextRef.current = "";
+      }
+
+      if (showNewMessagesBanner) {
+        setShowNewMessagesBanner(false)
+      }
     } catch (error) {
-      errorHandler(error,"clearNewMessagesCount")
+      errorHandler(error, "clearNewMessagesCount")
     }
   }, [checkAndMarkMessageAsRead, showNewMessagesBanner])
 
@@ -1580,7 +1616,7 @@ const playAudio: () => void = useCallback(() => {
             if (messageList?.length <= 0) {
               setMessageListState(States.error);
             }
-            errorHandler(error,"prependMessages");
+            errorHandler(error, "prependMessages");
             reject(error);
           }
         }
@@ -1631,7 +1667,7 @@ const playAudio: () => void = useCallback(() => {
 
         if (!isFetchingPreviousMessages) {
           isFetchingPreviousMessages = true;
-          if (!messageListManagerRef.current.previous) {
+          if (!messageListManagerRef.current.previous && messageIdRef.current.prevMessageId) {
             messageListManagerRef.current.previous = new MessageListManager(
               errorHandler,
               messagesRequestBuilder,
@@ -1654,13 +1690,13 @@ const playAudio: () => void = useCallback(() => {
                     unreadMessageCount
                   });
                 }
-                if(messagesList.length > 0 && showSmartRepliesRef.current){
-                toggleSmartReplyView(messagesList[messagesList.length - 1])
+                if (messagesList.length > 0 && showSmartRepliesRef.current) {
+                  toggleSmartReplyView(messagesList[messagesList.length - 1])
                 }
-                if(messagesList.length == 0 && showConversationStarters){
+                if (messagesList.length == 0 && showConversationStarters) {
                   setShowConversationStarter(true);
                 }
-                else{
+                else {
                   setShowConversationStarter(false);
 
                 };
@@ -1679,7 +1715,7 @@ const playAudio: () => void = useCallback(() => {
                         }
                       )
                       .catch((error: CometChat.CometChatException) => {
-                        errorHandler(error,"fetchActionMessages");
+                        errorHandler(error, "fetchActionMessages");
                       });
                   });
                 });
@@ -1758,7 +1794,7 @@ const playAudio: () => void = useCallback(() => {
                 setMessageListState(States.error);
               }
               if (error.code != "REQUEST_IN_PROGRESS") {
-                errorHandler(error,"fetchPreviousMessages");
+                errorHandler(error, "fetchPreviousMessages");
                 reject(error);
               }
               else {
@@ -1773,7 +1809,7 @@ const playAudio: () => void = useCallback(() => {
         if (messageList?.length <= 0) {
           setMessageListState(States.error);
         }
-        errorHandler(error,"fetchPreviousMessages");
+        errorHandler(error, "fetchPreviousMessages");
       }
     });
   }, [
@@ -1792,35 +1828,35 @@ const playAudio: () => void = useCallback(() => {
     setShowConversationStarter(false);
     setEnableSmartReplies(false);
   }
-/**
- * Retrieves smart replies for the current user or group context.
- * @returns A promise resolving to an array of smart replies.
- */
- const  getSmartReplies = (): Promise<string[]> => {
+  /**
+   * Retrieves smart replies for the current user or group context.
+   * @returns A promise resolving to an array of smart replies.
+   */
+  const getSmartReplies = (): Promise<string[]> => {
     return new Promise(async (resolve, reject) => {
-        try {
-            let receiverId: string = userRef.current
-                ? userRef.current?.getUid()
-                : groupRef.current?.getGuid()!;
-            let receiverType: string = userRef.current
-                ? CometChatUIKitConstants.MessageReceiverType.user
-                : CometChatUIKitConstants.MessageReceiverType.group;
-            const response: any = await CometChat.getSmartReplies(
-                receiverId,
-                receiverType,
-            );
+      try {
+        let receiverId: string = userRef.current
+          ? userRef.current?.getUid()
+          : groupRef.current?.getGuid()!;
+        let receiverType: string = userRef.current
+          ? CometChatUIKitConstants.MessageReceiverType.user
+          : CometChatUIKitConstants.MessageReceiverType.group;
+        const response: any = await CometChat.getSmartReplies(
+          receiverId,
+          receiverType,
+        );
 
-            return resolve(Object.values(response));
-        } catch (e) {
-          errorHandler(e,"getSmartReplies")
-            reject(e);
-        }
+        return resolve(Object.values(response));
+      } catch (e) {
+        errorHandler(e, "getSmartReplies")
+        reject(e);
+      }
     });
-};
-/**
- * Retrieves conversation starters for the current user or group context.
- * @returns A promise resolving to an array of conversation starters.
- */
+  };
+  /**
+   * Retrieves conversation starters for the current user or group context.
+   * @returns A promise resolving to an array of conversation starters.
+   */
   const getConversationStarter = (): Promise<string[]> => {
     return new Promise(async (resolve, reject) => {
       try {
@@ -1836,31 +1872,31 @@ const playAudio: () => void = useCallback(() => {
         );
         return resolve(response);
       } catch (e) {
-        errorHandler(e,"getConversationStarter")
+        errorHandler(e, "getConversationStarter")
         reject(e);
       }
     });
   };
-/**
- * Loads and displays either conversation starters or smart replies based on current conditions.
- * @returns A JSX element rendering the appropriate suggestions or null if none are applicable.
- */
+  /**
+   * Loads and displays either conversation starters or smart replies based on current conditions.
+   * @returns A JSX element rendering the appropriate suggestions or null if none are applicable.
+   */
   function loadFooterViewContent() {
-    if(showConversationStarter){
+    if (showConversationStarter) {
       return <div className="cometchat-message-list__footer-conversation-starter">
         <CometChatConversationStarter getConversationStarters={getConversationStarter} onSuggestionClicked={onSuggestionClicked} />
       </div>
     }
-    if(enableSmartReplies && showSmartRepliesRef.current){
+    if (enableSmartReplies && showSmartRepliesRef.current) {
       return <div className="cometchat-message-list__footer-smart-replies">
-        <CometChatSmartReplies getSmartReplies={getSmartReplies} onSuggestionClicked={onSuggestionClicked} closeCallback={()=>{
+        <CometChatSmartReplies getSmartReplies={getSmartReplies} onSuggestionClicked={onSuggestionClicked} closeCallback={() => {
           setEnableSmartReplies(false);
         }} />
       </div>
 
     }
     return null;
- 
+
   }
 
   /**
@@ -1911,8 +1947,8 @@ const playAudio: () => void = useCallback(() => {
               setScrollListToBottom(false);
             }
             let countText = UnreadMessagesRef.current.length > 1
-                ? localize("NEW_MESSAGES")
-                : localize("NEW_MESSAGE");
+              ? localize("NEW_MESSAGES")
+              : localize("NEW_MESSAGE");
             UnreadMessagesRef.current.push(...messages);
             newMessageTextRef.current =
               + UnreadMessagesRef.current.length + " " + countText;
@@ -1924,7 +1960,7 @@ const playAudio: () => void = useCallback(() => {
           if (messageList?.length <= 0) {
             setMessageListState(States.error);
           }
-          errorHandler(error,"appendMessages");
+          errorHandler(error, "appendMessages");
           reject(error);
         }
       });
@@ -1943,41 +1979,41 @@ const playAudio: () => void = useCallback(() => {
     return new Promise((resolve, reject) => {
       try {
         let requestBuilder = new CometChat.MessagesRequestBuilder()
-        .setType(CometChatUIKitConstants.MessageCategory.message)
-        .setCategory(CometChatUIKitConstants.MessageCategory.action)
-        .setMessageId(messageIdRef.current.nextMessageId)
-        .setLimit(30);
-      if (userRef.current) {
-        requestBuilder.setUID(userRef.current.getUid());
-      } else if (groupRef.current) {
-        requestBuilder.setGUID(groupRef.current.getGuid());
-      }
-      requestBuilder
-        .build()
-        .fetchNext()
-        .then((messages) => {
-          if (messages && messages.length > 0) {
-            messages.forEach((message: CometChat.BaseMessage) => {
-              replaceUpdatedMessage(
-                (
-                  message as CometChat.Action
-                ).getActionOn() as CometChat.BaseMessage
-              );
-            });
-            return resolve(true);
-          } else {
-            return resolve(true);
-          }
-        })
-        .catch((error: CometChat.CometChatException) => {
-          errorHandler(error,"MessagesRequestBuilder");
-          if (messageList?.length <= 0) {
-            setMessageListState(States.error);
-          }
-          return reject(error);
-        });
+          .setType(CometChatUIKitConstants.MessageCategory.message)
+          .setCategory(CometChatUIKitConstants.MessageCategory.action)
+          .setMessageId(messageIdRef.current.nextMessageId)
+          .setLimit(30);
+        if (userRef.current) {
+          requestBuilder.setUID(userRef.current.getUid());
+        } else if (groupRef.current) {
+          requestBuilder.setGUID(groupRef.current.getGuid());
+        }
+        requestBuilder
+          .build()
+          .fetchNext()
+          .then((messages) => {
+            if (messages && messages.length > 0) {
+              messages.forEach((message: CometChat.BaseMessage) => {
+                replaceUpdatedMessage(
+                  (
+                    message as CometChat.Action
+                  ).getActionOn() as CometChat.BaseMessage
+                );
+              });
+              return resolve(true);
+            } else {
+              return resolve(true);
+            }
+          })
+          .catch((error: CometChat.CometChatException) => {
+            errorHandler(error, "MessagesRequestBuilder");
+            if (messageList?.length <= 0) {
+              setMessageListState(States.error);
+            }
+            return reject(error);
+          });
       } catch (error) {
-        errorHandler(error,"fetchActionMessages")
+        errorHandler(error, "fetchActionMessages")
       }
     });
   }, [errorHandler]);
@@ -2029,7 +2065,7 @@ const playAudio: () => void = useCallback(() => {
               if (messageList?.length <= 0) {
                 setMessageListState(States.error);
               }
-              errorHandler(error,"fetchNextMessages");
+              errorHandler(error, "fetchNextMessages");
               reject(error);
             }
           );
@@ -2037,7 +2073,7 @@ const playAudio: () => void = useCallback(() => {
           resolve(true);
         }
       } catch (error: any) {
-        errorHandler(error,"fetchNextMessages");
+        errorHandler(error, "fetchNextMessages");
       }
     });
   }, [
@@ -2074,7 +2110,7 @@ const playAudio: () => void = useCallback(() => {
           return messages;
         });
       } catch (error: any) {
-        errorHandler(error,"updateReplyCount");
+        errorHandler(error, "updateReplyCount");
       }
     },
     [errorHandler]
@@ -2100,7 +2136,7 @@ const playAudio: () => void = useCallback(() => {
         return prevMessageList;
       });
     } catch (error: any) {
-      errorHandler(error,"updateUnreadReplyCount");
+      errorHandler(error, "updateUnreadReplyCount");
     }
   }, [errorHandler])
   /**
@@ -2158,10 +2194,10 @@ const playAudio: () => void = useCallback(() => {
   const addMessage: (message: CometChat.BaseMessage) => void = useCallback(
     (message: CometChat.BaseMessage) => {
       try {
-        if(showSmartRepliesRef.current){
+        if (showSmartRepliesRef.current) {
           toggleSmartReplyView(message);
         }
-       setShowConversationStarter(false)
+        setShowConversationStarter(false)
         totalMessagesCountRef.current += 1;
         if (totalMessagesCountRef.current > 0 && messageListState != States.loaded) {
           setMessageListState(States.loaded)
@@ -2184,10 +2220,10 @@ const playAudio: () => void = useCallback(() => {
         }
 
       } catch (error: any) {
-        errorHandler(error,"addMessage");
+        errorHandler(error, "addMessage");
       }
     },
-    [ errorHandler, scrollListToBottom]
+    [errorHandler, scrollListToBottom]
   );
 
 
@@ -2200,19 +2236,19 @@ const playAudio: () => void = useCallback(() => {
      * @returns {void}
      */
   const showAndIncrementUnreadCount: (message: CometChat.BaseMessage) => void = useCallback((message: CometChat.BaseMessage) => {
-try {
-  if (!isOnBottomRef.current && message.getSender() && message.getSender().getUid() != loggedInUserRef.current?.getUid()) {
-    let countText = UnreadMessagesRef.current.length > 1
-        ? localize("NEW_MESSAGES")
-        : localize("NEW_MESSAGE");
-    UnreadMessagesRef.current.push(message);
-    newMessageTextRef.current =
-      + UnreadMessagesRef.current.length + " " + countText;
-    setShowNewMessagesBanner(true);
-  }
-} catch (error) {
-  errorHandler(error,"showAndIncrementUnreadCount")
-}
+    try {
+      if (!isOnBottomRef.current && message.getSender() && message.getSender().getUid() != loggedInUserRef.current?.getUid()) {
+        let countText = UnreadMessagesRef.current.length > 1
+          ? localize("NEW_MESSAGES")
+          : localize("NEW_MESSAGE");
+        UnreadMessagesRef.current.push(message);
+        newMessageTextRef.current =
+          + UnreadMessagesRef.current.length + " " + countText;
+        setShowNewMessagesBanner(true);
+      }
+    } catch (error) {
+      errorHandler(error, "showAndIncrementUnreadCount")
+    }
   }, []);
 
   /**
@@ -2239,7 +2275,7 @@ try {
           return messages;
         });
       } catch (error: any) {
-        errorHandler(error,"markAllMessagAsDelivered");
+        errorHandler(error, "markAllMessagAsDelivered");
       }
     },
     [errorHandler]
@@ -2278,7 +2314,7 @@ try {
           return messages;
         });
       } catch (error: any) {
-        errorHandler(error,"markAllMessageAsRead");
+        errorHandler(error, "markAllMessageAsRead");
       }
     },
     [errorHandler]
@@ -2304,7 +2340,7 @@ try {
             : markAllMessageAsRead(messageReceipt);
         }
       } catch (error: any) {
-        errorHandler(error,"messageReadAndDelivered");
+        errorHandler(error, "messageReadAndDelivered");
       }
     },
     [
@@ -2321,18 +2357,18 @@ try {
     */
   const checkAndScrollToBottom: (forceScroll?: boolean) => void = useCallback((forceScroll: boolean = false) => {
 
-   try {
-    if (forceScroll || scrollToBottomOnNewMessages) {
-      setTimeout(() => {
-        setScrollListToBottom(true);
-        isOnBottomRef.current = true;
-        UnreadMessagesRef.current = [];
-      }, 100);
-      return;
+    try {
+      if (forceScroll || scrollToBottomOnNewMessages) {
+        setTimeout(() => {
+          setScrollListToBottom(true);
+          isOnBottomRef.current = true;
+          UnreadMessagesRef.current = [];
+        }, 100);
+        return;
+      }
+    } catch (error) {
+      errorHandler(error, "checkAndScrollToBottom")
     }
-   } catch (error) {
-    errorHandler(error,"checkAndScrollToBottom")
-   }
   }, [scrollToBottomOnNewMessages]);
 
   /**
@@ -2369,7 +2405,7 @@ try {
           }
         }
       } catch (error) {
-        errorHandler(error,"messageReceivedHandler");
+        errorHandler(error, "messageReceivedHandler");
       }
     },
     [
@@ -2413,7 +2449,7 @@ try {
           }
         }
       } catch (error) {
-        errorHandler(error,"groupActionMessageReceived");
+        errorHandler(error, "groupActionMessageReceived");
       }
     },
     [
@@ -2431,38 +2467,38 @@ try {
      * @returns {boolean} - Returns true if the receipt is of the current list, otherwise returns false.
      */
   const isReactionOfThisList: (receipt: CometChat.ReactionEvent) => boolean = useCallback((receipt: CometChat.ReactionEvent) => {
-   try {
-    const receiverId = receipt?.getReceiverId();
-    const receiverType = receipt?.getReceiverType();
-    const reactedById = receipt?.getReaction()?.getReactedBy()?.getUid();
-    const parentMessageId = receipt?.getParentMessageId();
-    const listParentMessageId = parentMessageId && String(parentMessageId);
-    if (listParentMessageId) {
-      if (parentMessageId === listParentMessageId) {
-        return true;
+    try {
+      const receiverId = receipt?.getReceiverId();
+      const receiverType = receipt?.getReceiverType();
+      const reactedById = receipt?.getReaction()?.getReactedBy()?.getUid();
+      const parentMessageId = receipt?.getParentMessageId();
+      const listParentMessageId = parentMessageId && String(parentMessageId);
+      if (listParentMessageId) {
+        if (parentMessageId === listParentMessageId) {
+          return true;
+        } else {
+          return false
+        }
       } else {
-        return false
-      }
-    } else {
-      if (receipt.getParentMessageId()) {
-        return false
-      }
+        if (receipt.getParentMessageId()) {
+          return false
+        }
 
-      if (userRef.current) {
-        if (receiverType === CometChatUIKitConstants.MessageReceiverType.user && (receiverId === userRef.current?.getUid() || reactedById === userRef.current?.getUid())) {
-          return true
-        }
-      } else if (groupRef.current) {
-        if (receiverType === CometChatUIKitConstants.MessageReceiverType.group && (receiverId === groupRef.current?.getGuid())) {
-          return true
+        if (userRef.current) {
+          if (receiverType === CometChatUIKitConstants.MessageReceiverType.user && (receiverId === userRef.current?.getUid() || reactedById === userRef.current?.getUid())) {
+            return true
+          }
+        } else if (groupRef.current) {
+          if (receiverType === CometChatUIKitConstants.MessageReceiverType.group && (receiverId === groupRef.current?.getGuid())) {
+            return true
+          }
         }
       }
+      return false
+    } catch (error) {
+      errorHandler(error, "isReactionOfThisList");
+      throw error;
     }
-    return false
-   } catch (error) {
-    errorHandler(error,"isReactionOfThisList");
-    throw error;
-   }
   }, [])
 
   /**
@@ -2473,41 +2509,41 @@ try {
   const messageReactionUpdated: (receipt: CometChat.ReactionEvent, isAdded: boolean) => boolean | undefined = useCallback(
     (receipt: CometChat.ReactionEvent, isAdded: boolean) => {
       try {
-        
-      if (!isReactionOfThisList(receipt)) {
-        return false;
-      }
 
-      setMessageList((prevMessageList: CometChat.BaseMessage[]) => {
-        const index = prevMessageList.findIndex(
-          (i) =>
-            i.getId().toString() ===
-            receipt.getReaction()?.getMessageId().toString()
-        );
-        if (index === -1) {
-          return prevMessageList;
+        if (!isReactionOfThisList(receipt)) {
+          return false;
         }
-        const messageObject = prevMessageList[index];
-        let action: CometChat.REACTION_ACTION;
-        if (isAdded) {
-          action = CometChat.REACTION_ACTION.REACTION_ADDED;
-        } else {
-          action = CometChat.REACTION_ACTION.REACTION_REMOVED;
-        }
-        const modifiedMessage = CometChat.CometChatHelper.updateMessageWithReactionInfo(messageObject, receipt.getReaction(), action) as CometChat.BaseMessage;
-        if (isAdded && modifiedMessage.getReactions() && modifiedMessage.getReactions().length == 1 && isOnBottomRef.current) {
-          scrollToBottom()
-        }
-        return prevMessageList.map((m) => {
-          if (m.getId().toString() === modifiedMessage?.getId().toString()) {
-            return CometChatUIKitUtility.clone(modifiedMessage)
-          } else {
-            return m
+
+        setMessageList((prevMessageList: CometChat.BaseMessage[]) => {
+          const index = prevMessageList.findIndex(
+            (i) =>
+              i.getId().toString() ===
+              receipt.getReaction()?.getMessageId().toString()
+          );
+          if (index === -1) {
+            return prevMessageList;
           }
+          const messageObject = prevMessageList[index];
+          let action: CometChat.REACTION_ACTION;
+          if (isAdded) {
+            action = CometChat.REACTION_ACTION.REACTION_ADDED;
+          } else {
+            action = CometChat.REACTION_ACTION.REACTION_REMOVED;
+          }
+          const modifiedMessage = CometChat.CometChatHelper.updateMessageWithReactionInfo(messageObject, receipt.getReaction(), action) as CometChat.BaseMessage;
+          if (isAdded && modifiedMessage.getReactions() && modifiedMessage.getReactions().length == 1 && isOnBottomRef.current) {
+            scrollToBottom()
+          }
+          return prevMessageList.map((m) => {
+            if (m.getId().toString() === modifiedMessage?.getId().toString()) {
+              return CometChatUIKitUtility.clone(modifiedMessage)
+            } else {
+              return m
+            }
+          });
         });
-      });
       } catch (error) {
-        errorHandler(error,"messageReactionUpdated")
+        errorHandler(error, "messageReactionUpdated")
       }
     }, [isReactionOfThisList]
   );
@@ -2539,7 +2575,7 @@ try {
           }
         }
       } catch (error) {
-        errorHandler(error,"callActionMessageReceived");
+        errorHandler(error, "callActionMessageReceived");
       }
     },
     [
@@ -2580,7 +2616,7 @@ try {
           }
         }
       } catch (error: any) {
-        errorHandler(error,"handleGroupAndCallActions");
+        errorHandler(error, "handleGroupAndCallActions");
       }
     },
     [
@@ -2611,7 +2647,7 @@ try {
           }
         );
       } catch (error: any) {
-        errorHandler(error,"onBottomCallback");
+        errorHandler(error, "onBottomCallback");
       }
     });
   }, [
@@ -2644,7 +2680,7 @@ try {
           }
         );
       } catch (error: any) {
-        errorHandler(error,"onTopCallback");
+        errorHandler(error, "onTopCallback");
       }
     });
   }, [fetchPreviousMessages, errorHandler, isOnBottomRef]);
@@ -2656,13 +2692,13 @@ try {
  */
   const updateView: (message: CometChat.BaseMessage) => void = useCallback(
     (message: CometChat.BaseMessage) => {
-     try {
-      elementRefs.current[message.getId()].current?.scrollIntoView({
-        block: "center",
-      });
-     } catch (error) {
-      errorHandler(error,"updateView")
-     }
+      try {
+        elementRefs.current[message.getId()].current?.scrollIntoView({
+          block: "center",
+        });
+      } catch (error) {
+        errorHandler(error, "updateView")
+      }
     },
     []
   );
@@ -2676,7 +2712,7 @@ try {
       clearNewMessagesCount()
       setScrollListToBottom(true);
     } catch (error: any) {
-      errorHandler(error,"scrollToBottom");
+      errorHandler(error, "scrollToBottom");
     }
   }, [markMessageRead, errorHandler, clearNewMessagesCount]);
 
@@ -2688,19 +2724,19 @@ try {
 
   const resetCountForUnreadMessagesInThread: (parentMessageId: number | string) => void = useCallback(
     (parentMessageId: number | string) => {
- try {
-  setMessageList((prevMessageList: CometChat.BaseMessage[]) => {
-    return prevMessageList.map((m: CometChat.BaseMessage) => {
-      if (m?.getId() === parentMessageId) {
-        return m;
-      } else {
-        return m;
+      try {
+        setMessageList((prevMessageList: CometChat.BaseMessage[]) => {
+          return prevMessageList.map((m: CometChat.BaseMessage) => {
+            if (m?.getId() === parentMessageId) {
+              return m;
+            } else {
+              return m;
+            }
+          });
+        });
+      } catch (error) {
+        errorHandler(error, "resetCountForUnreadMessagesInThread")
       }
-    });
-  });
- } catch (error) {
-  errorHandler(error,"resetCountForUnreadMessagesInThread")
- }
     },
     []
   );
@@ -2745,7 +2781,7 @@ try {
       );
       const ccMessageRead = CometChatMessageEvents.ccMessageRead.subscribe(
         (message: CometChat.BaseMessage) => {
-          if (isThreadOfCurrentChatForSDKEvent(message)) {
+          if (isThreadOfCurrentChatForSDKEvent(message) && message.getReceiverType() == CometChatUIKitConstants.MessageReceiverType.user) {
             resetCountForUnreadMessagesInThread(message.getParentMessageId());
           }
         }
@@ -2906,12 +2942,12 @@ try {
         messageReceivedHandler(customMessage);
       });
       const onMessagesDelivered = CometChatMessageEvents.onMessagesDelivered.subscribe((messageReceipt: CometChat.MessageReceipt) => {
-        if (!hideReceipts) {
+        if (!hideReceipts && messageReceipt.getReceiptType() == CometChatUIKitConstants.MessageReceiverType.user) {
           messageReadAndDelivered(messageReceipt);
         }
       });
       const onMessagesRead = CometChatMessageEvents.onMessagesRead.subscribe((messageReceipt: CometChat.MessageReceipt) => {
-        if (!hideReceipts) {
+        if (!hideReceipts && messageReceipt.getReceiptType() == CometChatUIKitConstants.MessageReceiverType.user) {
           messageReadAndDelivered(messageReceipt);
         }
       });
@@ -2987,11 +3023,11 @@ try {
           onMessageReactionAdded?.unsubscribe();
           onMessageReactionRemoved?.unsubscribe();
         } catch (error: any) {
-          errorHandler(error,"subscribeToUIEvents");
+          errorHandler(error, "subscribeToUIEvents");
         }
       };
     } catch (error: any) {
-      errorHandler(error,"subscribeToUIEvents");
+      errorHandler(error, "subscribeToUIEvents");
     }
   }, [
     validateTransientMessage,
@@ -3016,52 +3052,52 @@ try {
    */
   const handleScroll = useCallback(() => {
     try {
-      
-    const messageListBody = document.querySelector(".cometchat-message-list .cometchat-list__body");
-    if (!messageListBody) return;
-    let firstVisibleMessageId: any = null;
-    Object.keys(elementRefs.current).some((messageId) => {
-      const element = elementRefs.current[messageId];
-      if (element.current) {
-        const rect = element.current.getBoundingClientRect();
-        const containerRect = messageListBody.getBoundingClientRect();
-        if (rect.top >= containerRect.top && rect.bottom <= containerRect.bottom) {
-          firstVisibleMessageId = messageId;
-          return true;
-        }
-      }
-      return false;
-    });
-    if (firstVisibleMessageId) {
-      const currentVisibleMessage = getMessageById(firstVisibleMessageId);
-      if (currentVisibleMessage) {
-        const messageDate = currentVisibleMessage.getSentAt();
-        if (isDateDifferent(dateHeaderRef.current, messageDate)) {
-          setDateHeader(messageDate);
-          dateHeaderRef.current = messageDate;
 
+      const messageListBody = document.querySelector(".cometchat-message-list .cometchat-list__body");
+      if (!messageListBody) return;
+      let firstVisibleMessageId: any = null;
+      Object.keys(elementRefs.current).some((messageId) => {
+        const element = elementRefs.current[messageId];
+        if (element.current) {
+          const rect = element.current.getBoundingClientRect();
+          const containerRect = messageListBody.getBoundingClientRect();
+          if (rect.top >= containerRect.top && rect.bottom <= containerRect.bottom) {
+            firstVisibleMessageId = messageId;
+            return true;
+          }
+        }
+        return false;
+      });
+      if (firstVisibleMessageId) {
+        const currentVisibleMessage = getMessageById(firstVisibleMessageId);
+        if (currentVisibleMessage) {
+          const messageDate = currentVisibleMessage.getSentAt();
+          if (isDateDifferent(dateHeaderRef.current, messageDate)) {
+            setDateHeader(messageDate);
+            dateHeaderRef.current = messageDate;
+
+          }
         }
       }
-    }
     } catch (error) {
-      errorHandler(error,"handleScroll")
+      errorHandler(error, "handleScroll")
     }
   }, [getMessageById, setDateHeader, messageList])
 
   useEffect(() => {
- try {
-  let listElement = document.querySelector(".cometchat-message-list .cometchat-list__body");
-  if (listElement) {
-    listElement.addEventListener("scroll", handleScroll)
-  }
-  return () => {
-    if (listElement) {
-      listElement.removeEventListener("scroll", handleScroll);
+    try {
+      let listElement = document.querySelector(".cometchat-message-list .cometchat-list__body");
+      if (listElement) {
+        listElement.addEventListener("scroll", handleScroll)
+      }
+      return () => {
+        if (listElement) {
+          listElement.removeEventListener("scroll", handleScroll);
+        }
+      }
+    } catch (error) {
+      errorHandler(error, "addEventListener")
     }
-  }
- } catch (error) {
-  errorHandler(error,"addEventListener")
- }
 
   }, [handleScroll])
   /**
@@ -3089,7 +3125,7 @@ try {
           firstDateObj.getFullYear() !== secondDateObj.getFullYear()
         );
       } catch (error: any) {
-        errorHandler(error,"isDateDifferent");
+        errorHandler(error, "isDateDifferent");
       }
     },
     [errorHandler]
@@ -3104,25 +3140,25 @@ try {
   const showHeaderTitle: (message: CometChat.BaseMessage) => boolean = useCallback(
     (message: CometChat.BaseMessage) => {
       try {
-        
-      if (messageAlignment === MessageListAlignment.left) {
-        return true;
-      } else {
-        if (
-          groupRef.current &&
-          message?.getCategory() !==
-          CometChatUIKitConstants.MessageCategory.action &&
-          message?.getSender() &&
-          message?.getSender()?.getUid() !== loggedInUserRef.current?.getUid() &&
-          messageAlignment === MessageListAlignment.standard
-        ) {
+
+        if (messageAlignment === MessageListAlignment.left) {
           return true;
         } else {
-          return false;
+          if (
+            groupRef.current &&
+            message?.getCategory() !==
+            CometChatUIKitConstants.MessageCategory.action &&
+            message?.getSender() &&
+            message?.getSender()?.getUid() !== loggedInUserRef.current?.getUid() &&
+            messageAlignment === MessageListAlignment.standard
+          ) {
+            return true;
+          } else {
+            return false;
+          }
         }
-      }
       } catch (error) {
-        errorHandler(error,"showHeaderTitle");
+        errorHandler(error, "showHeaderTitle");
         throw error;
       }
     },
@@ -3138,28 +3174,28 @@ try {
   const getBubbleLeadingView: (message: CometChat.BaseMessage) => any = useCallback(
     (item: CometChat.BaseMessage) => {
       try {
-        
-      if (
-        item?.getCategory() !==
-        CometChatUIKitConstants.MessageCategory.action &&
-        item?.getCategory() !== CometChatUIKitConstants.MessageCategory.call &&
-        showHeaderTitle(item) &&
-        !hideAvatar
-      ) {
-        return (
-          <CometChatAvatar
-            name={item?.getSender()?.getName() || loggedInUserRef.current?.getName()!}
-            image={item?.getSender()?.getAvatar() || loggedInUserRef.current?.getAvatar()!}
-          ></CometChatAvatar>
-        );
-      } else {
-        return null;
-      }
+
+        if (
+          item?.getCategory() !==
+          CometChatUIKitConstants.MessageCategory.action &&
+          item?.getCategory() !== CometChatUIKitConstants.MessageCategory.call &&
+          showHeaderTitle(item) &&
+          !hideAvatar
+        ) {
+          return (
+            <CometChatAvatar
+              name={item?.getSender() ? item?.getSender()?.getName() : loggedInUserRef.current?.getName()!}
+              image={item?.getSender() ? item?.getSender()?.getAvatar() : loggedInUserRef.current?.getAvatar()!}
+            ></CometChatAvatar>
+          );
+        } else {
+          return null;
+        }
       } catch (error) {
-        errorHandler(error,"getBubbleLeadingView")
+        errorHandler(error, "getBubbleLeadingView")
       }
     },
-    [showHeaderTitle,hideAvatar]
+    [showHeaderTitle, hideAvatar]
   );
 
   /**
@@ -3204,24 +3240,24 @@ try {
 
   const getBubbleHeader: (item: CometChat.BaseMessage) => any = useCallback(
     (item: CometChat.BaseMessage) => {
-   try {
-    if (getHeaderView(item)) {
-      return getHeaderView(item);
-    } else {
-      if (
-        item?.getCategory() !==
-        CometChatUIKitConstants.MessageCategory.action &&
-        item?.getCategory() !== CometChatUIKitConstants.MessageCategory.call
-      ) {
-        return showHeaderTitle(item) ? getBubbleHeaderTitle(item) : null
-      }
-    }
+      try {
+        if (getHeaderView(item)) {
+          return getHeaderView(item);
+        } else {
+          if (
+            item?.getCategory() !==
+            CometChatUIKitConstants.MessageCategory.action &&
+            item?.getCategory() !== CometChatUIKitConstants.MessageCategory.call
+          ) {
+            return showHeaderTitle(item) ? getBubbleHeaderTitle(item) : null
+          }
+        }
 
-    return null;
-   } catch (error) {
-    errorHandler(error,"getBubbleHeader");
-    return null;
-   }
+        return null;
+      } catch (error) {
+        errorHandler(error, "getBubbleHeader");
+        return null;
+      }
     },
     [
 
@@ -3237,13 +3273,13 @@ try {
     reaction: CometChat.Reaction,
     message: CometChat.BaseMessage
   ) => {
-  try {
-    if (reaction?.getReactedBy()?.getUid() === loggedInUserRef.current?.getUid()) {
-      reactToMessages(reaction?.getReaction(), message);
+    try {
+      if (reaction?.getReactedBy()?.getUid() === loggedInUserRef.current?.getUid()) {
+        reactToMessages(reaction?.getReaction(), message);
+      }
+    } catch (error) {
+      errorHandler(error, "reactionItemClicked")
     }
-  } catch (error) {
-    errorHandler(error,"reactionItemClicked")
-  }
   }, [reactToMessages])
 
 
@@ -3344,7 +3380,7 @@ try {
           return null;
         }
       } catch (error: any) {
-        errorHandler(error,"getStatusInfoView");
+        errorHandler(error, "getStatusInfoView");
         return null;
       }
     },
@@ -3544,7 +3580,7 @@ try {
   const getMessageListFooter: () => JSX.Element = useCallback(() => {
     return (
       <>
-      {(showConversationStarter || enableSmartReplies ) && !showFooterPanelView ? loadFooterViewContent() : null}
+        {(showConversationStarter || enableSmartReplies) && !showFooterPanelView ? loadFooterViewContent() : null}
         {showFooterPanelView && panelViewRef.current ? panelViewRef.current : null}
         {footerView && !panelViewRef.current ? footerView : null}
       </>
@@ -3738,23 +3774,23 @@ try {
               emptyView={getEmptyHtml}
               scrollToBottom={scrollListToBottom}
             />
-      
+
 
           </div>
           {showNewMessagesBanner &&
-              UnreadMessagesRef.current &&
-              UnreadMessagesRef.current.length > 0 &&
-              !isOnBottomRef.current ? (
-              <div
-                className='cometchat-message-list__message-indicator'>
-                <CometChatButton
-                  text={newMessageTextRef.current}
-                  iconURL={downArrow}
-                  onClick={scrollToBottom}
-                ></CometChatButton>
+            UnreadMessagesRef.current &&
+            UnreadMessagesRef.current.length > 0 &&
+            !isOnBottomRef.current ? (
+            <div
+              className='cometchat-message-list__message-indicator'>
+              <CometChatButton
+                text={newMessageTextRef.current}
+                iconURL={downArrow}
+                onClick={scrollToBottom}
+              ></CometChatButton>
 
-              </div>
-            ) : null}
+            </div>
+          ) : null}
           <div
             className='cometchat-message-list__footer'
           >

@@ -1,13 +1,13 @@
 {
   "name": "sample-app",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "React App made using CometChat React v5 UI Kit.",
   "author": "CometChat",
   "private": true,
   "dependencies": {
     "@cometchat/calls-sdk-javascript": "^4.0.11",
     "@cometchat/chat-sdk-javascript": "^4.0.10",
-    "@cometchat/chat-uikit-react": "~5.0.0",
+    "@cometchat/chat-uikit-react": "~5.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "6.14.2",
@@ -37,7 +37,6 @@
     "@typescript-eslint/eslint-plugin": "^8.15.0",
     "@typescript-eslint/parser": "^8.15.0",
     "eslint": "^8.0.0",
-    "sass": "^1.78.0",
     "typescript": "4.9.5"
   },
   "overrides": {

@@ -12,30 +12,32 @@ export const useCometChatTextBubble = (props: { textFormatters: Array<CometChatT
         try {
             let el = document.createElement("div");
             el.innerHTML = text;
-            let frag = document.createDocumentFragment(),
-                node,
-                lastNode;
-            while ((node = el.firstChild)) {
-                if (node instanceof HTMLElement) {
-                    if (textFormatters && textFormatters.length) {
-                        for (let i = 0; i < textFormatters.length; i++) {
-                            node = textFormatters[i].registerEventListeners(
-                                node,
-                                node.classList
-                            );
-                        }
-                    }
+            let frag = document.createDocumentFragment();
+            const clonedNodes = Array.from(el.childNodes);
+            clonedNodes.forEach((node) => {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const span = document.createElement("span");
+                    span.style.whiteSpace = "pre-wrap";
+                    span.textContent = node.textContent ?? "";
+                    frag.appendChild(span);
+                }
+                else if (node instanceof HTMLElement) {
                     frag.appendChild(node);
                 }
-                lastNode = frag.appendChild(node);
-            }
-            textElement!.textContent = "";
-
+            });
+            textElement.textContent = "";
             textElement.appendChild(frag);
+
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
-    }
+    };
+
+
+
+
+
+
 
     return {
         pasteHtml,

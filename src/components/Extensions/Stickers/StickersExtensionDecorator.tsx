@@ -117,25 +117,25 @@ export class StickersExtensionDecorator extends DataSourceDecorator {
 
     // Use state to track whether the keyboard is open or not
     const [showKeyboard, setShowKeyboard] = useState(false);
-    var activePopoverSub:any = null;
-    const closeSticker = ()=>{
-      if(stickerKeyboardRef){
+    var activePopoverSub: any = null;
+    const closeSticker = () => {
+      if (stickerKeyboardRef) {
         stickerKeyboardRef?.current?.closePopover()
       }
       setShowKeyboard(false)
-      if(activePopoverSub){
+      if (activePopoverSub) {
         activePopoverSub.unsubscribe();
 
       }
     }
-    if(showKeyboard){
-      activePopoverSub =  CometChatUIEvents.ccActivePopover.subscribe((id:string)=>{
-        if(id != StickersConstants.sticker){
+    if (showKeyboard) {
+      activePopoverSub = CometChatUIEvents.ccActivePopover.subscribe((id: string) => {
+        if (id != StickersConstants.sticker) {
           closeSticker()
         }
-          })
+      })
     }
- 
+
     let openIconURL = StickerIcon;
     let closeIconURL = StickerIconFill;
 
@@ -144,7 +144,7 @@ export class StickersExtensionDecorator extends DataSourceDecorator {
     return (
       <div className={`cometchat-message-composer__auxilary-button-view-sticker-button ${showKeyboard ? "cometchat-message-composer__auxilary-button-view-sticker-button-active" : ""}`}>
         <CometChatPopover
-              ref={stickerKeyboardRef}
+          ref={stickerKeyboardRef}
           placement={Placement.top}
           closeOnOutsideClick={true}
           onOutsideClick={() => setShowKeyboard(false)}
@@ -152,7 +152,7 @@ export class StickersExtensionDecorator extends DataSourceDecorator {
           debounceOnHover={0}
           content={
             <StickersKeyboard
-              ccStickerClicked={(e: any) => this.sendSticker(e,closeSticker)}
+              ccStickerClicked={(e: any) => this.sendSticker(e, closeSticker)}
             />
           }
         >
@@ -175,15 +175,15 @@ export class StickersExtensionDecorator extends DataSourceDecorator {
    * Sends a sticker message.
    * @param event - The event object containing sticker details.
    */
-  sendSticker(event: any,closeSticker:Function) {
+  sendSticker(event: any, closeSticker: Function) {
     try {
-closeSticker()
+      closeSticker()
       let details = event?.detail;
       let sticker = {
         name: details?.stickerName,
         URL: details?.stickerURL,
       };
-      const receiverId: string|undefined =  this.user?.getUid() ||   this.group?.getGuid();
+      const receiverId: string | undefined = this.user?.getUid() || this.group?.getGuid();
       const receiverType: string = this.user
         ? CometChatUIKitConstants.MessageReceiverType.user
         : CometChatUIKitConstants.MessageReceiverType.group;
@@ -285,7 +285,9 @@ closeSticker()
     return (
       <CometChatImageBubble
         src={this.getSticker(stickerMessage)}
-        isSentByMe={isSentByMe} />
+        isSentByMe={isSentByMe}
+        disableLoadingState={true}
+      />
     );
   }
 
@@ -306,7 +308,7 @@ closeSticker()
         let stickerMessage: CometChat.CustomMessage =
           message as CometChat.CustomMessage;
         if (stickerMessage.getDeletedAt()) {
-          return super.getDeleteMessageBubble(stickerMessage,undefined,_alignment);
+          return super.getDeleteMessageBubble(stickerMessage, undefined, _alignment);
         }
         return this.getStickerMessageContentView(stickerMessage);
       },

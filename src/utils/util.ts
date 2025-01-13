@@ -1,3 +1,40 @@
+import WaveSurfer from "../components/BaseComponents/CometChatAudioBubble/src/wavesurfer";
+
+interface MediaPlayer {
+video?:HTMLVideoElement | null,
+mediaRecorder?:MediaRecorder | null
+}
+/**
+ * storing current media which is being played.
+ */
+export const currentMediaPlayer:MediaPlayer = {
+  video:null,
+  mediaRecorder:null
+}
+export const  currentAudioPlayer: {
+  instance: WaveSurfer | null;
+  setIsPlaying: ((isPlaying: boolean) => void) | null;
+} = { instance: null, setIsPlaying: null };
+
+/**
+ * Function to stop current media playback.
+ */
+
+export function closeCurrentMediaPlayer(pauseAudio: boolean = true) {
+  if (pauseAudio && currentAudioPlayer.instance && currentAudioPlayer.setIsPlaying) {
+    currentAudioPlayer.instance.pause();
+    if (currentAudioPlayer.setIsPlaying) {
+      currentAudioPlayer.setIsPlaying(false);
+    }
+  }
+
+  if (currentMediaPlayer.video && !currentMediaPlayer.video.paused) {
+    currentMediaPlayer.video.pause();
+  }
+  if (currentMediaPlayer.mediaRecorder) {
+    currentMediaPlayer.mediaRecorder.stop();
+  }
+}
 export function sanitizeHtml(htmlString: string, whitelistRegExes: RegExp[]) {
     if (!htmlString) {
         return "";

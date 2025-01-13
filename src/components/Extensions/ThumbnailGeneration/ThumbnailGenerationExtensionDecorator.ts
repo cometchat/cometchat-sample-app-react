@@ -1,7 +1,7 @@
 import { CometChat } from "@cometchat/chat-sdk-javascript";
 import { ChatConfigurator } from "../../../utils/ChatConfigurator";
 import { DataSourceDecorator } from "../../../utils/DataSourceDecorator";
-import PlaceholderImage from './assets/placeholder.png';
+import PlaceholderImage from '../../../assets/image_placeholder.png';
 
 /**
  * Class representing a Thumbnail Generation extension decorator.
@@ -36,7 +36,7 @@ export class ThumbnailGenerationExtensionDecorator extends DataSourceDecorator {
         if (ChatConfigurator.names.includes("imagemoderation")) {
             return super.getImageMessageBubble(imageUrl, placeholderImage, message);
         } else {
-            let imageUrl = message.getAttachments()[0].getUrl();
+            let imageUrl = message.getAttachments() ? message?.getAttachments()[0]?.getUrl() : (message.getData() as any)?.url;
             let metadata: any = message.getMetadata();
             if (metadata && metadata.hasOwnProperty("@injected") && metadata["@injected"].hasOwnProperty("extensions") && metadata["@injected"]["extensions"].hasOwnProperty("thumbnail-generation") && metadata["@injected"]["extensions"]["thumbnail-generation"]["url_medium"]) {
                 imageUrl = metadata["@injected"]["extensions"]["thumbnail-generation"]["url_medium"];

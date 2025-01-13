@@ -1,3 +1,41 @@
+@import url('../../node_modules/@cometchat/chat-uikit-react/dist/styles/css-variables.css');
+
+.App {
+    text-align: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: #282c34;
+}
+
+.App-logo {
+    height: 40vmin;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
+}
+
+.App-header {
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 .cometchat-root {
     width: 100%;
     height: 100%;
@@ -8,7 +46,7 @@
 
 .conversations-wrapper {
     display: flex;
-    width: 30vw;
+    width: 30%;
     max-width: 420px;
     height: 100vh;
     flex-direction: column;
@@ -69,7 +107,7 @@
 }
 
 .messages-wrapper {
-    width: 40vw;
+    width: 40%;
     height: 100%;
     display: flex;
     flex-direction: column;

@@ -159,10 +159,14 @@ export class ConversationsManager {
 
         CometChat.addMessageListener(messageListenerId, new CometChat.MessageListener({
             onMessagesRead: (messageReceipt: CometChat.MessageReceipt) => {
+               if(messageReceipt.getReceiptType() == CometChatUIKitConstants.MessageReceiverType.user){
                 callback(messageReceipt, true);
+               }
             },
             onMessagesDelivered: (messageReceipt: CometChat.MessageReceipt) => {
-                callback(messageReceipt, false);
+                if(messageReceipt.getReceiptType() == CometChatUIKitConstants.MessageReceiverType.user){
+                    callback(messageReceipt, false);
+                   }
             },
             onMessagesDeliveredToAll: (messageReceipt: CometChat.MessageReceipt) => {
                 callback(messageReceipt, false);
